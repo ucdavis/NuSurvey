@@ -42,6 +42,12 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\Bin\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="DataAnnotationsExtensions, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DataAnnotationsExtensions.0.5.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DataAnnotationsExtensions.ClientValidation">
+      <HintPath>..\packages\DataAnnotationsExtensions.MVC3.0.5.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\Bin\Elmah.dll</HintPath>
     </Reference>
@@ -79,8 +85,13 @@
     <Reference Include="UCDArch">
       <HintPath>..\Bin\UCDArch.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivator, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebActivator.1.4\lib\NETFramework40\WebActivator.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
