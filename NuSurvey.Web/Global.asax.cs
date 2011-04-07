@@ -2,6 +2,7 @@
 using Castle.Windsor;
 using Microsoft.Practices.ServiceLocation;
 using NuSurvey.Core;
+using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers;
 using UCDArch.Data.NHibernate;
 using UCDArch.Web.IoC;
@@ -35,7 +36,7 @@ namespace NuSurvey.Web
 
             //AutomapperConfig.Configure();
 
-            NHibernateSessionConfiguration.Mappings.UseFluentMappings(typeof(Class1).Assembly);
+            NHibernateSessionConfiguration.Mappings.UseFluentMappings(typeof(Answer).Assembly);
 
             IWindsorContainer container = InitializeServiceLocator();
         }
