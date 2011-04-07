@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using System.Web.Mvc;
+using Castle.Windsor;
+using Microsoft.Practices.ServiceLocation;
+using NuSurvey.Web.Controllers;
+using UCDArch.Web.IoC;
+using UCDArch.Web.ModelBinder;
 
 namespace NuSurvey.Web
 {
@@ -14,19 +14,7 @@ namespace NuSurvey.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
-        }
-
-        public static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            routes.MapRoute(
-                "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-            );
-
+            //filters.Add(new HandleErrorAttribute());
         }
 
         protected void Application_Start()
@@ -34,7 +22,34 @@ namespace NuSurvey.Web
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
-            RegisterRoutes(RouteTable.Routes);
+            
+            #if DEBUG
+            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            #endif
+
+            new RouteConfigurator().RegisterRoutes();
+
+            ModelBinders.Binders.DefaultBinder = new UCDArchModelBinder();
+
+            //AutomapperConfig.Configure();
+
+            //NHibernateSessionConfiguration.Mappings.UseFluentMappings(typeof(Customer).Assembly);
+
+            IWindsorContainer container = InitializeServiceLocator();
+        }
+
+        private static IWindsorContainer InitializeServiceLocator()
+        {
+            IWindsorContainer container = new WindsorContainer();
+
+            ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
+
+            container.RegisterControllers(typeof(HomeController).Assembly);
+            ComponentRegistrar.AddComponentsTo(container);
+
+            ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
+
+            return container;
         }
     }
 }
