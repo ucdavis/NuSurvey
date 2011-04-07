@@ -23,7 +23,7 @@ namespace NuSurvey.Core.Domain
     {
         public QuestionMap()
         {
-            Map(x => x.Id);
+            Id(x => x.Id);
             Map(x => x.IsActive);
             Map(x => x.Order);
             Map(x => x.IsOpenEnded);

@@ -17,7 +17,7 @@ namespace NuSurvey.Core.Domain
     {
         public CategoryMaxScoreMap()
         {
-            Map(x => x.Id);
+            Id(x => x.Id);
             Map(x => x.Date);
             Map(x => x.MaxScore);
 

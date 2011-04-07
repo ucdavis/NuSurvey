@@ -18,7 +18,7 @@ namespace NuSurvey.Core.Domain
     {
         public SurveyMap()
         {
-            Map(x => x.Id);
+            Id(x => x.Id);
             Map(x => x.Name);
             Map(x => x.IsActive);
         }

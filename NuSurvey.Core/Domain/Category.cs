@@ -26,7 +26,7 @@ namespace NuSurvey.Core.Domain
     {
         public CategoryMap()
         {
-            Map(x => x.Id);
+            Id(x => x.Id);
             Map(x => x.Name);
             Map(x => x.Rank);
             Map(x => x.Affirmation);

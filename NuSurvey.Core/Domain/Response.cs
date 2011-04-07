@@ -21,7 +21,7 @@ namespace NuSurvey.Core.Domain
     {
         public ResponseMap()
         {
-            Map(x => x.Id);
+            Id(x => x.Id);
             Map(x => x.Value);
             Map(x => x.Score);
             Map(x => x.Order);
