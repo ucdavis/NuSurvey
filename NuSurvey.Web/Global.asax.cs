@@ -1,7 +1,9 @@
 ﻿using System.Web.Mvc;
 using Castle.Windsor;
 using Microsoft.Practices.ServiceLocation;
+using NuSurvey.Core;
 using NuSurvey.Web.Controllers;
+using UCDArch.Data.NHibernate;
 using UCDArch.Web.IoC;
 using UCDArch.Web.ModelBinder;
 
@@ -33,7 +35,7 @@ namespace NuSurvey.Web
 
             //AutomapperConfig.Configure();
 
-            //NHibernateSessionConfiguration.Mappings.UseFluentMappings(typeof(Customer).Assembly);
+            NHibernateSessionConfiguration.Mappings.UseFluentMappings(typeof(Class1).Assembly);
 
             IWindsorContainer container = InitializeServiceLocator();
         }
