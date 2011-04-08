@@ -8,6 +8,7 @@ using UCDArch.Web.Attributes;
 namespace NuSurvey.Web.Controllers
 {
     [HandleTransactionsManually]
+    [Authorize]
     public class HomeController : ApplicationController
     {
         public ActionResult Index()
