@@ -103,8 +103,254 @@ namespace NuSurvey.Tests.RepositoryTests
 
         #endregion Init and Overrides	
         
-        
-        
+        #region Name Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the Name with null value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithNullValueDoesNotSave()
+        {
+            Survey survey = null;
+            try
+            {
+                #region Arrange
+                survey = GetValid(9);
+                survey.Name = null;
+                #endregion Arrange
+
+                #region Act
+                SurveyRepository.DbContext.BeginTransaction();
+                SurveyRepository.EnsurePersistent(survey);
+                SurveyRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(survey);
+                var results = survey.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: may not be null or empty");
+                Assert.IsTrue(survey.IsTransient());
+                Assert.IsFalse(survey.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the Name with empty string does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithEmptyStringDoesNotSave()
+        {
+            Survey survey = null;
+            try
+            {
+                #region Arrange
+                survey = GetValid(9);
+                survey.Name = string.Empty;
+                #endregion Arrange
+
+                #region Act
+                SurveyRepository.DbContext.BeginTransaction();
+                SurveyRepository.EnsurePersistent(survey);
+                SurveyRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(survey);
+                var results = survey.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: may not be null or empty");
+                Assert.IsTrue(survey.IsTransient());
+                Assert.IsFalse(survey.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the Name with spaces only does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithSpacesOnlyDoesNotSave()
+        {
+            Survey survey = null;
+            try
+            {
+                #region Arrange
+                survey = GetValid(9);
+                survey.Name = " ";
+                #endregion Arrange
+
+                #region Act
+                SurveyRepository.DbContext.BeginTransaction();
+                SurveyRepository.EnsurePersistent(survey);
+                SurveyRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(survey);
+                var results = survey.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: may not be null or empty");
+                Assert.IsTrue(survey.IsTransient());
+                Assert.IsFalse(survey.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the Name with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithTooLongValueDoesNotSave()
+        {
+            Survey survey = null;
+            try
+            {
+                #region Arrange
+                survey = GetValid(9);
+                survey.Name = "x".RepeatTimes((100 + 1));
+                #endregion Arrange
+
+                #region Act
+                SurveyRepository.DbContext.BeginTransaction();
+                SurveyRepository.EnsurePersistent(survey);
+                SurveyRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(survey);
+                Assert.AreEqual(100 + 1, survey.Name.Length);
+                var results = survey.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: length must be between 0 and 100");
+                Assert.IsTrue(survey.IsTransient());
+                Assert.IsFalse(survey.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the Name with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestNameWithOneCharacterSaves()
+        {
+            #region Arrange
+            var survey = GetValid(9);
+            survey.Name = "x";
+            #endregion Arrange
+
+            #region Act
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the Name with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestNameWithLongValueSaves()
+        {
+            #region Arrange
+            var survey = GetValid(9);
+            survey.Name = "x".RepeatTimes(100);
+            #endregion Arrange
+
+            #region Act
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(100, survey.Name.Length);
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion Name Tests
+
+        #region IsActive Tests
+
+        /// <summary>
+        /// Tests the IsActive is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestIsActiveIsFalseSaves()
+        {
+            #region Arrange
+
+            Survey survey = GetValid(9);
+            survey.IsActive = false;
+
+            #endregion Arrange
+
+            #region Act
+
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsFalse(survey.IsActive);
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the IsActive is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestIsActiveIsTrueSaves()
+        {
+            #region Arrange
+
+            var survey = GetValid(9);
+            survey.IsActive = true;
+
+            #endregion Arrange
+
+            #region Act
+
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsTrue(survey.IsActive);
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+
+            #endregion Assert
+        }
+
+        #endregion IsActive Tests
         
         
         
@@ -125,7 +371,12 @@ namespace NuSurvey.Tests.RepositoryTests
                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
-
+            expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)100)]", 
+                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            }));
             #endregion Arrange
 
             AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(Survey));
