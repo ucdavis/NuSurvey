@@ -25,7 +25,7 @@ namespace NuSurvey.Core.Domain
         {
             Id(x => x.Id);
             Map(x => x.IsActive);
-            Map(x => x.Order);
+            Map(x => x.Order).Column("`Order`");
             Map(x => x.IsOpenEnded);
 
             References(x => x.Category);

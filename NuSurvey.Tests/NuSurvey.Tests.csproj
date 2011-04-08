@@ -41,11 +41,17 @@
     <Reference Include="NHibernate">
       <HintPath>..\Bin\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate.ByteCode.Spring">
+      <HintPath>..\Bin\NHibernate.ByteCode.Spring.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Bin\System.Data.SQLite.DLL</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
@@ -58,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContinuousDeploymentIntegrationHack.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\StringExtension.cs" />
     <Compile Include="Core\Helpers\AttributeAndFieldValidation.cs" />
