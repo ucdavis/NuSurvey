@@ -30,3 +30,4 @@ _ReSharper*/
 !Bin/
 
 NuSurvey.SQL/NuSurvey.SQL.dbmdl
+*.dbmdl
