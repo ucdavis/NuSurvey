@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Models;
 
 namespace NuSurvey.Web.Controllers
@@ -39,7 +40,7 @@ namespace NuSurvey.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (MembershipService.ValidateUser(model.UserName, model.Password))
+                if (MembershipService.ValidateUser(model.UserName.ToLower(), model.Password))
                 {
                     FormsService.SignIn(model.UserName, model.RememberMe);
                     if (Url.IsLocalUrl(returnUrl))
@@ -53,7 +54,7 @@ namespace NuSurvey.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                    ModelState.AddModelError("", "The email or password provided is incorrect.");
                 }
             }
 
@@ -75,10 +76,10 @@ namespace NuSurvey.Web.Controllers
         // **************************************
         // URL: /Account/Register
         // **************************************
-
         public ActionResult Register()
         {
             ViewBag.PasswordLength = MembershipService.MinPasswordLength;
+
             return View();
         }
 
@@ -88,7 +89,7 @@ namespace NuSurvey.Web.Controllers
             if (ModelState.IsValid)
             {
                 // Attempt to register the user
-                MembershipCreateStatus createStatus = MembershipService.CreateUser(model.UserName, model.Password, model.Email);
+                MembershipCreateStatus createStatus = MembershipService.CreateUser(model.Email, model.Password, model.Email);
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
@@ -103,6 +104,7 @@ namespace NuSurvey.Web.Controllers
 
             // If we got this far, something failed, redisplay form
             ViewBag.PasswordLength = MembershipService.MinPasswordLength;
+
             return View(model);
         }
 

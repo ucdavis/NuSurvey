@@ -47,25 +47,27 @@
             </span>
         </div>
         @* Update depending on user login status *@
-        @*
+
         <div id="personalbar">
-            <div class="col1">
-                <span id="welcome_user">Welcome _username_!</span>
-            </div>
-            <div class="col2" id="LogOffOn">
-                <a href="#">logoff</a>
-            </div>
+            @if (Request.IsAuthenticated)
+            {                 
+                <div class="col1"><span id="welcome_user">Welcome @Context.User.Identity.Name</span></div>
+                <div class="col2" id="LogOffOn">@Html.ActionLink("Log Off", "Logoff", "Account")</div>
+                <div class="col1" id="ChangePassword">@Html.ActionLink("Change Password", "ChangePassword", "Account")</div>
+            }
         </div>
-        *@
+
         <div class="main">
             <div id="messagecontainer">
-                @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage)) { 
+                @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
+                { 
                 <div id="error_message">
                     @ViewBag.ErrorMessage
                 </div>
                 }
                 
-                @if (!string.IsNullOrWhiteSpace(TempData["Message"] as string)) { 
+                @if (!string.IsNullOrWhiteSpace(TempData["Message"] as string))
+                { 
                 <div id="status_message">
                     @TempData["Message"]
                 </div>
