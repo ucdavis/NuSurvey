@@ -36,6 +36,10 @@ namespace NuSurvey.Web.Controllers.Filters
             {
                 filterContext.HttpContext.Response.Redirect("~/Error");
             }
+            if (filterContext.HttpContext.User != null && !filterContext.HttpContext.User.IsInRole(RoleNames.Admin))
+            {
+                filterContext.HttpContext.Response.Redirect("~/Error/NotAuthorized");
+            }
             base.OnAuthorization(filterContext);
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Web.Attributes;
 
 namespace NuSurvey.Web.Controllers
@@ -17,7 +18,7 @@ namespace NuSurvey.Web.Controllers
 
             return View();
         }
-
+        [Admin]
         public ViewResult Sample()
         {
             return View();

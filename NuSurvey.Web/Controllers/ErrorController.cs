@@ -18,5 +18,10 @@ namespace NuSurvey.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult NotAuthorized()
+        {
+            return View();
+        }
     }
 }

@@ -11,7 +11,7 @@ using NuSurvey.Web.Models;
 
 namespace NuSurvey.Web.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : ApplicationController
     {
 
         public IFormsAuthenticationService FormsService { get; set; }
