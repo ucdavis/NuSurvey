@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
 
-namespace NuSurvey.Tests.Controllers
+namespace NuSurvey.Tests.ControllerTests
 {
     [TestClass]
     public class HomeControllerTest

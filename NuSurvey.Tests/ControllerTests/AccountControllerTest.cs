@@ -9,7 +9,7 @@ using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Models;
 
-namespace NuSurvey.Tests.Controllers
+namespace NuSurvey.Tests.ControllerTests
 {
 
     [TestClass]
