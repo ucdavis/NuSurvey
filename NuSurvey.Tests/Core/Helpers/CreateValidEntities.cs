@@ -30,5 +30,19 @@ namespace NuSurvey.Tests.Core.Helpers
 
             return rtValue;
         }
+
+        public static Answer Answer(int? counter)
+        {
+            var rtValue = new Answer();
+            var count = counter.HasValue ? counter.Value : 1;
+            rtValue.Score = count % 5;
+            rtValue.SurveyResponse = new SurveyResponse();
+            rtValue.Response = new Response();
+            rtValue.Question = new Question();
+            rtValue.Category = new Category();
+
+            return rtValue;
+
+        }
     }
 }

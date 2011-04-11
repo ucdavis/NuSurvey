@@ -75,6 +75,7 @@
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\StringExtension.cs" />
     <Compile Include="Core\Helpers\AttributeAndFieldValidation.cs" />
+    <Compile Include="Core\Helpers\ControllerRecordFakes.cs" />
     <Compile Include="Core\Helpers\CreateValidEntities.cs" />
     <Compile Include="Core\Helpers\NameAndType.cs" />
     <Compile Include="Core\Helpers\SpecificGuid.cs" />
