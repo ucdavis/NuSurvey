@@ -9,7 +9,7 @@ using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Models;
 
-namespace NuSurvey.Tests.Controllers
+namespace NuSurvey.Tests.ControllerTests
 {
 
     [TestClass]
@@ -249,7 +249,7 @@ namespace NuSurvey.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(ViewResult));
             ViewResult viewResult = (ViewResult)result;
             Assert.AreEqual(model, viewResult.ViewData.Model);
-            Assert.AreEqual("The user name or password provided is incorrect.", controller.ModelState[""].Errors[0].ErrorMessage);
+            Assert.AreEqual("The email or password provided is incorrect.", controller.ModelState[""].Errors[0].ErrorMessage);
         }
 
         [TestMethod]
@@ -297,7 +297,7 @@ namespace NuSurvey.Tests.Controllers
             RegisterModel model = new RegisterModel()
             {
                 UserName = "duplicateUser",
-                Email = "goodEmail",
+                Email = "duplicateUser",
                 Password = "goodPassword",
                 ConfirmPassword = "goodPassword"
             };
@@ -422,7 +422,8 @@ namespace NuSurvey.Tests.Controllers
 
             public bool ValidateUser(string userName, string password)
             {
-                return (userName == "someUser" && password == "goodPassword");
+                return (userName == "someUser".ToLower() && password == "goodPassword");
+                //return (userName == "goodpassword" && password == "goodPassword");
             }
 
             public MembershipCreateStatus CreateUser(string userName, string password, string email)
