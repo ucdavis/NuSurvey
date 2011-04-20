@@ -50,6 +50,8 @@ namespace NuSurvey.Core.Domain
             References(x => x.NegativeCategoryId1);
             References(x => x.NegativeCategoryId2);
             References(x => x.Survey);
+
+            HasMany(x => x.Answers).Cascade.AllDeleteOrphan();
         }
     }
 }
