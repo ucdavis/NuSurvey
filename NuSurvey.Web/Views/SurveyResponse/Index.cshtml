@@ -1,0 +1,39 @@
+﻿@model IEnumerable<NuSurvey.Core.Domain.Survey>
+
+@{
+	ViewBag.Title = "Index";
+}
+
+<h2>Active Surveys</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				Name
+			</th>
+			<th>
+				ShortName
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+@{ var odd = false; }
+@foreach (var item in Model) {
+		<tr class="@(odd ? "odd": "even")">
+			<td>
+				@Html.ActionLink("Answer", "Create", new { id=item.Id })
+			</td>
+			<td>
+				@item.Name
+			</td>
+			<td>
+				@item.ShortName
+			</td>
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+
