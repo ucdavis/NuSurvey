@@ -1,4 +1,5 @@
-﻿using FluentNHibernate.Mapping;
+﻿using System.Collections.Generic;
+using FluentNHibernate.Mapping;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
@@ -18,6 +19,8 @@ namespace NuSurvey.Core.Domain
         public virtual Category Category { get; set; }
         [NotNull]
         public virtual Survey Survey { get; set; }
+
+        public virtual IList<Response> Responses { get; set; }
     }
     public class QuestionMap : ClassMap<Question>
     {
@@ -30,6 +33,7 @@ namespace NuSurvey.Core.Domain
 
             References(x => x.Category);
             References(x => x.Survey);
+            HasMany(x => x.Responses);
         }
     }
 }
