@@ -47,6 +47,10 @@ namespace NuSurvey.Core.Domain
             Map(x => x.Name);
             Map(x => x.ShortName);
             Map(x => x.IsActive);
+
+            HasMany(x => x.Questions);
+            HasMany(x => x.SurveyResponses);
+            HasMany(x => x.Categories);
         }
     }
 }
