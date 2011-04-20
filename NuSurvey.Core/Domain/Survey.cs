@@ -27,6 +27,8 @@ namespace NuSurvey.Core.Domain
         [Required]
         [Length(100)]
         public virtual string Name { get; set; }
+        [Length(10)]
+        public virtual string ShortName { get; set; }
         public virtual bool IsActive { get; set; }
         
         [NotNull]
@@ -43,6 +45,7 @@ namespace NuSurvey.Core.Domain
         {
             Id(x => x.Id);
             Map(x => x.Name);
+            Map(x => x.ShortName);
             Map(x => x.IsActive);
         }
     }

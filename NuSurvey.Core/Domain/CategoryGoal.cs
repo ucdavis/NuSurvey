@@ -8,7 +8,7 @@ namespace NuSurvey.Core.Domain
     public class CategoryGoal : DomainObject
     {
         [Required]
-        [Length(100)]
+        [Length(200)]
         public virtual string Name { get; set; }
         public virtual bool IsActive { get; set; }
         [NotNull]
