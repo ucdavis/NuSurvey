@@ -8,6 +8,19 @@ namespace NuSurvey.Core.Domain
 {
     public class Category : DomainObject
     {
+        #region Constructor
+        public Category()
+        {
+            SetDefaults();
+        }
+
+        private void SetDefaults()
+        {
+            LastUpdate = DateTime.Now;
+        }
+        #endregion Constructor
+
+
         [Required]
         [Length(100)]
         public virtual string Name { get; set; }
@@ -17,7 +30,14 @@ namespace NuSurvey.Core.Domain
         [Required]
         public virtual string Encouragement { get; set; }
         public virtual bool IsActive { get; set; }
+        public virtual bool DoNotUseForCalculations { get; set; }
+
+        /// <summary>
+        /// This should be updated for every save
+        /// </summary>
         public virtual DateTime LastUpdate { get; set; }
+
+        public virtual DateTime CreateDate { get; set; }
         [NotNull]
         public virtual Survey Survey { get; set; }
     }
@@ -33,6 +53,8 @@ namespace NuSurvey.Core.Domain
             Map(x => x.Encouragement);
             Map(x => x.IsActive);
             Map(x => x.LastUpdate);
+            Map(x => x.CreateDate);
+            Map(x => x.DoNotUseForCalculations);
 
             References(x => x.Survey);
         }

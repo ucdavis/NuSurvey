@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentNHibernate.Mapping;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
@@ -8,6 +9,18 @@ namespace NuSurvey.Core.Domain
 {
     public class Question : DomainObject
     {
+        #region Constructor
+        public Question()
+        {
+            SetDefaults();
+        }
+
+        private void SetDefaults()
+        {
+            CreateDate = DateTime.Now;
+        }
+        #endregion Constructor
+
         [Required]
         [Length(100)]
         public virtual string Name { get; set; }
@@ -20,6 +33,8 @@ namespace NuSurvey.Core.Domain
         [NotNull]
         public virtual Survey Survey { get; set; }
 
+        public virtual DateTime CreateDate { get; set; }
+
         public virtual IList<Response> Responses { get; set; }
     }
     public class QuestionMap : ClassMap<Question>
@@ -30,6 +45,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.IsActive);
             Map(x => x.Order).Column("`Order`");
             Map(x => x.IsOpenEnded);
+            Map(x => x.CreateDate);
 
             References(x => x.Category);
             References(x => x.Survey);
