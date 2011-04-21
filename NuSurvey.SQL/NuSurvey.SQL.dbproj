@@ -769,5 +769,14 @@
     <Build Include="Schema Objects\Database Level Objects\Security\Schemas\aspnet_Membership_BasicAccess.schema.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Constraints\DF_Questions_CreateDate.defconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Constraints\DF_Categories_UseForCalculations.defconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Constraints\DF_Categories_CreateDate.defconst.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
 </Project>

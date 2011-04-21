@@ -5,6 +5,9 @@
     [CategoryId]  INT           NOT NULL,
     [SurveyId]    INT           NOT NULL,
     [Order]       INT           NOT NULL,
-    [IsOpenEnded] BIT           NOT NULL
+    [IsOpenEnded] BIT           NOT NULL,
+    [CreateDate]  DATETIME      NOT NULL
 );
+
+
 
