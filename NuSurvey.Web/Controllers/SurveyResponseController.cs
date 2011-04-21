@@ -6,6 +6,7 @@ using NuSurvey.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
+using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -69,9 +70,37 @@ namespace NuSurvey.Web.Controllers
         [HttpPost]
         public ActionResult Create(int id, SurveyResponse surveyResponse, QuestionAnswerParameter[] questions)
         {
-            var surveyResponseToCreate = new SurveyResponse();
+            var survey = Repository.OfType<Survey>().GetNullableById(id);
+            if (survey == null || !survey.IsActive)
+            {
+                Message = "Survey not found or not active.";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
 
-            TransferValues(surveyResponse, surveyResponseToCreate);
+            var surveyResponseToCreate = new SurveyResponse(survey);
+            if (questions == null)
+            {
+                questions = new QuestionAnswerParameter[0];
+            }
+
+            TransferValues(surveyResponse, surveyResponseToCreate, questions);
+
+            foreach (var question in survey.Questions.Where(a => a.IsActive && a.Category.IsActive).OrderBy(a => a.Order))
+            {
+                if (!surveyResponseToCreate.Answers.Where(a => a.Question != null && a.Question == question).Any())
+                {
+                    if (question.IsOpenEnded)
+                    {
+                        ModelState.AddModelError("Survey.Questions", "TODO open ended");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Survey.Questions", "TODO Missing");
+                    }
+                }
+            }
+
+            surveyResponseToCreate.TransferValidationMessagesTo(ModelState);
 
             if (ModelState.IsValid)
             {
@@ -83,8 +112,9 @@ namespace NuSurvey.Web.Controllers
             }
             else
             {
-				var viewModel = SurveyResponseViewModel.Create(Repository, null); //TODO: FIx
+				var viewModel = SurveyResponseViewModel.Create(Repository, survey);
                 viewModel.SurveyResponse = surveyResponse;
+                viewModel.SurveyAnswers = questions;
 
                 return View(viewModel);
             }
@@ -162,13 +192,89 @@ namespace NuSurvey.Web.Controllers
         /// <summary>
         /// Transfer editable values from source to destination
         /// </summary>
-        private static void TransferValues(SurveyResponse source, SurveyResponse destination)
+        private static void TransferValues(SurveyResponse source, SurveyResponse destination, QuestionAnswerParameter[] questions)
         {
 			//Recommendation: Use AutoMapper
 			//Mapper.Map(source, destination)
-            throw new NotImplementedException();
-        }
 
+            destination.StudentId = source.StudentId;
+            var queryableQuestions = questions.AsQueryable();
+            foreach (var question in destination.Survey.Questions)
+            {
+                Question question1 = question;
+                var passedQuestion = queryableQuestions.Where(a => a.QuestionId == question1.Id).SingleOrDefault();
+                if (passedQuestion == null)
+                {
+                    continue;
+                }
+                var answer = new Answer();
+                answer.Question = question;
+                answer.Category = question.Category;                
+                if (question.IsOpenEnded)
+                {
+                    #region Open Ended Logic
+
+                    int number;
+                    if (Int32.TryParse(passedQuestion.Answer, out number))
+                    {
+                        answer.OpenEndedAnswer = number;
+                        answer.Response = question1.Responses.Where(a => a.Value == number.ToString()).FirstOrDefault();
+                        if (answer.Response == null)
+                        {
+                            var highResponse = question1.Responses.Where(a => a.Value.Contains("+")).FirstOrDefault();
+                            if (highResponse != null)
+                            {
+                                int highValue;
+                                if (Int32.TryParse(highResponse.Value, out highValue))
+                                {
+                                    if (number >= highValue)
+                                    {
+                                        answer.Response = highResponse;
+                                    }
+                                }
+                            }
+                        }
+                        if (answer.Response == null)
+                        {
+                            var lowResponse = question1.Responses.Where(a => a.Value.Contains("-")).FirstOrDefault();
+                            if (lowResponse != null)
+                            {
+                                int lowValue;
+                                if (Int32.TryParse(lowResponse.Value, out lowValue))
+                                {
+                                    if (number <= Math.Abs(lowValue))
+                                    {
+                                        answer.Response = lowResponse;
+                                    }
+                                }
+                            }
+                        }                        
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    #endregion Open Ended Logic
+                }
+                else
+                {
+                    answer.Response = question1.Responses.Where(a => a.Id == passedQuestion.ResponseId).FirstOrDefault();
+                }
+                if (answer.Response != null || answer.Question.Category.DoNotUseForCalculations)
+                {
+                    if (answer.Question.Category.DoNotUseForCalculations)
+                    {
+                        answer.Score = 0;
+                    }
+                    else
+                    {
+                        answer.Score = answer.Response.Score;
+                    }
+                    destination.AddAnswers(answer);
+                }
+                
+            }      
+        }
     }
 
 	/// <summary>
@@ -179,6 +285,7 @@ namespace NuSurvey.Web.Controllers
 		public SurveyResponse SurveyResponse { get; set; }
         public IList<Question> Questions { get; set; }
         public Survey Survey { get; set; }
+	    public QuestionAnswerParameter[] SurveyAnswers;
  
 		public static SurveyResponseViewModel Create(IRepository repository, Survey survey)
 		{
@@ -197,5 +304,6 @@ namespace NuSurvey.Web.Controllers
     {
         public int QuestionId { get; set; }
         public string Answer { get; set; }
+        public int ResponseId { get; set; }
     }
 }

@@ -9,6 +9,8 @@ namespace NuSurvey.Core.Domain
 
         public virtual int Score { get; set; }
 
+        public virtual int? OpenEndedAnswer { get; set; }
+
         [NotNull]
         public virtual SurveyResponse SurveyResponse { get; set; }
         [NotNull]
@@ -26,6 +28,7 @@ namespace NuSurvey.Core.Domain
         {
             Id(x => x.Id);
             Map(x => x.Score);
+            Map(x => x.OpenEndedAnswer);
 
             References(x => x.SurveyResponse);
             References(x => x.Category);

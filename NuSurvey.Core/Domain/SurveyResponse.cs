@@ -14,6 +14,11 @@ namespace NuSurvey.Core.Domain
         {
             SetDefaults();
         }
+        public SurveyResponse(Survey survey)
+        {
+            SetDefaults();
+            Survey = survey;
+        }
 
         private void SetDefaults()
         {
@@ -35,6 +40,12 @@ namespace NuSurvey.Core.Domain
 
         [NotNull]
         public virtual IList<Answer> Answers { get; set; }
+
+        public virtual void AddAnswers(Answer answer)
+        {
+            answer.SurveyResponse = this;
+            Answers.Add(answer);
+        }
     }
 
     public class SurveyResponseMap : ClassMap<SurveyResponse>

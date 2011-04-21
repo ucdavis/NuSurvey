@@ -1,4 +1,6 @@
 ﻿@model NuSurvey.Web.Controllers.SurveyResponseViewModel
+           
+
 
 @{
     ViewBag.Title = "Answers";
@@ -7,9 +9,10 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
 	@Html.AntiForgeryToken()
-	@Html.ValidationSummary(true)
+	@Html.ValidationSummary("There were validation Errors.")
     @Html.HiddenFor(x => x.Survey.Id)
 <fieldset>
 @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
@@ -30,25 +33,31 @@ Example: Dinosaur 1  *@
 		</li>
 
         @{ var odd = false; }
-        @foreach (var item in Model.Questions){
-            <li class="@(odd ? "odd": "even")">
+        @{ var indexCounter = 0;}
+        @foreach (var item in Model.Questions)
+        {
+            <li class="@(odd ? "odd" : "even")">
                 <div class="editor-label required">
                     <label>@item.Order. @item.Name <span>*</span></label>
                 </div>
                 <div class="editor-field">
-                    <input id="Questions[@item.Order]_QuestionId" type="hidden" value="@item.Id" name="Questions[@item.Order].QuestionId" />
-                    @if (item.IsOpenEnded){ 
-                        <input id="Questions[@item.Order]" class="text-box single-line" type="text" value="" name="Questions[@item.Order].Answer"/>   
+                    <input id="Questions[@indexCounter]_QuestionId" type="hidden" value="@item.Id" name="Questions[@indexCounter].QuestionId" />
+                    @if (item.IsOpenEnded)
+                    { 
+                        <input id="Questions[@indexCounter]" class="text-box single-line" type="text" value="" name="Questions[@indexCounter].Answer"/>   
                     }
-                    else { 
-                        foreach (var response in item.Responses.OrderBy(x => x.Order)) { 
-                            <input id="Questions[@item.Order][@response.Order]" type="radio" value="@response.Value" name="Questions[@item.Order].Answer" /> 
-                            <label for="Questions[@item.Order][@response.Order]">@response.Value</label> <br />
+                    else
+                    {
+                        foreach (var response in item.Responses.OrderBy(x => x.Order))
+                        { 
+                            <input id="Questions[@indexCounter][@response.Order]" type="radio" value="@response.Id" name="Questions[@indexCounter].ResponseId" />                             
+                            <label for="Questions[@indexCounter][@response.Order]">@response.Value</label> <br />
                         }
                     }
                 </div>
             </li>
-            odd = !odd;    
+                    odd = !odd;
+                    indexCounter = indexCounter + 1;
         }
 
 		<li>
