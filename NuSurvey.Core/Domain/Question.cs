@@ -42,6 +42,7 @@ namespace NuSurvey.Core.Domain
         public QuestionMap()
         {
             Id(x => x.Id);
+            Map(x => x.Name);
             Map(x => x.IsActive);
             Map(x => x.Order).Column("`Order`");
             Map(x => x.IsOpenEnded);

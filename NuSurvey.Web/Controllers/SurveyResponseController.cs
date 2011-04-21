@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using NuSurvey.Core.Domain;
@@ -45,8 +46,11 @@ namespace NuSurvey.Web.Controllers
         //    return View(surveyResponse);
         //}
 
-        //
-        // GET: /SurveyResponse/Create
+        /// <summary>
+        /// GET: /SurveyResponse/Create
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <returns></returns>
         public ActionResult Create(int id)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
@@ -55,7 +59,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Survey not found or not active.";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-			var viewModel = SurveyResponseViewModel.Create(Repository);
+			var viewModel = SurveyResponseViewModel.Create(Repository, survey);
             
             return View(viewModel);
         } 
@@ -63,7 +67,7 @@ namespace NuSurvey.Web.Controllers
         //
         // POST: /SurveyResponse/Create
         [HttpPost]
-        public ActionResult Create(SurveyResponse surveyResponse)
+        public ActionResult Create(int id, SurveyResponse surveyResponse, QuestionAnswerParameter[] questions)
         {
             var surveyResponseToCreate = new SurveyResponse();
 
@@ -79,7 +83,7 @@ namespace NuSurvey.Web.Controllers
             }
             else
             {
-				var viewModel = SurveyResponseViewModel.Create(Repository);
+				var viewModel = SurveyResponseViewModel.Create(Repository, null); //TODO: FIx
                 viewModel.SurveyResponse = surveyResponse;
 
                 return View(viewModel);
@@ -173,14 +177,25 @@ namespace NuSurvey.Web.Controllers
     public class SurveyResponseViewModel
 	{
 		public SurveyResponse SurveyResponse { get; set; }
+        public IList<Question> Questions { get; set; }
+        public Survey Survey { get; set; }
  
-		public static SurveyResponseViewModel Create(IRepository repository)
+		public static SurveyResponseViewModel Create(IRepository repository, Survey survey)
 		{
 			Check.Require(repository != null, "Repository must be supplied");
+            Check.Require(survey != null);
 			
-			var viewModel = new SurveyResponseViewModel {SurveyResponse = new SurveyResponse()};
- 
+			var viewModel = new SurveyResponseViewModel {SurveyResponse = new SurveyResponse(), Survey = survey};
+		    viewModel.Questions = viewModel.Survey.Questions
+                .Where(a => a.IsActive && a.Category != null && a.Category.IsActive)
+                .OrderBy(a => a.Order).ToList();            
 			return viewModel;
 		}
 	}
+
+    public class QuestionAnswerParameter
+    {
+        public int QuestionId { get; set; }
+        public string Answer { get; set; }
+    }
 }
