@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentNHibernate.Mapping;
-using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+using System.ComponentModel.DataAnnotations;
 
 namespace NuSurvey.Core.Domain
 {
@@ -22,7 +22,7 @@ namespace NuSurvey.Core.Domain
 
 
         [Required]
-        [Length(100)]
+        [StringLength(100)]
         public virtual string Name { get; set; }
         public virtual int Rank { get; set; }
         [Required]
@@ -38,7 +38,7 @@ namespace NuSurvey.Core.Domain
         public virtual DateTime LastUpdate { get; set; }
 
         public virtual DateTime CreateDate { get; set; }
-        [NotNull]
+        [Required]
         public virtual Survey Survey { get; set; }
     }
 

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentNHibernate.Mapping;
-using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace NuSurvey.Core.Domain
 {
@@ -9,7 +10,7 @@ namespace NuSurvey.Core.Domain
     {
         public virtual DateTime Date { get; set; }
         public virtual int MaxScore { get; set; }
-        [NotNull]
+        [Required]
         public virtual Category Category { get; set; }
     }
 

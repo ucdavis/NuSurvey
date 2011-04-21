@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentNHibernate.Mapping;
-using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace NuSurvey.Core.Domain
 {
@@ -28,17 +28,17 @@ namespace NuSurvey.Core.Domain
         #endregion Constructor
 
         [Required]
-        [Length(10)]
+        [StringLength(10)]
         public virtual string StudentId { get; set; }
         public virtual DateTime DateTaken { get; set; }
 
         public virtual Category PositiveCategory { get; set; }
         public virtual Category NegativeCategoryId1 { get; set; }
         public virtual Category NegativeCategoryId2 { get; set; }
-        [NotNull]
+        [Required]
         public virtual Survey Survey { get; set; }
 
-        [NotNull]
+        [Required]
         public virtual IList<Answer> Answers { get; set; }
 
         public virtual void AddAnswers(Answer answer)

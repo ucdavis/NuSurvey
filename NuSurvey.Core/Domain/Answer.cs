@@ -1,6 +1,8 @@
-﻿using FluentNHibernate.Mapping;
-using NHibernate.Validator.Constraints;
+﻿using System;
+using System.Collections.Generic;
+using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace NuSurvey.Core.Domain
 {
@@ -11,13 +13,13 @@ namespace NuSurvey.Core.Domain
 
         public virtual int? OpenEndedAnswer { get; set; }
 
-        [NotNull]
+        [Required]
         public virtual SurveyResponse SurveyResponse { get; set; }
-        [NotNull]
+        [Required]
         public virtual Category Category { get; set; }
-        [NotNull]
+        [Required]
         public virtual Question Question { get; set; }
-        [NotNull]
+        [Required]
         public virtual Response Response { get; set; }
     }
 

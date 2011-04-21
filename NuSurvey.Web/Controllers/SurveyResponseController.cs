@@ -100,7 +100,7 @@ namespace NuSurvey.Web.Controllers
                 }
             }
 
-            surveyResponseToCreate.TransferValidationMessagesTo(ModelState);
+            
 
             if (ModelState.IsValid)
             {
