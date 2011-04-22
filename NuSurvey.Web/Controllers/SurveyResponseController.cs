@@ -85,17 +85,29 @@ namespace NuSurvey.Web.Controllers
 
             TransferValues(surveyResponse, surveyResponseToCreate, questions);
 
-            foreach (var question in survey.Questions.Where(a => a.IsActive && a.Category.IsActive).OrderBy(a => a.Order))
+            if (survey.Questions.Where(a => a.IsActive && a.Category.IsActive).Count() != questions.Count())
             {
-                if (!surveyResponseToCreate.Answers.Where(a => a.Question != null && a.Question == question).Any())
+                Message = "You must answer all survey questions.";
+            }
+
+            for (int i = 0; i < questions.Count(); i++)
+            {
+                if (!surveyResponseToCreate.Answers.Where(a => a.Question.Id == questions[i].QuestionId).Any())
                 {
-                    if (question.IsOpenEnded)
+                    if (survey.Questions.Where(a => a.Id == questions[i].QuestionId).Single().IsOpenEnded)
                     {
-                        ModelState.AddModelError("Survey.Questions", "TODO open ended");
+                        if (!string.IsNullOrWhiteSpace(questions[i].Answer))
+                        {
+                            ModelState.AddModelError(string.Format("Questions[{0}]", i), "Numeric answer to Question is required"); 
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Format("Questions[{0}]", i), "Answer must be a number");  
+                        }                 
                     }
                     else
                     {
-                        ModelState.AddModelError("Survey.Questions", "TODO Missing");
+                        ModelState.AddModelError(string.Format("Questions[{0}]", i), "Answer is required");
                     }
                 }
             }

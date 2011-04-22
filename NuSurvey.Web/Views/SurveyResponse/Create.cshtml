@@ -12,7 +12,7 @@
 @using (Html.BeginForm())
 {
 	@Html.AntiForgeryToken()
-	@Html.ValidationSummary("There were validation Errors.")
+	@Html.ValidationSummary(true)
     @Html.HiddenFor(x => x.Survey.Id)
 <fieldset>
 @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
@@ -44,7 +44,8 @@ Example: Dinosaur 1  *@
                     <input id="Questions[@indexCounter]_QuestionId" type="hidden" value="@item.Id" name="Questions[@indexCounter].QuestionId" />
                     @if (item.IsOpenEnded)
                     { 
-                        <input id="Questions[@indexCounter]" class="text-box single-line" type="text" value="" name="Questions[@indexCounter].Answer"/>   
+                        <input id="Questions[@indexCounter]" class="text-box single-line" type="text" value="" name="Questions[@indexCounter].Answer"/>  
+                        
                     }
                     else
                     {
@@ -54,6 +55,7 @@ Example: Dinosaur 1  *@
                             <label for="Questions[@indexCounter][@response.Order]">@response.Value</label> <br />
                         }
                     }
+                    @Html.ValidationMessage("Questions[" + @indexCounter + "]")
                 </div>
             </li>
                     odd = !odd;
