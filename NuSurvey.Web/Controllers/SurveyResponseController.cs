@@ -92,27 +92,27 @@ namespace NuSurvey.Web.Controllers
 
             for (int i = 0; i < questions.Count(); i++)
             {
-                if (!surveyResponseToCreate.Answers.Where(a => a.Question.Id == questions[i].QuestionId).Any())
+                var i1 = i;
+                if (!surveyResponseToCreate.Answers.Where(a => a.Question.Id == questions[i1].QuestionId).Any())
                 {
-                    if (survey.Questions.Where(a => a.Id == questions[i].QuestionId).Single().IsOpenEnded)
+                    if (survey.Questions.Where(a => a.Id == questions[i1].QuestionId).Single().IsOpenEnded)
                     {
-                        if (!string.IsNullOrWhiteSpace(questions[i].Answer))
+                        if (string.IsNullOrWhiteSpace(questions[i1].Answer))
                         {
-                            ModelState.AddModelError(string.Format("Questions[{0}]", i), "Numeric answer to Question is required"); 
+                            ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Numeric answer to Question is required"); 
                         }
                         else
                         {
-                            ModelState.AddModelError(string.Format("Questions[{0}]", i), "Answer must be a number");  
+                            ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Answer must be a number");  
                         }                 
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Format("Questions[{0}]", i), "Answer is required");
+                        ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Answer is required");
                     }
                 }
             }
 
-            
 
             if (ModelState.IsValid)
             {
