@@ -272,7 +272,12 @@ namespace NuSurvey.Web.Controllers
                 {
                     answer.Response = question1.Responses.Where(a => a.Id == passedQuestion.ResponseId).FirstOrDefault();
                 }
-                if (answer.Response != null || answer.Question.Category.DoNotUseForCalculations)
+                if (answer.Category.DoNotUseForCalculations && answer.Response == null && answer.OpenEndedAnswer != null)
+                {
+                    answer.Score = 0;
+                    destination.AddAnswers(answer);
+                }
+                if (answer.Response != null)
                 {
                     if (answer.Question.Category.DoNotUseForCalculations)
                     {
