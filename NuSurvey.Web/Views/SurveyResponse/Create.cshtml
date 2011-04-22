@@ -34,6 +34,7 @@ Example: Dinosaur 1  *@
 
         @{ var odd = false; }
         @{ var indexCounter = 0;}
+        @{ var ans = string.Empty;}
         @foreach (var item in Model.Questions)
         {
             <li class="@(odd ? "odd" : "even")">
@@ -43,15 +44,27 @@ Example: Dinosaur 1  *@
                 <div class="editor-field ">
                     <input id="Questions[@indexCounter]_QuestionId" type="hidden" value="@item.Id" name="Questions[@indexCounter].QuestionId" />
                     @if (item.IsOpenEnded)
-                    { 
-                        <input id="Questions[@indexCounter]" class="text-box single-line" type="text" value="" name="Questions[@indexCounter].Answer"/>  
-                        
+                    {
+                        if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter).Answer != null)
+                        {
+                            ans = Model.SurveyAnswers.ElementAtOrDefault(indexCounter).Answer;
+                        }
+                        else {
+                            ans = string.Empty;
+                        }              
+                        <input id="Questions[@indexCounter]" class="text-box single-line" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>                   
                     }
                     else
                     {
                         foreach (var response in item.Responses.OrderBy(x => x.Order))
-                        { 
-                            <input id="Questions[@indexCounter][@response.Order]" type="radio" value="@response.Id" name="Questions[@indexCounter].ResponseId" />                             
+                        {
+                            var isChecked = string.Empty;
+                            if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null){
+                                if (response.Id == Model.SurveyAnswers.ElementAtOrDefault(indexCounter).ResponseId){
+                                    isChecked = "checked=\"checked\""; 
+                                }
+                            }
+                            <input id="Questions[@indexCounter][@response.Order]" type="radio" value="@response.Id" @isChecked name="Questions[@indexCounter].ResponseId" />                             
                             <label for="Questions[@indexCounter][@response.Order]">@response.Value</label> <br />
                         }
                     }
