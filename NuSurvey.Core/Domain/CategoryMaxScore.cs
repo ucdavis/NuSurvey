@@ -6,6 +6,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NuSurvey.Core.Domain
 {
+    /// <summary>
+    /// The CategoryMax Score is used to save the maximum score possible by adding up all the question's highest response score.
+    /// This value is used to calculate the percentage of the survey response's score
+    /// If anything is changed for a Category's questions or responses, this needs to be recalculated.
+    /// </summary>
     public class CategoryMaxScore : DomainObject
     {
         public virtual DateTime Date { get; set; }

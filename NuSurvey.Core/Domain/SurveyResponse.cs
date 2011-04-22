@@ -33,12 +33,12 @@ namespace NuSurvey.Core.Domain
         public virtual DateTime DateTaken { get; set; }
 
         public virtual Category PositiveCategory { get; set; }
-        public virtual Category NegativeCategoryId1 { get; set; }
-        public virtual Category NegativeCategoryId2 { get; set; }
-        [Required]
+        public virtual Category NegativeCategory1 { get; set; }
+        public virtual Category NegativeCategory2 { get; set; }
+           
         public virtual Survey Survey { get; set; }
 
-        [Required]
+        
         public virtual IList<Answer> Answers { get; set; }
 
         public virtual void AddAnswers(Answer answer)
@@ -57,12 +57,12 @@ namespace NuSurvey.Core.Domain
             Map(x => x.DateTaken);
 
             //TODO: Ensure that these point to the correct values in the database.
-            References(x => x.PositiveCategory);
-            References(x => x.NegativeCategoryId1);
-            References(x => x.NegativeCategoryId2);
+            References(x => x.PositiveCategory).Column("PositiveCategoryId");
+            References(x => x.NegativeCategory1).Column("NegativeCategoryId1");
+            References(x => x.NegativeCategory2).Column("NegativeCategoryId2");
             References(x => x.Survey);
 
-            HasMany(x => x.Answers).Cascade.AllDeleteOrphan();
+            HasMany(x => x.Answers).Cascade.All();
         }
     }
 }

@@ -6,6 +6,7 @@ using NuSurvey.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
+using UCDArch.Testing.Extensions;
 using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
@@ -59,6 +60,16 @@ namespace NuSurvey.Web.Controllers
             {
                 Message = "Survey not found or not active.";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations))
+            {
+                var catMaxScore =
+                    Repository.OfType<CategoryMaxScore>().Queryable.Where(a => a.Category == category).FirstOrDefault();
+                if (catMaxScore == null)
+                {
+                    Message = "Survey does not have related CategoryMaxScore records.";
+                    return this.RedirectToAction<ErrorController>(a => a.Index());
+                }
             }
 			var viewModel = SurveyResponseViewModel.Create(Repository, survey);
             
@@ -116,6 +127,28 @@ namespace NuSurvey.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                var scores = new List<Scores>();
+                foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations))
+                {
+                    var score = new Scores();
+                    score.Category = category;
+                    score.MaxScore = Repository.OfType<CategoryMaxScore>().Queryable.Where(a => a.Category == category).First().MaxScore;
+                    score.TotalScore = surveyResponseToCreate.Answers.Where(a => a.Category == category).Sum(b => b.Score);
+                    score.Percent = (score.TotalScore / score.MaxScore) * 100m;
+                    scores.Add(score);
+                }
+
+                surveyResponseToCreate.PositiveCategory = scores
+                    .OrderByDescending(a => a.Percent)
+                    .FirstOrDefault().Category;
+                surveyResponseToCreate.NegativeCategory1 = scores
+                    .OrderBy(a => a.Percent)
+                    .Where(a => a.Category != surveyResponseToCreate.PositiveCategory)
+                    .FirstOrDefault().Category;
+                surveyResponseToCreate.NegativeCategory2 = scores
+                    .OrderBy(a => a.Percent)
+                    .Where(a => a.Category != surveyResponseToCreate.PositiveCategory && a.Category != surveyResponseToCreate.NegativeCategory1)
+                    .FirstOrDefault().Category;
                 _surveyResponseRepository.EnsurePersistent(surveyResponseToCreate);
 
                 Message = "SurveyResponse Created Successfully";
@@ -124,6 +157,10 @@ namespace NuSurvey.Web.Controllers
             }
             else
             {
+                foreach (var modelState in ModelState.Values.Where(a => a.Errors.Count() > 0))
+                {
+                    var x = modelState;
+                }
 				var viewModel = SurveyResponseViewModel.Create(Repository, survey);
                 viewModel.SurveyResponse = surveyResponse;
                 viewModel.SurveyAnswers = questions;
@@ -310,6 +347,7 @@ namespace NuSurvey.Web.Controllers
             Check.Require(survey != null);
 			
 			var viewModel = new SurveyResponseViewModel {SurveyResponse = new SurveyResponse(), Survey = survey};
+		    viewModel.SurveyResponse.Survey = survey;
 		    viewModel.Questions = viewModel.Survey.Questions
                 .Where(a => a.IsActive && a.Category != null && a.Category.IsActive)
                 .OrderBy(a => a.Order).ToList();            
@@ -322,5 +360,13 @@ namespace NuSurvey.Web.Controllers
         public int QuestionId { get; set; }
         public string Answer { get; set; }
         public int ResponseId { get; set; }
+    }
+
+    public class Scores
+    {
+        public Category Category { get; set; }
+        public decimal MaxScore { get; set; }
+        public decimal TotalScore { get; set; }
+        public decimal Percent { get; set; }
     }
 }
