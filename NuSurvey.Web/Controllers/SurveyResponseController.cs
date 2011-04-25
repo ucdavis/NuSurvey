@@ -104,6 +104,7 @@ namespace NuSurvey.Web.Controllers
             }
 
             TransferValues(surveyResponse, surveyResponseToCreate, questions);
+            surveyResponseToCreate.UserId = CurrentUser.Identity.Name;
 
             if (survey.Questions.Where(a => a.IsActive && a.Category.IsActive).Count() != questions.Count())
             {
@@ -178,6 +179,30 @@ namespace NuSurvey.Web.Controllers
 
                 return View(viewModel);
             }
+        }
+
+        /// <summary>
+        /// Get: /SurveyResponse/Results
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Results(int id)
+        {
+            var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (surveyResponse == null)
+            {
+                Message = "Not Found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            if (!CurrentUser.IsInRole(RoleNames.Admin))
+            {
+                if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+                {
+                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                }
+            }
+
+            return View(surveyResponse);
         }
 
         //

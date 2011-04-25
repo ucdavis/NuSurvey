@@ -38,6 +38,8 @@ namespace NuSurvey.Core.Domain
         [Required]
         public virtual Survey Survey { get; set; }
 
+        [Required]
+        public virtual string UserId { get; set; }
         
         public virtual IList<Answer> Answers { get; set; }
 
@@ -55,6 +57,7 @@ namespace NuSurvey.Core.Domain
             Id(x => x.Id);
             Map(x => x.StudentId);
             Map(x => x.DateTaken);
+            Map(x => x.UserId);
 
             //TODO: Ensure that these point to the correct values in the database.
             References(x => x.PositiveCategory).Column("PositiveCategoryId");
