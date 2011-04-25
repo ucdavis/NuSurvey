@@ -1,25 +1,132 @@
-﻿@model NuSurvey.Core.Domain.SurveyResponse
+﻿@model NuSurvey.Web.Controllers.SurveyReponseDetailViewModel
 
 @{
-    ViewBag.Title = "Survey Response Details";
+	ViewBag.Title = @Model.SurveyResponse.Survey.Name + " Survey Response";
 }
 
-@*<h2>Details</h2>*@
 
-<fieldset>
-    <legend>SurveyResponse</legend>
-	<ul>
-		<li>
-			<div class="display-label">StudentId</div>
-			<div class="display-field">@Model.StudentId</div>
-		</li>
-		<li>
-			<div class="display-label">DateTaken</div>
-			<div class="display-field">@String.Format("{0:g}", Model.DateTaken)</div>
-		</li>
-	</ul>
-</fieldset>
-<p>    
-    @Html.ActionLink("Back to List", "Index")
-</p>
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({ "bJQueryUI": true });
+        });    
+    </script>
+}
+
+<h2>Scores</h2>
+
+<table class="datatable">
+	<thead>
+		<tr>
+            <th></th>
+			<th>
+                Name
+			</th>
+            <th>
+                Rank
+			</th>
+            <th>
+                Total Score
+            </th>
+            <th>
+                Max Score
+            </th>
+            <th>
+                Percent
+            </th>
+		</tr>
+	</thead>
+	<tbody>
+
+@{ var odd = false; }
+@foreach (var score in Model.Scores.OrderBy(x => x.Category.Rank))
+{
+		<tr class="@(odd ? "odd" : "even")">
+            <td></td>
+			<td>
+                @score.Category.Name
+			</td>
+            <td>
+                @score.Category.Rank
+			</td>
+            <td>
+                @score.TotalScore
+            </td>
+            <td>
+                @score.MaxScore
+            </td>
+            <td>
+                @String.Format("{0:0.00}", @score.Percent)%
+            </td>
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+
+<h2>Responses</h2>
+
+<table class="datatable">
+	<thead>
+		<tr>
+            <th></th>
+			<th>
+                Name
+			</th>
+            <th>
+                Rank
+			</th>
+            <th>
+                #
+            </th>
+            <th>
+                Question
+            </th>
+            <th>
+                Answer
+            </th>
+            <th>
+                Score
+            </th>
+		</tr>
+	</thead>
+	<tbody>
+
+@{ odd = false; }
+@foreach (var ans in Model.SurveyResponse.Answers)
+{
+		<tr class="@(odd ? "odd" : "even")">
+            <td></td>
+			<td>
+                @ans.Question.Category.Name
+			</td>
+            <td>
+                @ans.Question.Category.Rank
+			</td>
+            <td>
+                @ans.Question.Order
+            </td>
+            <td>
+                @ans.Question.Name
+            </td>
+            <td>
+                @if (!ans.OpenEndedAnswer.HasValue){ 
+                    @ans.Response.Value
+                }
+                else{
+                    @ans.OpenEndedAnswer 
+                }
+            </td>
+            <td>
+                @ans.Score
+            </td>
+		</tr>
+                odd = !odd;
+}
+	</tbody>
+</table>
+
+
 

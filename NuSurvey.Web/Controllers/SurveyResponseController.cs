@@ -52,7 +52,9 @@ namespace NuSurvey.Web.Controllers
 
             if (surveyResponse == null) return RedirectToAction("Index");
 
-            return View(surveyResponse);
+            var viewModel = SurveyReponseDetailViewModel.Create(Repository, surveyResponse);
+
+            return View(viewModel);
         }
 
         /// <summary>
@@ -107,6 +109,8 @@ namespace NuSurvey.Web.Controllers
             {
                 Message = "You must answer all survey questions.";
             }
+            ModelState.Clear();
+            surveyResponseToCreate.TransferValidationMessagesTo(ModelState);
 
             for (int i = 0; i < questions.Count(); i++)
             {
@@ -353,14 +357,42 @@ namespace NuSurvey.Web.Controllers
 			Check.Require(repository != null, "Repository must be supplied");
             Check.Require(survey != null);
 			
-			var viewModel = new SurveyResponseViewModel {SurveyResponse = new SurveyResponse(), Survey = survey};
-		    viewModel.SurveyResponse.Survey = survey;
+			var viewModel = new SurveyResponseViewModel {SurveyResponse = new SurveyResponse(survey), Survey = survey};
+		    //viewModel.SurveyResponse.Survey = survey;
 		    viewModel.Questions = viewModel.Survey.Questions
                 .Where(a => a.IsActive && a.Category != null && a.Category.IsActive)
                 .OrderBy(a => a.Order).ToList();            
 			return viewModel;
 		}
 	}
+
+    public class SurveyReponseDetailViewModel
+    {
+        public SurveyResponse SurveyResponse { get; set; }
+        public IList<Scores> Scores { get; set; }
+
+        public static SurveyReponseDetailViewModel Create(IRepository repository, SurveyResponse surveyResponse)
+        {
+            Check.Require(repository != null, "Repository must be supplied");
+            Check.Require(surveyResponse != null);
+
+            var viewModel = new SurveyReponseDetailViewModel {SurveyResponse = surveyResponse};
+
+            viewModel.Scores = new List<Scores>();
+            foreach (var category in surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations))
+            {
+                var score = new Scores();
+                score.Category = category;
+                score.MaxScore = repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id).TotalMaxScore;
+                score.TotalScore = viewModel.SurveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);
+                score.Percent = (score.TotalScore / score.MaxScore) * 100m;
+                viewModel.Scores.Add(score);
+            }
+
+
+            return viewModel;
+        }
+    }
 
     public class QuestionAnswerParameter
     {
