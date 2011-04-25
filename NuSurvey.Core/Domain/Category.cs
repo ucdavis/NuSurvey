@@ -41,6 +41,8 @@ namespace NuSurvey.Core.Domain
         [Required]
         public virtual Survey Survey { get; set; }
 
+        public virtual IList<CategoryGoal> CategoryGoals { get; set; }
+
     }
 
     public class CategoryMap : ClassMap<Category>
@@ -57,6 +59,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.CreateDate);
             Map(x => x.DoNotUseForCalculations);
 
+            HasMany(x => x.CategoryGoals);
             References(x => x.Survey);
         }
     }

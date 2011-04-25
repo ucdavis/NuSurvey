@@ -251,6 +251,7 @@
     <Content Include="Views\Survey\Index.cshtml" />
     <Content Include="Views\Survey\Details.cshtml" />
     <Content Include="Views\SurveyResponse\Details.cshtml" />
+    <Content Include="Views\SurveyResponse\Results.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

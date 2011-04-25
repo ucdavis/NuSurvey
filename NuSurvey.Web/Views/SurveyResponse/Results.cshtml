@@ -1,0 +1,31 @@
+﻿@model NuSurvey.Core.Domain.SurveyResponse
+
+@{
+    ViewBag.Title = "Parenting Quiz Results";
+}
+
+
+<h3>Thank you @Model.StudentId for taking the time to complete the @Model.Survey.Name quiz.<br />We hope this feedback will help you and your family make healthy food and activity choices.</h3>
+
+<h2>@Model.PositiveCategory.Affirmation</h2>
+<br />
+@if(Model.NegativeCategory1 != null){
+    <strong><input type="checkbox" /> @Model.NegativeCategory1.Encouragement</strong>
+    <br />
+    foreach (var goal in Model.NegativeCategory1.CategoryGoals.Where(x => x.IsActive)) { 
+         <input type="checkbox" /> @goal.Name
+        <br />
+    }
+    <br />
+}
+@if(Model.NegativeCategory2 != null){
+    <strong><input type="checkbox" /> @Model.NegativeCategory2.Encouragement</strong>
+    <br />
+    foreach (var goal in Model.NegativeCategory2.CategoryGoals.Where(x => x.IsActive)) { 
+        <input type="checkbox" /> @goal.Name
+        <br />
+    }
+    <br />
+}
+
+
