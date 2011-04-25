@@ -1,0 +1,76 @@
+﻿@model IEnumerable<NuSurvey.Core.Domain.SurveyResponse>
+
+@{
+	ViewBag.Title = "Survey Responses";
+}
+
+@*<h2>Details</h2>*@
+
+@*<p>
+	@Html.ActionLink("Create New", "Create")
+</p>*@
+<table class="datatable">
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				StudentId
+			</th>
+			<th>
+				DateTaken
+			</th>
+            <th>
+                Positive Category
+            </th>
+            <th>
+                Negative Category
+            </th>
+            <th>
+                Negative Category
+            </th>
+		</tr>
+	</thead>
+	<tbody>
+@{ var odd = false; }
+@foreach (var item in Model) {
+		<tr class="@(odd ? "odd": "even")">
+			<td>
+				@Html.ActionLink("Details", "Details", new { id=item.Id })
+				@*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+			</td>
+			<td>
+				@item.StudentId
+			</td>
+			<td>
+				@String.Format("{0:g}", item.DateTaken)
+			</td>
+            <td>
+                @if (item.PositiveCategory != null) { 
+                    @item.PositiveCategory.Name
+                }
+            </td>
+            <td>
+                @if (item.NegativeCategory1 != null) { 
+                    @item.NegativeCategory1.Name
+                }
+            </td>
+            <td>
+                @if (item.NegativeCategory2 != null) {
+                    @item.NegativeCategory2.Name
+                }
+            </td>
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+
+<script type="text/javascript">
+	$(function () {
+		$("table.datatable").dataTable({
+			"bJQueryUI": true //Use the jquery ui skin
+			//"aaSorting": [[ 3, "asc" ]] //Add default sorting
+		});
+	});
+</script>
+

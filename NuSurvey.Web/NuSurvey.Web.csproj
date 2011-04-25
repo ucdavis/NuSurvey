@@ -101,6 +101,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Filters\RoleFilter.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\SurveyResponseController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -245,6 +246,9 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\SurveyResponse\Index.cshtml" />
     <Content Include="Views\SurveyResponse\Create.cshtml" />
+    <Content Include="Views\Survey\Index.cshtml" />
+    <Content Include="Views\Survey\Details.cshtml" />
+    <Content Include="Views\SurveyResponse\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

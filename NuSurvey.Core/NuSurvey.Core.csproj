@@ -56,7 +56,7 @@
     <Compile Include="Domain\Answer.cs" />
     <Compile Include="Domain\Category.cs" />
     <Compile Include="Domain\CategoryGoal.cs" />
-    <Compile Include="Domain\CategoryMaxScore.cs" />
+    <Compile Include="Domain\CategoryTotalMaxScore.cs" />
     <Compile Include="Domain\Question.cs" />
     <Compile Include="Domain\Response.cs" />
     <Compile Include="Domain\Survey.cs" />

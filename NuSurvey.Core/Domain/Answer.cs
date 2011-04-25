@@ -19,7 +19,9 @@ namespace NuSurvey.Core.Domain
         public virtual Category Category { get; set; }
         [Required]
         public virtual Question Question { get; set; }
-        [Required]
+        /// <summary>
+        /// This is only required for non-open ended questions that are for categories that are used for calculations
+        /// </summary>
         public virtual Response Response { get; set; }
     }
 

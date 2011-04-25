@@ -35,7 +35,7 @@ namespace NuSurvey.Core.Domain
         public virtual Category PositiveCategory { get; set; }
         public virtual Category NegativeCategory1 { get; set; }
         public virtual Category NegativeCategory2 { get; set; }
-           
+        [Required]
         public virtual Survey Survey { get; set; }
 
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using NuSurvey.Core.Domain;
+using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
@@ -37,16 +38,22 @@ namespace NuSurvey.Web.Controllers
             return View(activeSurveyList);
         }
 
-        //
-        // GET: /SurveyResponse/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+        
+        /// <summary>
+        /// Called from the Survey Details.
+        /// GET: /SurveyResponse/Details/5
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Admin]
+        public ActionResult Details(int id)
+        {
+            var surveyResponse = _surveyResponseRepository.GetNullableById(id);
 
-        //    if (surveyResponse == null) return RedirectToAction("Index");
+            if (surveyResponse == null) return RedirectToAction("Index");
 
-        //    return View(surveyResponse);
-        //}
+            return View(surveyResponse);
+        }
 
         /// <summary>
         /// GET: /SurveyResponse/Create
@@ -61,16 +68,16 @@ namespace NuSurvey.Web.Controllers
                 Message = "Survey not found or not active.";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations))
-            {
-                var catMaxScore =
-                    Repository.OfType<CategoryMaxScore>().Queryable.Where(a => a.Category == category).FirstOrDefault();
-                if (catMaxScore == null)
-                {
-                    Message = "Survey does not have related CategoryMaxScore records.";
-                    return this.RedirectToAction<ErrorController>(a => a.Index());
-                }
-            }
+            //foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations))
+            //{
+            //    var catMaxScore =
+            //        Repository.OfType<CategoryMaxScore>().Queryable.Where(a => a.Category == category).FirstOrDefault();
+            //    if (catMaxScore == null)
+            //    {
+            //        Message = "Survey does not have related CategoryMaxScore records.";
+            //        return this.RedirectToAction<ErrorController>(a => a.Index());
+            //    }
+            //}
 			var viewModel = SurveyResponseViewModel.Create(Repository, survey);
             
             return View(viewModel);
@@ -132,7 +139,7 @@ namespace NuSurvey.Web.Controllers
                 {
                     var score = new Scores();
                     score.Category = category;
-                    score.MaxScore = Repository.OfType<CategoryMaxScore>().Queryable.Where(a => a.Category == category).First().MaxScore;
+                    score.MaxScore = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id).TotalMaxScore; //Repository.OfType<CategoryMaxScore>().Queryable.Where(a => a.Category == category).First().MaxScore;
                     score.TotalScore = surveyResponseToCreate.Answers.Where(a => a.Category == category).Sum(b => b.Score);
                     score.Percent = (score.TotalScore / score.MaxScore) * 100m;
                     scores.Add(score);

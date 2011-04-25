@@ -1,0 +1,25 @@
+﻿@model NuSurvey.Core.Domain.SurveyResponse
+
+@{
+    ViewBag.Title = "Survey Response Details";
+}
+
+@*<h2>Details</h2>*@
+
+<fieldset>
+    <legend>SurveyResponse</legend>
+	<ul>
+		<li>
+			<div class="display-label">StudentId</div>
+			<div class="display-field">@Model.StudentId</div>
+		</li>
+		<li>
+			<div class="display-label">DateTaken</div>
+			<div class="display-field">@String.Format("{0:g}", Model.DateTaken)</div>
+		</li>
+	</ul>
+</fieldset>
+<p>    
+    @Html.ActionLink("Back to List", "Index")
+</p>
+

@@ -40,6 +40,7 @@ namespace NuSurvey.Core.Domain
         public virtual DateTime CreateDate { get; set; }
         [Required]
         public virtual Survey Survey { get; set; }
+
     }
 
     public class CategoryMap : ClassMap<Category>
