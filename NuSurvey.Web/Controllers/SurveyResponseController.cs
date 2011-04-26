@@ -147,25 +147,30 @@ namespace NuSurvey.Web.Controllers
                     score.MaxScore = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id).TotalMaxScore; //Repository.OfType<CategoryMaxScore>().Queryable.Where(a => a.Category == category).First().MaxScore;
                     score.TotalScore = surveyResponseToCreate.Answers.Where(a => a.Category == category).Sum(b => b.Score);
                     score.Percent = (score.TotalScore / score.MaxScore) * 100m;
+                    score.Rank = category.Rank;
                     scores.Add(score);
                 }
 
                 surveyResponseToCreate.PositiveCategory = scores
                     .OrderByDescending(a => a.Percent)
+                    .ThenBy(a => a.Rank)
                     .FirstOrDefault().Category;
+
                 surveyResponseToCreate.NegativeCategory1 = scores
-                    .OrderBy(a => a.Percent)
                     .Where(a => a.Category != surveyResponseToCreate.PositiveCategory)
-                    .FirstOrDefault().Category;
-                surveyResponseToCreate.NegativeCategory2 = scores
                     .OrderBy(a => a.Percent)
+                    .ThenBy(a => a.Rank)
+                    .FirstOrDefault().Category;
+                surveyResponseToCreate.NegativeCategory2 = scores                    
                     .Where(a => a.Category != surveyResponseToCreate.PositiveCategory && a.Category != surveyResponseToCreate.NegativeCategory1)
+                    .OrderBy(a => a.Percent)
+                    .ThenBy(a => a.Rank)
                     .FirstOrDefault().Category;
                 _surveyResponseRepository.EnsurePersistent(surveyResponseToCreate);
 
                 Message = "SurveyResponse Created Successfully";
 
-                return RedirectToAction("Index");
+                return this.RedirectToAction<SurveyResponseController>(a => a.Results(surveyResponseToCreate.Id));
             }
             else
             {
@@ -411,6 +416,7 @@ namespace NuSurvey.Web.Controllers
                 score.MaxScore = repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id).TotalMaxScore;
                 score.TotalScore = viewModel.SurveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);
                 score.Percent = (score.TotalScore / score.MaxScore) * 100m;
+                score.Rank = category.Rank;
                 viewModel.Scores.Add(score);
             }
 
@@ -432,5 +438,6 @@ namespace NuSurvey.Web.Controllers
         public decimal MaxScore { get; set; }
         public decimal TotalScore { get; set; }
         public decimal Percent { get; set; }
+        public int Rank { get; set; }
     }
 }
