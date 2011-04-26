@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
@@ -273,14 +274,14 @@ namespace NuSurvey.Tests.ControllerTests
             AccountController controller = GetAccountController();
             RegisterModel model = new RegisterModel()
             {
-                UserName = "someUser",
+                //UserName = "someUser",
                 Email = "goodEmail",
                 Password = "goodPassword",
                 ConfirmPassword = "goodPassword"
             };
 
             // Act
-            ActionResult result = controller.Register(model);
+            ActionResult result = controller.Register(model, new string[0]);
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
@@ -296,14 +297,14 @@ namespace NuSurvey.Tests.ControllerTests
             AccountController controller = GetAccountController();
             RegisterModel model = new RegisterModel()
             {
-                UserName = "duplicateUser",
+                //UserName = "duplicateUser",
                 Email = "duplicateUser",
                 Password = "goodPassword",
                 ConfirmPassword = "goodPassword"
             };
 
             // Act
-            ActionResult result = controller.Register(model);
+            ActionResult result = controller.Register(model, new string[0]);
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(ViewResult));
@@ -320,7 +321,7 @@ namespace NuSurvey.Tests.ControllerTests
             AccountController controller = GetAccountController();
             RegisterModel model = new RegisterModel()
             {
-                UserName = "someUser",
+                //UserName = "someUser",
                 Email = "goodEmail",
                 Password = "goodPassword",
                 ConfirmPassword = "goodPassword"
@@ -328,7 +329,7 @@ namespace NuSurvey.Tests.ControllerTests
             controller.ModelState.AddModelError("", "Dummy error message.");
 
             // Act
-            ActionResult result = controller.Register(model);
+            ActionResult result = controller.Register(model, new string[0]);
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(ViewResult));
@@ -425,6 +426,12 @@ namespace NuSurvey.Tests.ControllerTests
                 return (userName == "someUser".ToLower() && password == "goodPassword");
                 //return (userName == "goodpassword" && password == "goodPassword");
             }
+
+            public bool ManageRoles(string userName, string [] roles)
+            {
+                return true;
+            }
+
 
             public MembershipCreateStatus CreateUser(string userName, string password, string email)
             {

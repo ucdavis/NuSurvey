@@ -62,6 +62,21 @@ Example: Dinosaur 1  *@
 				@Html.ValidationMessageFor(model => model.ConfirmPassword)
 			</div>
 		</li>
+        <li>
+            <div class="editor-label">
+                @Html.Label("Roles")
+            </div>
+            <div class="editor-field">
+                <ul class="checkbox_container">
+                    <li>
+                        <input class="checkbox" type="checkbox" value="@ViewBag.UserRole" name="Roles" /> User
+                    </li>
+                    <li>
+                        <input class="checkbox" type="checkbox" value="@ViewBag.AdminRole" name="Roles" /> Admin
+                    </li>
+                </ul>
+            </div>
+        </li>
 		<li>
 			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
 			<label>&nbsp;</label>

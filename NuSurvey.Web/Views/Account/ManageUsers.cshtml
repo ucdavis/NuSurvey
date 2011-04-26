@@ -1,0 +1,74 @@
+﻿@model IQueryable<NuSurvey.Web.Controllers.UsersRoles>
+
+@{
+	ViewBag.Title = "ManageUsers";
+}
+
+
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({ "bJQueryUI": true });
+        });    
+    </script>
+}
+
+
+<p>
+	@Html.ActionLink("Create New", "Create")
+</p>
+<table class="datatable">
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				User Name/Email
+			</th>
+			<th>
+				Admin
+			</th>
+			<th>
+				User
+			</th>
+            <th></th>
+		</tr>
+	</thead>
+	<tbody>
+@{ var odd = false; }
+@foreach (var item in Model) {
+		<tr class="@(odd ? "odd": "even")">	
+        <td>
+            
+            <a href="/Account/Details/@item.UserName">
+                <img src="@Url.Image("details.png")" alt="View the details of this user" /></a> 
+            <a href="/Account/Edit/@item.UserName">
+                <img src="@Url.Image("edit.png")" alt="Edit this user" /></a>
+            </td>
+			<td>
+				@item.UserName
+			</td>
+			<td>
+				@if (item.Admin) { 
+                 @Html.Encode("Admin");
+                }
+			</td>
+			<td>
+				@if (item.User) { 
+                 @Html.Encode("User");
+                }
+			</td>
+            <td>
+                <a href="/Account/Delete/@item.UserName">
+                    <img alt="Delete this user" src="/Images/delete.png">
+                </a>     
+            </td>
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+
+
+

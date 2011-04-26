@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration.Provider;
 using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Linq.Expressions;
+using NuSurvey.Web.Controllers.Filters;
+using UCDArch.Core.Utils;
 
 namespace NuSurvey.Web.Models
 {
@@ -50,9 +54,9 @@ namespace NuSurvey.Web.Models
 
     public class RegisterModel
     {
-        [Required]
-        [Display(Name = "User name")]
-        public string UserName { get; set; }
+        //[Required]
+        //[Display(Name = "User name")]
+        //public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]
@@ -69,7 +73,27 @@ namespace NuSurvey.Web.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
     }
+
+    public class EditUserViewModel
+    {
+        public string Email { get; set; }
+        public bool IsAdmin { get; set; }
+        public bool IsUser { get; set; }
+
+        public static EditUserViewModel Create(string email)
+        {
+            Check.Require(!string.IsNullOrWhiteSpace(email));
+
+            var viewModel = new EditUserViewModel {Email = email};
+            viewModel.IsAdmin = Roles.IsUserInRole(viewModel.Email, RoleNames.Admin);
+            viewModel.IsUser = Roles.IsUserInRole(viewModel.Email, RoleNames.User);
+
+            return viewModel;
+        }
+    }
+
     #endregion
 
     #region Services
@@ -85,6 +109,7 @@ namespace NuSurvey.Web.Models
         bool ValidateUser(string userName, string password);
         MembershipCreateStatus CreateUser(string userName, string password, string email);
         bool ChangePassword(string userName, string oldPassword, string newPassword);
+        bool ManageRoles(string userName, string[] roles);
     }
 
     public class AccountMembershipService : IMembershipService
@@ -126,6 +151,42 @@ namespace NuSurvey.Web.Models
             MembershipCreateStatus status;
             _provider.CreateUser(userName, password, email, null, null, true, null, out status);
             return status;
+        }
+
+        public bool ManageRoles(string userName, string[] roles)
+        {
+            //try
+            //{
+                if (roles == null)
+                {
+                    roles = new string[0];
+                }
+
+                var user = _provider.GetUser(userName, false);
+                var allRoles = Roles.GetAllRoles();
+                var usersRoles = Roles.GetRolesForUser(userName);
+                foreach (var role in allRoles)
+                {
+                    if (!roles.Contains(role) && usersRoles.Contains(role))
+                    {
+                        Roles.RemoveUsersFromRole(new string[] { userName },role);
+                    }
+                }
+                foreach (var role in roles)
+                {
+                    if (allRoles.Contains(role) && !usersRoles.Contains(role))
+                    {
+                        Roles.AddUsersToRole(new string[] { userName },role);
+                    }
+                }
+                
+            //}
+            //catch (Exception ex)
+            //{
+            //    return false;
+            //}
+            return true;
+
         }
 
         public bool ChangePassword(string userName, string oldPassword, string newPassword)

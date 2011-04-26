@@ -9,6 +9,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Models;
+using MvcContrib;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -76,16 +77,23 @@ namespace NuSurvey.Web.Controllers
         // **************************************
         // URL: /Account/Register
         // **************************************
+        [Admin]
         public ActionResult Register()
         {
             ViewBag.PasswordLength = MembershipService.MinPasswordLength;
+            ViewBag.UserRole = RoleNames.User;
+            ViewBag.AdminRole = RoleNames.Admin;
 
             return View();
         }
 
+        [Admin]
         [HttpPost]
-        public ActionResult Register(RegisterModel model)
+        public ActionResult Register(RegisterModel model, string[] roles )
         {
+            ViewBag.UserRole = RoleNames.User;
+            ViewBag.AdminRole = RoleNames.Admin;
+
             if (ModelState.IsValid)
             {
                 // Attempt to register the user
@@ -93,7 +101,16 @@ namespace NuSurvey.Web.Controllers
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
-                    FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
+                    //FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
+                    if(MembershipService.ManageRoles(model.Email, roles))
+                    {
+                        Message = "User and roles created";
+                    }
+                    else
+                    {
+                        Message = "User created, but problem with roles";
+                    }
+
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -107,6 +124,85 @@ namespace NuSurvey.Web.Controllers
 
             return View(model);
         }
+
+        [Admin]
+        public ActionResult ManageUsers()
+        {
+            var users = Membership.GetAllUsers();
+
+            var emails = (from MembershipUser user in users
+                    where user.UserName.ToLower() != CurrentUser.Identity.Name.ToLower()
+                    select user.UserName.ToLower()).ToList();
+
+            var usersRoles = new List<UsersRoles>();
+            foreach (var email in emails)
+            {
+                var userRole = new UsersRoles();
+                userRole.UserName = email;
+                userRole.User = Roles.IsUserInRole(email, RoleNames.User);
+                userRole.Admin = Roles.IsUserInRole(email, RoleNames.Admin);
+                usersRoles.Add(userRole);
+            }
+
+            return View(usersRoles.AsQueryable());
+        }
+
+        [Admin]
+        public ActionResult Edit(string id)
+        {
+            if (id.Trim().ToLower() == CurrentUser.Identity.Name)
+            {
+                Message = "Can't change yourself";
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
+            if(Membership.GetUser(id) == null)
+            {
+                Message = "User Not Found";
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+            }
+
+            var viewModel = EditUserViewModel.Create(id);
+
+            return View(viewModel);
+        }
+
+        [Admin]
+        [HttpPost]
+        public ActionResult Edit(EditUserViewModel editUserViewModel)
+        {
+            if (editUserViewModel.Email.Trim().ToLower() == CurrentUser.Identity.Name)
+            {
+                Message = "Can't change yourself";
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
+            if (Membership.GetUser(editUserViewModel.Email) == null)
+            {
+                Message = "User Not Found";
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+            }
+
+            var roles = new string[]{"", ""};
+            
+            if (editUserViewModel.IsAdmin)
+            {
+                roles[0] = RoleNames.Admin;
+            }
+            if (editUserViewModel.IsUser)
+            {
+                roles[1] = RoleNames.User;
+            }
+            if(MembershipService.ManageRoles(editUserViewModel.Email, roles) == true)
+            {
+                Message = "Roles Updated";
+            }
+            else
+            {
+                Message = "Problem with Updating Roles";
+            }
+
+            return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+        }
+
 
         // **************************************
         // URL: /Account/ChangePassword
@@ -149,5 +245,12 @@ namespace NuSurvey.Web.Controllers
             return View();
         }
 
+    }
+
+    public class UsersRoles
+    {
+        public string UserName { get; set; }
+        public bool Admin { get; set; }
+        public bool User { get; set; }
     }
 }
