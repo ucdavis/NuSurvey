@@ -5,6 +5,7 @@ using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
+using MvcContrib;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -55,17 +56,18 @@ namespace NuSurvey.Web.Controllers
         [HttpPost]
         public ActionResult Create(Survey survey)
         {
-            var surveyToCreate = new Survey();
+            //var surveyToCreate = new Survey();
 
-            TransferValues(survey, surveyToCreate);
+            //TransferValues(survey, surveyToCreate);
 
             if (ModelState.IsValid)
             {
-                _surveyRepository.EnsurePersistent(surveyToCreate);
+                //_surveyRepository.EnsurePersistent(surveyToCreate);
+                _surveyRepository.EnsurePersistent(survey);
 
                 Message = "Survey Created Successfully";
 
-                return RedirectToAction("Index");
+                return this.RedirectToAction(a => a.Edit(survey.Id));
             }
             else
             {
@@ -82,12 +84,12 @@ namespace NuSurvey.Web.Controllers
         {
             var survey = _surveyRepository.GetNullableById(id);
 
-            if (survey == null) return RedirectToAction("Index");
+            if (survey == null)
+            {
+                return this.RedirectToAction(a => a.Index());
+            }
 
-			var viewModel = SurveyViewModel.Create(Repository);
-			viewModel.Survey = survey;
-
-			return View(viewModel);
+			return View(survey);
         }
         
         //
@@ -97,7 +99,10 @@ namespace NuSurvey.Web.Controllers
         {
             var surveyToEdit = _surveyRepository.GetNullableById(id);
 
-            if (surveyToEdit == null) return RedirectToAction("Index");
+            if (surveyToEdit == null)
+            {
+                return this.RedirectToAction(a => a.Index());
+            }
 
             TransferValues(survey, surveyToEdit);
 
@@ -111,10 +116,7 @@ namespace NuSurvey.Web.Controllers
             }
             else
             {
-				var viewModel = SurveyViewModel.Create(Repository);
-                viewModel.Survey = survey;
-
-                return View(viewModel);
+                return View(surveyToEdit);
             }
         }
         

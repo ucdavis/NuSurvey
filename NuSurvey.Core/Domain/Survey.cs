@@ -15,6 +15,7 @@ namespace NuSurvey.Core.Domain
 
         private void SetDefaults()
         {
+            IsActive = false;
             Questions = new List<Question>();
             SurveyResponses = new List<SurveyResponse>();
             Categories = new List<Category>();

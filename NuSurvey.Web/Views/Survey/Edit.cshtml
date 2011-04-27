@@ -1,0 +1,225 @@
+﻿@model NuSurvey.Core.Domain.Survey
+
+@{
+	ViewBag.Title = "Edit Survey";
+}
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="/Survey/Index">Surveys</a> 
+        </li>
+        <li>
+            Edit
+        </li>
+    </ul>
+}
+
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable.categories").dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "aaSorting": [[ 1, "asc" ]],
+                "aoColumns": [{ "bSearchable": false, "bSortable": false }, null, null, null, null]
+            });
+        });
+        $(function () {
+            $("table.datatable.questions").dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "aaSorting": [[1, "asc"]],
+                "aoColumns": [{ "bSearchable": false, "bSortable": false }, null, null, null, null, null, null, null],
+                "sScrollX": "100%"                
+            });
+        });    
+    </script>
+}
+
+
+@*<h2>Edit</h2>*@
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true)
+<fieldset>
+@* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
+Example: Dinosaur 1  *@
+	<legend>Survey Details</legend>
+	@*<h4>Form Header</h4>*@
+	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
+	<p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
+	<ul>
+		<li>
+			<div class="editor-label required">
+				@Html.LabelFor(model => model.Name)<span>*</span> 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.Name)
+				@Html.ValidationMessageFor(model => model.Name)
+			</div>
+		</li>
+		<li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.ShortName) 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.ShortName)
+				@Html.ValidationMessageFor(model => model.ShortName)
+			</div>
+		</li>
+		<li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.IsActive) 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.IsActive)
+				@Html.ValidationMessageFor(model => model.IsActive)
+			</div>
+		</li>
+		@*@Html.HiddenFor(model => model.Id)*@
+		<li>
+			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+			<label>&nbsp;</label>
+			<input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "Index")
+		</li>
+	</ul>
+</fieldset>
+}
+
+
+    <h2>Categories</h2>
+    <p>
+	    @Html.ActionLink("Create New", "Create", "Category") @*TODO: Correct parameters*@
+    </p>
+    <table class="datatable categories">
+	    <thead>
+		    <tr>
+			    <th></th>
+			    <th>
+				    Rank
+			    </th>
+                <th>
+				    Name
+			    </th>
+			    <th>
+				    Active
+			    </th>
+                <th>Ignore</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+    @{ var odd = false; }
+    @foreach (var item in Model.Categories.Where(a => a.IsCurrentVersion)) {
+		    <tr class="@(odd ? "odd": "even")">
+			    <td>
+                    @*<a href="/Category/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Category" /></a>*@
+                    <a href="/Category/Edit/@item.Id"><img src="@Url.Image("edit.png")" alt="Edit this Category" /></a>
+			    </td>
+			    <td>
+				    @item.Rank
+			    </td>
+			    <td>
+				    @item.Name
+			    </td>
+			    <td>
+                    @if (item.IsActive){ 
+                        @item.IsActive
+                    }
+			    </td>
+                <td>
+                    @if (item.DoNotUseForCalculations){ 
+                        @item.DoNotUseForCalculations
+                    }
+                </td>
+		    </tr>
+                    odd = !odd;
+    }
+	    </tbody>
+    </table>
+
+
+<br />
+
+
+    <h2>All Questions</h2>
+    @*<p>
+	    @Html.ActionLink("Create New", "Create")
+    </p>*@
+    <table class="datatable questions">
+	    <thead>
+		    <tr>
+			    <th></th>
+			    <th>
+				    Order
+			    </th>
+			    <th>
+				    Rank
+			    </th>
+			    <th>
+				    Question
+			    </th>
+                <th>
+                    Open Ended
+                </th>
+                <th>
+                    Choices
+                </th>
+                <th>
+                    Active
+                </th>
+                <th>Ignore</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+    @{ odd = false; }
+    @foreach (var item in Model.Questions.Where(a => a.Category.IsCurrentVersion)) {
+		    <tr class="@(odd ? "odd": "even")">
+			    <td>
+                    @*<a href="/Category/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Category" /></a>*@
+                    <a href="/Question/Edit/@item.Id"><img src="@Url.Image("edit.png")" alt="Edit this Question" /></a>
+			    </td>
+			    <td>
+				    @item.Order
+			    </td>
+			    <td>
+				    @item.Category.Rank
+			    </td>
+			    <td>
+				    @item.Name
+			    </td>
+                <td>
+                    @if (item.IsOpenEnded) { 
+                    @item.IsOpenEnded
+                    }
+                </td>
+                <td>
+                    @item.Responses.Count
+                </td>
+			    <td>
+                    @if (item.IsActive){ 
+                        @item.IsActive
+                    }
+			    </td>
+                <td>
+                    @if (item.Category.DoNotUseForCalculations){ 
+                        @item.Category.DoNotUseForCalculations
+                    }
+			    </td>
+		    </tr>
+                    odd = !odd;
+    }
+	    </tbody>
+    </table>
+
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
+

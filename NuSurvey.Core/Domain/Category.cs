@@ -17,6 +17,7 @@ namespace NuSurvey.Core.Domain
         private void SetDefaults()
         {
             LastUpdate = DateTime.Now;
+            IsCurrentVersion = true;
         }
         #endregion Constructor
 
@@ -31,6 +32,7 @@ namespace NuSurvey.Core.Domain
         public virtual string Encouragement { get; set; }
         public virtual bool IsActive { get; set; }
         public virtual bool DoNotUseForCalculations { get; set; }
+        public virtual bool IsCurrentVersion { get; set; }
 
         /// <summary>
         /// This should be updated for every save
@@ -58,6 +60,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.LastUpdate);
             Map(x => x.CreateDate);
             Map(x => x.DoNotUseForCalculations);
+            Map(x => x.IsCurrentVersion);
 
             HasMany(x => x.CategoryGoals);
             References(x => x.Survey);

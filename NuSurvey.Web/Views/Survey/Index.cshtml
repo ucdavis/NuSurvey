@@ -17,7 +17,7 @@
 @section SubNav {
     <ul class="navigation">
         <li>
-            <a href="/Survey">Surveys</a>
+            Surveys
         </li>
     </ul>
 }
@@ -48,9 +48,8 @@
 @foreach (var item in Model) {
 		<tr class="@(odd ? "odd": "even")">
 			<td>
-				@*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
-				@Html.ActionLink("Details", "Details", new { id=item.Id }) 
-				@*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+                <a href="/Survey/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Survey" /></a>
+                <a href="/Survey/Edit/@item.Id"><img src="@Url.Image("edit.png")" alt="Edit this Survey" /></a>
 			</td>
 			<td>
 				@item.Name

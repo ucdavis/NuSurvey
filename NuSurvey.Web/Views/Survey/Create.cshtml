@@ -1,0 +1,73 @@
+﻿@model NuSurvey.Web.Controllers.SurveyViewModel
+
+@{
+	ViewBag.Title = "Create Survey";
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="/Survey/Index">Surveys</a> 
+        </li>
+        <li>
+            Create
+        </li>
+    </ul>
+}
+
+@*<h2>Create</h2>*@
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true)
+<fieldset>
+@* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
+Example: Dinosaur 1  *@
+	@*<legend>Survey</legend>*@
+	@*<h4>Form Header</h4>*@
+	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
+	<p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
+	<ul>
+		<li>
+			<div class="editor-label required">
+				@Html.LabelFor(model => model.Survey.Name)<span>*</span> 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.Survey.Name)
+				@Html.ValidationMessageFor(model => model.Survey.Name)
+			</div>
+		</li>
+		<li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Survey.ShortName) 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.Survey.ShortName)
+				@Html.ValidationMessageFor(model => model.Survey.ShortName)
+			</div>
+		</li>
+@*		<li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.IsActive) 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.IsActive)
+				@Html.ValidationMessageFor(model => model.IsActive)
+			</div>
+		</li>*@
+		<li>
+			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+			<label>&nbsp;</label>
+			<input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "Index")
+		</li>
+	</ul>
+</fieldset>
+}
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
+
