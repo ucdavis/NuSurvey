@@ -38,7 +38,7 @@ namespace NuSurvey.Web.Controllers
 
             if (survey == null) return RedirectToAction("Index");          
 
-            return View(survey.SurveyResponses);
+            return View(survey);
         }
 
         //

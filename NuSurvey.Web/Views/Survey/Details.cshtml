@@ -1,8 +1,29 @@
-﻿@model IEnumerable<NuSurvey.Core.Domain.SurveyResponse>
+﻿@model NuSurvey.Core.Domain.Survey
 
 @{
 	ViewBag.Title = "Survey Responses";
 }
+
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({ "bJQueryUI": true });
+        });    
+    </script>
+}
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="/Survey/Index">Surveys</a> 
+        </li>
+        <li>
+            <a href="/Survey/Details/@Model.Id" >Responses</a> 
+        </li>
+    </ul>
+}
+
 
 @*<h2>Details</h2>*@
 
@@ -32,7 +53,7 @@
 	</thead>
 	<tbody>
 @{ var odd = false; }
-@foreach (var item in Model) {
+@foreach (var item in Model.SurveyResponses) {
 		<tr class="@(odd ? "odd": "even")">
 			<td>
 				@Html.ActionLink("Details", "Details", "SurveyResponse", new { id = item.Id }, new { })
@@ -65,12 +86,5 @@
 	</tbody>
 </table>
 
-<script type="text/javascript">
-	$(function () {
-		$("table.datatable").dataTable({
-			"bJQueryUI": true //Use the jquery ui skin
-			//"aaSorting": [[ 3, "asc" ]] //Add default sorting
-		});
-	});
-</script>
+
 

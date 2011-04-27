@@ -4,7 +4,26 @@
 	ViewBag.Title = "Surveys";
 }
 
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({ "bJQueryUI": true });
+        });    
+    </script>
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="/Survey">Surveys</a>
+        </li>
+    </ul>
+}
+
 @*<h2>Index</h2>*@
+
 
 <p>
 	@Html.ActionLink("Create New", "Create")
@@ -48,12 +67,4 @@
 	</tbody>
 </table>
 
-<script type="text/javascript">
-	$(function () {
-		$("table.datatable").dataTable({
-			"bJQueryUI": true //Use the jquery ui skin
-			//"aaSorting": [[ 3, "asc" ]] //Add default sorting
-		});
-	});
-</script>
 
