@@ -1,0 +1,61 @@
+﻿@model NuSurvey.Web.Models.EditUserViewModel
+           
+           <ul>
+		<li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Email) 
+			</div>
+			<div class="editor-field">
+				@Html.DisplayFor(model => model.Email)
+			</div>
+		</li>
+        <li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.User.IsOnline) 
+			</div>
+			<div class="editor-field">
+				@Html.DisplayFor(model => model.User.IsOnline)
+			</div>
+		</li>
+                <li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.User.IsLockedOut) 
+			</div>
+			<div class="editor-field">
+				@Html.DisplayFor(model => model.User.IsLockedOut)
+			</div>
+		</li>
+        <li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.User.LastActivityDate) 
+			</div>
+			<div class="editor-field">
+				@Html.DisplayFor(model => model.User.LastActivityDate)
+			</div>
+		</li>
+                <li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.User.LastLockoutDate) 
+			</div>
+			<div class="editor-field">
+				@Html.DisplayFor(model => model.User.LastLockoutDate)
+			</div>
+		</li>
+        <li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.User.LastLoginDate) 
+			</div>
+			<div class="editor-field">
+				@Html.DisplayFor(model => model.User.LastLoginDate)
+			</div>
+		</li>
+        <li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.User.LastPasswordChangedDate) 
+			</div>
+			<div class="editor-field">
+				@Html.DisplayFor(model => model.User.LastPasswordChangedDate)
+			</div>
+		</li>
+    </ul>
+

@@ -155,13 +155,14 @@ namespace NuSurvey.Web.Controllers
                 Message = "Can't change yourself";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
             }
-            if(Membership.GetUser(id) == null)
+            if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
                 return this.RedirectToAction<AccountController>(a => a.ManageUsers());
             }
 
             var viewModel = EditUserViewModel.Create(id);
+            viewModel.User = MembershipService.GetUser(id);
 
             return View(viewModel);
         }
@@ -218,6 +219,7 @@ namespace NuSurvey.Web.Controllers
             }
 
             var viewModel = EditUserViewModel.Create(id);
+            viewModel.User = MembershipService.GetUser(id);
 
             return View(viewModel);
         }

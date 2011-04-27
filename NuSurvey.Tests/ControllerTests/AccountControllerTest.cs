@@ -432,6 +432,11 @@ namespace NuSurvey.Tests.ControllerTests
                 return true;
             }
 
+            public MembershipUser GetUser(string userName)
+            {
+                return null;
+            }
+
             public bool DeleteUser(string userName)
             {
                 return true;

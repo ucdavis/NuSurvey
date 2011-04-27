@@ -39,10 +39,9 @@
 @{ var odd = false; }
 @foreach (var item in Model) {
 		<tr class="@(odd ? "odd": "even")">	
-        <td>
-            
-            <a href="/Account/Details/@item.UserName">
-                <img src="@Url.Image("details.png")" alt="View the details of this user" /></a> 
+        <td>            
+            @*<a href="/Account/Details/@item.UserName">
+                <img src="@Url.Image("details.png")" alt="View the details of this user" /></a> *@
             <a href="/Account/Edit/@item.UserName">
                 <img src="@Url.Image("edit.png")" alt="Edit this user" /></a>
             </td>

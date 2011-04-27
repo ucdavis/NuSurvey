@@ -82,7 +82,7 @@ namespace NuSurvey.Web.Models
         public bool IsAdmin { get; set; }
         public bool IsUser { get; set; }
         public bool Confirm { get; set; }
-    
+        public MembershipUser User { get; set; }
 
         public static EditUserViewModel Create(string email)
         {
@@ -91,6 +91,7 @@ namespace NuSurvey.Web.Models
             var viewModel = new EditUserViewModel {Email = email};
             viewModel.IsAdmin = Roles.IsUserInRole(viewModel.Email, RoleNames.Admin);
             viewModel.IsUser = Roles.IsUserInRole(viewModel.Email, RoleNames.User);
+
 
             viewModel.Confirm = false;
 
@@ -115,6 +116,7 @@ namespace NuSurvey.Web.Models
         bool ChangePassword(string userName, string oldPassword, string newPassword);
         bool ManageRoles(string userName, string[] roles);
         bool DeleteUser(string userName);
+        MembershipUser GetUser(string userName);
     }
 
     public class AccountMembershipService : IMembershipService
@@ -137,6 +139,11 @@ namespace NuSurvey.Web.Models
             {
                 return _provider.MinRequiredPasswordLength;
             }
+        }
+
+        public MembershipUser GetUser(string userName)
+        {
+            return _provider.GetUser(userName, false);
         }
 
         public bool ValidateUser(string userName, string password)
