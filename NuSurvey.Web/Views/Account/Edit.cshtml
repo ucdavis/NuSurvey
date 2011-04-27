@@ -15,7 +15,6 @@
 <fieldset>
 @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
 Example: Dinosaur 1  *@
-	<legend>EditUserViewModel</legend>
 	@*<h4>Form Header</h4>*@
 	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
 	<p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
@@ -50,7 +49,7 @@ Example: Dinosaur 1  *@
 		<li>
 			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
 			<label>&nbsp;</label>
-			<input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "Index")
+			<input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "ManageUsers")
 		</li>
 	</ul>
 </fieldset>

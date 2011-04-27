@@ -81,6 +81,8 @@ namespace NuSurvey.Web.Models
         public string Email { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsUser { get; set; }
+        public bool Confirm { get; set; }
+    
 
         public static EditUserViewModel Create(string email)
         {
@@ -89,6 +91,8 @@ namespace NuSurvey.Web.Models
             var viewModel = new EditUserViewModel {Email = email};
             viewModel.IsAdmin = Roles.IsUserInRole(viewModel.Email, RoleNames.Admin);
             viewModel.IsUser = Roles.IsUserInRole(viewModel.Email, RoleNames.User);
+
+            viewModel.Confirm = false;
 
             return viewModel;
         }
@@ -110,6 +114,7 @@ namespace NuSurvey.Web.Models
         MembershipCreateStatus CreateUser(string userName, string password, string email);
         bool ChangePassword(string userName, string oldPassword, string newPassword);
         bool ManageRoles(string userName, string[] roles);
+        bool DeleteUser(string userName);
     }
 
     public class AccountMembershipService : IMembershipService
@@ -153,6 +158,11 @@ namespace NuSurvey.Web.Models
             return status;
         }
 
+        public bool DeleteUser(string userName)
+        {
+            return _provider.DeleteUser(userName, true);
+        }
+
         public bool ManageRoles(string userName, string[] roles)
         {
             //try
@@ -165,15 +175,18 @@ namespace NuSurvey.Web.Models
                 var user = _provider.GetUser(userName, false);
                 var allRoles = Roles.GetAllRoles();
                 var usersRoles = Roles.GetRolesForUser(userName);
-                foreach (var role in allRoles)
+                foreach (var allRole in allRoles)
                 {
-                    if (!roles.Contains(role) && usersRoles.Contains(role))
+                    //if the existing roles is not in what we are passing and the user has that role, remove it 
+                    if (!roles.Contains(allRole) && usersRoles.Contains(allRole))
                     {
-                        Roles.RemoveUsersFromRole(new string[] { userName },role);
+                        Roles.RemoveUsersFromRole(new string[] { userName }, allRole);
                     }
                 }
+
                 foreach (var role in roles)
                 {
+                    //If the role we are passing exists and the user doesn't have it, then add it.
                     if (allRoles.Contains(role) && !usersRoles.Contains(role))
                     {
                         Roles.AddUsersToRole(new string[] { userName },role);

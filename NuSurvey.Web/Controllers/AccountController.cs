@@ -203,6 +203,54 @@ namespace NuSurvey.Web.Controllers
             return this.RedirectToAction<AccountController>(a => a.ManageUsers());
         }
 
+        [Admin]
+        public ActionResult Delete(string id)
+        {
+            if (id.Trim().ToLower() == CurrentUser.Identity.Name)
+            {
+                Message = "Can't delete yourself";
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
+            if (Membership.GetUser(id) == null)
+            {
+                Message = "User Not Found";
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+            }
+
+            var viewModel = EditUserViewModel.Create(id);
+
+            return View(viewModel);
+        }
+
+        [Admin]
+        [HttpPost]
+        public ActionResult Delete(string id, bool confirm)
+        {
+            if (id.Trim().ToLower() == CurrentUser.Identity.Name)
+            {
+                Message = "Can't delete yourself";
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
+            if (Membership.GetUser(id) == null)
+            {
+                Message = "User Not Found";
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+            }
+            if (confirm)
+            {
+                if (MembershipService.DeleteUser(id))
+                {
+                    Message = "User Removed";
+                }
+                else
+                {
+                    Message = "Remove User Failed";
+                }
+            }
+
+            return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+        }
+
 
         // **************************************
         // URL: /Account/ChangePassword

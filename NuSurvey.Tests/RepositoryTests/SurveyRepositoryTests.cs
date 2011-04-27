@@ -131,7 +131,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(survey);
                 var results = survey.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Name: may not be null or empty");
+                results.AssertErrorsAre("Name: The Name field is required.");
                 Assert.IsTrue(survey.IsTransient());
                 Assert.IsFalse(survey.IsValid());
                 throw;
@@ -163,7 +163,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(survey);
                 var results = survey.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Name: may not be null or empty");
+                results.AssertErrorsAre("Name: The Name field is required.");
                 Assert.IsTrue(survey.IsTransient());
                 Assert.IsFalse(survey.IsValid());
                 throw;
@@ -195,7 +195,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(survey);
                 var results = survey.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Name: may not be null or empty");
+                results.AssertErrorsAre("Name: The Name field is required.");
                 Assert.IsTrue(survey.IsTransient());
                 Assert.IsFalse(survey.IsValid());
                 throw;
@@ -228,7 +228,7 @@ namespace NuSurvey.Tests.RepositoryTests
                 Assert.IsNotNull(survey);
                 Assert.AreEqual(100 + 1, survey.Name.Length);
                 var results = survey.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Name: length must be between 0 and 100");
+                results.AssertErrorsAre("Name: The field Name must be a string with a maximum length of 100.");
                 Assert.IsTrue(survey.IsTransient());
                 Assert.IsFalse(survey.IsValid());
                 throw;
