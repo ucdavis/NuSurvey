@@ -96,10 +96,14 @@ Example: Dinosaur 1  *@
 }
 
 
-    <h2>Categories</h2>
-    <p>
-	    @Html.ActionLink("Create New", "Create", "Category", new {id = Model.Id }, new { }) 
+    <h2 >Categories</h2>
+    <p class="specialMe">
+	    @Html.ActionLink("Create New", "Create", "Category", new {id = Model.Id }, new { })  
     </p>
+    <p class="specialMe rightAway">
+        <a class="rightAway" href="/Category/ReOrder/@Model.Id">Change Rank</a>
+    </p>
+
     <table class="datatable categories">
 	    <thead>
 		    <tr>
