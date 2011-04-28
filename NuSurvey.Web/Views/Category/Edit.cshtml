@@ -23,11 +23,20 @@
 
      <script type="text/javascript">
         $(function () {
-            $("table.datatable").dataTable({
+            $("table.datatable.goals").dataTable({
                 "bJQueryUI": true,
                 "sPaginationType": "full_numbers",
                 "aaSorting": [[1, "asc"]],
                 "aoColumns": [{ "bSearchable": false, "bSortable": false }, null, null]
+            });
+        });
+
+        $(function () {
+            $("table.datatable.questions").dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "aaSorting": [[1, "asc"]],
+                "aoColumns": [{ "bSearchable": false, "bSortable": false }, null, null, null, null, null],                
             });
         }); 
     </script>
@@ -57,6 +66,14 @@ Example: Dinosaur 1  *@
 			</div>
 			<div class="editor-field">
 				@Html.DisplayFor(model => model.Category.LastUpdate)
+			</div>
+        </li>
+        <li>
+			<div class="editor-label">
+				@Html.Label("Current Rank") 
+			</div>
+			<div class="editor-field">
+				@Html.DisplayFor(model => model.Category.Rank)
 			</div>
         </li>
 		<li>
@@ -147,7 +164,7 @@ Example: Dinosaur 1  *@
     <p>
 	    @Html.ActionLink("Create New", "Create", "CategoryGoal", new {id = Model.Category.Id }, new { }) 
     </p>
-    <table class="datatable">
+    <table class="datatable goals">
 	    <thead>
 		    <tr>
 			    <th></th>
@@ -171,6 +188,67 @@ Example: Dinosaur 1  *@
 			    <td>
 				    @item.Name
 			    </td>
+			    <td>
+                    @if (item.IsActive){ 
+                        @item.IsActive
+                    }
+			    </td>
+		    </tr>
+                    odd = !odd;
+    }
+	    </tbody>
+    </table>
+
+    <br />
+
+
+    <h2>Category Questions</h2>
+    <p>
+	    @Html.ActionLink("Create New", "Create", "Question", new { id = @Model.Category.Id }, new { })
+    </p>
+    <table class="datatable questions">
+	    <thead>
+		    <tr>
+			    <th></th>
+			    <th>
+				    Order
+			    </th>
+			    <th>
+				    Question
+			    </th>
+                <th>
+                    Open Ended
+                </th>
+                <th>
+                    Choices
+                </th>
+                <th>
+                    Active
+                </th>
+		    </tr>
+	    </thead>
+	    <tbody>
+    @{ odd = false; }
+    @foreach (var item in Model.Category.Questions) {
+		    <tr class="@(odd ? "odd": "even")">
+			    <td>
+                    @*<a href="/Category/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Category" /></a>*@
+                    <a href="/Question/Edit/@item.Id"><img src="@Url.Image("edit.png")" alt="Edit this Question" /></a>
+			    </td>
+			    <td>
+				    @item.Order
+			    </td>
+			    <td>
+				    @item.Name
+			    </td>
+                <td>
+                    @if (item.IsOpenEnded) { 
+                    @item.IsOpenEnded
+                    }
+                </td>
+                <td>
+                    @item.Responses.Count
+                </td>
 			    <td>
                     @if (item.IsActive){ 
                         @item.IsActive

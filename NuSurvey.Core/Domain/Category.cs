@@ -31,6 +31,7 @@ namespace NuSurvey.Core.Domain
             CreateDate = LastUpdate;
             IsCurrentVersion = true;
             CategoryGoals = new List<CategoryGoal>();
+            Questions = new List<Question>();
 
         }
         private void SetPostDefaults()
@@ -81,6 +82,8 @@ namespace NuSurvey.Core.Domain
 
         public virtual IList<CategoryGoal> CategoryGoals { get; set; }
 
+        public virtual IList<Question> Questions { get; set; }
+
     }
 
     public class CategoryMap : ClassMap<Category>
@@ -99,6 +102,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.IsCurrentVersion);
 
             HasMany(x => x.CategoryGoals);
+            HasMany(x => x.Questions);
             References(x => x.Survey);
         }
     }
