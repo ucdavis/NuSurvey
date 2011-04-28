@@ -255,7 +255,7 @@
     <Content Include="Views\Account\ManageUsers.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
-    <Content Include="Views\Account\UserDetails.cshtml" />
+    <Content Include="Views\Account\_UserDetails.cshtml" />
     <Content Include="Views\Survey\Create.cshtml" />
     <Content Include="Views\Survey\Edit.cshtml" />
     <Content Include="Views\Category\Create.cshtml" />
