@@ -4,6 +4,7 @@ using Microsoft.Practices.ServiceLocation;
 using NuSurvey.Core;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers;
+using NuSurvey.Web.Helpers;
 using UCDArch.Data.NHibernate;
 using UCDArch.Web.IoC;
 using UCDArch.Web.ModelBinder;
@@ -34,7 +35,7 @@ namespace NuSurvey.Web
 
             ModelBinders.Binders.DefaultBinder = new UCDArchModelBinder();
 
-            //AutomapperConfig.Configure();
+            AutomapperConfig.Configure();
 
             NHibernateSessionConfiguration.Mappings.UseFluentMappings(typeof(Answer).Assembly);
 

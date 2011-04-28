@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using AutoMapper;
 using NuSurvey.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
+using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -50,8 +52,12 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         } 
 
-        //
-        // POST: /Category/Create
+        /// <summary>
+        /// POST: /Category/Create
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="category"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(int id, Category category)
         {
@@ -61,9 +67,14 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<SurveyController>(a => a.Index());
             }
 
-            var categoryToCreate = new Category();
+            var categoryToCreate = new Category(survey);
 
-            TransferValues(category, categoryToCreate);
+            Mapper.Map(category, categoryToCreate);
+
+    
+
+            ModelState.Clear();
+            categoryToCreate.TransferValidationMessagesTo(ModelState);
 
             if (ModelState.IsValid)
             {
@@ -71,30 +82,34 @@ namespace NuSurvey.Web.Controllers
 
                 Message = "Category Created Successfully";
 
-                return RedirectToAction("Index");
+                return this.RedirectToAction(a => a.Edit(categoryToCreate.Id));
             }
             else
             {
 				var viewModel = CategoryViewModel.Create(Repository, survey);
-                viewModel.Category = category;
+                viewModel.Category = categoryToCreate;
 
                 return View(viewModel);
             }
         }
 
-        //
-        // GET: /Category/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    var category = _categoryRepository.GetNullableById(id);
+        
+        /// <summary>
+        /// GET: /Category/Edit/5
+        /// </summary>
+        /// <param name="id">Categorie Id</param>
+        /// <returns></returns>
+        public ActionResult Edit(int id)
+        {
+            var category = _categoryRepository.GetNullableById(id);
 
-        //    if (category == null) return RedirectToAction("Index");
+            if (category == null) return RedirectToAction("Index");
 
-        //    var viewModel = CategoryViewModel.Create(Repository);
-        //    viewModel.Category = category;
+            var viewModel = CategoryViewModel.Create(Repository, category.Survey);
+            viewModel.Category = category;
 
-        //    return View(viewModel);
-        //}
+            return View(viewModel);
+        }
         
         ////
         //// POST: /Category/Edit/5
@@ -157,8 +172,7 @@ namespace NuSurvey.Web.Controllers
         private static void TransferValues(Category source, Category destination)
         {
 			//Recommendation: Use AutoMapper
-			//Mapper.Map(source, destination)
-            throw new NotImplementedException();
+            Mapper.Map(source, destination);
         }
 
     }
@@ -176,7 +190,7 @@ namespace NuSurvey.Web.Controllers
 			Check.Require(repository != null, "Repository must be supplied");
             Check.Require(survey != null);
 			
-			var viewModel = new CategoryViewModel {Survey = survey, Category = new Category()};
+			var viewModel = new CategoryViewModel {Survey = survey, Category = new Category(survey)};            
  
 			return viewModel;
 		}

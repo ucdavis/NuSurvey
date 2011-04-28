@@ -92,6 +92,7 @@ form .text_field, form .text_area  {min-width:200px;}
 .required {font-weight:bold;}
 .required span, span.required {color:#FF0000;}
 input.button {font-size: 1.2em; padding: 8px 15px 3px;}
+form div.editor-field.wideText .text-box {width:250px}
 
 /*   validation     */
 .field-validation-error {padding:2px 10px; margin:-2px 0 0 5px; display:inline-block; vertical-align:top;}

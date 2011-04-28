@@ -1,23 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace NuSurvey.Core.Domain
 {
     public class Category : DomainObject
     {
         #region Constructor
-        public Category()
+        public Category(Survey survey)
         {
-            SetDefaults();
+            SetPreDefaults();
+            Survey = survey;
+            SetPostDefaults();
         }
 
-        private void SetDefaults()
+        public Category()
+        {
+            SetPreDefaults();
+            SetPostDefaults();
+        }
+
+        private void SetPreDefaults()
         {
             LastUpdate = DateTime.Now;
+            CreateDate = LastUpdate;
             IsCurrentVersion = true;
+            CategoryGoals = new List<CategoryGoal>();
+
+        }
+        private void SetPostDefaults()
+        {
+            if (Rank == 0)
+            {
+                if (Survey != null && Survey.Categories != null && Survey.Categories.Count > 0)
+                {
+                    Rank = Survey.Categories.Max(a => a.Rank) + 1;
+                }
+                else
+                {
+                    Rank = 1;
+                }
+            }
         }
         #endregion Constructor
 
@@ -26,11 +54,18 @@ namespace NuSurvey.Core.Domain
         [StringLength(100)]
         public virtual string Name { get; set; }
         public virtual int Rank { get; set; }
+
         [Required]
+        [DataType(DataType.MultilineText)]
         public virtual string Affirmation { get; set; }
+
         [Required]
+        [DataType(DataType.MultilineText)]
         public virtual string Encouragement { get; set; }
+        [DisplayName("Active")]
         public virtual bool IsActive { get; set; }
+
+        [DisplayName("Do Not Use For Calculations")]
         public virtual bool DoNotUseForCalculations { get; set; }
         public virtual bool IsCurrentVersion { get; set; }
 
