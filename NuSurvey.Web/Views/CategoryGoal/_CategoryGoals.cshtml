@@ -4,8 +4,8 @@
 			<div class="editor-label required">
 				@Html.LabelFor(model => model.CategoryGoal.Name)<span>*</span> 
 			</div>
-			<div class="editor-field wideText">
-				@Html.EditorFor(model => model.CategoryGoal.Name)
+			<div class="editor-field wideText LimitCharacters">
+				@Html.EditorFor(model => model.CategoryGoal.Name)                
 				@Html.ValidationMessageFor(model => model.CategoryGoal.Name)
 			</div>
 		</li>

@@ -21,6 +21,23 @@
     </ul>
 }
 
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.jqEasyCharCounter.js")'></script>
+     
+         <script type="text/javascript">
+
+             $(document).ready(function () {
+                 $("Div.LimitCharacters .text-box").each(function (index, item) {
+                     var length = $(item).data("val-length-max");
+                     var warnLength = length - 10;
+                     $(item).jqEasyCounter({ maxChars: length, maxCharsWarning: warnLength, msgTextAlign: 'left', });
+                 });
+             });
+
+   </script>
+}
+
+
 @*<h2>Edit</h2>*@
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>

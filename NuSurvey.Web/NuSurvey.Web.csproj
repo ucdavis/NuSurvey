@@ -142,6 +142,8 @@
     <Content Include="robots.txt" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.jqEasyCharCounter.js" />
+    <Content Include="Scripts\jquery.jqEasyCharCounter.min.js" />
     <Content Include="UCDArch.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -266,7 +268,6 @@
     <Content Include="Views\CategoryGoal\_CategoryGoals.cshtml" />
     <Content Include="Views\CategoryGoal\Edit.cshtml" />
     <Content Include="Views\CategoryGoal\Details.cshtml" />
-    <Content Include="Views\CategoryGoal\Details2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
