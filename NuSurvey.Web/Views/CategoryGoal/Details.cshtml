@@ -1,0 +1,36 @@
+﻿@model NuSurvey.Web.Controllers.CategoryGoalViewModel
+
+@{
+    ViewBag.Title = "Goal Details";
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="/Survey/Index">Surveys</a> 
+        </li>
+        <li>
+            <a href="/Survey/Edit/@Model.Survey.Id">Edit Survey</a> 
+        </li>
+        <li>
+            <a href="/Category/Edit/@Model.Category.Id">Edit Category</a> 
+        </li>
+        <li>
+            Details
+        </li>
+    </ul>
+}
+
+
+	<ul>
+		<li>
+			<div class="display-label">Goal</div>
+			<div class="display-field">@Model.CategoryGoal.Name</div>
+		</li>
+		<li>
+			<div class="display-label">Active</div>
+			<div class="display-field">@Model.CategoryGoal.IsActive</div>
+		</li>
+	</ul>
+
+

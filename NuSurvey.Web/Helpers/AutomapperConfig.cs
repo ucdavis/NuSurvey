@@ -20,6 +20,10 @@ namespace NuSurvey.Web.Helpers
                 .ForMember(x => x.Rank, x => x.Ignore())
                 .ForMember(x => x.Survey, x => x.Ignore());
 
+            CreateMap<CategoryGoal, CategoryGoal>()
+                .ForMember(x => x.Id, x => x.Ignore())
+                .ForMember(x => x.Category, x => x.Ignore());
+
 
             //CreateMap<Session, Session>()
             //    .ForMember(x => x.Id, x => x.Ignore())

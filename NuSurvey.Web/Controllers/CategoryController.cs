@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
 using NuSurvey.Core.Domain;
+using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
@@ -13,6 +14,7 @@ namespace NuSurvey.Web.Controllers
     /// <summary>
     /// Controller for the Category class
     /// </summary>
+    [Admin]
     public class CategoryController : ApplicationController
     {
 	    private readonly IRepository<Category> _categoryRepository;
@@ -114,70 +116,46 @@ namespace NuSurvey.Web.Controllers
 
             return View(viewModel);
         }
-        
-        ////
-        //// POST: /Category/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(int id, Category category)
-        //{
-        //    var categoryToEdit = _categoryRepository.GetNullableById(id);
 
-        //    if (categoryToEdit == null) return RedirectToAction("Index");
-
-        //    TransferValues(category, categoryToEdit);
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        _categoryRepository.EnsurePersistent(categoryToEdit);
-
-        //        Message = "Category Edited Successfully";
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    else
-        //    {
-        //        var viewModel = CategoryViewModel.Create(Repository);
-        //        viewModel.Category = category;
-
-        //        return View(viewModel);
-        //    }
-        //}
-        
-        ////
-        //// GET: /Category/Delete/5 
-        //public ActionResult Delete(int id)
-        //{
-        //    var category = _categoryRepository.GetNullableById(id);
-
-        //    if (category == null) return RedirectToAction("Index");
-
-        //    return View(category);
-        //}
-
-        ////
-        //// POST: /Category/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, Category category)
-        //{
-        //    var categoryToDelete = _categoryRepository.GetNullableById(id);
-
-        //    if (categoryToDelete == null) return RedirectToAction("Index");
-
-        //    _categoryRepository.Remove(categoryToDelete);
-
-        //    Message = "Category Removed Successfully";
-
-        //    return RedirectToAction("Index");
-        //}
-        
         /// <summary>
-        /// Transfer editable values from source to destination
+        /// POST: /Category/Edit/5
         /// </summary>
-        private static void TransferValues(Category source, Category destination)
+        /// <param name="id">Category Id</param>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Edit(int id, Category category)
         {
-			//Recommendation: Use AutoMapper
-            Mapper.Map(source, destination);
+            var categoryToEdit = _categoryRepository.GetNullableById(id);
+
+            if (categoryToEdit == null)
+            {
+                Message = "Category not found to edit.";
+                return this.RedirectToAction<SurveyController>(a => a.Index());
+            }
+
+            Mapper.Map(category, categoryToEdit);
+
+            ModelState.Clear();
+            categoryToEdit.TransferValidationMessagesTo(ModelState);
+
+            if (ModelState.IsValid)
+            {
+                _categoryRepository.EnsurePersistent(categoryToEdit);
+
+                Message = "Category Edited Successfully";
+
+                return this.RedirectToAction<SurveyController>(a => a.Edit(categoryToEdit.Survey.Id));
+            }
+            else
+            {
+                var viewModel = CategoryViewModel.Create(Repository, categoryToEdit.Survey);
+                viewModel.Category = category;
+
+                return View(viewModel);
+            }
         }
+               
 
     }
 

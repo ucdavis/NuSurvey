@@ -2,7 +2,15 @@
     ViewBag.Title = "Home Page";
 }
 
-<h2>@ViewBag.Message</h2>
-<p>
-    To learn more about ASP.NET MVC visit <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
-</p>
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="/Survey/Index">Surveys</a> 
+        </li>
+        <li>
+            <a href="/SurveyResponse/Index">Answer Surveys</a> 
+        </li>
+    </ul>
+}
+
+

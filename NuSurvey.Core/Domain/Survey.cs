@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
 using System.ComponentModel.DataAnnotations;
@@ -26,8 +27,12 @@ namespace NuSurvey.Core.Domain
         [Required]
         [StringLength(100)]
         public virtual string Name { get; set; }
+
         [StringLength(10)]
+        [DisplayName("Short Name")]
         public virtual string ShortName { get; set; }
+
+        [DisplayName("Active")]
         public virtual bool IsActive { get; set; }
 
         [Required]
