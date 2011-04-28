@@ -72,6 +72,7 @@ namespace NuSurvey.Core.Domain
         /// <summary>
         /// This should be updated for every save
         /// </summary>
+        [DisplayName("Last Updated On")] 
         public virtual DateTime LastUpdate { get; set; }
 
         public virtual DateTime CreateDate { get; set; }

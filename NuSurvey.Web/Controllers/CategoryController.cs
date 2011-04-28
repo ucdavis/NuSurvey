@@ -97,13 +97,17 @@ namespace NuSurvey.Web.Controllers
         /// <summary>
         /// GET: /Category/Edit/5
         /// </summary>
-        /// <param name="id">Categorie Id</param>
+        /// <param name="id">Category Id</param>
         /// <returns></returns>
         public ActionResult Edit(int id)
         {
             var category = _categoryRepository.GetNullableById(id);
 
-            if (category == null) return RedirectToAction("Index");
+            if (category == null)
+            {
+                Message = "Category not found to edit.";
+                return this.RedirectToAction<SurveyController>(a => a.Index());
+            }
 
             var viewModel = CategoryViewModel.Create(Repository, category.Survey);
             viewModel.Category = category;

@@ -1,0 +1,183 @@
+﻿@model NuSurvey.Web.Controllers.CategoryViewModel
+
+@{
+    ViewBag.Title = "Edit Category";
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="/Survey/Index">Surveys</a> 
+        </li>
+        <li>
+            <a href="/Survey/Edit/@Model.Survey.Id">Edit Survey</a> 
+        </li>
+        <li>
+            Edit
+        </li>
+    </ul>
+}
+
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "aaSorting": [[1, "asc"]],
+                "aoColumns": [{ "bSearchable": false, "bSortable": false }, null, null]
+            });
+        }); 
+    </script>
+}
+
+
+@*<h2>Edit</h2>*@
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true)
+<fieldset>
+@* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
+Example: Dinosaur 1  *@
+	<legend>Category Details</legend>
+	@*<h4>Form Header</h4>*@
+	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
+	<p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
+	<ul>
+        <li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Category.LastUpdate) 
+			</div>
+			<div class="editor-field">
+				@Html.DisplayFor(model => model.Category.LastUpdate)
+			</div>
+        </li>
+		<li>
+			<div class="editor-label required">
+				@Html.LabelFor(model => model.Category.Name)<span>*</span> 
+			</div>
+			<div class="editor-field wideText">
+				@Html.EditorFor(model => model.Category.Name)
+				@Html.ValidationMessageFor(model => model.Category.Name)
+			</div>
+		</li>
+@*		<li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Category.Rank) 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.Category.Rank)
+				@Html.ValidationMessageFor(model => model.Category.Rank)
+			</div>
+		</li>*@
+		<li>
+			<div class="editor-label required">
+				@Html.LabelFor(model => model.Category.Affirmation)<span>*</span> 
+			</div>
+			<div class="editor-field wideText">
+				@Html.EditorFor(model => model.Category.Affirmation)
+				@Html.ValidationMessageFor(model => model.Category.Affirmation)
+			</div>
+		</li>
+		<li>
+			<div class="editor-label required">
+				@Html.LabelFor(model => model.Category.Encouragement)<span>*</span> 
+			</div>
+			<div class="editor-field wideText">
+				@Html.EditorFor(model => model.Category.Encouragement)
+				@Html.ValidationMessageFor(model => model.Category.Encouragement)
+			</div>
+		</li>
+		<li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Category.IsActive) 
+			</div>
+			<div class="editor-field wideText">
+				@Html.EditorFor(model => model.Category.IsActive)
+				@Html.ValidationMessageFor(model => model.Category.IsActive)
+			</div>
+		</li>
+		<li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Category.DoNotUseForCalculations) 
+			</div>
+			<div class="editor-field wideText">
+				@Html.EditorFor(model => model.Category.DoNotUseForCalculations)
+				@Html.ValidationMessageFor(model => model.Category.DoNotUseForCalculations)
+			</div>
+		</li>
+@*		<li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Category.IsCurrentVersion) 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.Category.IsCurrentVersion)
+				@Html.ValidationMessageFor(model => model.Category.IsCurrentVersion)
+			</div>
+		</li>*@
+@*		
+		</li>
+		<li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Category.CreateDate) 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.Category.CreateDate)
+				@Html.ValidationMessageFor(model => model.Category.CreateDate)
+			</div>
+		</li>*@
+		@Html.HiddenFor(model => model.Category.Id)
+		<li>
+			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+			<label>&nbsp;</label>
+			<input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "Index")
+		</li>
+	</ul>
+</fieldset>
+}
+
+    <h2>Goals</h2>
+    <p>
+	    @Html.ActionLink("Create New", "Create", "CategoryGoal", new {id = Model.Category.Id }, new { }) 
+    </p>
+    <table class="datatable">
+	    <thead>
+		    <tr>
+			    <th></th>
+			    <th>
+				    Goal
+			    </th>
+ 
+			    <th>
+				    Active
+			    </th>
+		    </tr>
+	    </thead>
+	    <tbody>
+    @{ var odd = false; }
+    @foreach (var item in Model.Category.CategoryGoals) {
+		    <tr class="@(odd ? "odd": "even")">
+			    <td>
+                    <a href="/CategoryGoal/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Goal" /></a>
+                    <a href="/CategoryGoal/Edit/@item.Id"><img src="@Url.Image("edit.png")" alt="Edit this Goal" /></a>
+			    </td>
+			    <td>
+				    @item.Name
+			    </td>
+			    <td>
+                    @if (item.IsActive){ 
+                        @item.IsActive
+                    }
+			    </td>
+		    </tr>
+                    odd = !odd;
+    }
+	    </tbody>
+    </table>
+
