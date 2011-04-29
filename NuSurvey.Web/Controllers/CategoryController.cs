@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -7,6 +8,8 @@ using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
+using UCDArch.Web.ActionResults;
+using UCDArch.Web.Attributes;
 using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
@@ -23,7 +26,55 @@ namespace NuSurvey.Web.Controllers
         {
             _categoryRepository = categoryRepository;
         }
-    
+
+        public ActionResult ReOrder(int id)
+        {
+            var survey = Repository.OfType<Survey>().GetNullableById(id);
+            if (survey == null)
+            {
+                return this.RedirectToAction<SurveyController>(a => a.Index());
+            }
+
+            var viewModel = CategoryListViewModel.Create(Repository, survey);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [BypassAntiForgeryToken]
+        public ActionResult ReOrder(int id, string tableOrder)
+        {
+            var survey = Repository.OfType<Survey>().GetNullableById(id);
+            if (survey == null)
+            {
+                return new JsonNetResult(false);
+            }
+
+            var ids = tableOrder.Split(' ');
+            var categoryIds = new int[ids.Count()];
+            for (var i = 0; i < ids.Count(); i++)
+            {
+                if (!int.TryParse(ids[i], out categoryIds[i]))
+                {
+                    return new JsonNetResult(false);
+                }
+            }
+            for (var i = 0; i < categoryIds.Count(); i++)
+            {
+                var i1 = i;
+                survey.Categories.Where(a => a.Id == categoryIds[i1]).Single().Rank = i + 1;
+            }
+
+            ModelState.Clear();
+            survey.TransferValidationMessagesTo(ModelState);
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<Survey>().EnsurePersistent(survey);
+            }
+
+            return new JsonNetResult(true);
+        }
+
 
         ////
         //// GET: /Category/Details/5
@@ -177,4 +228,24 @@ namespace NuSurvey.Web.Controllers
 			return viewModel;
 		}
 	}
+
+    /// <summary>
+    /// ViewModel for the Category class
+    /// </summary>
+    public class CategoryListViewModel
+    {
+        public Survey Survey { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
+
+        public static CategoryListViewModel Create(IRepository repository, Survey survey)
+        {
+            Check.Require(repository != null, "Repository must be supplied");
+            Check.Require(survey != null);
+
+            var viewModel = new CategoryListViewModel { Survey = survey };
+            viewModel.Categories = viewModel.Survey.Categories.Where(a => a.IsCurrentVersion).OrderBy(a => a.Rank);
+
+            return viewModel;
+        }
+    }
 }

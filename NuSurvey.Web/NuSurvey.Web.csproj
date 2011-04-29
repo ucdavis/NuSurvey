@@ -144,6 +144,7 @@
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.jqEasyCharCounter.js" />
     <Content Include="Scripts\jquery.jqEasyCharCounter.min.js" />
+    <Content Include="Scripts\jquery.tablednd_0_5.js" />
     <Content Include="UCDArch.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -268,6 +269,7 @@
     <Content Include="Views\CategoryGoal\_CategoryGoals.cshtml" />
     <Content Include="Views\CategoryGoal\Edit.cshtml" />
     <Content Include="Views\CategoryGoal\Details.cshtml" />
+    <Content Include="Views\Category\ReOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
