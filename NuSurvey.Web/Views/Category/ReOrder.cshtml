@@ -13,7 +13,7 @@
             <a href="/Survey/Edit/@Model.Survey.Id">Edit Survey</a> 
         </li>
         <li>
-            Edit
+            Change Rank
         </li>
     </ul>
 }
@@ -23,6 +23,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+
             // Initialise the table
             $("table.DragnDrop").tableDnD({
                 onDrop: function (table, row) {
@@ -35,12 +36,12 @@
                         }
                         else {
                             newOrder = newOrder + " " + rows[i].id;
-                        }                     
+                        }
                     }
                     var url = '@Url.Action("ReOrder", "Category")';
                     $.post(url, { tableOrder: newOrder },
                         function (result) {
-                            if(result != true){
+                            if (result != true) {
                                 alert("There was a problem updating.");
                             }
                         });
@@ -82,6 +83,7 @@
 @{ var odd = true; }
 @foreach (var item in Model.Categories)
 {
+    var jasonId = "Rank" + item.Id;
 		<tr id="@item.Id" class="@(odd ? "odd" : "even")">
 			<td>
 			</td>
