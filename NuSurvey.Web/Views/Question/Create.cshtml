@@ -32,6 +32,23 @@
             // attach event handlers
             $("img#AddResponses").click(function () { AddResponseInput(); });
 
+            // Initialise the table
+            $("table.DragnDrop").tableDnD({
+                onDrop: function (table, row) {
+                    //debugger;
+                    var rows = table.tBodies[0].rows;
+                    var newOrder = "";
+                    for (var i = 0; i < rows.length; i++) {
+                        if (newOrder == "") {
+                            newOrder = rows[i].id;
+                        }
+                        else {
+                            newOrder = newOrder + " " + rows[i].id;
+                        }
+                    }
+                    $("#SortOrder").val(newOrder);
+                }
+            });
 
         });
 
@@ -67,7 +84,7 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
-@using (Html.BeginForm() )
+@using (Html.BeginForm())
 {
 	@Html.AntiForgeryToken()
 	@Html.ValidationSummary(true)
@@ -80,6 +97,7 @@ Example: Dinosaur 1  *@
 	@*<h4>Form Header</h4>*@
 	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
 	<p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
+    <p>Click the plus button to add more Response Choices. Drag and Drop choices to change the order.</p>
 	<ul>
         <li>
 			<div class="editor-label required">
@@ -152,11 +170,23 @@ Example: Dinosaur 1  *@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr id="0">
+                    @{var respCount = 0;}
+                    @foreach (var resp in Model.Responses)
+                    { 
+                        <tr id="@respCount">
                             <td></td>
-                            <td><input id="Response" class="text-box single-line" type="text" name="Response[0].Value"> </input></td>
-                            <td><input id="Response" class="text-box single-line" type="text" name="Response[0].Score"> </input></td>
+                            <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Value" value="@resp.Value"></input></td>
+                            <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Score" value="@resp.Score"></input></td>
                         </tr>
+                       respCount = respCount + 1;
+                    }
+                    @if (respCount == 0){                     
+                        <tr id="@respCount">
+                            <td></td>
+                            <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Value"></input></td>
+                            <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Score"></input></td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
                 <img id="AddResponses" src=@Url.Content("~/Images/plus.png") style="width:24px; height:24px;" />

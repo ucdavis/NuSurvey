@@ -66,6 +66,57 @@ namespace NuSurvey.Web.Controllers
         [HttpPost]
         public ActionResult Create(int id, Question question, ResponsesParameter[] response, string sortOrder)
         {
+            var survey = Repository.OfType<Survey>().GetNullableById(id);
+            if (survey == null)
+            {
+                Message = "Survey Not Found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            Message = "Testing";
+            var viewModel1 = QuestionViewModel.Create(Repository, survey);
+            viewModel1.Question = question;
+            var useSort = true;
+            if (!string.IsNullOrWhiteSpace(sortOrder))
+            {
+                var ids = sortOrder.Split(' ');
+                var responseIds = new int[ids.Count()];
+                for (var i = 0; i < ids.Count(); i++)
+                {
+                    if (!int.TryParse(ids[i], out responseIds[i]))
+                    {
+                        useSort = false;
+                        break;
+                    }
+                }
+                if (useSort && responseIds.Count() == response.Count())
+                {
+                    var sortedResponse = new List<ResponsesParameter>();
+                    for (int i = 0; i < responseIds.Count(); i++)
+                    {
+                        if (!string.IsNullOrWhiteSpace(response[responseIds[i]].Value))
+                        {
+                            sortedResponse.Add(response[responseIds[i]]);
+                        }
+                    }
+                    viewModel1.Responses = sortedResponse;
+                }
+                else
+                {
+                    var cleanedResponse = new List<ResponsesParameter>();
+                    foreach (var responsesParameter in response)
+                    {
+                        if (!string.IsNullOrWhiteSpace(responsesParameter.Value))
+                        {
+                            cleanedResponse.Add(responsesParameter);
+                        }
+                    }
+                    viewModel1.Responses = cleanedResponse; 
+                }
+            }
+
+            return View(viewModel1);
+
+
             var questionToCreate = new Question();
 
             TransferValues(question, questionToCreate);
@@ -80,7 +131,7 @@ namespace NuSurvey.Web.Controllers
             }
             else
             {
-				var viewModel = QuestionViewModel.Create(Repository, null);
+				var viewModel = QuestionViewModel.Create(Repository, survey);
                 viewModel.Question = question;
 
                 return View(viewModel);
@@ -179,6 +230,7 @@ namespace NuSurvey.Web.Controllers
         public Category Category { get; set; }
         public IEnumerable<SelectListItem> CategoryPick { get; set; }
         public string SortOrder { get; set; }
+        public IList<ResponsesParameter> Responses { get; set; }
  
 		public static QuestionViewModel Create(IRepository repository, Survey survey)
 		{
@@ -187,6 +239,7 @@ namespace NuSurvey.Web.Controllers
 			
 			var viewModel = new QuestionViewModel {Question = new Question(), Survey = survey};
 		    viewModel.Categories = viewModel.Survey.Categories.Where(a => a.IsCurrentVersion).OrderBy(a => a.Rank);
+            viewModel.Responses = new List<ResponsesParameter>();
  
 			return viewModel;
 		}
