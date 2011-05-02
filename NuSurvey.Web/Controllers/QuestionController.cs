@@ -64,7 +64,7 @@ namespace NuSurvey.Web.Controllers
         //
         // POST: /Question/Create
         [HttpPost]
-        public ActionResult Create(Question question)
+        public ActionResult Create(int id, Question question, ResponsesParameter[] response, string sortOrder)
         {
             var questionToCreate = new Question();
 
@@ -178,6 +178,7 @@ namespace NuSurvey.Web.Controllers
         public IEnumerable<Category> Categories { get; set; }
         public Category Category { get; set; }
         public IEnumerable<SelectListItem> CategoryPick { get; set; }
+        public string SortOrder { get; set; }
  
 		public static QuestionViewModel Create(IRepository repository, Survey survey)
 		{
@@ -190,4 +191,10 @@ namespace NuSurvey.Web.Controllers
 			return viewModel;
 		}
 	}
+
+    public class ResponsesParameter
+    {
+        public string Value { get; set; }
+        public int Score { get; set; }
+    }
 }

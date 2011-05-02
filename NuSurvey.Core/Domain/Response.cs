@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +10,7 @@ namespace NuSurvey.Core.Domain
     public class Response : DomainObject
     {
         [Required]
+        [DisplayName("Choice")]
         public virtual string Value { get; set; }
 
         public virtual int Score { get; set; }
