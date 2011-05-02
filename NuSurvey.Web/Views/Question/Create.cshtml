@@ -89,6 +89,7 @@
 	@Html.AntiForgeryToken()
 	@Html.ValidationSummary(true)
     @Html.HiddenFor(x => x.Survey.Id)
+    @Html.Hidden("categoryId", Model.Category != null ? Model.Category.Id : 0)
     <input id="SortOrder" type="text" value="0" name="SortOrder" style="display:none"/>    
 <fieldset>
 @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
@@ -195,7 +196,15 @@ Example: Dinosaur 1  *@
 		<li>
 			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
 			<label>&nbsp;</label>
-			<input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "Index")
+			<input class="button" type="submit" value="Submit" /> |
+                                @if (Model.Category != null)
+                                {
+                                        <a href="/Category/Edit/@Model.Category.Id">Cancel</a> 
+                                }
+                                else
+                                { 
+                                    <a href="/Survey/Edit/@Model.Survey.Id">Cancel</a>
+                                }
 		</li>
 	</ul>
 	</fieldset>

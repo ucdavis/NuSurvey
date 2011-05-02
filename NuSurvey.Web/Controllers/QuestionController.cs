@@ -64,7 +64,7 @@ namespace NuSurvey.Web.Controllers
         //
         // POST: /Question/Create
         [HttpPost]
-        public ActionResult Create(int id, Question question, ResponsesParameter[] response, string sortOrder)
+        public ActionResult Create(int id, int? categoryId, Question question, ResponsesParameter[] response, string sortOrder)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
             if (survey == null)
@@ -74,6 +74,11 @@ namespace NuSurvey.Web.Controllers
             }
             Message = "Testing";
             var viewModel1 = QuestionViewModel.Create(Repository, survey);
+            if (categoryId != null)
+            {
+                var category = Repository.OfType<Category>().GetNullableById(categoryId.Value);
+                viewModel1.Category = category;
+            }
             viewModel1.Question = question;
             var useSort = true;
             if (!string.IsNullOrWhiteSpace(sortOrder))
