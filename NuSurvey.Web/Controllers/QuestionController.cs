@@ -254,5 +254,6 @@ namespace NuSurvey.Web.Controllers
     {
         public string Value { get; set; }
         public int Score { get; set; }
+        public bool Remove { get; set; }
     }
 }

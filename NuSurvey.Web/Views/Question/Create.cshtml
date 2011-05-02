@@ -54,7 +54,7 @@
 
         function AddResponseInput(obj) {
             var index = $("#ResponseTable > tbody tr").length;
-            $("#ResponseTable > tbody:last").append('<tr id="' + index + '"><td></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Value"> </input></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Score"> </input></td></tr>');
+            $("#ResponseTable > tbody:last").append('<tr id="' + index + '"><td></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Value"> </input></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Score"> </input></td><td><input id="Response_' + index + '__Remove" type="checkbox" name="Response[' + index + '].Remove" value="true"/><input type="hidden" value="false" name="Response[' + index + '].Remove"></td></tr>');
 
             // Initialise the table
             $("table.DragnDrop").tableDnD({
@@ -168,6 +168,7 @@ Example: Dinosaur 1  *@
                             <th></th>
                             <th>Choice</th>
                             <th>Score</th>
+                            <th>Remove</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -178,6 +179,8 @@ Example: Dinosaur 1  *@
                             <td></td>
                             <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Value" value="@resp.Value"></input></td>
                             <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Score" value="@resp.Score"></input></td>
+                            <td>@Html.CheckBox("Response[" + respCount + "].Remove")</td>
+
                         </tr>
                        respCount = respCount + 1;
                     }
@@ -186,6 +189,7 @@ Example: Dinosaur 1  *@
                             <td></td>
                             <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Value"></input></td>
                             <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Score"></input></td>
+                            <td>@Html.CheckBox("Response[" + respCount + "].Remove")</td>
                         </tr>
                     }
                     </tbody>
