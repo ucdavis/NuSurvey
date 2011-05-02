@@ -156,7 +156,7 @@ Example: Dinosaur 1  *@
 
     <h2>All Questions</h2>
     <p class="specialMe">
-	    @*@Html.ActionLink("Create New", "Create", "Category", new {id = Model.Id }, new { })*@  
+	    @Html.ActionLink("Create New", "Create", "Question", new {id = Model.Id }, new { })  
     </p>
     <p class="specialMe rightAway">
         <a class="rightAway" href="/Question/ReOrder/@Model.Id">Change Order</a>

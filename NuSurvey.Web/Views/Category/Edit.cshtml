@@ -204,7 +204,7 @@ Example: Dinosaur 1  *@
 
     <h2>Category Questions</h2>
     <p>
-	    @Html.ActionLink("Create New", "Create", "Question", new { id = @Model.Category.Id }, new { })
+	    @Html.ActionLink("Create New", "Create", "Question", new { id = @Model.Survey.Id, categoryId = @Model.Category.Id }, new { })
     </p>
     <table class="datatable questions">
 	    <thead>

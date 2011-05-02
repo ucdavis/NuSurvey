@@ -61,6 +61,9 @@
     <Reference Include="MvcContrib">
       <HintPath>..\Bin\MvcContrib.dll</HintPath>
     </Reference>
+    <Reference Include="MvcContrib.FluentHtml">
+      <HintPath>..\Bin\MvcContrib.FluentHtml.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate.ByteCode.Spring">
       <HintPath>..\Bin\NHibernate.ByteCode.Spring.dll</HintPath>
     </Reference>
@@ -103,6 +106,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Filters\RoleFilter.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\SurveyResponseController.cs" />
     <Compile Include="Global.asax.cs">
@@ -270,6 +274,7 @@
     <Content Include="Views\CategoryGoal\Edit.cshtml" />
     <Content Include="Views\CategoryGoal\Details.cshtml" />
     <Content Include="Views\Category\ReOrder.cshtml" />
+    <Content Include="Views\Question\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

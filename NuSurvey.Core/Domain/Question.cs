@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
 using System.ComponentModel.DataAnnotations;
@@ -22,11 +23,16 @@ namespace NuSurvey.Core.Domain
 
         [Required]
         [StringLength(100)]
+        [DisplayName("Question")]
         public virtual string Name { get; set; }
 
+        [DisplayName("Active")]
         public virtual bool IsActive { get; set; }
         public virtual int Order { get; set; }
+
+        [DisplayName("Open Ended")]
         public virtual bool IsOpenEnded { get; set; }
+
         [Required]
         public virtual Category Category { get; set; }
         [Required]
@@ -49,7 +55,7 @@ namespace NuSurvey.Core.Domain
 
             References(x => x.Category);
             References(x => x.Survey);
-            HasMany(x => x.Responses);
+            HasMany(x => x.Responses).Cascade.AllDeleteOrphan();
         }
     }
 }
