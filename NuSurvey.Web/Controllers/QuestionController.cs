@@ -333,9 +333,6 @@ namespace NuSurvey.Web.Controllers
             }
             else
             {
-				var viewModel1 = QuestionViewModel.Create(Repository, null);
-                viewModel1.Question = question;
-
                 return View(viewModel);
             }
         }
