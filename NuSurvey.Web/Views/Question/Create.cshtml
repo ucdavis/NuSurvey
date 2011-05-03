@@ -32,23 +32,7 @@
             // attach event handlers
             $("img#AddResponses").click(function () { AddResponseInput(); });
 
-            // Initialise the table
-            $("table.DragnDrop").tableDnD({
-                onDrop: function (table, row) {
-                    //debugger;
-                    var rows = table.tBodies[0].rows;
-                    var newOrder = "";
-                    for (var i = 0; i < rows.length; i++) {
-                        if (newOrder == "") {
-                            newOrder = rows[i].id;
-                        }
-                        else {
-                            newOrder = newOrder + " " + rows[i].id;
-                        }
-                    }
-                    $("#SortOrder").val(newOrder);
-                }
-            });
+            UpdateDragAndDropTable();
 
         });
 
@@ -56,6 +40,11 @@
             var index = $("#ResponseTable > tbody tr").length;
             $("#ResponseTable > tbody:last").append('<tr id="' + index + '"><td></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Value"> </input></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Score"> </input></td><td><input id="Response_' + index + '__Remove" type="checkbox" name="Response[' + index + '].Remove" value="true"/><input type="hidden" value="false" name="Response[' + index + '].Remove"></td></tr>');
 
+            UpdateDragAndDropTable();
+
+        }
+
+        function UpdateDragAndDropTable() {
             // Initialise the table
             $("table.DragnDrop").tableDnD({
                 onDrop: function (table, row) {

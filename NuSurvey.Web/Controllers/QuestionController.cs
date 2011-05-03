@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AutoMapper;
 using NuSurvey.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
+using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -72,14 +74,14 @@ namespace NuSurvey.Web.Controllers
                 Message = "Survey Not Found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            Message = "Testing";
-            var viewModel1 = QuestionViewModel.Create(Repository, survey);
+            var viewModel = QuestionViewModel.Create(Repository, survey);
             if (categoryId != null)
             {
                 var category = Repository.OfType<Category>().GetNullableById(categoryId.Value);
-                viewModel1.Category = category;
+                viewModel.Category = category;
             }
-            viewModel1.Question = question;
+            viewModel.Question = question;
+
             var useSort = true;
             if (!string.IsNullOrWhiteSpace(sortOrder))
             {
@@ -87,44 +89,67 @@ namespace NuSurvey.Web.Controllers
                 var responseIds = new int[ids.Count()];
                 for (var i = 0; i < ids.Count(); i++)
                 {
-                    if (!int.TryParse(ids[i], out responseIds[i]))
-                    {
-                        useSort = false;
-                        break;
-                    }
+                    if (int.TryParse(ids[i], out responseIds[i])) continue;
+                    useSort = false;
+                    break;
                 }
                 if (useSort && responseIds.Count() == response.Count())
                 {
                     var sortedResponse = new List<ResponsesParameter>();
-                    for (int i = 0; i < responseIds.Count(); i++)
+                    for (var i = 0; i < responseIds.Count(); i++)
                     {
                         if (!string.IsNullOrWhiteSpace(response[responseIds[i]].Value))
                         {
                             sortedResponse.Add(response[responseIds[i]]);
                         }
                     }
-                    viewModel1.Responses = sortedResponse;
+                    viewModel.Responses = sortedResponse;
                 }
                 else
                 {
-                    var cleanedResponse = new List<ResponsesParameter>();
-                    foreach (var responsesParameter in response)
-                    {
-                        if (!string.IsNullOrWhiteSpace(responsesParameter.Value))
-                        {
-                            cleanedResponse.Add(responsesParameter);
-                        }
-                    }
-                    viewModel1.Responses = cleanedResponse; 
+                    viewModel.Responses = response;
                 }
             }
+            else
+            {
+                viewModel.Responses = response;
+            }
 
-            return View(viewModel1);
+            // Remove responses that do not have a Choice or that have the remove checked. This is the create, so they will never be added
+            var cleanedResponse = new List<ResponsesParameter>();
+            foreach (var responsesParameter in viewModel.Responses)
+            {
+                if (!string.IsNullOrWhiteSpace(responsesParameter.Value) && !responsesParameter.Remove)
+                {
+                    cleanedResponse.Add(responsesParameter);
+                }
+            }
+            viewModel.Responses = cleanedResponse;
 
 
-            var questionToCreate = new Question();
+            var questionToCreate = new Question(survey);
+            Mapper.Map(question, questionToCreate);
+            var counter = 0;
+            foreach (var responsesParameter in viewModel.Responses)
+            {
+                counter++;
+                var responseToAdd = new Response
+                {
+                    Order = counter,
+                    IsActive = true,
+                    Score = responsesParameter.Score,
+                    Value = responsesParameter.Value
+                };
 
-            TransferValues(question, questionToCreate);
+                questionToCreate.AddResponse(responseToAdd);
+            }
+
+            ModelState.Clear();
+            questionToCreate.TransferValidationMessagesTo(ModelState);
+            if (questionToCreate.Responses.Where(a => a.IsActive).Count() == 0)
+            {
+                ModelState.AddModelError("Question", "Responses are required.");
+            }
 
             if (ModelState.IsValid)
             {
@@ -132,21 +157,26 @@ namespace NuSurvey.Web.Controllers
 
                 Message = "Question Created Successfully";
 
-                return RedirectToAction("Index");
+                if (viewModel.Category != null)
+                {
+                    return this.RedirectToAction<CategoryController>(a => a.Edit(viewModel.Category.Id));
+                }
+                return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
             }
-            else
-            {
-				var viewModel = QuestionViewModel.Create(Repository, survey);
-                viewModel.Question = question;
-
-                return View(viewModel);
-            }
+            return View(viewModel);
         }
 
         //
         // GET: /Question/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, int surveyId, int? categoryId)
         {
+            var survey = Repository.OfType<Survey>().GetNullableById(surveyId);
+            if (survey == null)
+            {
+                Message = "Survey Not Found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+
             var question = _questionRepository.GetNullableById(id);
 
             if (question == null) return RedirectToAction("Index");

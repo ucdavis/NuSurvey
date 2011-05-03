@@ -16,13 +16,17 @@ namespace NuSurvey.Web.Helpers
         protected override void Configure()
         {
             CreateMap<Category, Category>()
-                .ForMember(x => x.Id, x => x.Ignore())
                 .ForMember(x => x.Rank, x => x.Ignore())
                 .ForMember(x => x.Survey, x => x.Ignore());
 
             CreateMap<CategoryGoal, CategoryGoal>()
                 .ForMember(x => x.Id, x => x.Ignore())
                 .ForMember(x => x.Category, x => x.Ignore());
+
+            CreateMap<Question, Question>()
+                .ForMember(x => x.Id, x => x.Ignore())
+                .ForMember(x => x.Order, x => x.Ignore())
+                .ForMember(x => x.Survey, x => x.Ignore());
 
 
             //CreateMap<Session, Session>()

@@ -4,20 +4,46 @@ using System.ComponentModel;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
+using System.Linq;
 
 namespace NuSurvey.Core.Domain
 {
     public class Question : DomainObject
     {
         #region Constructor
-        public Question()
+        public Question(Survey survey)
         {
-            SetDefaults();
+            SetPreDefaults();
+            Survey = survey;
+            SetPostDefaults();
         }
 
-        private void SetDefaults()
+        public Question()
+        {
+            SetPreDefaults();
+            SetPostDefaults();
+        }
+
+        private void SetPreDefaults()
         {
             CreateDate = DateTime.Now;
+            IsActive = true;
+        }
+
+        private void SetPostDefaults()
+        {
+            if (Order == 0)
+            {
+                if (Survey != null && Survey.Questions != null && Survey.Questions.Count > 0)
+                {
+                    Order = Survey.Questions.Max(a => a.Order) + 1;
+                }
+                else
+                {
+                    Order = 1;
+                }
+            }
         }
         #endregion Constructor
 
@@ -41,6 +67,14 @@ namespace NuSurvey.Core.Domain
         public virtual DateTime CreateDate { get; set; }
 
         public virtual IList<Response> Responses { get; set; }
+
+        #region Methods
+        public virtual void AddResponse(Response response)
+        {
+            response.Question = this;
+            Responses.Add(response);
+        }
+        #endregion Methods
     }
     public class QuestionMap : ClassMap<Question>
     {
