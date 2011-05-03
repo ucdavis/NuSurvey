@@ -1,0 +1,100 @@
+﻿@model NuSurvey.Web.Controllers.QuestionViewModel
+
+@{
+    ViewBag.Title = "Edit Question";
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="/Survey/Index">Surveys</a> 
+        </li>
+        <li>
+            <a href="/Survey/Edit/@Model.Survey.Id">Edit Survey</a> 
+        </li>
+        @if (Model.Category != null)
+        {
+            <li>
+                <a href="/Category/Edit/@Model.Category.Id">Edit Category</a> 
+            </li>
+        }
+        <li>
+            Edit
+        </li>
+    </ul>
+}
+
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.tablednd_0_5.js")'></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // attach event handlers
+            $("img#AddResponses").click(function () { AddResponseInput(); });
+
+            UpdateDragAndDropTable();
+
+        });
+
+        function AddResponseInput(obj) {
+            var index = $("#ResponseTable > tbody tr").length;
+            $("#ResponseTable > tbody:last").append('<tr id="' + index + '"><td></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Value"> </input></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Score"> </input></td><td><input id="Response_' + index + '__Remove" type="checkbox" name="Response[' + index + '].Remove" value="true"/><input type="hidden" value="false" name="Response[' + index + '].Remove"></td></tr>');
+
+            UpdateDragAndDropTable();
+
+        }
+
+        function UpdateDragAndDropTable() {
+            // Initialise the table
+            $("table.DragnDrop").tableDnD({
+                onDrop: function (table, row) {
+                    //debugger;
+                    var rows = table.tBodies[0].rows;
+                    var newOrder = "";
+                    for (var i = 0; i < rows.length; i++) {
+                        if (newOrder == "") {
+                            newOrder = rows[i].id;
+                        }
+                        else {
+                            newOrder = newOrder + " " + rows[i].id;
+                        }
+                    }
+                    $("#SortOrder").val(newOrder);
+                }
+            });
+        }
+
+    </script>
+
+}
+
+@*<h2>Edit</h2>*@
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true)
+    @Html.Hidden("surveyId", Model.Survey.Id)
+    @Html.Hidden("categoryId", Model.Category != null ? Model.Category.Id : 0)
+    @Html.HiddenFor(x => x.Question.Id)
+    <input id="SortOrder" type="text" value="0" name="SortOrder" style="display:none"/>  
+<fieldset>
+@* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
+Example: Dinosaur 1  *@
+	@*<legend>QuestionViewModel</legend>*@
+	@*<h4>Form Header</h4>*@
+	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
+	<p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
+    <p>Click the plus button to add more Response Choices. Drag and Drop choices to change the order.</p>
+
+    @Html.Partial("_Questions")
+
+</fieldset>
+}
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
+

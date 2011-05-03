@@ -178,11 +178,25 @@ namespace NuSurvey.Web.Controllers
             }
 
             var question = _questionRepository.GetNullableById(id);
+            if (question == null)
+            {
+                Message = "Question Not Found.";
+                return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+            }
 
-            if (question == null) return RedirectToAction("Index");
-
-			var viewModel = QuestionViewModel.Create(Repository, null);
+			var viewModel = QuestionViewModel.Create(Repository, survey);
 			viewModel.Question = question;
+            if (categoryId != null)
+            {
+                var category = Repository.OfType<Category>().GetNullableById(categoryId.Value);
+                viewModel.Category = category;
+            }
+
+            foreach (var resp in
+                question.Responses.OrderBy(a => a.Order).Select(response => new ResponsesParameter {Value = response.Value, Score = response.Score, ResponseId = response.Id,  Remove = !response.IsActive}))
+            {
+                viewModel.Responses.Add(resp);
+            }
 
 			return View(viewModel);
         }
@@ -190,13 +204,120 @@ namespace NuSurvey.Web.Controllers
         //
         // POST: /Question/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, Question question)
+        public ActionResult Edit(int id, int surveyId, int? categoryId, Question question, ResponsesParameter[] response, string sortOrder)
         {
+            var survey = Repository.OfType<Survey>().GetNullableById(surveyId);
+            if (survey == null)
+            {
+                Message = "Survey Not Found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+
             var questionToEdit = _questionRepository.GetNullableById(id);
+            if (questionToEdit == null)
+            {
+                Message = "Question Not Found.";
+                return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+            }
+            
+            var viewModel = QuestionViewModel.Create(Repository, survey);
+            if (categoryId != null)
+            {
+                var category = Repository.OfType<Category>().GetNullableById(categoryId.Value);
+                viewModel.Category = category;
+            }
+            viewModel.Question = question;
 
-            if (questionToEdit == null) return RedirectToAction("Index");
+            var useSort = true;
+            if (!string.IsNullOrWhiteSpace(sortOrder))
+            {
+                var ids = sortOrder.Split(' ');
+                var responseIds = new int[ids.Count()];
+                for (var i = 0; i < ids.Count(); i++)
+                {
+                    if (int.TryParse(ids[i], out responseIds[i])) continue;
+                    useSort = false;
+                    break;
+                }
+                if (useSort && responseIds.Count() == response.Count())
+                {
+                    var sortedResponse = new List<ResponsesParameter>();
+                    for (var i = 0; i < responseIds.Count(); i++)
+                    {
+                        if (!string.IsNullOrWhiteSpace(response[responseIds[i]].Value))
+                        {
+                            sortedResponse.Add(response[responseIds[i]]);
+                        }
+                    }
+                    viewModel.Responses = sortedResponse;
+                }
+                else
+                {
+                    viewModel.Responses = response;
+                }
+            }
+            else
+            {
+                viewModel.Responses = response;
+            }
 
-            TransferValues(question, questionToEdit);
+            // Remove responses that do not have a Choice or that have the remove checked. This is the create, so they will never be added
+            var cleanedResponse = new List<ResponsesParameter>();
+            foreach (var responsesParameter in viewModel.Responses)
+            {
+                if (responsesParameter.ResponseId != 0)
+                {
+                    cleanedResponse.Add(responsesParameter);
+                }
+                else if (!string.IsNullOrWhiteSpace(responsesParameter.Value) && !responsesParameter.Remove)
+                {
+                    cleanedResponse.Add(responsesParameter);
+                }
+            }
+            viewModel.Responses = cleanedResponse;
+
+            Mapper.Map(question, questionToEdit);
+
+            var counter = 0;
+            foreach (var responsesParameter in viewModel.Responses)
+            {
+                counter++;
+                if (responsesParameter.ResponseId != 0)
+                {
+                    var foundResp = questionToEdit.Responses.Where(a => a.Id == responsesParameter.ResponseId).Single();
+                    foundResp.Value = responsesParameter.Value;
+                    foundResp.Score = responsesParameter.Score;
+                    foundResp.IsActive = !responsesParameter.Remove;
+                    foundResp.Order = counter;
+                }
+                else
+                {
+                    var responseToAdd = new Response
+                    {
+                        Order = counter,
+                        IsActive = true,
+                        Score = responsesParameter.Score,
+                        Value = responsesParameter.Value
+                    };
+
+                    questionToEdit.AddResponse(responseToAdd);
+                }
+            }
+
+            ModelState.Clear();
+            questionToEdit.TransferValidationMessagesTo(ModelState);
+
+            foreach (var responseCheck in questionToEdit.Responses)
+            {
+                if (string.IsNullOrWhiteSpace(responseCheck.Value))
+                {
+                    ModelState.AddModelError("Question", string.Format("Response {0} must have a choice.", responseCheck.Order));
+                }
+            }
+            if (questionToEdit.Responses.Where(a => a.IsActive).Count() == 0)
+            {
+                ModelState.AddModelError("Question", "Active Responses are required.");
+            }
 
             if (ModelState.IsValid)
             {
@@ -204,12 +325,16 @@ namespace NuSurvey.Web.Controllers
 
                 Message = "Question Edited Successfully";
 
-                return RedirectToAction("Index");
+                if (viewModel.Category != null)
+                {
+                    return this.RedirectToAction<CategoryController>(a => a.Edit(viewModel.Category.Id));
+                }
+                return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
             }
             else
             {
-				var viewModel = QuestionViewModel.Create(Repository, null);
-                viewModel.Question = question;
+				var viewModel1 = QuestionViewModel.Create(Repository, null);
+                viewModel1.Question = question;
 
                 return View(viewModel);
             }
@@ -285,5 +410,6 @@ namespace NuSurvey.Web.Controllers
         public string Value { get; set; }
         public int Score { get; set; }
         public bool Remove { get; set; }
+        public int ResponseId { get; set; }
     }
 }
