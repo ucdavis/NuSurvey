@@ -142,6 +142,9 @@
     <NotInBuild Include="Schema Comparisons\VogelToInternalSchemaComparison.scmp">
       <SubType>NotInBuild</SubType>
     </NotInBuild>
+    <NotInBuild Include="Schema Comparisons\VogelToTerrySchemaComparison.scmp">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Constraints\DF_SurveyResponses_DateTaken.defconst.sql">
