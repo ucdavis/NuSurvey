@@ -56,7 +56,28 @@ if (!String.IsNullOrEmpty(mvcHost.MasterPageFile)) {
     PushIndent("    ");
 }
 #>
-<fieldset>
+
+@section SubNav
+{
+	<ul class="navigation">
+		<#
+		string pkName = GetPrimaryKeyName(mvcHost.ViewDataType);
+		if (pkName != null) {
+		#>
+			<li>@Html.ActionLink("Edit", "Edit", new { id=Model.<#= pkName #> }) </li>
+			<li>@Html.ActionLink("Back to List", "Index")</li>
+		<#
+		} else {
+		#>
+			<li>@Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) </li>
+			<li>@Html.ActionLink("Back to List", "Index")</li>
+		<#
+		}
+		#>
+	</ul>
+}
+
+<fieldset class="display-form">
     <legend><#= mvcHost.ViewDataType.Name #></legend>
 	<ul>
 <#
@@ -65,7 +86,7 @@ foreach (ModelProperty property in GetModelProperties(mvcHost.ViewDataType)) {
 #>
 		<li>
 			<div class="display-label"><#= property.Name #></div>
-			<div class="display-field">@<#= property.ValueExpression #></div>
+			<div class="display-details">@<#= property.ValueExpression #></div>
 		</li>
 <#
     }
@@ -73,22 +94,7 @@ foreach (ModelProperty property in GetModelProperties(mvcHost.ViewDataType)) {
 #>
 	</ul>
 </fieldset>
-<p>
-<#
-string pkName = GetPrimaryKeyName(mvcHost.ViewDataType);
-if (pkName != null) {
-#>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.<#= pkName #> }) |
-    @Html.ActionLink("Back to List", "Index")
-<#
-} else {
-#>
-    @Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
-<#
-}
-#>
-</p>
+
 <#
 if(!mvcHost.IsPartialView && !mvcHost.IsContentPage) {
     ClearIndent();

@@ -39,6 +39,13 @@ if(mvcHost.IsPartialView) {
 		}
 	}
 #>
+
+<asp:Content runat="server" ID="SubNavContent" ContentPlaceHolderID="SubNav">
+	<ul class="navigation">
+		<li><%: Html.ActionLink("Create New", "Create") %></li>
+	</ul>
+</asp:Content>
+
 <asp:Content ID="Content<#= CPHCounter #>" ContentPlaceHolderID="<#= mvcHost.PrimaryContentPlaceHolderID #>" runat="server">
 
 <h2><#= mvcHost.ViewName #></h2>
@@ -59,9 +66,7 @@ if(mvcHost.IsPartialView) {
 	PushIndent("    ");
 }
 #>
-<p>
-	<%: Html.ActionLink("Create New", "Create") %>
-</p>
+
 <table>
 	<thead>
 		<tr>
@@ -78,6 +83,7 @@ foreach (ModelProperty property in properties) {
 	}
 }
 #>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -88,16 +94,24 @@ string pkName = GetPrimaryKeyName(mvcHost.ViewDataType);
 if (pkName != null) {
 #>
 			<td>
-				<%: Html.ActionLink("Edit", "Edit", new { id=item.<#= pkName #> }) %> |
-				<%: Html.ActionLink("Details", "Details", new { id=item.<#= pkName #> }) %> |
+				<a href='<%: Url.Action("Details", new {id=item.<#= pkName #>}) %>'>
+					<img src='<%: Url.Content("~/Images/details.png") %>' />
+				</a>
+				<a href='<%: Url.Action("Edit", new {id=item.<#= pkName #>}) %>'>
+					<img src='<%: Url.Content("~/Images/edit.png") %>' />
+				</a>
 				<%: Html.ActionLink("Delete", "Delete", new { id=item.<#= pkName #> }) %>
 			</td>
 <#
 } else {
 #>
 			<td>
-				<%: Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) %> |
-				<%: Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) %> |
+				<a href='<%: Url.Action("Details", new {/*id=item.<#= pkName #>*/}) %>'>
+					<img src='<%: Url.Content("~/Images/details.png") %>' />
+				</a>
+				<a href='<%: Url.Action("Edit", new {/*id=item.<#= pkName #>*/}) %>'>
+					<img src='<%: Url.Content("~/Images/edit.png") %>' />
+				</a>
 				<%: Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) %>
 			</td>
 <#
@@ -112,7 +126,21 @@ foreach (ModelProperty property in properties) {
 <#
 	}
 }
+
+if (pkName != null) {
 #>
+			<td>
+				<a href='<%: Url.Action("Delete", new {id=item.<#= pkName #>}) %>'>
+					<img src='<%: Url.Content("~/Images/delete.png") %>' />
+				</a>
+			</td>
+<# } else { #>
+			<td>
+				<a href='<%: Url.Action("Delete", new {/*id=item.<#= pkName #>*/}) %>'>
+					<img src='<%: Url.Content("~/Images/delete.png") %>' />
+				</a>
+			</td>
+<# } #>
 		</tr>  
 <% } %>
 	</tbody>
