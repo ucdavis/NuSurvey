@@ -232,7 +232,7 @@ Example: Dinosaur 1  *@
     @foreach (var item in Model.Category.Questions) {
 		    <tr class="@(odd ? "odd": "even")">
 			    <td>
-                    @*<a href="/Category/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Category" /></a>*@
+                    <a href="/Question/Details/@item.Id?categoryId=@Model.Category.Id"><img src="@Url.Image("details.png")" alt="View the details of this Question" /></a>
                     <a href="/Question/Edit/@item.Id?surveyId=@Model.Survey.Id&categoryId=@Model.Category.Id"><img src="@Url.Image("edit.png")" alt="Edit this Question" /></a>
 			    </td>
 			    <td>
@@ -242,7 +242,8 @@ Example: Dinosaur 1  *@
 				    @item.Name
 			    </td>
                 <td>
-                    @if (item.IsOpenEnded) { 
+                    @if (item.IsOpenEnded)
+                    { 
                     @item.IsOpenEnded
                     }
                 </td>
@@ -250,7 +251,8 @@ Example: Dinosaur 1  *@
                     @item.Responses.Count
                 </td>
 			    <td>
-                    @if (item.IsActive){ 
+                    @if (item.IsActive)
+                    { 
                         @item.IsActive
                     }
 			    </td>

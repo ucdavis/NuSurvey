@@ -29,6 +29,7 @@ namespace NuSurvey.Core.Domain
         {
             CreateDate = DateTime.Now;
             IsActive = true;
+            Responses = new List<Response>();
         }
 
         private void SetPostDefaults()
@@ -64,8 +65,10 @@ namespace NuSurvey.Core.Domain
         [Required]
         public virtual Survey Survey { get; set; }
 
+        [DisplayName("Date Created")]
         public virtual DateTime CreateDate { get; set; }
 
+        [Required]
         public virtual IList<Response> Responses { get; set; }
 
         #region Methods

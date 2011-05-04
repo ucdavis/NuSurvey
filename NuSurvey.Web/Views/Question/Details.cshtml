@@ -1,0 +1,62 @@
+﻿@model NuSurvey.Web.Controllers.QuestionDetailViewModel
+
+@{
+    ViewBag.Title = "Question Details";
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="/Survey/Index">Surveys</a> 
+        </li>
+        <li>
+            <a href="/Survey/Edit/@Model.Question.Survey.Id">Edit Survey</a> 
+        </li>
+        @if (Model.Category != null)
+        {
+            <li>
+                <a href="/Category/Edit/@Model.Category.Id">Edit Category</a> 
+            </li>
+        }
+        <li>
+            Details
+        </li>
+    </ul>
+}
+
+@*<h2>Details</h2>*@
+	<ul>
+		<li>
+			<div class="display-label">@Html.LabelFor(a => a.Question.Name)</div>
+			<div class="display-field">@Model.Question.Name</div>
+		</li>
+		<li>            
+			<div class="display-label">@Html.LabelFor(a => a.Question.IsActive)</div>
+			<div class="display-field">@Model.Question.IsActive</div>
+		</li>
+		<li>
+			<div class="display-label">@Html.LabelFor(a => a.Question.Order)</div>
+			<div class="display-field">@Html.DisplayFor(a => a.Question.Order)</div>
+		</li>
+		<li>
+			<div class="display-label">@Html.LabelFor(a => a.Question.IsOpenEnded)</div>
+			<div class="display-field">@Model.Question.IsOpenEnded</div>
+		</li>
+		<li>
+			<div class="display-label">@Html.LabelFor(a => a.Question.CreateDate)</div>
+			<div class="display-field">@String.Format("{0:g}", Model.Question.CreateDate)</div>
+		</li>
+        <li>
+            <div class="display-label">@Html.LabelFor(a => a.Question.Responses)</div>
+            <div class="display-field">
+            @foreach (var response in Model.Question.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
+            {
+                <input id="Questions[@response.Order]" type="radio" value="@response.Id" name="Questions.ResponseId" />                             
+                <label for="Questions[@response.Order]">@response.Value (score = @response.Score)</label> <br />
+            }
+            </div>
+        </li>
+	</ul>
+
+
+

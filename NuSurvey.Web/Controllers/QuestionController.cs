@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
 using NuSurvey.Core.Domain;
+using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
@@ -14,6 +15,7 @@ namespace NuSurvey.Web.Controllers
     /// <summary>
     /// Controller for the Question class
     /// </summary>
+    [Admin]
     public class QuestionController : ApplicationController
     {
 	    private readonly IRepository<Question> _questionRepository;
@@ -34,13 +36,23 @@ namespace NuSurvey.Web.Controllers
 
         //
         // GET: /Question/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, int? categoryId)
         {
             var question = _questionRepository.GetNullableById(id);
 
-            if (question == null) return RedirectToAction("Index");
+            if (question == null)
+            {
+                Message = "Question not found.";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
 
-            return View(question);
+            var viewModel = QuestionDetailViewModel.Create(Repository, question);
+            if (categoryId.HasValue && categoryId.Value != 0)
+            {
+                viewModel.Category = question.Category;
+            }
+
+            return View(viewModel);
         }
 
         //
@@ -261,7 +273,7 @@ namespace NuSurvey.Web.Controllers
                 viewModel.Responses = response;
             }
 
-            // Remove responses that do not have a Choice or that have the remove checked. This is the create, so they will never be added
+            // never removed saved responses, only make them inactive. 
             var cleanedResponse = new List<ResponsesParameter>();
             foreach (var responsesParameter in viewModel.Responses)
             {
@@ -337,42 +349,33 @@ namespace NuSurvey.Web.Controllers
             }
         }
         
-        //
-        // GET: /Question/Delete/5 
-        public ActionResult Delete(int id)
-        {
-			var question = _questionRepository.GetNullableById(id);
+        ////
+        //// GET: /Question/Delete/5 
+        //public ActionResult Delete(int id)
+        //{
+        //    var question = _questionRepository.GetNullableById(id);
 
-            if (question == null) return RedirectToAction("Index");
+        //    if (question == null) return RedirectToAction("Index");
 
-            return View(question);
-        }
+        //    return View(question);
+        //}
 
-        //
-        // POST: /Question/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, Question question)
-        {
-			var questionToDelete = _questionRepository.GetNullableById(id);
+        ////
+        //// POST: /Question/Delete/5
+        //[HttpPost]
+        //public ActionResult Delete(int id, Question question)
+        //{
+        //    var questionToDelete = _questionRepository.GetNullableById(id);
 
-            if (questionToDelete == null) return RedirectToAction("Index");
+        //    if (questionToDelete == null) return RedirectToAction("Index");
 
-            _questionRepository.Remove(questionToDelete);
+        //    _questionRepository.Remove(questionToDelete);
 
-            Message = "Question Removed Successfully";
+        //    Message = "Question Removed Successfully";
 
-            return RedirectToAction("Index");
-        }
+        //    return RedirectToAction("Index");
+        //}
         
-        /// <summary>
-        /// Transfer editable values from source to destination
-        /// </summary>
-        private static void TransferValues(Question source, Question destination)
-        {
-			//Recommendation: Use AutoMapper
-			//Mapper.Map(source, destination)
-            throw new NotImplementedException();
-        }
 
     }
 
@@ -401,6 +404,22 @@ namespace NuSurvey.Web.Controllers
 			return viewModel;
 		}
 	}
+
+    public class QuestionDetailViewModel
+    {
+        public Question Question { get; set; }
+        public Category Category { get; set; }
+
+        public static QuestionDetailViewModel Create(IRepository repository, Question question)
+        {
+            Check.Require(repository != null, "Repository must be supplied");
+            Check.Require(question != null);
+
+            var viewModel = new QuestionDetailViewModel {Question = question};
+
+            return viewModel;
+        }
+    }
 
     public class ResponsesParameter
     {
