@@ -211,7 +211,9 @@
     <Folder Include="Controllers\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">

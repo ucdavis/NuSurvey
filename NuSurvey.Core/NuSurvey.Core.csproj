@@ -31,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DataAnnotationsExtensions">
-      <HintPath>..\packages\DataAnnotationsExtensions.0.5.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+    <Reference Include="DataAnnotationsExtensions, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DataAnnotationsExtensions.0.6.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
     </Reference>
     <Reference Include="FluentNHibernate">
       <HintPath>..\Bin\FluentNHibernate.dll</HintPath>
@@ -66,7 +67,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
