@@ -191,8 +191,8 @@ Example: Dinosaur 1  *@
     @foreach (var item in Model.Questions.Where(a => a.Category.IsCurrentVersion)) {
 		    <tr class="@(odd ? "odd": "even")">
 			    <td>
-                    @*<a href="/Category/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Category" /></a>*@
-                    <a href="/Question/Edit/@item.Id"><img src="@Url.Image("edit.png")" alt="Edit this Question" /></a>
+                    @*<a href="/Category/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Category" /></a>*@                    
+                    <a href="/Question/Edit/@item.Id?surveyId=@Model.Id"><img src="@Url.Image("edit.png")" alt="Edit this Question" /></a>
 			    </td>
 			    <td>
 				    @item.Order
