@@ -1,6 +1,8 @@
 ﻿@model NuSurvey.Web.Models.EditUserViewModel
-           
-           <ul>
+   
+   <fieldset class="display-form"> 
+   <legend>Details</legend>       
+      <ul>
 		<li>
 			<div class="editor-label">
 				@Html.LabelFor(model => model.Email) 
@@ -10,24 +12,18 @@
 			</div>
 		</li>
         <li>
-			<div class="editor-label">
-				@Html.LabelFor(model => model.User.IsOnline) 
-			</div>
 			<div class="editor-field">
-				@Html.DisplayFor(model => model.User.IsOnline)
+				@Html.DisplayFor(model => model.User.IsOnline) @Html.Label("Is Online")
 			</div>
 		</li>
-                <li>
-			<div class="editor-label">
-				@Html.LabelFor(model => model.User.IsLockedOut) 
-			</div>
+        <li>
 			<div class="editor-field">
-				@Html.DisplayFor(model => model.User.IsLockedOut)
+				@Html.DisplayFor(model => model.User.IsLockedOut) @Html.Label("Is Locked Out")
 			</div>
 		</li>
         <li>
 			<div class="editor-label">
-				@Html.LabelFor(model => model.User.LastActivityDate) 
+				@Html.Label("Last Activity Date") 
 			</div>
 			<div class="editor-field">
 				@Html.DisplayFor(model => model.User.LastActivityDate)
@@ -35,7 +31,7 @@
 		</li>
                 <li>
 			<div class="editor-label">
-				@Html.LabelFor(model => model.User.LastLockoutDate) 
+				@Html.Label("Last Lockout Date") 
 			</div>
 			<div class="editor-field">
 				@Html.DisplayFor(model => model.User.LastLockoutDate)
@@ -43,7 +39,7 @@
 		</li>
         <li>
 			<div class="editor-label">
-				@Html.LabelFor(model => model.User.LastLoginDate) 
+				@Html.Label("Last Login Date") 
 			</div>
 			<div class="editor-field">
 				@Html.DisplayFor(model => model.User.LastLoginDate)
@@ -51,11 +47,12 @@
 		</li>
         <li>
 			<div class="editor-label">
-				@Html.LabelFor(model => model.User.LastPasswordChangedDate) 
+				@Html.Label("Last Password Changed Date") 
 			</div>
 			<div class="editor-field">
 				@Html.DisplayFor(model => model.User.LastPasswordChangedDate)
 			</div>
 		</li>
     </ul>
+    </fieldset>
 

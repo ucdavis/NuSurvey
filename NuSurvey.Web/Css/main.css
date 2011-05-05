@@ -96,6 +96,21 @@ form div.editor-field.wideText .text-box {width:250px;}
 .specialMe {display:inline-block; width:49%;}
 .rightAway {text-align:right; margin-right:-15px}
 
+/* ---------------- */
+/*   display form   */
+/* ---------------- */
+fieldset.display-form {padding: 1em;}
+.display-form {margin:1em 0; text-align:left;}
+.display-form ul li {list-style-type:none;margin:10px 0;}
+.display-form ul li ul li{margin:2px 0;}
+.display-form div.display-label {display:inline-block; width:120px; vertical-align:top; }
+.display-form div.display-details {display:inline-block; font-weight:bold; vertical-align:top;}
+.display-form fieldset {padding:10px;}
+.display-form fieldset  ul{padding:10px 50px 10px 100px;}
+.display-form fieldset  ul ul{padding:0;}
+.display-form fieldset div.display-label {display:inline-block; width:120px; vertical-align:top;}
+.display-form fieldset div.display-field {display:inline-block; vertical-align:top; font-weight:bold;}
+
 
 /*   validation     */
 .field-validation-error {padding:2px 10px; margin:-2px 0 0 5px; display:inline-block; vertical-align:top;}

@@ -1,25 +1,44 @@
 ﻿@model NuSurvey.Web.Models.EditUserViewModel
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Delete User";
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Administration", "Home")">Admin Home</a> 
+        </li>
+        <li>
+            <a href="@Url.Action("ManageUsers", "Account")">Manage Users</a> 
+        </li>
+        <li>
+            Delete
+        </li>
+    </ul>
 }
 
 
     @Html.Partial("_UserDetails")
+<fieldset class="display-form"> 
+<legend>Roles</legend>
 <ul>
 @*		<li>
 			<div class="display-label">Email</div>
 			<div class="display-field">@Model.Email</div>
 		</li>*@
 		<li>
-			<div class="display-label">IsAdmin</div>
-			<div class="display-field">@Model.IsAdmin</div>
+            <div class="editor-field">
+				@Html.DisplayFor(x => x.IsAdmin) @Html.Label("Is Admin")
+			</div>
 		</li>
 		<li>
-			<div class="display-label">IsUser</div>
-			<div class="display-field">@Model.IsUser</div>
+            <div class="editor-field">
+				@Html.DisplayFor(x => x.IsUser) @Html.Label("Is User")
+			</div>
 		</li>
 </ul>
+</fieldset>
 
 
 
