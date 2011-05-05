@@ -230,6 +230,7 @@
     <Folder Include="Controllers\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CodeTemplates\AddView\CSHTML\JasonDetails.tt" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -331,7 +332,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>22474</DevelopmentServerPort>
+          <DevelopmentServerPort>37849</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

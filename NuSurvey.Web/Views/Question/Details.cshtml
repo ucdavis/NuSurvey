@@ -28,30 +28,31 @@
 }
 
 @*<h2>Details</h2>*@
+<fieldset class="display-form">
 	<ul>
 		<li>
 			<div class="display-label">@Html.LabelFor(a => a.Question.Name)</div>
-			<div class="display-field">@Model.Question.Name</div>
+			<div class="display-details">@Model.Question.Name</div>
 		</li>
-		<li>            
-			<div class="display-label">@Html.LabelFor(a => a.Question.IsActive)</div>
-			<div class="display-field">@Model.Question.IsActive</div>
+		<li>     
+            <div class="display-label">@Html.LabelFor(a => a.Question.IsActive)</div>       
+			<div class="display-details">@Html.DisplayFor(a => a.Question.IsActive)</div>
 		</li>
 		<li>
 			<div class="display-label">@Html.LabelFor(a => a.Question.Order)</div>
-			<div class="display-field">@Html.DisplayFor(a => a.Question.Order)</div>
+			<div class="display-details">@Html.DisplayFor(a => a.Question.Order)</div>
 		</li>
 		<li>
 			<div class="display-label">@Html.LabelFor(a => a.Question.IsOpenEnded)</div>
-			<div class="display-field">@Model.Question.IsOpenEnded</div>
+			<div class="display-details">@Html.DisplayFor(a => a.Question.IsOpenEnded)</div>
 		</li>
 		<li>
 			<div class="display-label">@Html.LabelFor(a => a.Question.CreateDate)</div>
-			<div class="display-field">@String.Format("{0:g}", Model.Question.CreateDate)</div>
+			<div class="display-details">@String.Format("{0:g}", Model.Question.CreateDate)</div>
 		</li>
         <li>
             <div class="display-label">@Html.LabelFor(a => a.Question.Responses)</div>
-            <div class="display-field">
+            <div class="display-details">
             @foreach (var response in Model.Question.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
             {
                 <input id="Questions[@response.Order]" type="radio" value="@response.Id" name="Questions.ResponseId" />                             
@@ -61,5 +62,5 @@
         </li>
 	</ul>
 
-
+</fieldset>
 
