@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Web.Attributes;
+using Elmah;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -23,8 +20,14 @@ namespace NuSurvey.Web.Controllers
         {
             return View();
         }
-
+        [Authorize]
         public ActionResult About()
+        {
+            return View();
+        }
+
+        [Admin]
+        public ActionResult Administration()
         {
             return View();
         }

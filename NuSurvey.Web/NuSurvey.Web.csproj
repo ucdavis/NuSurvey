@@ -169,6 +169,8 @@
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.jqEasyCharCounter.js" />
     <Content Include="Scripts\jquery.jqEasyCharCounter.min.js" />
+    <Content Include="Scripts\jquery.placeholder.js" />
+    <Content Include="Scripts\jquery.placeholder.min.js" />
     <Content Include="Scripts\jquery.tablednd_0_5.js" />
     <Content Include="UCDArch.txt" />
     <Content Include="Web.config">
@@ -228,9 +230,10 @@
     <Folder Include="Controllers\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config">
+    <None Include="packages.config">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
+    <Content Include="Views\Home\Administration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">
