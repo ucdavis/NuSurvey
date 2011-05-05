@@ -2,15 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 
-@section SubNav {
-    <ul class="navigation">
-        <li>
-            <a href="@Url.Action("Index", "Survey")">Surveys</a> 
-        </li>
-        <li>
-            <a href="@Url.Action("Index", "SurveyResponse")">Answer Surveys</a> 
-        </li>
-    </ul>
-}
-
+<p>
+    <a href="@Url.Action("Index", "SurveyResponse")">Answer Surveys</a> 
+</p>
 

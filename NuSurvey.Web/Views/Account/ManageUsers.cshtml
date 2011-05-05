@@ -4,6 +4,18 @@
 	ViewBag.Title = "Manage Users";
 }
 
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Administration", "Home")">Admin Home</a> 
+        </li>
+        <li>
+            Manage Users
+        </li>
+    </ul>
+}
+
+
 
 @section AdditionalScripts{
      <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
