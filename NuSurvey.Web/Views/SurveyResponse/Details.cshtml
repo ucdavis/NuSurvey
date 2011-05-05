@@ -18,10 +18,10 @@
 @section SubNav {
     <ul class="navigation">
         <li>
-            <a href="/Survey">Surveys</a> 
+            <a href="@Url.Action("Index", "Survey")">Surveys</a>
         </li>
         <li>
-            <a href="/Survey/Details/@Model.SurveyResponse.Survey.Id" >Responses</a> 
+            <a href="@Url.Action("Details", "Survey", new { id = @Model.SurveyResponse.Survey.Id })">Responses</a> 
         </li>
         <li>
             Details

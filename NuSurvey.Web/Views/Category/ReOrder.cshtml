@@ -7,10 +7,10 @@
 @section SubNav {
     <ul class="navigation">
         <li>
-            <a href="/Survey/Index">Surveys</a> 
+            <a href="@Url.Action("Index", "Survey")">Surveys</a> 
         </li>
         <li>
-            <a href="/Survey/Edit/@Model.Survey.Id">Edit Survey</a> 
+            <a href="@Url.Action("Edit", "Survey", new { id = @Model.Survey.Id })">Edit Survey</a> 
         </li>
         <li>
             Change Rank

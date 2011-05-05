@@ -7,10 +7,10 @@
 @section SubNav {
     <ul class="navigation">
         <li>
-            <a href="/Survey/Index">Surveys</a> 
+            <a href="@Url.Action("Index", "Survey")">Surveys</a> 
         </li>
         <li>
-            <a href="/Survey/Edit/@Model.Survey.Id">Edit Survey</a> 
+            <a href="@Url.Action("Edit", "Survey", new { id = @Model.Survey.Id })">Edit Survey</a>  
         </li>
         <li>
             Edit
@@ -154,7 +154,7 @@ Example: Dinosaur 1  *@
 		<li>
 			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
 			<label>&nbsp;</label>
-			<input class="button" type="submit" value="Submit" /> | <a href="/Survey/Edit/@Model.Survey.Id">Cancel</a> 
+			<input class="button" type="submit" value="Submit" /> | <a href="@Url.Action("Edit", "Survey", new { id = @Model.Survey.Id })">Cancel</a>  
 		</li>
 	</ul>
 </fieldset>
@@ -182,8 +182,8 @@ Example: Dinosaur 1  *@
     @foreach (var item in Model.Category.CategoryGoals) {
 		    <tr class="@(odd ? "odd": "even")">
 			    <td>
-                    <a href="/CategoryGoal/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Goal" /></a>
-                    <a href="/CategoryGoal/Edit/@item.Id"><img src="@Url.Image("edit.png")" alt="Edit this Goal" /></a>
+                	<a href='@Url.Action("Details", "CategoryGoal", new { id = @item.Id })'><img src="@Url.Image("details.png")" alt="View the details of this Goal"/>
+                    <a href='@Url.Action("Edit", "CategoryGoal", new { id = @item.Id })'><img src="@Url.Image("edit.png")" alt="Edit this Goal"/>                    
 			    </td>
 			    <td>
 				    @item.Name
@@ -232,8 +232,8 @@ Example: Dinosaur 1  *@
     @foreach (var item in Model.Category.Questions) {
 		    <tr class="@(odd ? "odd": "even")">
 			    <td>
-                    <a href="/Question/Details/@item.Id?categoryId=@Model.Category.Id"><img src="@Url.Image("details.png")" alt="View the details of this Question" /></a>
-                    <a href="/Question/Edit/@item.Id?surveyId=@Model.Survey.Id&categoryId=@Model.Category.Id"><img src="@Url.Image("edit.png")" alt="Edit this Question" /></a>
+                    <a href='@Url.Action("Details", "Question", new { id = @item.Id, categoryId = @Model.Category.Id })'><img src="@Url.Image("details.png")" alt="View the details of this Question"/>
+                    <a href='@Url.Action("Edit", "Question", new { id = @item.Id, surveyId = @Model.Survey.Id, categoryId = @Model.Category.Id })'><img src="@Url.Image("edit.png")" alt="Edit this Question"/>                                        
 			    </td>
 			    <td>
 				    @item.Order

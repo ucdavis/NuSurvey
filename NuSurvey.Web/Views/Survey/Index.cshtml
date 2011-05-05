@@ -48,8 +48,8 @@
 @foreach (var item in Model) {
 		<tr class="@(odd ? "odd": "even")">
 			<td>
-                <a href="/Survey/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Survey" /></a>
-                <a href="/Survey/Edit/@item.Id"><img src="@Url.Image("edit.png")" alt="Edit this Survey" /></a>
+                <a href='@Url.Action("Details", "Survey", new { id = @item.Id })'><img alt="View the details of this Survey" src="@Url.Image("details.png")"/></a>                
+                <a href='@Url.Action("Edit", "Survey", new { id = @item.Id })'><img alt="Edit this Survey" src="@Url.Image("edit.png")"/></a>                
 			</td>
 			<td>
 				@item.Name

@@ -23,5 +23,10 @@ namespace NuSurvey.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult FileNotFound()
+        {
+            return View();
+        }
     }
 }

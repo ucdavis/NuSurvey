@@ -6,7 +6,7 @@
 @section SubNav {
     <ul class="navigation">
         <li>
-            <a href="/Survey/Index">Surveys</a> 
+            <a href="@Url.Action("Index", "Survey")">Surveys</a> 
         </li>
         <li>
             Edit
@@ -125,8 +125,7 @@ Example: Dinosaur 1  *@
     @foreach (var item in Model.Categories.Where(a => a.IsCurrentVersion)) {
 		    <tr class="@(odd ? "odd": "even")">
 			    <td>
-                    @*<a href="/Category/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Category" /></a>*@
-                    <a href="/Category/Edit/@item.Id"><img src="@Url.Image("edit.png")" alt="Edit this Category" /></a>
+                    <a href='@Url.Action("Edit", "Category", new { id = @item.Id })'><img alt="Edit this Category" src="@Url.Image("edit.png")"/></a>                                      
 			    </td>
 			    <td>
 				    @item.Rank
@@ -191,8 +190,8 @@ Example: Dinosaur 1  *@
     @foreach (var item in Model.Questions.Where(a => a.Category.IsCurrentVersion)) {
 		    <tr class="@(odd ? "odd": "even")">
 			    <td>
-                    <a href="/Question/Details/@item.Id"><img src="@Url.Image("details.png")" alt="View the details of this Question" /></a>
-                    <a href="/Question/Edit/@item.Id?surveyId=@Model.Id"><img src="@Url.Image("edit.png")" alt="Edit this Question" /></a>
+                    <a href='@Url.Action("Details", "Question", new { id = @item.Id })'><img alt="View the details of this Question" src="@Url.Image("details.png")"/></a>
+                    <a href='@Url.Action("Edit", "Question", new { id = @item.Id, surveyId = @Model.Id })'><img alt="Edit this Question" src="@Url.Image("edit.png")"/></a>                    
 			    </td>
 			    <td>
 				    @item.Order

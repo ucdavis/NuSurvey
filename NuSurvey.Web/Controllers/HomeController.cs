@@ -28,5 +28,10 @@ namespace NuSurvey.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult Throw()
+        {
+            throw new ApplicationException("Ack! Test Throw Found.");
+        }
     }
 }

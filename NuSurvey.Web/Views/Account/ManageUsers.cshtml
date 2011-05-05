@@ -40,10 +40,9 @@
 @foreach (var item in Model) {
 		<tr class="@(odd ? "odd": "even")">	
         <td>            
-            @*<a href="/Account/Details/@item.UserName">
-                <img src="@Url.Image("details.png")" alt="View the details of this user" /></a> *@
-            <a href="/Account/Edit/@item.UserName">
-                <img src="@Url.Image("edit.png")" alt="Edit this user" /></a>
+				<a href='@Url.Action("Edit", "Account", new { id = @item.UserName })'>
+					<img alt="Edit this user" src='@Url.Image("edit.png")' />
+				</a>
             </td>
 			<td>
 				@item.UserName
@@ -59,9 +58,7 @@
                 }
 			</td>
             <td>
-                <a href="/Account/Delete/@item.UserName">
-                    <img alt="Delete this user" src="/Images/delete.png">
-                </a>     
+                <a href='@Url.Action("Delete", "Account", new { id = @item.UserName })'><img alt="Delete this user" src="@Url.Image("delete.png")"/></a>     
             </td>
 		</tr>
 		odd = !odd;

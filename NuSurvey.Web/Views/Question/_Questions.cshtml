@@ -117,11 +117,11 @@
 			<input class="button" type="submit" value="Submit" /> |
                                 @if (Model.Category != null)
                                 {
-                                        <a href="/Category/Edit/@Model.Category.Id">Cancel</a> 
+                                    <a href="@Url.Action("Edit", "Category", new { id = @Model.Category.Id })">Cancel</a> 
                                 }
                                 else
                                 { 
-                                    <a href="/Survey/Edit/@Model.Survey.Id">Cancel</a>
+                                    <a href="@Url.Action("Edit", "Survey", new { id = @Model.Survey.Id })">Cancel</a>         
                                 }
 		</li>
 	</ul>
