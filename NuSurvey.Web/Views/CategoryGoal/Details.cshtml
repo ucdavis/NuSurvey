@@ -24,16 +24,23 @@
     </ul>
 }
 
-
+<fieldset class="display-form">
 	<ul>
-		<li>
+@*		<li>
 			<div class="display-label">Goal</div>
 			<div class="display-field">@Model.CategoryGoal.Name</div>
 		</li>
 		<li>
 			<div class="display-label">Active</div>
 			<div class="display-field">@Model.CategoryGoal.IsActive</div>
+		</li>*@
+        <li>
+			<div class="display-label">@Html.LabelFor(a => a.CategoryGoal.Name)</div>
+			<div class="display-field">@Html.DisplayFor(a => a.CategoryGoal.Name)</div>
+		</li>
+		<li>
+			<div class="display-field">@Html.DisplayFor(a => a.CategoryGoal.IsActive) @Html.LabelFor(a => a.CategoryGoal.IsActive)</div>
 		</li>
 	</ul>
-
+</fieldset>
 
