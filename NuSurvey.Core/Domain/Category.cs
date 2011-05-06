@@ -28,7 +28,7 @@ namespace NuSurvey.Core.Domain
         private void SetPreDefaults()
         {
             LastUpdate = DateTime.Now;
-            CreateDate = LastUpdate;
+            CreateDate = DateTime.Now;
             IsCurrentVersion = true;
             CategoryGoals = new List<CategoryGoal>();
             Questions = new List<Question>();
