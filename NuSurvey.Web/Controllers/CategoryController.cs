@@ -113,10 +113,11 @@ namespace NuSurvey.Web.Controllers
             }
 
             var categoryToCreate = new Category(survey);
+            categoryToCreate.CreateDate = DateTime.Now;
+            categoryToCreate.LastUpdate = categoryToCreate.CreateDate;
 
             Mapper.Map(category, categoryToCreate);
-
-    
+            
 
             ModelState.Clear();
             categoryToCreate.TransferValidationMessagesTo(ModelState);
@@ -176,6 +177,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Category not found to edit.";
                 return this.RedirectToAction<SurveyController>(a => a.Index());
             }
+            categoryToEdit.LastUpdate = DateTime.Now;
 
             Mapper.Map(category, categoryToEdit);
 

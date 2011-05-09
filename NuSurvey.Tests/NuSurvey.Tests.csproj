@@ -103,10 +103,12 @@
     <Compile Include="Core\Helpers\ControllerRecordFakes.cs" />
     <Compile Include="Core\Helpers\CreateValidEntities.cs" />
     <Compile Include="Core\Helpers\NameAndType.cs" />
+    <Compile Include="Core\Helpers\RepositoryLoad.cs" />
     <Compile Include="Core\Helpers\SpecificGuid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ControllerTests\HomeControllerTest.cs" />
     <Compile Include="ControllerTests\AccountControllerTest.cs" />
+    <Compile Include="RepositoryTests\CategoryRepositoryTests.cs" />
     <Compile Include="RepositoryTests\SurveyRepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>

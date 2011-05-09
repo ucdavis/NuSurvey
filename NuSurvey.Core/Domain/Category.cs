@@ -27,8 +27,6 @@ namespace NuSurvey.Core.Domain
 
         private void SetPreDefaults()
         {
-            LastUpdate = DateTime.Now;
-            CreateDate = DateTime.Now;
             IsCurrentVersion = true;
             CategoryGoals = new List<CategoryGoal>();
             Questions = new List<Question>();
@@ -54,6 +52,7 @@ namespace NuSurvey.Core.Domain
         [Required]
         [StringLength(100)]
         public virtual string Name { get; set; }
+
         public virtual int Rank { get; set; }
 
         [Required]
@@ -63,11 +62,13 @@ namespace NuSurvey.Core.Domain
         [Required]
         [DataType(DataType.MultilineText)]
         public virtual string Encouragement { get; set; }
+
         [DisplayName("Active")]
         public virtual bool IsActive { get; set; }
 
         [DisplayName("Do Not Use For Calculations")]
         public virtual bool DoNotUseForCalculations { get; set; }
+
         public virtual bool IsCurrentVersion { get; set; }
 
         /// <summary>

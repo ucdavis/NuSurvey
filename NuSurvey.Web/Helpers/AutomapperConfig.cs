@@ -18,6 +18,7 @@ namespace NuSurvey.Web.Helpers
             CreateMap<Category, Category>()
                 .ForMember(x => x.Rank, x => x.Ignore())
                 .ForMember(x => x.LastUpdate, x => x.Ignore())
+                .ForMember(x => x.CreateDate, x => x.Ignore())
                 .ForMember(x => x.Survey, x => x.Ignore());
 
             CreateMap<CategoryGoal, CategoryGoal>()

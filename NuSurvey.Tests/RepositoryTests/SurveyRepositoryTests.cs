@@ -101,8 +101,8 @@ namespace NuSurvey.Tests.RepositoryTests
             SurveyRepository.DbContext.CommitTransaction();
         }
 
-        #endregion Init and Overrides	
-        
+        #endregion Init and Overrides	               
+
         #region Name Tests
         #region Invalid Tests
 
@@ -288,6 +288,164 @@ namespace NuSurvey.Tests.RepositoryTests
         #endregion Valid Tests
         #endregion Name Tests
 
+        #region ShortName Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the ShortName with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestShortNameWithTooLongValueDoesNotSave()
+        {
+            Survey survey = null;
+            try
+            {
+                #region Arrange
+                survey = GetValid(9);
+                survey.ShortName = "x".RepeatTimes((10 + 1));
+                #endregion Arrange
+
+                #region Act
+                SurveyRepository.DbContext.BeginTransaction();
+                SurveyRepository.EnsurePersistent(survey);
+                SurveyRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(survey);
+                Assert.AreEqual(10 + 1, survey.ShortName.Length);
+                var results = survey.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("ShortName: The field ShortName must be a string with a maximum length of 10.");
+                Assert.IsTrue(survey.IsTransient());
+                Assert.IsFalse(survey.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the ShortName with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestShortNameWithNullValueSaves()
+        {
+            #region Arrange
+            var survey = GetValid(9);
+            survey.ShortName = null;
+            #endregion Arrange
+
+            #region Act
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the ShortName with empty string saves.
+        /// </summary>
+        [TestMethod]
+        public void TestShortNameWithEmptyStringSaves()
+        {
+            #region Arrange
+            var survey = GetValid(9);
+            survey.ShortName = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the ShortName with one space saves.
+        /// </summary>
+        [TestMethod]
+        public void TestShortNameWithOneSpaceSaves()
+        {
+            #region Arrange
+            var survey = GetValid(9);
+            survey.ShortName = " ";
+            #endregion Arrange
+
+            #region Act
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the ShortName with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestShortNameWithOneCharacterSaves()
+        {
+            #region Arrange
+            var survey = GetValid(9);
+            survey.ShortName = "x";
+            #endregion Arrange
+
+            #region Act
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the ShortName with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestShortNameWithLongValueSaves()
+        {
+            #region Arrange
+            var survey = GetValid(9);
+            survey.ShortName = "x".RepeatTimes(10);
+            #endregion Arrange
+
+            #region Act
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(10, survey.ShortName.Length);
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion ShortName Tests
+
         #region IsActive Tests
 
         /// <summary>
@@ -376,6 +534,10 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)100)]", 
                  "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("ShortName", "System.String", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)10)]"
             }));
             #endregion Arrange
 
