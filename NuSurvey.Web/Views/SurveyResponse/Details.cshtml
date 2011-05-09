@@ -32,6 +32,24 @@
     </ul>
 }
 
+<h2>Details</h2>
+<fieldset  class="display-form">
+	<ul>
+        <li>
+			<div class="display-label">@Html.LabelFor(a => a.SurveyResponse.DateTaken)</div>
+			<div class="display-details">@Html.DisplayFor(a => a.SurveyResponse.DateTaken)</div>
+		</li>
+		<li>
+            <div class="display-label">@Html.LabelFor(a => a.SurveyResponse.StudentId)</div>
+			<div class="display-details">@Html.DisplayFor(a => a.SurveyResponse.StudentId)</div>
+		</li>
+		<li>
+            <div class="display-label">@Html.LabelFor(a => a.SurveyResponse.UserId)</div>
+			<div class="display-details">@Html.DisplayFor(a => a.SurveyResponse.UserId)</div>
+		</li>
+	</ul>
+</fieldset>
+
 <h2>Scores</h2>
 
 <table class="datatable">

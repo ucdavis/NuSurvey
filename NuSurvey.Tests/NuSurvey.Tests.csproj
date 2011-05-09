@@ -110,6 +110,7 @@
     <Compile Include="ControllerTests\AccountControllerTest.cs" />
     <Compile Include="RepositoryTests\CategoryGoalRepositoryTests.cs" />
     <Compile Include="RepositoryTests\CategoryRepositoryTests.cs" />
+    <Compile Include="RepositoryTests\QuestionRepositoryTests.cs" />
     <Compile Include="RepositoryTests\SurveyRepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>

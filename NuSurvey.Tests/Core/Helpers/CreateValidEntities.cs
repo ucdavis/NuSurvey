@@ -64,5 +64,15 @@ namespace NuSurvey.Tests.Core.Helpers
 
             return rtValue;
         }
+
+        public static Question Question(int? counter)
+        {
+            var rtValue = new Question();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.Survey = new Survey();
+            rtValue.Category = new Category();
+
+            return rtValue;
+        }
     }
 }

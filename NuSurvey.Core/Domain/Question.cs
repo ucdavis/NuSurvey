@@ -55,18 +55,19 @@ namespace NuSurvey.Core.Domain
 
         [DisplayName("Active")]
         public virtual bool IsActive { get; set; }
+
         public virtual int Order { get; set; }
 
         [DisplayName("Open Ended")]
         public virtual bool IsOpenEnded { get; set; }
 
+        [DisplayName("Date Created")]
+        public virtual DateTime CreateDate { get; set; }
+
         [Required]
         public virtual Category Category { get; set; }
         [Required]
         public virtual Survey Survey { get; set; }
-
-        [DisplayName("Date Created")]
-        public virtual DateTime CreateDate { get; set; }
 
         [Required]
         public virtual IList<Response> Responses { get; set; }

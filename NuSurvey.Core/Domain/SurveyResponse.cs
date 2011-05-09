@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
 using System.ComponentModel.DataAnnotations;
@@ -29,7 +30,10 @@ namespace NuSurvey.Core.Domain
 
         [Required]
         [StringLength(10)]
+        [DisplayName("Id #")]
         public virtual string StudentId { get; set; }
+
+        [DisplayName("Date Taken")]
         public virtual DateTime DateTaken { get; set; }
 
         public virtual Category PositiveCategory { get; set; }
@@ -39,6 +43,7 @@ namespace NuSurvey.Core.Domain
         public virtual Survey Survey { get; set; }
 
         [Required]
+        [DisplayName("User Id")]
         public virtual string UserId { get; set; }
         
         public virtual IList<Answer> Answers { get; set; }
