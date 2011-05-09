@@ -140,7 +140,7 @@ namespace NuSurvey.Web.Controllers
             if (ModelState.IsValid)
             {
                 var scores = new List<Scores>();
-                foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations))
+                foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
                 {
                     var score = new Scores();
                     score.Category = category;
@@ -408,8 +408,10 @@ namespace NuSurvey.Web.Controllers
 
             var viewModel = new SurveyReponseDetailViewModel {SurveyResponse = surveyResponse};
 
+            //Get all the related categories that had answers.
+            var relatedCategoryIds = viewModel.SurveyResponse.Answers.Select(x => x.Category.Id).ToList();
             viewModel.Scores = new List<Scores>();
-            foreach (var category in surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations))
+            foreach (var category in viewModel.SurveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && relatedCategoryIds.Contains(a.Id)))
             {
                 var score = new Scores();
                 score.Category = category;
