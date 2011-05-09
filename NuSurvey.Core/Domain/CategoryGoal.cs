@@ -36,6 +36,7 @@ namespace NuSurvey.Core.Domain
 
         [DisplayName("Active")]
         public virtual bool IsActive { get; set; }
+
         [Required]
         public virtual Category Category { get; set; }
     }

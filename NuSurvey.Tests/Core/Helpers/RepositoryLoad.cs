@@ -11,12 +11,22 @@ namespace NuSurvey.Tests.Core.Helpers
 {
     public static class RepositoryLoad
     {
-        public static void LoadSurveys(IRepository<Survey> repository,int entriesToAdd)
+        public static void LoadSurveys(IRepository repository,int entriesToAdd)
         {
             for (int i = 0; i < entriesToAdd; i++)
             {
                 var validEntity = CreateValidEntities.Survey(i + 1);
-                repository.EnsurePersistent(validEntity);
+                repository.OfType<Survey>().EnsurePersistent(validEntity);
+            }
+        }
+
+        public static void LoadCategories(IRepository repository, int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.Category(i + 1);
+                validEntity.Survey = repository.OfType<Survey>().Queryable.First();
+                repository.OfType<Category>().EnsurePersistent(validEntity);
             }
         }
     }

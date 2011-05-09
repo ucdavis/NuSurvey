@@ -102,7 +102,7 @@ namespace NuSurvey.Tests.RepositoryTests
         protected override void LoadData()
         {
             SurveyRepository.DbContext.BeginTransaction();
-            RepositoryLoad.LoadSurveys(SurveyRepository, 3); 
+            RepositoryLoad.LoadSurveys(Repository, 3); 
             SurveyRepository.DbContext.CommitTransaction();
 
             CategoryRepository.DbContext.BeginTransaction();
@@ -812,6 +812,162 @@ namespace NuSurvey.Tests.RepositoryTests
 
         #endregion IsCurrentVersion Tests
         
+        #region LastUpdate Tests
+
+        /// <summary>
+        /// Tests the LastUpdate with past date will save.
+        /// </summary>
+        [TestMethod]
+        public void TestLastUpdateWithPastDateWillSave()
+        {
+            #region Arrange
+            var compareDate = DateTime.Now.AddDays(-10);
+            Category record = GetValid(99);
+            record.LastUpdate = compareDate;
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitChanges();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            Assert.AreEqual(compareDate, record.LastUpdate);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the LastUpdate with current date date will save.
+        /// </summary>
+        [TestMethod]
+        public void TestLastUpdateWithCurrentDateDateWillSave()
+        {
+            #region Arrange
+            var compareDate = DateTime.Now;
+            var record = GetValid(99);
+            record.LastUpdate = compareDate;
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitChanges();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            Assert.AreEqual(compareDate, record.LastUpdate);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the LastUpdate with future date date will save.
+        /// </summary>
+        [TestMethod]
+        public void TestLastUpdateWithFutureDateDateWillSave()
+        {
+            #region Arrange
+            var compareDate = DateTime.Now.AddDays(15);
+            var record = GetValid(99);
+            record.LastUpdate = compareDate;
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitChanges();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            Assert.AreEqual(compareDate, record.LastUpdate);
+            #endregion Assert
+        }
+        #endregion LastUpdate Tests
+        
+        #region CreateDate Tests
+
+        /// <summary>
+        /// Tests the CreateDate with past date will save.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateDateWithPastDateWillSave()
+        {
+            #region Arrange
+            var compareDate = DateTime.Now.AddDays(-10);
+            Category record = GetValid(99);
+            record.CreateDate = compareDate;
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitChanges();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            Assert.AreEqual(compareDate, record.CreateDate);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the CreateDate with current date date will save.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateDateWithCurrentDateDateWillSave()
+        {
+            #region Arrange
+            var compareDate = DateTime.Now;
+            var record = GetValid(99);
+            record.CreateDate = compareDate;
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitChanges();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            Assert.AreEqual(compareDate, record.CreateDate);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the CreateDate with future date date will save.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateDateWithFutureDateDateWillSave()
+        {
+            #region Arrange
+            var compareDate = DateTime.Now.AddDays(15);
+            var record = GetValid(99);
+            record.CreateDate = compareDate;
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitChanges();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            Assert.AreEqual(compareDate, record.CreateDate);
+            #endregion Assert
+        }
+        #endregion CreateDate Tests
+        
 
         #region Reflection of Database.
 
@@ -829,6 +985,7 @@ namespace NuSurvey.Tests.RepositoryTests
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)1000)]", 
                  "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("CreateDate", "System.DateTime", new List<string>()));
             expectedFields.Add(new NameAndType("DoNotUseForCalculations", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("Encouragement", "System.String", new List<string>
             {
@@ -842,6 +999,7 @@ namespace NuSurvey.Tests.RepositoryTests
             }));
             expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("IsCurrentVersion", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("LastUpdate", "System.DateTime", new List<string>()));
             expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)100)]", 

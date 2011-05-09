@@ -55,5 +55,14 @@ namespace NuSurvey.Tests.Core.Helpers
 
             return rtValue;
         }
+
+        public static CategoryGoal CategoryGoal(int? counter)
+        {
+            var rtValue = new CategoryGoal();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.Category = new Category();
+
+            return rtValue;
+        }
     }
 }

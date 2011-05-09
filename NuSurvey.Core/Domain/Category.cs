@@ -78,6 +78,7 @@ namespace NuSurvey.Core.Domain
         public virtual DateTime LastUpdate { get; set; }
 
         public virtual DateTime CreateDate { get; set; }
+
         [Required]
         public virtual Survey Survey { get; set; }
 
