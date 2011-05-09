@@ -36,10 +36,11 @@
 		</li>*@
         <li>
 			<div class="display-label">@Html.LabelFor(a => a.CategoryGoal.Name)</div>
-			<div class="display-field">@Html.DisplayFor(a => a.CategoryGoal.Name)</div>
+			<div class="display-details">@Html.DisplayFor(a => a.CategoryGoal.Name)</div>
 		</li>
 		<li>
-			<div class="display-field">@Html.DisplayFor(a => a.CategoryGoal.IsActive) @Html.LabelFor(a => a.CategoryGoal.IsActive)</div>
+            <div class="display-label">@Html.LabelFor(a => a.CategoryGoal.IsActive)</div>
+			<div class="display-details">@Html.DisplayFor(a => a.CategoryGoal.IsActive)</div>
 		</li>
 	</ul>
 </fieldset>

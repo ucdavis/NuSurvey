@@ -1,7 +1,7 @@
-﻿@model NuSurvey.Web.Controllers.CategoryListViewModel
+﻿@model NuSurvey.Web.Controllers.QuestionListViewModel
 
 @{
-	ViewBag.Title = "Change Rank";
+	ViewBag.Title = "Change Order";
 }
 
 @section SubNav {
@@ -16,14 +16,13 @@
             <a href="@Url.Action("Edit", "Survey", new { id = @Model.Survey.Id })">Edit Survey</a> 
         </li>
         <li>
-            Change Rank
+            Change Order
         </li>
     </ul>
 }
 
 @section AdditionalScripts{
     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.tablednd_0_5.js")'></script>
-
     <script type="text/javascript">
         $(document).ready(function () {
             // Initialise the table
@@ -35,7 +34,7 @@
                     for (var i = 0; i < rows.length; i++) {
                         newOrder[i] = rows[i].id;
                     }
-                    var url = '@Url.Action("ReOrder", "Category")';
+                    var url = '@Url.Action("ReOrder", "Question")';
                     var postData = { tableOrder: newOrder };
 
                     $.ajax({
@@ -54,55 +53,53 @@
             });
         });
     </script>
+
 }
 
 
-<h2>Drag And Drop Rows to Change Rank</h2>
+<h2>Drag And Drop Rows to Change Question Order</h2>
 
 <table class="DragnDrop">
 	<thead>
 		<tr>
 			<th></th>
 			<th>
+				Order
+			</th>
+			<th>
+				Question
+			</th>
+            <th>
 				Rank
 			</th>
 			<th>
-				Name
-			</th>
-			<th>
-				Affirmation
-			</th>
-			<th>
-				Encouragement
+				Category
 			</th>
 			<th>
 				Active
-			</th>
-			<th>
-				Ignore
 			</th>
 		</tr>
 	</thead>
 	<tbody>
 @{ var odd = true; }
-@foreach (var item in Model.Categories)
+@foreach (var item in Model.Questions)
 {
-    var jasonId = "Rank" + item.Id;
+    var jasonId = "Order" + item.Id;
 		<tr id="@item.Id" class="@(odd ? "odd" : "even")">
 			<td>
 			</td>
 			<td>
-				@item.Rank
+				@item.Order
 			</td>
 			<td>
 				@item.Name
 			</td>
 
 			<td>
-				@item.Affirmation
+				@item.Category.Rank
 			</td>
 			<td>
-				@item.Encouragement
+				@item.Category.Name
 			</td>
 			<td>
                 @if (item.IsActive)
@@ -110,15 +107,8 @@
                     @item.IsActive
                 }
 			</td>
-			<td>
-                @if (item.DoNotUseForCalculations)
-                { 
-                    @item.DoNotUseForCalculations
-                }
-			</td>
 		</tr>
                 odd = !odd;
 }
 	</tbody>
 </table>
-

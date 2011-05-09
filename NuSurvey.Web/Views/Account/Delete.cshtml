@@ -28,13 +28,19 @@
 			<div class="display-field">@Model.Email</div>
 		</li>*@
 		<li>
-            <div class="editor-field">
-				@Html.DisplayFor(x => x.IsAdmin) @Html.Label("Is Admin")
+            <div class="display-label">
+				@Html.Label("Is Admin") 
+			</div>
+            <div class="display-details">
+				@Html.DisplayFor(x => x.IsAdmin) 
 			</div>
 		</li>
 		<li>
-            <div class="editor-field">
-				@Html.DisplayFor(x => x.IsUser) @Html.Label("Is User")
+            <div class="display-label">
+				@Html.Label("Is User")
+			</div>
+            <div class="display-details">
+				@Html.DisplayFor(x => x.IsUser)
 			</div>
 		</li>
 </ul>

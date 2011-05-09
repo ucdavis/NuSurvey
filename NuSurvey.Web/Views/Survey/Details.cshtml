@@ -59,7 +59,8 @@
 @foreach (var item in Model.SurveyResponses) {
 		<tr class="@(odd ? "odd": "even")">
 			<td>
-				@Html.ActionLink("Details", "Details", "SurveyResponse", new { id = item.Id }, new { })
+                <a href='@Url.Action("Details", "SurveyResponse", new { id = @item.Id })'><img alt="Details of Survey Response" src="@Url.Image("details.png")"/></a>
+				@*@Html.ActionLink("Details", "Details", "SurveyResponse", new { id = item.Id }, new { })*@
 				@*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
 			</td>
 			<td>

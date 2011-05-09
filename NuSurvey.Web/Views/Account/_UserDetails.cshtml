@@ -4,52 +4,58 @@
    <legend>Details</legend>       
       <ul>
 		<li>
-			<div class="editor-label">
+			<div class="display-label">
 				@Html.LabelFor(model => model.Email) 
 			</div>
-			<div class="editor-field">
+			<div class="display-details">
 				@Html.DisplayFor(model => model.Email)
 			</div>
 		</li>
         <li>
-			<div class="editor-field">
-				@Html.DisplayFor(model => model.User.IsOnline) @Html.Label("Is Online")
+            <div class="display-label">
+				@Html.Label("Is Online") 
+			</div>
+			<div class="display-details">
+				@Html.DisplayFor(model => model.User.IsOnline)
 			</div>
 		</li>
         <li>
-			<div class="editor-field">
-				@Html.DisplayFor(model => model.User.IsLockedOut) @Html.Label("Is Locked Out")
+            <div class="display-label">
+				@Html.Label("Is Locked Out") 
+			</div>
+			<div class="display-details">
+				@Html.DisplayFor(model => model.User.IsLockedOut)
 			</div>
 		</li>
         <li>
-			<div class="editor-label">
+			<div class="display-label">
 				@Html.Label("Last Activity Date") 
 			</div>
-			<div class="editor-field">
+			<div class="display-details">
 				@Html.DisplayFor(model => model.User.LastActivityDate)
 			</div>
 		</li>
                 <li>
-			<div class="editor-label">
+			<div class="display-label">
 				@Html.Label("Last Lockout Date") 
 			</div>
-			<div class="editor-field">
+			<div class="display-details">
 				@Html.DisplayFor(model => model.User.LastLockoutDate)
 			</div>
 		</li>
         <li>
-			<div class="editor-label">
+			<div class="display-label">
 				@Html.Label("Last Login Date") 
 			</div>
-			<div class="editor-field">
+			<div class="display-details">
 				@Html.DisplayFor(model => model.User.LastLoginDate)
 			</div>
 		</li>
         <li>
-			<div class="editor-label">
+			<div class="display-label">
 				@Html.Label("Last Password Changed Date") 
 			</div>
-			<div class="editor-field">
+			<div class="display-details">
 				@Html.DisplayFor(model => model.User.LastPasswordChangedDate)
 			</div>
 		</li>

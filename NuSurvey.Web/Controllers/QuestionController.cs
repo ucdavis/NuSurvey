@@ -8,6 +8,8 @@ using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
+using UCDArch.Web.ActionResults;
+using UCDArch.Web.Attributes;
 using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
@@ -348,7 +350,58 @@ namespace NuSurvey.Web.Controllers
                 return View(viewModel);
             }
         }
-        
+
+        /// <summary>
+        /// ReOrder Get
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <returns></returns>
+        public ActionResult ReOrder(int id)
+        {
+            var survey = Repository.OfType<Survey>().GetNullableById(id);
+            if (survey == null)
+            {
+                return this.RedirectToAction<SurveyController>(a => a.Index());
+            }
+
+            var viewModel = QuestionListViewModel.Create(Repository, survey);
+            return View(viewModel);
+        }
+
+        /// <summary>
+        /// ReOrder Questions within a survey
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="tableOrder"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [BypassAntiForgeryToken]
+        public ActionResult ReOrder(int id, int[] tableOrder)
+        {
+
+                var survey = Repository.OfType<Survey>().GetNullableById(id);
+                if (survey == null)
+                {
+                    return new JsonNetResult(false);
+                }
+
+                for (var i = 0; i < tableOrder.Count(); i++)
+                {
+                    survey.Questions.Where(a => a.Id == tableOrder[i]).Single().Order = i + 1;
+                }
+                ModelState.Clear();
+                survey.TransferValidationMessagesTo(ModelState);
+               
+                if (ModelState.IsValid)
+                {
+                    Repository.OfType<Survey>().EnsurePersistent(survey);
+                }
+
+                return new JsonNetResult(true);
+
+
+        }
+
         ////
         //// GET: /Question/Delete/5 
         //public ActionResult Delete(int id)
@@ -416,6 +469,23 @@ namespace NuSurvey.Web.Controllers
             Check.Require(question != null);
 
             var viewModel = new QuestionDetailViewModel {Question = question};
+
+            return viewModel;
+        }
+    }
+
+    public class QuestionListViewModel
+    {
+        public Survey Survey { get; set; }
+        public IEnumerable<Question> Questions { get; set; }
+
+        public static QuestionListViewModel Create(IRepository repository, Survey survey)
+        {
+            Check.Require(repository != null, "Repository must be supplied");
+            Check.Require(survey != null);
+
+            var viewModel = new QuestionListViewModel { Survey = survey };
+            viewModel.Questions = viewModel.Survey.Questions.Where(a => a.Category.IsCurrentVersion).OrderBy(a => a.Order);
 
             return viewModel;
         }

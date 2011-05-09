@@ -27,6 +27,7 @@ namespace NuSurvey.Web.Controllers
             _categoryRepository = categoryRepository;
         }
 
+
         public ActionResult ReOrder(int id)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
@@ -41,7 +42,7 @@ namespace NuSurvey.Web.Controllers
 
         [HttpPost]
         [BypassAntiForgeryToken]
-        public ActionResult ReOrder(int id, string tableOrder)
+        public ActionResult ReOrder(int id, int[] tableOrder)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
             if (survey == null)
@@ -49,19 +50,10 @@ namespace NuSurvey.Web.Controllers
                 return new JsonNetResult(false);
             }
 
-            var ids = tableOrder.Split(' ');
-            var categoryIds = new int[ids.Count()];
-            for (var i = 0; i < ids.Count(); i++)
-            {
-                if (!int.TryParse(ids[i], out categoryIds[i]))
-                {
-                    return new JsonNetResult(false);
-                }
-            }
-            for (var i = 0; i < categoryIds.Count(); i++)
+            for (var i = 0; i < tableOrder.Count(); i++)
             {
                 var i1 = i;
-                survey.Categories.Where(a => a.Id == categoryIds[i1]).Single().Rank = i + 1;
+                survey.Categories.Where(a => a.Id == tableOrder[i1]).Single().Rank = i + 1;
             }
 
             ModelState.Clear();
