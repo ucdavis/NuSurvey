@@ -8,9 +8,12 @@ using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
+using UCDArch.Data.NHibernate;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Attributes;
 using UCDArch.Web.Helpers;
+using System.Linq.Expressions;
+using System.Linq;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -177,17 +180,73 @@ namespace NuSurvey.Web.Controllers
                 Message = "Category not found to edit.";
                 return this.RedirectToAction<SurveyController>(a => a.Index());
             }
+
+            var isNewVersion = false;
+            if (Repository.OfType<Answer>().Queryable.Where(a => a.Category.Id == categoryToEdit.Id).Any())
+            {
+                //Ok, there are related questions
+                if (categoryToEdit.IsActive != category.IsActive || 
+                    categoryToEdit.DoNotUseForCalculations != category.DoNotUseForCalculations)
+                {
+                    //ok, a field has been changed which could effect the score, so we want to version it.
+                    isNewVersion = true;
+                }
+            }
+
+
             categoryToEdit.LastUpdate = DateTime.Now;
+            category.CategoryGoals = categoryToEdit.CategoryGoals;
+            category.Questions = categoryToEdit.Questions;
 
             Mapper.Map(category, categoryToEdit);
+            
+
 
             ModelState.Clear();
             categoryToEdit.TransferValidationMessagesTo(ModelState);
 
             if (ModelState.IsValid)
             {
-                _categoryRepository.EnsurePersistent(categoryToEdit);
+                if (isNewVersion)
+                {
+                    var oldVersion = _categoryRepository.GetNullableById(id);
+                    var newVersion = new Category(oldVersion.Survey);
 
+                    newVersion.Rank = oldVersion.Rank;
+                    newVersion.LastUpdate = DateTime.Now;
+                    newVersion.CreateDate = newVersion.LastUpdate;                   
+
+                    foreach (var categoryGoal in oldVersion.CategoryGoals)
+                    {
+                        var categoryGoalToDuplicate = new CategoryGoal();
+                        Mapper.Map(categoryGoal, categoryGoalToDuplicate);
+                        newVersion.AddCategoryGoal(categoryGoalToDuplicate);
+                    }
+                    foreach (var question in oldVersion.Questions)
+                    {
+                        var questionToDuplicate = new Question(oldVersion.Survey);
+                        questionToDuplicate.Order = question.Order;
+                        Mapper.Map(question, questionToDuplicate);
+                        newVersion.AddQuestions(questionToDuplicate);
+                    }
+
+
+                    newVersion.IsActive = category.IsActive;
+                    newVersion.Name = category.Name;
+                    newVersion.Affirmation = category.Affirmation;
+                    newVersion.Encouragement = category.Encouragement;
+                    newVersion.DoNotUseForCalculations = category.DoNotUseForCalculations;
+
+                    oldVersion.IsCurrentVersion = false;
+
+                    _categoryRepository.EnsurePersistent(newVersion);
+                    _categoryRepository.EnsurePersistent(oldVersion);
+                }
+                else
+                {
+                    _categoryRepository.EnsurePersistent(categoryToEdit); 
+                }
+                
                 Message = "Category Edited Successfully";
 
                 return this.RedirectToAction<SurveyController>(a => a.Edit(categoryToEdit.Survey.Id));

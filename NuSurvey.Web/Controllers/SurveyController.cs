@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using AutoMapper;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
@@ -104,7 +105,8 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction(a => a.Index());
             }
 
-            TransferValues(survey, surveyToEdit);
+            Mapper.Map(survey, surveyToEdit);
+
 
             if (ModelState.IsValid)
             {
@@ -146,16 +148,7 @@ namespace NuSurvey.Web.Controllers
 
             return RedirectToAction("Index");
         }
-        
-        /// <summary>
-        /// Transfer editable values from source to destination
-        /// </summary>
-        private static void TransferValues(Survey source, Survey destination)
-        {
-			//Recommendation: Use AutoMapper
-			//Mapper.Map(source, destination)
-            throw new NotImplementedException();
-        }
+
 
     }
 

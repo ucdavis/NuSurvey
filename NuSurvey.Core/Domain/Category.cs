@@ -86,6 +86,21 @@ namespace NuSurvey.Core.Domain
 
         public virtual IList<Question> Questions { get; set; }
 
+        #region Methods
+        public virtual void AddCategoryGoal(CategoryGoal categoryGoal)
+        {
+            categoryGoal.Category = this;
+            CategoryGoals.Add(categoryGoal);
+        }
+
+        public virtual void AddQuestions(Question question)
+        {
+            question.Category = this;
+            Questions.Add(question);
+        }
+
+        #endregion Methods
+
     }
 
     public class CategoryMap : ClassMap<Category>
@@ -103,8 +118,8 @@ namespace NuSurvey.Core.Domain
             Map(x => x.DoNotUseForCalculations);
             Map(x => x.IsCurrentVersion);
 
-            HasMany(x => x.CategoryGoals);
-            HasMany(x => x.Questions);
+            HasMany(x => x.CategoryGoals).Cascade.SaveUpdate();
+            HasMany(x => x.Questions).Cascade.SaveUpdate();
             References(x => x.Survey);
         }
     }

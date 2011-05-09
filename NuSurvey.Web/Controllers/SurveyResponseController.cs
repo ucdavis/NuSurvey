@@ -144,7 +144,12 @@ namespace NuSurvey.Web.Controllers
                 {
                     var score = new Scores();
                     score.Category = category;
-                    score.MaxScore = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id).TotalMaxScore; //Repository.OfType<CategoryMaxScore>().Queryable.Where(a => a.Category == category).First().MaxScore;
+                    var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
+                    if (totalMax == null) //No Questions most likely
+                    {
+                        continue;
+                    }
+                    score.MaxScore = totalMax.TotalMaxScore; 
                     score.TotalScore = surveyResponseToCreate.Answers.Where(a => a.Category == category).Sum(b => b.Score);
                     score.Percent = (score.TotalScore / score.MaxScore) * 100m;
                     score.Rank = category.Rank;
@@ -415,7 +420,14 @@ namespace NuSurvey.Web.Controllers
             {
                 var score = new Scores();
                 score.Category = category;
-                score.MaxScore = repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id).TotalMaxScore;
+                var totalMax = repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
+                if (totalMax == null) //No Questions most likely
+                {
+                    continue;
+                }
+                score.MaxScore = totalMax.TotalMaxScore; 
+
+                //score.MaxScore = repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id).TotalMaxScore;
                 score.TotalScore = viewModel.SurveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);
                 score.Percent = (score.TotalScore / score.MaxScore) * 100m;
                 score.Rank = category.Rank;
