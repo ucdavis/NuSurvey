@@ -230,7 +230,28 @@
     <Folder Include="Controllers\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CodeTemplates\AddController\Controller.tt" />
+    <None Include="CodeTemplates\AddView\AspxCSharp\Create.tt" />
+    <None Include="CodeTemplates\AddView\AspxCSharp\CreateViewModel.tt" />
+    <None Include="CodeTemplates\AddView\AspxCSharp\Delete.tt" />
+    <None Include="CodeTemplates\AddView\AspxCSharp\Details.tt" />
+    <None Include="CodeTemplates\AddView\AspxCSharp\Edit.tt" />
+    <None Include="CodeTemplates\AddView\AspxCSharp\EditViewModel.tt" />
+    <None Include="CodeTemplates\AddView\AspxCSharp\Empty.tt" />
+    <None Include="CodeTemplates\AddView\AspxCSharp\List.tt" />
+    <None Include="CodeTemplates\AddView\AspxCSharp\ListDatatables.tt" />
+    <None Include="CodeTemplates\AddView\AspxCSharp\ListTelerik.tt" />
+    <None Include="CodeTemplates\AddView\CSHTML\Create.tt" />
+    <None Include="CodeTemplates\AddView\CSHTML\CreateViewModel.tt" />
+    <None Include="CodeTemplates\AddView\CSHTML\Delete.tt" />
+    <None Include="CodeTemplates\AddView\CSHTML\Details.tt" />
+    <None Include="CodeTemplates\AddView\CSHTML\Edit.tt" />
+    <None Include="CodeTemplates\AddView\CSHTML\EditViewModel.tt" />
+    <None Include="CodeTemplates\AddView\CSHTML\Empty.tt" />
     <None Include="CodeTemplates\AddView\CSHTML\JasonDetails.tt" />
+    <None Include="CodeTemplates\AddView\CSHTML\List.tt" />
+    <None Include="CodeTemplates\AddView\CSHTML\ListDatatables.tt" />
+    <None Include="CodeTemplates\AddView\CSHTML\ListTelerik.tt" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -294,27 +315,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CodeTemplates\AddController\Controller.tt" />
-    <None Include="CodeTemplates\AddView\AspxCSharp\Create.tt" />
-    <None Include="CodeTemplates\AddView\AspxCSharp\CreateViewModel.tt" />
-    <None Include="CodeTemplates\AddView\AspxCSharp\Delete.tt" />
-    <None Include="CodeTemplates\AddView\AspxCSharp\Details.tt" />
-    <None Include="CodeTemplates\AddView\AspxCSharp\Edit.tt" />
-    <None Include="CodeTemplates\AddView\AspxCSharp\EditViewModel.tt" />
-    <None Include="CodeTemplates\AddView\AspxCSharp\Empty.tt" />
-    <None Include="CodeTemplates\AddView\AspxCSharp\List.tt" />
-    <None Include="CodeTemplates\AddView\AspxCSharp\ListDatatables.tt" />
-    <None Include="CodeTemplates\AddView\AspxCSharp\ListTelerik.tt" />
-    <None Include="CodeTemplates\AddView\CSHTML\Create.tt" />
-    <None Include="CodeTemplates\AddView\CSHTML\CreateViewModel.tt" />
-    <None Include="CodeTemplates\AddView\CSHTML\Delete.tt" />
-    <None Include="CodeTemplates\AddView\CSHTML\Details.tt" />
-    <None Include="CodeTemplates\AddView\CSHTML\Edit.tt" />
-    <None Include="CodeTemplates\AddView\CSHTML\EditViewModel.tt" />
-    <None Include="CodeTemplates\AddView\CSHTML\Empty.tt" />
-    <None Include="CodeTemplates\AddView\CSHTML\List.tt" />
-    <None Include="CodeTemplates\AddView\CSHTML\ListDatatables.tt" />
-    <None Include="CodeTemplates\AddView\CSHTML\ListTelerik.tt" />
     <Content Include="Views\Error\FileNotFound.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
