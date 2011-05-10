@@ -197,61 +197,22 @@ namespace NuSurvey.Web.Controllers
             categoryToEdit.LastUpdate = DateTime.Now;
             category.CategoryGoals = categoryToEdit.CategoryGoals;
             category.Questions = categoryToEdit.Questions;
-
-            Mapper.Map(category, categoryToEdit);
+            category.PreviousVersion = categoryToEdit.PreviousVersion;
+            category.Survey = categoryToEdit.Survey;
             
-
-
             ModelState.Clear();
-            categoryToEdit.TransferValidationMessagesTo(ModelState);
+            category.TransferValidationMessagesTo(ModelState);
 
             if (ModelState.IsValid)
             {
                 if (isNewVersion)
                 {
-                    //var oldVersion = _categoryRepository.GetNullableById(id);
-                    //var newVersion = new Category(oldVersion.Survey);
-
-                    //newVersion.Rank = oldVersion.Rank;
-                    //newVersion.LastUpdate = DateTime.Now;
-                    //newVersion.CreateDate = newVersion.LastUpdate;                   
-
-                    //foreach (var categoryGoal in oldVersion.CategoryGoals)
-                    //{
-                    //    var categoryGoalToDuplicate = new CategoryGoal();
-                    //    Mapper.Map(categoryGoal, categoryGoalToDuplicate);
-                    //    newVersion.AddCategoryGoal(categoryGoalToDuplicate);
-                    //}
-                    //foreach (var question in oldVersion.Questions)
-                    //{
-                    //    var questionToDuplicate = new Question(oldVersion.Survey);
-                    //    questionToDuplicate.Order = question.Order;
-                    //    foreach (var response in question.Responses)
-                    //    {
-                    //        questionToDuplicate.AddResponse(response);
-                    //    }
-                    //    Mapper.Map(question, questionToDuplicate);
-                    //    newVersion.AddQuestions(questionToDuplicate);
-                    //}
-
-
-                    //newVersion.IsActive = category.IsActive;
-                    //newVersion.Name = category.Name;
-                    //newVersion.Affirmation = category.Affirmation;
-                    //newVersion.Encouragement = category.Encouragement;
-                    //newVersion.DoNotUseForCalculations = category.DoNotUseForCalculations;
-                    //newVersion.PreviousVersion = oldVersion;
-
-                    //oldVersion.IsCurrentVersion = false;
-
-                    //_categoryRepository.EnsurePersistent(newVersion);
-                    //_categoryRepository.EnsurePersistent(oldVersion);
-
                     ArchiveCategory(id, category); //Don't care about the returned value here
                     Message = "Category Edited and Versioned Successfully";
                 }
                 else
                 {
+                    Mapper.Map(category, categoryToEdit);
                     _categoryRepository.EnsurePersistent(categoryToEdit);
                     Message = "Category Edited Successfully";
                 }
@@ -314,15 +275,18 @@ namespace NuSurvey.Web.Controllers
 
             //*******************  SAVE
             _categoryRepository.EnsurePersistent(newVersion);
+            var saveId = newVersion.Id;
             //*******************  SAVE
 
-            //NHibernateSessionManager.Instance.GetSession().Evict(oldVersion);
+
+            oldVersion = _categoryRepository.GetNullableById(id);
             oldVersion.IsCurrentVersion = false;
+
             //*******************  SAVE
             _categoryRepository.EnsurePersistent(oldVersion);
             //*******************  SAVE
 
-            return newVersion;
+            return _categoryRepository.GetNullableById(saveId);
         }
                
 
