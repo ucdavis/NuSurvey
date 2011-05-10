@@ -209,59 +209,120 @@ namespace NuSurvey.Web.Controllers
             {
                 if (isNewVersion)
                 {
-                    var oldVersion = _categoryRepository.GetNullableById(id);
-                    var newVersion = new Category(oldVersion.Survey);
+                    //var oldVersion = _categoryRepository.GetNullableById(id);
+                    //var newVersion = new Category(oldVersion.Survey);
 
-                    newVersion.Rank = oldVersion.Rank;
-                    newVersion.LastUpdate = DateTime.Now;
-                    newVersion.CreateDate = newVersion.LastUpdate;                   
+                    //newVersion.Rank = oldVersion.Rank;
+                    //newVersion.LastUpdate = DateTime.Now;
+                    //newVersion.CreateDate = newVersion.LastUpdate;                   
 
-                    foreach (var categoryGoal in oldVersion.CategoryGoals)
-                    {
-                        var categoryGoalToDuplicate = new CategoryGoal();
-                        Mapper.Map(categoryGoal, categoryGoalToDuplicate);
-                        newVersion.AddCategoryGoal(categoryGoalToDuplicate);
-                    }
-                    foreach (var question in oldVersion.Questions)
-                    {
-                        var questionToDuplicate = new Question(oldVersion.Survey);
-                        questionToDuplicate.Order = question.Order;
-                        foreach (var response in question.Responses)
-                        {
-                            questionToDuplicate.AddResponse(response);
-                        }
-                        Mapper.Map(question, questionToDuplicate);
-                        newVersion.AddQuestions(questionToDuplicate);
-                    }
+                    //foreach (var categoryGoal in oldVersion.CategoryGoals)
+                    //{
+                    //    var categoryGoalToDuplicate = new CategoryGoal();
+                    //    Mapper.Map(categoryGoal, categoryGoalToDuplicate);
+                    //    newVersion.AddCategoryGoal(categoryGoalToDuplicate);
+                    //}
+                    //foreach (var question in oldVersion.Questions)
+                    //{
+                    //    var questionToDuplicate = new Question(oldVersion.Survey);
+                    //    questionToDuplicate.Order = question.Order;
+                    //    foreach (var response in question.Responses)
+                    //    {
+                    //        questionToDuplicate.AddResponse(response);
+                    //    }
+                    //    Mapper.Map(question, questionToDuplicate);
+                    //    newVersion.AddQuestions(questionToDuplicate);
+                    //}
 
 
-                    newVersion.IsActive = category.IsActive;
-                    newVersion.Name = category.Name;
-                    newVersion.Affirmation = category.Affirmation;
-                    newVersion.Encouragement = category.Encouragement;
-                    newVersion.DoNotUseForCalculations = category.DoNotUseForCalculations;
+                    //newVersion.IsActive = category.IsActive;
+                    //newVersion.Name = category.Name;
+                    //newVersion.Affirmation = category.Affirmation;
+                    //newVersion.Encouragement = category.Encouragement;
+                    //newVersion.DoNotUseForCalculations = category.DoNotUseForCalculations;
+                    //newVersion.PreviousVersion = oldVersion;
 
-                    oldVersion.IsCurrentVersion = false;
+                    //oldVersion.IsCurrentVersion = false;
 
-                    _categoryRepository.EnsurePersistent(newVersion);
-                    _categoryRepository.EnsurePersistent(oldVersion);
+                    //_categoryRepository.EnsurePersistent(newVersion);
+                    //_categoryRepository.EnsurePersistent(oldVersion);
+
+                    ArchiveCategory(id, category); //Don't care about the returned value here
+                    Message = "Category Edited and Versioned Successfully";
                 }
                 else
                 {
-                    _categoryRepository.EnsurePersistent(categoryToEdit); 
+                    _categoryRepository.EnsurePersistent(categoryToEdit);
+                    Message = "Category Edited Successfully";
                 }
                 
-                Message = "Category Edited Successfully";
-
+                
                 return this.RedirectToAction<SurveyController>(a => a.Edit(categoryToEdit.Survey.Id));
             }
             else
             {
+                Message = "Unable to Edit Category";
                 var viewModel = CategoryViewModel.Create(Repository, categoryToEdit.Survey);
                 viewModel.Category = category;
 
                 return View(viewModel);
             }
+        }
+
+        /// <summary>
+        /// This creates and saves a new version of the category and saves the old version of the category
+        /// </summary>
+        /// <param name="id">id of the current category</param>
+        /// <param name="updatedCategory">the current category with updated values</param>
+        /// <returns>the new category with updated values</returns>
+        public Category ArchiveCategory(int id, Category updatedCategory)
+        {
+            var oldVersion = _categoryRepository.GetNullableById(id);
+            var newVersion = new Category(oldVersion.Survey);
+
+            newVersion.Rank = oldVersion.Rank;
+            newVersion.LastUpdate = DateTime.Now;
+            newVersion.CreateDate = newVersion.LastUpdate;
+
+            foreach (var categoryGoal in oldVersion.CategoryGoals)
+            {
+                var categoryGoalToDuplicate = new CategoryGoal();
+                Mapper.Map(categoryGoal, categoryGoalToDuplicate);
+                newVersion.AddCategoryGoal(categoryGoalToDuplicate);
+            }
+            foreach (var question in oldVersion.Questions)
+            {
+                var questionToDuplicate = new Question(oldVersion.Survey);
+                questionToDuplicate.Order = question.Order;
+                foreach (var response in question.Responses)
+                {
+                    var newResponse = new Response(); //If I don't do this, the old responses are *moved* here, not copied
+                    Mapper.Map(response, newResponse);
+                    questionToDuplicate.AddResponse(newResponse);
+                }
+                Mapper.Map(question, questionToDuplicate);
+                newVersion.AddQuestions(questionToDuplicate);
+            }
+
+
+            newVersion.IsActive = updatedCategory.IsActive;
+            newVersion.Name = updatedCategory.Name;
+            newVersion.Affirmation = updatedCategory.Affirmation;
+            newVersion.Encouragement = updatedCategory.Encouragement;
+            newVersion.DoNotUseForCalculations = updatedCategory.DoNotUseForCalculations;
+            newVersion.PreviousVersion = oldVersion;            
+
+            //*******************  SAVE
+            _categoryRepository.EnsurePersistent(newVersion);
+            //*******************  SAVE
+
+            //NHibernateSessionManager.Instance.GetSession().Evict(oldVersion);
+            oldVersion.IsCurrentVersion = false;
+            //*******************  SAVE
+            _categoryRepository.EnsurePersistent(oldVersion);
+            //*******************  SAVE
+
+            return newVersion;
         }
                
 

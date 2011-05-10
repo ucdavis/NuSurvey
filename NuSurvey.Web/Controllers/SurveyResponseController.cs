@@ -106,7 +106,7 @@ namespace NuSurvey.Web.Controllers
             TransferValues(surveyResponse, surveyResponseToCreate, questions);
             surveyResponseToCreate.UserId = CurrentUser.Identity.Name;
 
-            if (survey.Questions.Where(a => a.IsActive && a.Category.IsActive).Count() != questions.Count())
+            if (survey.Questions.Where(a => a.IsActive && a.Category.IsActive && a.Category.IsCurrentVersion).Count() != questions.Count())
             {
                 Message = "You must answer all survey questions.";
             }
@@ -395,7 +395,7 @@ namespace NuSurvey.Web.Controllers
 			var viewModel = new SurveyResponseViewModel {SurveyResponse = new SurveyResponse(survey), Survey = survey};
 		    //viewModel.SurveyResponse.Survey = survey;
 		    viewModel.Questions = viewModel.Survey.Questions
-                .Where(a => a.IsActive && a.Category != null && a.Category.IsActive)
+                .Where(a => a.IsActive && a.Category != null && a.Category.IsActive && a.Category.IsCurrentVersion)
                 .OrderBy(a => a.Order).ToList();            
 			return viewModel;
 		}

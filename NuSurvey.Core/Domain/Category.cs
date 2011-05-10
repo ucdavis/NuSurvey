@@ -82,6 +82,8 @@ namespace NuSurvey.Core.Domain
         [Required]
         public virtual Survey Survey { get; set; }
 
+        public virtual Category PreviousVersion { get; set; }
+
         public virtual IList<CategoryGoal> CategoryGoals { get; set; }
 
         public virtual IList<Question> Questions { get; set; }
@@ -117,6 +119,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.CreateDate);
             Map(x => x.DoNotUseForCalculations);
             Map(x => x.IsCurrentVersion);
+            References(x => x.PreviousVersion).Column("PreviousVersion").ForeignKey("id");
 
             HasMany(x => x.CategoryGoals).Cascade.SaveUpdate();
             HasMany(x => x.Questions).Cascade.SaveUpdate();
