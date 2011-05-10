@@ -135,6 +135,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteConfigurator.asax.cs" />
+    <Compile Include="Services\ArchiveService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Css\images\ui-bg_flat_0_aaaaaa_40x100.png" />

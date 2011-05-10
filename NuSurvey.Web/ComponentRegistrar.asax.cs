@@ -1,5 +1,6 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using NuSurvey.Web.Services;
 using UCDArch.Core.CommonValidator;
 using UCDArch.Core.DataAnnotationsValidator.CommonValidatorAdapter;
 using UCDArch.Core.PersistanceSupport;
@@ -15,6 +16,7 @@ namespace NuSurvey.Web
 
             container.Register(Component.For<IValidator>().ImplementedBy<Validator>().Named("validator"));
             container.Register(Component.For<IDbContext>().ImplementedBy<DbContext>().Named("dbContext"));
+            container.Register(Component.For<IArchiveService>().ImplementedBy<ArchiveService>().Named("archiveService"));
         }
 
         private static void AddGenericRepositoriesTo(IWindsorContainer container)

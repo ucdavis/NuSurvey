@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
@@ -24,10 +25,12 @@ namespace NuSurvey.Web.Controllers
     public class CategoryController : ApplicationController
     {
 	    private readonly IRepository<Category> _categoryRepository;
+        private readonly IArchiveService _archiveService;
 
-        public CategoryController(IRepository<Category> categoryRepository)
+        public CategoryController(IRepository<Category> categoryRepository, IArchiveService archiveService)
         {
             _categoryRepository = categoryRepository;
+            _archiveService = archiveService;
         }
 
 
@@ -207,7 +210,8 @@ namespace NuSurvey.Web.Controllers
             {
                 if (isNewVersion)
                 {
-                    ArchiveCategory(id, category); //Don't care about the returned value here
+                    //ArchiveCategory(id, category); //Don't care about the returned value here
+                    _archiveService.ArchiveCategory(Repository, id, category);
                     Message = "Category Edited and Versioned Successfully";
                 }
                 else
@@ -228,65 +232,6 @@ namespace NuSurvey.Web.Controllers
 
                 return View(viewModel);
             }
-        }
-
-        /// <summary>
-        /// This creates and saves a new version of the category and saves the old version of the category
-        /// </summary>
-        /// <param name="id">id of the current category</param>
-        /// <param name="updatedCategory">the current category with updated values</param>
-        /// <returns>the new category with updated values</returns>
-        public Category ArchiveCategory(int id, Category updatedCategory)
-        {
-            var oldVersion = _categoryRepository.GetNullableById(id);
-            var newVersion = new Category(oldVersion.Survey);
-
-            newVersion.Rank = oldVersion.Rank;
-            newVersion.LastUpdate = DateTime.Now;
-            newVersion.CreateDate = newVersion.LastUpdate;
-
-            foreach (var categoryGoal in oldVersion.CategoryGoals)
-            {
-                var categoryGoalToDuplicate = new CategoryGoal();
-                Mapper.Map(categoryGoal, categoryGoalToDuplicate);
-                newVersion.AddCategoryGoal(categoryGoalToDuplicate);
-            }
-            foreach (var question in oldVersion.Questions)
-            {
-                var questionToDuplicate = new Question(oldVersion.Survey);
-                questionToDuplicate.Order = question.Order;
-                foreach (var response in question.Responses)
-                {
-                    var newResponse = new Response(); //If I don't do this, the old responses are *moved* here, not copied
-                    Mapper.Map(response, newResponse);
-                    questionToDuplicate.AddResponse(newResponse);
-                }
-                Mapper.Map(question, questionToDuplicate);
-                newVersion.AddQuestions(questionToDuplicate);
-            }
-
-
-            newVersion.IsActive = updatedCategory.IsActive;
-            newVersion.Name = updatedCategory.Name;
-            newVersion.Affirmation = updatedCategory.Affirmation;
-            newVersion.Encouragement = updatedCategory.Encouragement;
-            newVersion.DoNotUseForCalculations = updatedCategory.DoNotUseForCalculations;
-            newVersion.PreviousVersion = oldVersion;            
-
-            //*******************  SAVE
-            _categoryRepository.EnsurePersistent(newVersion);
-            var saveId = newVersion.Id;
-            //*******************  SAVE
-
-
-            oldVersion = _categoryRepository.GetNullableById(id);
-            oldVersion.IsCurrentVersion = false;
-
-            //*******************  SAVE
-            _categoryRepository.EnsurePersistent(oldVersion);
-            //*******************  SAVE
-
-            return _categoryRepository.GetNullableById(saveId);
         }
                
 
