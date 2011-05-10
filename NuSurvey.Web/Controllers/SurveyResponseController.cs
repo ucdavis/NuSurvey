@@ -179,10 +179,10 @@ namespace NuSurvey.Web.Controllers
             }
             else
             {
-                foreach (var modelState in ModelState.Values.Where(a => a.Errors.Count() > 0))
-                {
-                    var x = modelState;
-                }
+                //foreach (var modelState in ModelState.Values.Where(a => a.Errors.Count() > 0))
+                //{
+                //    var x = modelState;
+                //}
 				var viewModel = SurveyResponseViewModel.Create(Repository, survey);
                 viewModel.SurveyResponse = surveyResponse;
                 viewModel.SurveyAnswers = questions;
