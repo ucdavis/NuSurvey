@@ -9,8 +9,11 @@
     [LastUpdate]              DATETIME      NOT NULL,
     [CreateDate]              DATETIME      NOT NULL,
     [DoNotUseForCalculations] BIT           NOT NULL,
-    [IsCurrentVersion]        BIT           NOT NULL
+    [IsCurrentVersion]        BIT           NOT NULL,
+    [PreviousVersion]         INT           NULL
 );
+
+
 
 
 
