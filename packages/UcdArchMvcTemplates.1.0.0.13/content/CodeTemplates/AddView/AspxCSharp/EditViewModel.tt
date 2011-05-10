@@ -39,13 +39,6 @@ if(mvcHost.IsPartialView) {
         }
     }
 #>
-
-<asp:Content runat="server" ID="SubNavContent" ContentPlaceHolderID="SubNav">
-	<ul class="navigation">
-		<li><%: Html.ActionLink("Back To List", "Index") %></li>
-	</ul>
-</asp:Content>
-
 <asp:Content ID="Content<#= CPHCounter #>" ContentPlaceHolderID="<#= mvcHost.PrimaryContentPlaceHolderID #>" runat="server">
 
 <h2><#= mvcHost.ViewName #></h2>
@@ -66,23 +59,6 @@ if(mvcHost.IsPartialView) {
     PushIndent("    ");
 }
 #>
-<#
-if (mvcHost.ReferenceScriptLibraries) {
-#>
-<#
-    if (!mvcHost.IsContentPage) {
-#>
-<script src="<%: Url.Content("~/Scripts/jquery-1.4.4.min.js") %>" type="text/javascript"></script>
-<#
-    }
-#>
-<script src="<%: Url.Content("~/Scripts/jquery.validate.min.js") %>" type="text/javascript"></script>
-<script src="<%: Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js") %>" type="text/javascript"></script>
-
-<#
-}
-#>
-
 <% using (Html.BeginForm()) { %>
 	<%: Html.AntiForgeryToken() %>
     <%: Html.ValidationSummary(true) %>
@@ -96,32 +72,37 @@ Example: Dinosaur 1  --%>
 	<ul>
 <#
 foreach (ModelProperty property in GetModelProperties(mvcHost.ViewDataType)) {
-    if (!property.IsPrimaryKey && !property.IsReadOnly) {
+    if (property.IsPrimaryKey) {
 #>
-		<li>
-			<div class="editor-label<# if (property.IsRequired) { #> required<# }#>">
-				<%: Html.LabelFor(model => model.<#= property.Name #>) %><# if (property.IsRequired) { #><span>*</span><# }#> 
-			</div>
-			<div class="editor-field">
-				<%: Html.EditorFor(model => model.<#= property.Name #>) %>
-				<%: Html.ValidationMessageFor(model => model.<#= property.Name #>) %>
-			</div>
-		</li>
+        <%: Html.HiddenFor(model => model.<#= property.Path #>) %>
+
+<#
+    } else if (!property.IsReadOnly) {
+#>
+        <div class="editor-label<# if (property.IsRequired) { #> required<# }#>">
+            <%: Html.LabelFor(model => model.<#= property.Path #>) %><# if (property.IsRequired) { #><span>*</span><# }#> 
+        </div>
+        <div class="editor-field">
+            <%: Html.EditorFor(model => model.<#= property.Path #>) %>
+            <%: Html.ValidationMessageFor(model => model.<#= property.Path #>) %>
+        </div>
+
 <#
     }
 }
 #>
 		<li>
 			<%-- For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> --%>
-			<div class="editor-label">&nbsp;</div>
-			<div class="editor-field">
+			<label>&nbsp;</label>
 			<input class="button" type="submit" value="Create" /> | <%: Html.ActionLink("Cancel", "Index") %>
-			</div>
 		</li>
 	</ul>
 </fieldset>
 <% } %>
 
+<div>
+    <%: Html.ActionLink("Back to List", "Index") %>
+</div>
 <#
 // The following code closes the asp:Content tag used in the case of a master page and the body and html tags in the case of a regular view page
 #>
@@ -156,6 +137,7 @@ if(mvcHost.IsContentPage) {
 // Describes the information about a property on the model
 class ModelProperty {
     public string Name { get; set; }
+    public string Path { get; set; }                                                                                                                                                                                                                                                                                                                                                                                     
     public string ValueExpression { get; set; }
     public Type UnderlyingType { get; set; }
     public bool IsPrimaryKey { get; set; }
@@ -173,10 +155,19 @@ static Type[] bindableNonPrimitiveTypes = new[] {
     typeof(TimeSpan),
 };
 
+string GetUnderlyingModelName(Type type)
+{
+	if (type.Name.EndsWith("ViewModel") == false) { throw new ArgumentException("This template should be called with a viewmodel class"); }
+	return type.Name.Substring(0, "ViewModel".Length - 1);
+}
+
 // Call this to get the list of properties in the model. Change this to modify or add your
 // own default formatting for display values.
 List<ModelProperty> GetModelProperties(Type type) {
-    List<ModelProperty> results = GetEligibleProperties(type);
+	var viewTypeName = GetUnderlyingModelName(type);
+    var viewType = type.GetProperty(viewTypeName).PropertyType;                                                                                                                                                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+	List<ModelProperty> results = GetEligibleProperties(viewType);
     
     foreach (ModelProperty prop in results) {
         if (prop.UnderlyingType == typeof(double) || prop.UnderlyingType == typeof(decimal)) {
@@ -185,6 +176,8 @@ List<ModelProperty> GetModelProperties(Type type) {
         else if (prop.UnderlyingType == typeof(DateTime)) {
             prop.ValueExpression = "String.Format(\"{0:g}\", " + prop.ValueExpression + ")";
         }
+                                                                                                                                                                                                                                                                                                                                                                                                      
+        prop.Path = string.Format("{0}.{1}", viewTypeName, prop.Name);
     }
 
     return results;
