@@ -259,6 +259,8 @@
     <Content Include="Views\Home\Administration.cshtml" />
     <Content Include="Views\Question\ReOrder.cshtml" />
     <Content Include="Views\SurveyResponse\_Results.cshtml" />
+    <Content Include="Views\Survey\_CategoriesList.cshtml" />
+    <Content Include="Views\Survey\_QuestionsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">
