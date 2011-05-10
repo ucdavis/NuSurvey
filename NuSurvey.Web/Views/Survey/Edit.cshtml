@@ -104,7 +104,7 @@ Example: Dinosaur 1  *@
 	    @Html.ActionLink("Create New", "Create", "Category", new {id = Model.Id }, new { })  
     </p>
     <p class="specialMe rightAway">
-        <a class="rightAway" href="/Category/ReOrder/@Model.Id">Change Rank</a>
+        <a class="rightAway" href='@Url.Action("ReOrder", "Category", new { id = @Model.Id })'>Change Rank</a>
     </p>
 
     <table class="datatable categories">
@@ -161,7 +161,7 @@ Example: Dinosaur 1  *@
 	    @Html.ActionLink("Create New", "Create", "Question", new {id = Model.Id }, new { })  
     </p>
     <p class="specialMe rightAway">
-        <a class="rightAway" href="/Question/ReOrder/@Model.Id">Change Order</a>
+        <a class="rightAway" href='@Url.Action("ReOrder", "Question", new { id = @Model.Id })'>Change Order</a>
     </p>
     <table class="datatable questions">
 	    <thead>
