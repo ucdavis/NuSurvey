@@ -226,6 +226,10 @@ namespace NuSurvey.Web.Controllers
                     {
                         var questionToDuplicate = new Question(oldVersion.Survey);
                         questionToDuplicate.Order = question.Order;
+                        foreach (var response in question.Responses)
+                        {
+                            questionToDuplicate.AddResponse(response);
+                        }
                         Mapper.Map(question, questionToDuplicate);
                         newVersion.AddQuestions(questionToDuplicate);
                     }
