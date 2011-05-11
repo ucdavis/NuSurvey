@@ -58,7 +58,11 @@ namespace NuSurvey.Web.Controllers
                 Message = "Category Not Found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-
+            if (!category.IsCurrentVersion)
+            {
+                Message = "Category is not Current";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
 
 			var viewModel = CategoryGoalViewModel.Create(Repository, category);
             
@@ -78,6 +82,11 @@ namespace NuSurvey.Web.Controllers
             if (category == null)
             {
                 Message = "Category Not Found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            if (!category.IsCurrentVersion)
+            {
+                Message = "Category is not Current";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
 
@@ -119,6 +128,11 @@ namespace NuSurvey.Web.Controllers
                 Message = "CategoryGoal Not Found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
+            if (!categoryGoal.Category.IsCurrentVersion)
+            {
+                Message = "Related Category is not Current";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
 
 			var viewModel = CategoryGoalViewModel.Create(Repository, categoryGoal.Category);
 			viewModel.CategoryGoal = categoryGoal;
@@ -136,6 +150,11 @@ namespace NuSurvey.Web.Controllers
             if (categoryGoalToEdit == null)
             {
                 Message = "CategoryGoal Not Found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            if (!categoryGoalToEdit.Category.IsCurrentVersion)
+            {
+                Message = "Related Category is not Current";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
 

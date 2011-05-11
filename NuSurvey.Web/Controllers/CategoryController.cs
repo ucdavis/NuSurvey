@@ -160,6 +160,11 @@ namespace NuSurvey.Web.Controllers
                 Message = "Category not found to edit.";
                 return this.RedirectToAction<SurveyController>(a => a.Index());
             }
+            if (!category.IsCurrentVersion)
+            {
+                Message = "Category is not Current";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
 
             var viewModel = CategoryViewModel.Create(Repository, category.Survey);
             viewModel.Category = category;
@@ -182,6 +187,11 @@ namespace NuSurvey.Web.Controllers
             {
                 Message = "Category not found to edit.";
                 return this.RedirectToAction<SurveyController>(a => a.Index());
+            }
+            if (!categoryToEdit.IsCurrentVersion)
+            {
+                Message = "Category is not Current";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
             }
 
             var isNewVersion = false;

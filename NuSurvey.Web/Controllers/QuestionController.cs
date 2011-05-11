@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
@@ -21,12 +22,14 @@ namespace NuSurvey.Web.Controllers
     public class QuestionController : ApplicationController
     {
 	    private readonly IRepository<Question> _questionRepository;
+        private readonly IArchiveService _archiveService;
 
-        public QuestionController(IRepository<Question> questionRepository)
+        public QuestionController(IRepository<Question> questionRepository, IArchiveService archiveService)
         {
             _questionRepository = questionRepository;
+            _archiveService = archiveService;
         }
-    
+
         ////
         //// GET: /Question/
         //public ActionResult Index()
@@ -82,6 +85,7 @@ namespace NuSurvey.Web.Controllers
         [HttpPost]
         public ActionResult Create(int id, int? categoryId, Question question, ResponsesParameter[] response, string sortOrder)
         {
+            var isNewVersion = false;
             var survey = Repository.OfType<Survey>().GetNullableById(id);
             if (survey == null)
             {
@@ -93,6 +97,11 @@ namespace NuSurvey.Web.Controllers
             {
                 var category = Repository.OfType<Category>().GetNullableById(categoryId.Value);
                 viewModel.Category = category;
+                if (Repository.OfType<Answer>().Queryable.Where(a => a.Category.Id == category.Id).Any())
+                {
+                    //The category picked already has answers, so if it is valid and we create a new question, we want to create a new version of the category first.
+                    isNewVersion = true;
+                }
             }
             viewModel.Question = question;
 
@@ -167,9 +176,17 @@ namespace NuSurvey.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                var extraMessage = string.Empty;
+                if (isNewVersion && questionToCreate.IsActive)
+                {
+                    questionToCreate.Category = _archiveService.ArchiveCategory(Repository, questionToCreate.Category.Id, questionToCreate.Category);
+                    viewModel.Category = questionToCreate.Category;
+                    extraMessage = ", related Category versioned";
+                }
+
                 _questionRepository.EnsurePersistent(questionToCreate);
 
-                Message = "Question Created Successfully";
+                Message = string.Format("Question Created Successfully{0}", extraMessage);
 
                 if (viewModel.Category != null)
                 {
