@@ -169,9 +169,14 @@ namespace NuSurvey.Web.Controllers
 
             ModelState.Clear();
             questionToCreate.TransferValidationMessagesTo(ModelState);
+
             if (questionToCreate.Responses.Where(a => a.IsActive).Count() == 0)
             {
                 ModelState.AddModelError("Question", "Responses are required.");
+            }
+            if (questionToCreate.Category != null && !questionToCreate.Category.IsCurrentVersion)
+            {
+                ModelState.AddModelError("Question.Category", "Selected Category is not current.");
             }
 
             if (ModelState.IsValid)
@@ -348,6 +353,11 @@ namespace NuSurvey.Web.Controllers
             if (questionToEdit.Responses.Where(a => a.IsActive).Count() == 0)
             {
                 ModelState.AddModelError("Question", "Active Responses are required.");
+            }
+
+            if (questionToEdit.Category != null && !questionToEdit.Category.IsCurrentVersion)
+            {
+                ModelState.AddModelError("Question.Category", "Selected Category is not current.");
             }
 
             if (ModelState.IsValid)
