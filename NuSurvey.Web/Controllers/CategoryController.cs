@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -168,6 +169,7 @@ namespace NuSurvey.Web.Controllers
 
             var viewModel = CategoryViewModel.Create(Repository, category.Survey);
             viewModel.Category = category;
+            viewModel.HasRelatedAnswers = Repository.OfType<Answer>().Queryable.Where(a => a.Category.Id == viewModel.Category.Id).Any();
 
             return View(viewModel);
         }
@@ -239,6 +241,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Unable to Edit Category";
                 var viewModel = CategoryViewModel.Create(Repository, categoryToEdit.Survey);
                 viewModel.Category = category;
+                viewModel.HasRelatedAnswers = Repository.OfType<Answer>().Queryable.Where(a => a.Category.Id == viewModel.Category.Id).Any();
 
                 return View(viewModel);
             }
@@ -253,7 +256,9 @@ namespace NuSurvey.Web.Controllers
     public class CategoryViewModel
 	{
         public Survey Survey { get; set; }
-		public Category Category { get; set; }        
+		public Category Category { get; set; }
+        [DisplayName("Has Related Answers")]
+        public bool HasRelatedAnswers { get; set; }
  
 		public static CategoryViewModel Create(IRepository repository, Survey survey)
 		{
@@ -261,8 +266,8 @@ namespace NuSurvey.Web.Controllers
             Check.Require(survey != null);
 			
 			var viewModel = new CategoryViewModel {Survey = survey, Category = new Category(survey)};            
- 
-			return viewModel;
+
+		    return viewModel;
 		}
 	}
 

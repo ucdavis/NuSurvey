@@ -73,6 +73,14 @@ Example: Dinosaur 1  *@
         </li>
         <li>
 			<div class="editor-label">
+				@Html.LabelFor(model => model.HasRelatedAnswers) 
+			</div>
+			<div class="editor-field">
+				@Html.DisplayFor(model => model.HasRelatedAnswers)
+			</div>
+        </li>
+        <li>
+			<div class="editor-label">
 				@Html.Label("Current Rank") 
 			</div>
 			<div class="editor-field">
