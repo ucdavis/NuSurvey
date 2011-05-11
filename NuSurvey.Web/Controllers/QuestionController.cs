@@ -242,6 +242,19 @@ namespace NuSurvey.Web.Controllers
         [HttpPost]
         public ActionResult Edit(int id, int surveyId, int? categoryId, Question question, ResponsesParameter[] response, string sortOrder)
         {
+            //To check if there are related answers, we need to check two things:
+            //  1) Does this question have related answers
+            //  2) Does the related Category have related answers (cauz we might be moving the question to a different category)
+            //If there are related answers we may have to version one or both categories
+            //And we need to check if we need to version
+            //  1) Moving question to a different category
+            //  2) Active changed
+            //  3) Open Ended Changed
+            //  4) Response added
+            //  5) Response Hidden/Unhidden (Response.IsActive)
+            //  6) quesion (name) is changed
+
+
             var survey = Repository.OfType<Survey>().GetNullableById(surveyId);
             if (survey == null)
             {
