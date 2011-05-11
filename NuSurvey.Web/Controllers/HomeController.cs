@@ -2,6 +2,7 @@
 using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Web.Attributes;
 using Elmah;
+using MvcContrib;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -30,6 +31,13 @@ namespace NuSurvey.Web.Controllers
         public ActionResult Administration()
         {
             return View();
+        }
+
+        [Admin]
+        public ActionResult Clear()
+        {
+            HttpContext.Cache.Remove("Version");
+            return this.RedirectToAction(a => a.Index());
         }
     }
 }
