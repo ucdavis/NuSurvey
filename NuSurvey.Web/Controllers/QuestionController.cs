@@ -537,5 +537,6 @@ namespace NuSurvey.Web.Controllers
         public int Score { get; set; }
         public bool Remove { get; set; }
         public int ResponseId { get; set; }
+        public int Order { get; set; }
     }
 }

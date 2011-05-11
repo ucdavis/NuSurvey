@@ -38,7 +38,7 @@
 
         function AddResponseInput(obj) {
             var index = $("#ResponseTable > tbody tr").length;
-            $("#ResponseTable > tbody:last").append('<tr id="' + index + '"><td></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Value"> </input></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Score"> </input></td><td><input id="Response_' + index + '__Remove" type="checkbox" name="Response[' + index + '].Remove" value="true"/><input type="hidden" value="false" name="Response[' + index + '].Remove"></td></tr>');
+            $("#ResponseTable > tbody:last").append('<tr id="' + index + '"><td></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Value"> </input></td><td><input id="Response" class="text-box single-line" type="text" name="Response[' + index + '].Score"> </input><input id="OrderId' + index + '" type="text" value="' + index + '" name="Response[' + index + '].Order" style="display:none"/></td><td><input id="Response_' + index + '__Remove" type="checkbox" name="Response[' + index + '].Remove" value="true"/><input type="hidden" value="false" name="Response[' + index + '].Remove"></td></tr>');
 
             UpdateDragAndDropTable();
 
@@ -58,6 +58,7 @@
                         else {
                             newOrder = newOrder + " " + rows[i].id;
                         }
+                        $("#orderId" + i).val(i);
                     }
                     $("#SortOrder").val(newOrder);
                 }

@@ -75,14 +75,17 @@
                     </thead>
                     <tbody>
                     @{var respCount = 0;}
+                    @{var orderId = "";}
                     @foreach (var resp in Model.Responses)
                     { 
                         <tr id="@respCount">
                             <td></td>
                             <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Value" value="@resp.Value"></input></td>
                             <td>
+                                @{orderId = string.Format("OrderId{0}", respCount);}
                                 <input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Score" value="@resp.Score"></input>
                                 <input id="Response" type="text" value="@resp.ResponseId" name="Response[@respCount].ResponseId" style="display:none"/> 
+                                <input id="@orderId" type="text" value="@respCount" name="Response[@respCount].Order" style="display:none"/> 
                             </td>
                             <td>
                             @{var checkId = "Response_" + respCount + "__Remove";}
@@ -102,7 +105,10 @@
                         <tr id="@respCount">
                             <td></td>
                             <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Value"></input></td>
-                            <td><input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Score"></input></td>
+                            <td>
+                            <input id="Response" class="text-box single-line" type="text" name="Response[@respCount].Score"></input>
+                            <input id="OrderId0" type="text" value="0" name="Response[0].Order" style="display:none"/> 
+                            </td>
                             <td>@Html.CheckBox("Response[" + respCount + "].Remove")</td>
                         </tr>
                     }
