@@ -83,7 +83,7 @@ namespace NuSurvey.Web.Controllers
         //
         // POST: /Question/Create
         [HttpPost]
-        public ActionResult Create(int id, int? categoryId, Question question, ResponsesParameter[] response, string sortOrder)
+        public ActionResult Create(int id, int? categoryId, Question question, ResponsesParameter[] response)
         {
             var isNewVersion = false;
             var survey = Repository.OfType<Survey>().GetNullableById(id);
@@ -105,42 +105,10 @@ namespace NuSurvey.Web.Controllers
             }
             viewModel.Question = question;
 
-            var useSort = true;
-            if (!string.IsNullOrWhiteSpace(sortOrder))
-            {
-                var ids = sortOrder.Split(' ');
-                var responseIds = new int[ids.Count()];
-                for (var i = 0; i < ids.Count(); i++)
-                {
-                    if (int.TryParse(ids[i], out responseIds[i])) continue;
-                    useSort = false;
-                    break;
-                }
-                if (useSort && responseIds.Count() == response.Count())
-                {
-                    var sortedResponse = new List<ResponsesParameter>();
-                    for (var i = 0; i < responseIds.Count(); i++)
-                    {
-                        if (!string.IsNullOrWhiteSpace(response[responseIds[i]].Value))
-                        {
-                            sortedResponse.Add(response[responseIds[i]]);
-                        }
-                    }
-                    viewModel.Responses = sortedResponse;
-                }
-                else
-                {
-                    viewModel.Responses = response;
-                }
-            }
-            else
-            {
-                viewModel.Responses = response;
-            }
 
             // Remove responses that do not have a Choice or that have the remove checked. This is the create, so they will never be added
             var cleanedResponse = new List<ResponsesParameter>();
-            foreach (var responsesParameter in viewModel.Responses)
+            foreach (var responsesParameter in response.OrderBy(a => a.Order))
             {
                 if (!string.IsNullOrWhiteSpace(responsesParameter.Value) && !responsesParameter.Remove)
                 {
@@ -152,13 +120,12 @@ namespace NuSurvey.Web.Controllers
 
             var questionToCreate = new Question(survey);
             Mapper.Map(question, questionToCreate);
-            var counter = 0;
+
             foreach (var responsesParameter in viewModel.Responses)
             {
-                counter++;
                 var responseToAdd = new Response
                 {
-                    Order = counter,
+                    Order = responsesParameter.Order,
                     IsActive = true,
                     Score = responsesParameter.Score,
                     Value = responsesParameter.Value

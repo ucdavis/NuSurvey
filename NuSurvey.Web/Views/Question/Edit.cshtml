@@ -61,8 +61,7 @@
                         else {
                             newOrder = newOrder + " " + rows[i].id;
                         }
-                        var orderId = "#OrderId" + rows[i].id;
-                        $(orderId).val(i);
+                        $("#OrderId" + rows[i].id).val(i);
                     }
                     $("#SortOrder").val(newOrder);
                 }
