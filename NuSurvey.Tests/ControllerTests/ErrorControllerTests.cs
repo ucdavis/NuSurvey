@@ -167,7 +167,7 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Arrange
 
             #region Act
-            var result = controllerClass.GetCustomAttributes(true).OfType<VersionAttribute>();
+            var result = controllerClass.GetCustomAttributes(true).OfType<LocVersionAttribute>();
             #endregion Act
 
             #region Assert
