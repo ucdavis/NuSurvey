@@ -310,7 +310,7 @@ namespace NuSurvey.Web.Controllers
             {
                 if (string.IsNullOrWhiteSpace(responseCheck.Value))
                 {
-                    ModelState.AddModelError("Question", string.Format("Response {0} must have a choice.", responseCheck.Order));
+                    ModelState.AddModelError("Question", string.Format("Response {0} must have a choice.", responseCheck.Order + 1));
                 }
             }
             if (questionToEdit.Responses.Where(a => a.IsActive).Count() == 0)
