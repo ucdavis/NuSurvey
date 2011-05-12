@@ -53,17 +53,9 @@
                 onDrop: function (table, row) {
                     //debugger;
                     var rows = table.tBodies[0].rows;
-                    var newOrder = "";
                     for (var i = 0; i < rows.length; i++) {
-                        if (newOrder == "") {
-                            newOrder = rows[i].id;
-                        }
-                        else {
-                            newOrder = newOrder + " " + rows[i].id;
-                        }
                         $("#OrderId" + rows[i].id).val(i);
                     }
-                    $("#SortOrder").val(newOrder);
                 }
             });
         }
@@ -83,7 +75,6 @@
     @Html.Hidden("surveyId", Model.Survey.Id)
     @Html.Hidden("categoryId", Model.Category != null ? Model.Category.Id : 0)
     @Html.HiddenFor(x => x.Question.Id)
-    <input id="SortOrder" type="text" value="0" name="SortOrder" style="display:none"/>  
 <fieldset>
 @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
 Example: Dinosaur 1  *@

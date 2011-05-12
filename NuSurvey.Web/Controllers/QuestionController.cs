@@ -215,7 +215,7 @@ namespace NuSurvey.Web.Controllers
         //
         // POST: /Question/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, int surveyId, int? categoryId, Question question, ResponsesParameter[] response, string sortOrder)
+        public ActionResult Edit(int id, int surveyId, int? categoryId, Question question, ResponsesParameter[] response)
         {
             //To check if there are related answers, we need to check two things:
             //  1) Does this question have related answers
@@ -252,42 +252,10 @@ namespace NuSurvey.Web.Controllers
             }
             viewModel.Question = question;
 
-            var useSort = true;
-            if (!string.IsNullOrWhiteSpace(sortOrder))
-            {
-                var ids = sortOrder.Split(' ');
-                var responseIds = new int[ids.Count()];
-                for (var i = 0; i < ids.Count(); i++)
-                {
-                    if (int.TryParse(ids[i], out responseIds[i])) continue;
-                    useSort = false;
-                    break;
-                }
-                if (useSort && responseIds.Count() == response.Count())
-                {
-                    var sortedResponse = new List<ResponsesParameter>();
-                    for (var i = 0; i < responseIds.Count(); i++)
-                    {
-                        if (!string.IsNullOrWhiteSpace(response[responseIds[i]].Value))
-                        {
-                            sortedResponse.Add(response[responseIds[i]]);
-                        }
-                    }
-                    viewModel.Responses = sortedResponse;
-                }
-                else
-                {
-                    viewModel.Responses = response;
-                }
-            }
-            else
-            {
-                viewModel.Responses = response;
-            }
 
             // never removed saved responses, only make them inactive. 
             var cleanedResponse = new List<ResponsesParameter>();
-            foreach (var responsesParameter in viewModel.Responses)
+            foreach (var responsesParameter in response.OrderBy(a => a.Order))
             {
                 if (responsesParameter.ResponseId != 0)
                 {
@@ -302,23 +270,22 @@ namespace NuSurvey.Web.Controllers
 
             Mapper.Map(question, questionToEdit);
 
-            var counter = 0;
+
             foreach (var responsesParameter in viewModel.Responses)
             {
-                counter++;
                 if (responsesParameter.ResponseId != 0)
                 {
                     var foundResp = questionToEdit.Responses.Where(a => a.Id == responsesParameter.ResponseId).Single();
                     foundResp.Value = responsesParameter.Value;
                     foundResp.Score = responsesParameter.Score.GetValueOrDefault(0);
                     foundResp.IsActive = !responsesParameter.Remove;
-                    foundResp.Order = counter;
+                    foundResp.Order = responsesParameter.Order;
                 }
                 else
                 {
                     var responseToAdd = new Response
                     {
-                        Order = counter,
+                        Order = responsesParameter.Order,
                         IsActive = true,
                         Score = responsesParameter.Score.GetValueOrDefault(0),
                         Value = responsesParameter.Value
@@ -330,6 +297,14 @@ namespace NuSurvey.Web.Controllers
 
             ModelState.Clear();
             questionToEdit.TransferValidationMessagesTo(ModelState);
+
+            foreach (var responsesParameter in cleanedResponse)
+            {
+                if (!responsesParameter.Score.HasValue)
+                {
+                    ModelState.AddModelError("Question", "All responses need a score");
+                }
+            }
 
             foreach (var responseCheck in questionToEdit.Responses)
             {
