@@ -1,8 +1,8 @@
-﻿using UCDArch.Web.Attributes;
+﻿using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Web.Controller;
 
 namespace NuSurvey.Web.Controllers
 {
-    [Version]
+    [LocVersion]
     public class ApplicationController : SuperController { }
 }

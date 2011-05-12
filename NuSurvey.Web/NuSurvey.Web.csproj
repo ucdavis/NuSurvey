@@ -124,6 +124,7 @@
     <Compile Include="Controllers\CategoryGoalController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Filters\RoleFilter.cs" />
+    <Compile Include="Controllers\Filters\LocVersionAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
