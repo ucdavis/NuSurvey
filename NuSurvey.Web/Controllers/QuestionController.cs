@@ -127,7 +127,7 @@ namespace NuSurvey.Web.Controllers
                 {
                     Order = responsesParameter.Order,
                     IsActive = true,
-                    Score = responsesParameter.Score,
+                    Score = responsesParameter.Score.GetValueOrDefault(0),
                     Value = responsesParameter.Value
                 };
 
@@ -136,6 +136,14 @@ namespace NuSurvey.Web.Controllers
 
             ModelState.Clear();
             questionToCreate.TransferValidationMessagesTo(ModelState);
+
+            foreach (var responsesParameter in cleanedResponse)
+            {
+                if (!responsesParameter.Score.HasValue)
+                {
+                    ModelState.AddModelError("Question", "All responses need a score");
+                }
+            }
 
             if (questionToCreate.Responses.Where(a => a.IsActive).Count() == 0)
             {
@@ -302,7 +310,7 @@ namespace NuSurvey.Web.Controllers
                 {
                     var foundResp = questionToEdit.Responses.Where(a => a.Id == responsesParameter.ResponseId).Single();
                     foundResp.Value = responsesParameter.Value;
-                    foundResp.Score = responsesParameter.Score;
+                    foundResp.Score = responsesParameter.Score.GetValueOrDefault(0);
                     foundResp.IsActive = !responsesParameter.Remove;
                     foundResp.Order = counter;
                 }
@@ -312,7 +320,7 @@ namespace NuSurvey.Web.Controllers
                     {
                         Order = counter,
                         IsActive = true,
-                        Score = responsesParameter.Score,
+                        Score = responsesParameter.Score.GetValueOrDefault(0),
                         Value = responsesParameter.Value
                     };
 
@@ -501,7 +509,7 @@ namespace NuSurvey.Web.Controllers
     public class ResponsesParameter
     {
         public string Value { get; set; }
-        public int Score { get; set; }
+        public int? Score { get; set; }
         public bool Remove { get; set; }
         public int ResponseId { get; set; }
         public int Order { get; set; }
