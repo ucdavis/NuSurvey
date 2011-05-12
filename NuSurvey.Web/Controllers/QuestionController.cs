@@ -93,17 +93,18 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
             var viewModel = QuestionViewModel.Create(Repository, survey);
-            if (categoryId != null)
+            if (categoryId != null) //This category Id is just used for defaults and navigation
             {
                 var category = Repository.OfType<Category>().GetNullableById(categoryId.Value);
                 viewModel.Category = category;
-                if (Repository.OfType<Answer>().Queryable.Where(a => a.Category.Id == category.Id).Any())
-                {
-                    //The category picked already has answers, so if it is valid and we create a new question, we want to create a new version of the category first.
-                    isNewVersion = true;
-                }
             }
             viewModel.Question = question;
+
+            if (question.Category != null && Repository.OfType<Answer>().Queryable.Where(a => a.Category.Id == question.Category.Id).Any())
+            {
+                //The category picked already has answers, so if it is valid and we create a new question, we want to create a new version of the category first.
+                isNewVersion = true;
+            }
 
 
             // Remove responses that do not have a Choice or that have the remove checked. This is the create, so they will never be added
@@ -229,6 +230,10 @@ namespace NuSurvey.Web.Controllers
             //  5) Response Hidden/Unhidden (Response.IsActive)
             //  6) quesion (name) is changed
 
+            var originalCategoryId = 0;
+            var newCategoryId = 0;
+            var originalCategoryHasAnswers = false;
+            var newCategoryHasAnswers = false;
 
             var survey = Repository.OfType<Survey>().GetNullableById(surveyId);
             if (survey == null)
@@ -242,6 +247,14 @@ namespace NuSurvey.Web.Controllers
             {
                 Message = "Question Not Found.";
                 return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+            }
+
+            //Save the Id of the original Category in case we need to version it.
+            originalCategoryId = questionToEdit.Category.Id;
+            originalCategoryHasAnswers = Repository.OfType<Answer>().Queryable.Where(a => a.Category.Id == originalCategoryId).Any();
+            if (question.Category != null && question.Category.Id != originalCategoryId)
+            {
+                newCategoryId = question.Category.Id;
             }
             
             var viewModel = QuestionViewModel.Create(Repository, survey);
