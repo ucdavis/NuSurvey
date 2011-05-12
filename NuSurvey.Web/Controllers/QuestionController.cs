@@ -234,6 +234,8 @@ namespace NuSurvey.Web.Controllers
             var newCategoryId = 0;
             var originalCategoryHasAnswers = false;
             var newCategoryHasAnswers = false;
+            var originalHasChanges = false;
+            var newHasChanges = false;
 
             var survey = Repository.OfType<Survey>().GetNullableById(surveyId);
             if (survey == null)
@@ -255,6 +257,7 @@ namespace NuSurvey.Web.Controllers
             if (question.Category != null && question.Category.Id != originalCategoryId)
             {
                 newCategoryId = question.Category.Id;
+                newCategoryHasAnswers = Repository.OfType<Answer>().Queryable.Where(a => a.Category.Id == newCategoryId).Any();
             }
             
             var viewModel = QuestionViewModel.Create(Repository, survey);
@@ -264,6 +267,27 @@ namespace NuSurvey.Web.Controllers
                 viewModel.Category = category;
             }
             viewModel.Question = question;
+
+            //Version Checks Part1
+            if (newCategoryId == 0 && originalCategoryHasAnswers) //Same category and has answers
+            {
+                if (questionToEdit.IsActive != question.IsActive)
+                {
+                    originalHasChanges = true;
+                }
+                if (questionToEdit.IsOpenEnded != question.IsOpenEnded)
+                {
+                    originalHasChanges = true;
+                }
+                if (questionToEdit.Name.ToLower() != question.Name.ToLower())
+                {
+                    originalHasChanges = true;
+                }
+            }
+            if (newCategoryId != 0)
+            {
+                
+            }
 
 
             // never removed saved responses, only make them inactive. 
