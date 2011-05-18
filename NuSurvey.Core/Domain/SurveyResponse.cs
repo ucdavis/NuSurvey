@@ -64,7 +64,6 @@ namespace NuSurvey.Core.Domain
             Map(x => x.DateTaken);
             Map(x => x.UserId);
 
-            //TODO: Ensure that these point to the correct values in the database.
             References(x => x.PositiveCategory).Column("PositiveCategoryId");
             References(x => x.NegativeCategory1).Column("NegativeCategoryId1");
             References(x => x.NegativeCategory2).Column("NegativeCategoryId2");
