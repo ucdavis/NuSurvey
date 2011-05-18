@@ -418,7 +418,7 @@ namespace NuSurvey.Web.Controllers
                         newQuestion.IsActive = question.IsActive;
                         newQuestion.IsOpenEnded = question.IsOpenEnded;
                         newQuestion.Name = question.Name;
-                        newQuestion.Order = question.Order;
+                        newQuestion.Order = questionToEdit.Order;
                         foreach (var responsesParameter in viewModel.Responses)
                         {
                             var responseToAdd = new Response
