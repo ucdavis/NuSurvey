@@ -341,8 +341,8 @@ namespace NuSurvey.Web.Controllers
 
 
 
-            Mapper.Map(question, questionToEdit);
-
+            //Mapper.Map(question, questionToEdit);
+            question.Responses.Clear();
 
             foreach (var responsesParameter in viewModel.Responses)
             {
@@ -353,6 +353,7 @@ namespace NuSurvey.Web.Controllers
                     foundResp.Score = responsesParameter.Score.GetValueOrDefault(0);
                     foundResp.IsActive = !responsesParameter.Remove;
                     foundResp.Order = responsesParameter.Order;
+                    question.AddResponse(foundResp);
                 }
                 else
                 {
@@ -364,12 +365,15 @@ namespace NuSurvey.Web.Controllers
                         Value = responsesParameter.Value
                     };
 
-                    questionToEdit.AddResponse(responseToAdd);
+                    question.AddResponse(responseToAdd);
                 }
             }
+            question.Survey = questionToEdit.Survey;
+            
+
 
             ModelState.Clear();
-            questionToEdit.TransferValidationMessagesTo(ModelState);
+            question.TransferValidationMessagesTo(ModelState);
 
             foreach (var responsesParameter in cleanedResponse)
             {
@@ -379,22 +383,24 @@ namespace NuSurvey.Web.Controllers
                 }
             }
 
-            foreach (var responseCheck in questionToEdit.Responses)
+            foreach (var responseCheck in question.Responses)
             {
                 if (string.IsNullOrWhiteSpace(responseCheck.Value))
                 {
                     ModelState.AddModelError("Question", string.Format("Response {0} must have a choice.", responseCheck.Order + 1));
                 }
             }
-            if (questionToEdit.Responses.Where(a => a.IsActive).Count() == 0)
+            if (question.Responses.Where(a => a.IsActive).Count() == 0)
             {
                 ModelState.AddModelError("Question", "Active Responses are required.");
             }
 
-            if (questionToEdit.Category != null && !questionToEdit.Category.IsCurrentVersion)
+            if (question.Category != null && !question.Category.IsCurrentVersion)
             {
                 ModelState.AddModelError("Question.Category", "Selected Category is not current.");
             }
+
+           // ModelState.AddModelError("Question", "Faked ERROR FOR DEBUG!!!");
 
             if (ModelState.IsValid)
             {
@@ -402,40 +408,60 @@ namespace NuSurvey.Web.Controllers
                 var extraMessage2 = string.Empty;
                 if (originalHasChanges)
                 {
-                    var updatedOrigialCategory = _archiveService.ArchiveCategory(
-                        Repository, 
-                        originalCategoryId, 
-                        Repository.OfType<Category>().GetNullableById(originalCategoryId));
+                    var newCategory = _archiveService.ArchiveCategory(
+                        Repository,
+                        originalCategoryId, questionToEdit);
                     if (newCategoryId == 0)
                     {
-                        questionToEdit.Category = updatedOrigialCategory;
-                        extraMessage1 = "Related Category Versioned";
+                        var newQuestion = new Question(question.Survey);
+                        newQuestion.Category = newCategory;
+                        newQuestion.IsActive = question.IsActive;
+                        newQuestion.IsOpenEnded = question.IsOpenEnded;
+                        newQuestion.Name = question.Name;
+                        newQuestion.Order = question.Order;
+                        foreach (var responsesParameter in viewModel.Responses)
+                        {
+                            var responseToAdd = new Response
+                            {
+                                Order = responsesParameter.Order,
+                                IsActive = true,
+                                Score = responsesParameter.Score.GetValueOrDefault(0),
+                                Value = responsesParameter.Value
+                            };
+
+                            newQuestion.AddResponse(responseToAdd);
+                        }
+
+                        question = newQuestion;
+                        extraMessage1 = "Related Category Versioned and Question Edited Successfully";
                     }
                     else
                     {
-                        extraMessage1 = "Previously Related Category Versioned";
+                        extraMessage1 = "Previously Related Category Versioned and Question Edited Successfully";
                     }
-                    
-                }
-                if (newHasChanges)
-                {
-                    var updatedNewCategory = _archiveService.ArchiveCategory(
-                        Repository, 
-                        newCategoryId,
-                        Repository.OfType<Category>().GetNullableById(newCategoryId));
-                    questionToEdit.Category = updatedNewCategory;
-                    extraMessage2 = "Newly Related category Versioned";
-                }
 
-                _questionRepository.EnsurePersistent(questionToEdit);
 
-                Message = string.Format("Question Edited Successfully {0} {1}", extraMessage1, extraMessage2);
-
-                if (viewModel.Category != null)
-                {
-                    return this.RedirectToAction<CategoryController>(a => a.Edit(viewModel.Category.Id));
                 }
-                return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+                //if (newHasChanges)
+                //{
+                //    var updatedNewCategory = _archiveService.ArchiveCategory(
+                //        Repository, 
+                //        newCategoryId);
+                //    questionToEdit.Category = updatedNewCategory;
+                //    extraMessage2 = "Newly Related category Versioned";
+                //}
+
+
+                    _questionRepository.EnsurePersistent(question);
+
+                    Message = string.Format("Question Edited Successfully {0} {1}", extraMessage1, extraMessage2);
+
+                    if (viewModel.Category != null)
+                    {
+                        return this.RedirectToAction<CategoryController>(a => a.Edit(questionToEdit.Category.Id));
+                    }
+                    return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+
             }
             else
             {
