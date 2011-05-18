@@ -268,26 +268,6 @@ namespace NuSurvey.Web.Controllers
             }
             viewModel.Question = question;
 
-            //Version Checks Part1
-            if (newCategoryId == 0 && originalCategoryHasAnswers) //Same category and has answers
-            {
-                if (questionToEdit.IsActive != question.IsActive)
-                {
-                    originalHasChanges = true;
-                }
-                if (questionToEdit.IsOpenEnded != question.IsOpenEnded)
-                {
-                    originalHasChanges = true;
-                }
-                if (questionToEdit.Name.ToLower() != question.Name.ToLower())
-                {
-                    originalHasChanges = true;
-                }
-            }
-            if (newCategoryId != 0)
-            {
-                
-            }
 
 
             // never removed saved responses, only make them inactive. 
@@ -304,6 +284,62 @@ namespace NuSurvey.Web.Controllers
                 }
             }
             viewModel.Responses = cleanedResponse;
+
+
+            //Version Checks Part1
+            if (originalCategoryHasAnswers) //original category and has answers
+            {
+                if (newCategoryId != 0) //Changed to a different Category
+                {
+                    originalHasChanges = true;
+                } else if (questionToEdit.IsActive != question.IsActive) //Active state changed
+                {
+                    originalHasChanges = true;
+                } else if (questionToEdit.IsOpenEnded != question.IsOpenEnded) //OpenEnded Question Changed
+                {
+                    originalHasChanges = true;
+                } else if (questionToEdit.Name.ToLower() != question.Name.ToLower()) //Question (name) has changed
+                {
+                    originalHasChanges = true;
+                } else if (viewModel.Responses.Count != questionToEdit.Responses.Count) //Number of possible responses has changed
+                {
+                    //Added
+                    originalHasChanges = true;
+                } 
+                else
+                {
+                    foreach (var responsesParameter in viewModel.Responses)
+                    {
+                        var foundResp = questionToEdit.Responses.Where(a => a.Id == responsesParameter.ResponseId).Single();
+                        if (foundResp.Value.ToLower() != responsesParameter.Value.ToLower()) //Response Value (choice) has changed
+                        {
+                            originalHasChanges = true;
+                            break;
+                        } else if (foundResp.Score != responsesParameter.Score.GetValueOrDefault(0)) //Score has Changed
+                        {
+                            originalHasChanges = true;
+                            break;
+                        } else if (foundResp.IsActive == responsesParameter.Remove) //Hide response has changed
+                        {
+                            originalHasChanges = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (newCategoryId != 0 && newCategoryHasAnswers)
+            {
+                var newCategory = Repository.OfType<Category>().GetNullableById(newCategoryId);
+                if (newCategory != null)
+                {
+                    if (newCategory.IsActive && questionToEdit.IsActive) //If the new Category isn't active it shouldn't have answers
+                    {
+                        newHasChanges = true;
+                    }
+                }
+            }
+
+
 
             Mapper.Map(question, questionToEdit);
 
@@ -362,9 +398,38 @@ namespace NuSurvey.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                var extraMessage1 = string.Empty;
+                var extraMessage2 = string.Empty;
+                if (originalHasChanges)
+                {
+                    var updatedOrigialCategory = _archiveService.ArchiveCategory(
+                        Repository, 
+                        originalCategoryId, 
+                        Repository.OfType<Category>().GetNullableById(originalCategoryId));
+                    if (newCategoryId == 0)
+                    {
+                        questionToEdit.Category = updatedOrigialCategory;
+                        extraMessage1 = "Related Category Versioned";
+                    }
+                    else
+                    {
+                        extraMessage1 = "Previously Related Category Versioned";
+                    }
+                    
+                }
+                if (newHasChanges)
+                {
+                    var updatedNewCategory = _archiveService.ArchiveCategory(
+                        Repository, 
+                        newCategoryId,
+                        Repository.OfType<Category>().GetNullableById(newCategoryId));
+                    questionToEdit.Category = updatedNewCategory;
+                    extraMessage2 = "Newly Related category Versioned";
+                }
+
                 _questionRepository.EnsurePersistent(questionToEdit);
 
-                Message = "Question Edited Successfully";
+                Message = string.Format("Question Edited Successfully {0} {1}", extraMessage1, extraMessage2);
 
                 if (viewModel.Category != null)
                 {
