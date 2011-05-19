@@ -332,7 +332,7 @@ namespace NuSurvey.Web.Controllers
                 var newCategory = Repository.OfType<Category>().GetNullableById(newCategoryId);
                 if (newCategory != null)
                 {
-                    if (newCategory.IsActive && questionToEdit.IsActive) //If the new Category isn't active it shouldn't have answers
+                    if (newCategory.IsActive && question.IsActive) //If the new Category isn't active it shouldn't have answers
                     {
                         newHasChanges = true;
                     }
@@ -404,17 +404,19 @@ namespace NuSurvey.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var extraMessage1 = string.Empty;
-                var extraMessage2 = string.Empty;
+                string extraMessage1;
+                string extraMessage2;
+
+                #region Original Has Changes and needs to be versioned
                 if (originalHasChanges)
                 {
-                    var newCategory = _archiveService.ArchiveCategory(
+                    var newOriginalCategory = _archiveService.ArchiveCategory(
                         Repository,
                         originalCategoryId, questionToEdit);
                     if (newCategoryId == 0)
                     {
                         var newQuestion = new Question(question.Survey);
-                        newQuestion.Category = newCategory;
+                        newQuestion.Category = newOriginalCategory;
                         newQuestion.IsActive = question.IsActive;
                         newQuestion.IsOpenEnded = question.IsOpenEnded;
                         newQuestion.Name = question.Name;
@@ -433,7 +435,8 @@ namespace NuSurvey.Web.Controllers
                         }
 
                         question = newQuestion;
-                        extraMessage1 = "Related Category Versioned and Question Edited Successfully";
+                        extraMessage1 = "Related Category Versioned";
+                        extraMessage2 = string.Empty;
 
                         _questionRepository.EnsurePersistent(question);
 
@@ -441,25 +444,138 @@ namespace NuSurvey.Web.Controllers
 
                         if (viewModel.Category != null)
                         {
-                            return this.RedirectToAction<CategoryController>(a => a.Edit(questionToEdit.Category.Id));
+                            return this.RedirectToAction<CategoryController>(a => a.Edit(newOriginalCategory.Id));
                         }
-                        return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+                        return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));   
                     }
                     else
                     {
-                        extraMessage1 = "Previously Related Category Versioned and Question Edited Successfully";
+                        if (newHasChanges)
+                        {
+                            var newNewCategory = _archiveService.ArchiveCategory(Repository, newCategoryId, questionToEdit);
+
+                            var newQuestion = new Question(question.Survey);
+                            newQuestion.Category = newNewCategory;
+                            newQuestion.IsActive = question.IsActive;
+                            newQuestion.IsOpenEnded = question.IsOpenEnded;
+                            newQuestion.Name = question.Name;
+                            newQuestion.Order = questionToEdit.Order;
+                            foreach (var responsesParameter in viewModel.Responses)
+                            {
+                                var responseToAdd = new Response
+                                {
+                                    Order = responsesParameter.Order,
+                                    IsActive = true,
+                                    Score = responsesParameter.Score.GetValueOrDefault(0),
+                                    Value = responsesParameter.Value
+                                };
+
+                                newQuestion.AddResponse(responseToAdd);
+                            }
+
+                            question = newQuestion;
+                            extraMessage1 = "Previously Related Category Versioned";
+                            extraMessage2 = "Newly Related Category Versioned";
+
+                            _questionRepository.EnsurePersistent(question);
+
+                            Message = string.Format("Question Edited Successfully {0} {1}", extraMessage1, extraMessage2);
+
+                            if (viewModel.Category != null)
+                            {
+                                return this.RedirectToAction<CategoryController>(a => a.Edit(newOriginalCategory.Id));
+                            }
+                            return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id)); 
+                        }
+                        else
+                        {
+                            var newQuestion = new Question(question.Survey);
+                            newQuestion.Category = question.Category;
+                            newQuestion.IsActive = question.IsActive;
+                            newQuestion.IsOpenEnded = question.IsOpenEnded;
+                            newQuestion.Name = question.Name;
+                            newQuestion.Order = questionToEdit.Order;
+                            foreach (var responsesParameter in viewModel.Responses)
+                            {
+                                var responseToAdd = new Response
+                                {
+                                    Order = responsesParameter.Order,
+                                    IsActive = true,
+                                    Score = responsesParameter.Score.GetValueOrDefault(0),
+                                    Value = responsesParameter.Value
+                                };
+
+                                newQuestion.AddResponse(responseToAdd);
+                            }
+
+                            question = newQuestion;
+                            extraMessage1 = "Previously Related Category Versioned";
+                            extraMessage2 = "Newly Related Category Not Versioned";
+
+                            _questionRepository.EnsurePersistent(question);
+
+                            Message = string.Format("Question Edited Successfully {0} {1}", extraMessage1, extraMessage2);
+
+                            if (viewModel.Category != null)
+                            {
+                                return this.RedirectToAction<CategoryController>(a => a.Edit(newOriginalCategory.Id));
+                            }
+                            return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id)); 
+                        }
+
+                        
                     }
 
 
                 }
-                //if (newHasChanges)
-                //{
-                //    var updatedNewCategory = _archiveService.ArchiveCategory(
-                //        Repository, 
-                //        newCategoryId);
-                //    questionToEdit.Category = updatedNewCategory;
-                //    extraMessage2 = "Newly Related category Versioned";
-                //}
+                #endregion Original Has Changes and needs to be versioned
+
+                #region Original Is not Versioned, but new Category Is
+                
+                
+                if (newHasChanges)
+                {
+                    var newNewCategory = _archiveService.ArchiveCategory(Repository, newCategoryId, questionToEdit);
+
+                    var newQuestion = new Question(question.Survey);
+                    newQuestion.Category = newNewCategory;
+                    newQuestion.IsActive = question.IsActive;
+                    newQuestion.IsOpenEnded = question.IsOpenEnded;
+                    newQuestion.Name = question.Name;
+                    newQuestion.Order = questionToEdit.Order;
+                    foreach (var responsesParameter in viewModel.Responses)
+                    {
+                        var responseToAdd = new Response
+                        {
+                            Order = responsesParameter.Order,
+                            IsActive = true,
+                            Score = responsesParameter.Score.GetValueOrDefault(0),
+                            Value = responsesParameter.Value
+                        };
+
+                        newQuestion.AddResponse(responseToAdd);
+                    }
+
+                    question = newQuestion;
+
+                    extraMessage1 = "Previously Related Category Not Versioned";
+                    extraMessage2 = "Newly Related category Versioned";
+
+                    _questionRepository.EnsurePersistent(question);
+
+                    Message = string.Format("Question Edited Successfully {0} {1}", extraMessage1, extraMessage2);
+
+                    if (viewModel.Category != null)
+                    {
+                        return this.RedirectToAction<CategoryController>(a => a.Edit(viewModel.Category.Id));
+                    }
+                    return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id)); 
+
+                    
+                }
+                #endregion Original Is not Versioned, but new Category Is
+
+                #region No Versioning, editing as normal                                
 
                 Mapper.Map(question, questionToEdit);
 
@@ -499,6 +615,8 @@ namespace NuSurvey.Web.Controllers
                     return this.RedirectToAction<CategoryController>(a => a.Edit(questionToEdit.Category.Id));
                 }
                 return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+
+                #endregion No Versioning, editing as normal
 
             }
             else
