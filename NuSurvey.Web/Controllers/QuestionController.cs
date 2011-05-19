@@ -85,10 +85,6 @@ namespace NuSurvey.Web.Controllers
         [HttpPost]
         public ActionResult Create(int id, int? categoryId, Question question, ResponsesParameter[] response)
         {
-            //TODO: Check to see if creating a question will need a new version of the category to be created.
-            //If there are related answers to the category
-            //If the category is active
-            //if the category is used for calculations?
             var isNewVersion = false;
             var survey = Repository.OfType<Survey>().GetNullableById(id);
             if (survey == null)
@@ -434,7 +430,7 @@ namespace NuSurvey.Web.Controllers
                             var responseToAdd = new Response
                             {
                                 Order = responsesParameter.Order,
-                                IsActive = true,
+                                IsActive = !responsesParameter.Remove,
                                 Score = responsesParameter.Score.GetValueOrDefault(0),
                                 Value = responsesParameter.Value
                             };
@@ -473,7 +469,7 @@ namespace NuSurvey.Web.Controllers
                                 var responseToAdd = new Response
                                 {
                                     Order = responsesParameter.Order,
-                                    IsActive = true,
+                                    IsActive = !responsesParameter.Remove,
                                     Score = responsesParameter.Score.GetValueOrDefault(0),
                                     Value = responsesParameter.Value
                                 };
@@ -508,7 +504,7 @@ namespace NuSurvey.Web.Controllers
                                 var responseToAdd = new Response
                                 {
                                     Order = responsesParameter.Order,
-                                    IsActive = true,
+                                    IsActive = !responsesParameter.Remove,
                                     Score = responsesParameter.Score.GetValueOrDefault(0),
                                     Value = responsesParameter.Value
                                 };
@@ -556,7 +552,7 @@ namespace NuSurvey.Web.Controllers
                         var responseToAdd = new Response
                         {
                             Order = responsesParameter.Order,
-                            IsActive = true,
+                            IsActive = !responsesParameter.Remove,
                             Score = responsesParameter.Score.GetValueOrDefault(0),
                             Value = responsesParameter.Value
                         };

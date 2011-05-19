@@ -55,7 +55,7 @@
                     }
                 </td>
                 <td>
-                    @item.Responses.Count
+                    @item.Responses.Where(a => a.IsActive).Count() -  @item.Responses.Where(a => !a.IsActive).Count()
                 </td>
 			    <td>
                     @if (item.IsActive){ 
