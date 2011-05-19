@@ -400,7 +400,7 @@ namespace NuSurvey.Web.Controllers
                 ModelState.AddModelError("Question.Category", "Selected Category is not current.");
             }
 
-           // ModelState.AddModelError("Question", "Faked ERROR FOR DEBUG!!!");
+           
 
             if (ModelState.IsValid)
             {
@@ -434,6 +434,16 @@ namespace NuSurvey.Web.Controllers
 
                         question = newQuestion;
                         extraMessage1 = "Related Category Versioned and Question Edited Successfully";
+
+                        _questionRepository.EnsurePersistent(question);
+
+                        Message = string.Format("Question Edited Successfully {0} {1}", extraMessage1, extraMessage2);
+
+                        if (viewModel.Category != null)
+                        {
+                            return this.RedirectToAction<CategoryController>(a => a.Edit(questionToEdit.Category.Id));
+                        }
+                        return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
                     }
                     else
                     {
@@ -451,16 +461,44 @@ namespace NuSurvey.Web.Controllers
                 //    extraMessage2 = "Newly Related category Versioned";
                 //}
 
+                Mapper.Map(question, questionToEdit);
 
-                    _questionRepository.EnsurePersistent(question);
+                questionToEdit.Responses.Clear();
 
-                    Message = string.Format("Question Edited Successfully {0} {1}", extraMessage1, extraMessage2);
-
-                    if (viewModel.Category != null)
+                foreach (var responsesParameter in viewModel.Responses)
+                {
+                    if (responsesParameter.ResponseId != 0)
                     {
-                        return this.RedirectToAction<CategoryController>(a => a.Edit(questionToEdit.Category.Id));
+                        var foundResp = question.Responses.Where(a => a.Id == responsesParameter.ResponseId).Single();
+                        foundResp.Value = responsesParameter.Value;
+                        foundResp.Score = responsesParameter.Score.GetValueOrDefault(0);
+                        foundResp.IsActive = !responsesParameter.Remove;
+                        foundResp.Order = responsesParameter.Order;
+                        questionToEdit.AddResponse(foundResp);
                     }
-                    return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+                    else
+                    {
+                        var responseToAdd = new Response
+                        {
+                            Order = responsesParameter.Order,
+                            IsActive = true,
+                            Score = responsesParameter.Score.GetValueOrDefault(0),
+                            Value = responsesParameter.Value
+                        };
+
+                        questionToEdit.AddResponse(responseToAdd);
+                    }
+                }
+
+                _questionRepository.EnsurePersistent(questionToEdit);
+
+                Message = "Question Edited Successfully";
+
+                if (viewModel.Category != null)
+                {
+                    return this.RedirectToAction<CategoryController>(a => a.Edit(questionToEdit.Category.Id));
+                }
+                return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
 
             }
             else
