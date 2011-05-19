@@ -291,7 +291,11 @@ namespace NuSurvey.Web.Controllers
             {
                 if (newCategoryId != 0) //Changed to a different Category
                 {
-                    originalHasChanges = true;
+                    //if we are changing the category, but the question was not active then there would not be any changes to the original category
+                    if (questionToEdit.IsActive) 
+                    { 
+                        originalHasChanges = true;
+                    }
                 } else if (questionToEdit.IsActive != question.IsActive) //Active state changed
                 {
                     originalHasChanges = true;
