@@ -262,6 +262,8 @@
     <Content Include="Views\SurveyResponse\_Results.cshtml" />
     <Content Include="Views\Survey\_CategoriesList.cshtml" />
     <Content Include="Views\Survey\_QuestionsList.cshtml" />
+    <Content Include="Views\Category\_CategoryQuestions.cshtml" />
+    <Content Include="Views\Category\_Goals.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">
