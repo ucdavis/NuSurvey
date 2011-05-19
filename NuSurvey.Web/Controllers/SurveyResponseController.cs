@@ -70,16 +70,28 @@ namespace NuSurvey.Web.Controllers
                 Message = "Survey not found or not active.";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            //foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations))
-            //{
-            //    var catMaxScore =
-            //        Repository.OfType<CategoryMaxScore>().Queryable.Where(a => a.Category == category).FirstOrDefault();
-            //    if (catMaxScore == null)
-            //    {
-            //        Message = "Survey does not have related CategoryMaxScore records.";
-            //        return this.RedirectToAction<ErrorController>(a => a.Index());
-            //    }
-            //}
+
+            var count = 0;
+            foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
+            {                
+                var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
+                if (totalMax == null) //No Questions most likely
+                {
+                    continue;
+                }
+                count++;
+                if (count > 3)
+                {
+                    break;
+                }
+            }
+
+            if (count < 3)
+            {
+                Message = "Survey does not have enough active categories to complete survey.";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+
 			var viewModel = SurveyResponseViewModel.Create(Repository, survey);
             
             return View(viewModel);
@@ -149,11 +161,13 @@ namespace NuSurvey.Web.Controllers
                     {
                         continue;
                     }
-                    score.MaxScore = totalMax.TotalMaxScore; 
-                    score.TotalScore = surveyResponseToCreate.Answers.Where(a => a.Category == category).Sum(b => b.Score);
-                    score.Percent = (score.TotalScore / score.MaxScore) * 100m;
+                    score.MaxScore = totalMax.TotalMaxScore;
+                    score.TotalScore =
+                        surveyResponseToCreate.Answers.Where(a => a.Category == category).Sum(b => b.Score);
+                    score.Percent = (score.TotalScore/score.MaxScore)*100m;
                     score.Rank = category.Rank;
                     scores.Add(score);
+
                 }
 
                 surveyResponseToCreate.PositiveCategory = scores

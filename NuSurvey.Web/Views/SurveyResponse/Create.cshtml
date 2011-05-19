@@ -58,7 +58,7 @@ Example: Dinosaur 1  *@
                     }
                     else
                     {
-                        foreach (var response in item.Responses.OrderBy(x => x.Order))
+                        foreach (var response in item.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
                         {
                             var isChecked = string.Empty;
                             if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null){

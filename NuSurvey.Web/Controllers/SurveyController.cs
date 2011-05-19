@@ -98,6 +98,7 @@ namespace NuSurvey.Web.Controllers
         [HttpPost]
         public ActionResult Edit(int id, Survey survey)
         {
+            //TODO: Add validation where active must have other values?
             var surveyToEdit = _surveyRepository.GetNullableById(id);
 
             if (surveyToEdit == null)
