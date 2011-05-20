@@ -84,8 +84,9 @@ namespace NuSurvey.Core.Domain
 
         public virtual Category PreviousVersion { get; set; }
 
+        [Required]
         public virtual IList<CategoryGoal> CategoryGoals { get; set; }
-
+        [Required]
         public virtual IList<Question> Questions { get; set; }
 
         #region Methods

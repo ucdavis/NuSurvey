@@ -968,6 +968,510 @@ namespace NuSurvey.Tests.RepositoryTests
         }
         #endregion CreateDate Tests
         
+        #region Survey Tests
+        #region Invalid Tests
+        /// <summary>
+        /// Tests the Survey with A value of null does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestSurveyWithAValueOfNullDoesNotSave()
+        {
+            Category category = null;
+            try
+            {
+                #region Arrange
+                category = GetValid(9);
+                category.Survey = null;
+                #endregion Arrange
+
+                #region Act
+                CategoryRepository.DbContext.BeginTransaction();
+                CategoryRepository.EnsurePersistent(category);
+                CategoryRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(category);
+                Assert.AreEqual(category.Survey, null);
+                var results = category.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Survey: The Survey field is required.");
+                Assert.IsTrue(category.IsTransient());
+                Assert.IsFalse(category.IsValid());
+                throw;
+            }	
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.TransientObjectException))]
+        public void TestSurveyWithANewValueDoesNotSave()
+        {
+            Category category = null;
+            try
+            {
+                #region Arrange
+                category = GetValid(9);
+                category.Survey = CreateValidEntities.Survey(9);
+                #endregion Arrange
+
+                #region Act
+                CategoryRepository.DbContext.BeginTransaction();
+                CategoryRepository.EnsurePersistent(category);
+                CategoryRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                Assert.IsNotNull(category);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("object references an unsaved transient instance - save the transient instance before flushing. Type: NuSurvey.Core.Domain.Survey, Entity: NuSurvey.Core.Domain.Survey", ex.Message);
+ 
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+        #region Valid Tests
+
+        [TestMethod]
+        public void TestCategoryWithExistingSurveySaves()
+        {
+            #region Arrange
+            var survey = Repository.OfType<Survey>().GetNullableById(2);
+            Assert.IsNotNull(survey);
+            var record = GetValid(9);
+            record.Survey = survey;
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(survey.Name, record.Survey.Name);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert		
+        }
+        #endregion Valid Tests
+        #region Cascade Tests
+
+        [TestMethod]
+        public void TestDeleteCategoryDoesNotCascadeToSurvey()
+        {
+            #region Arrange
+            var survey = Repository.OfType<Survey>().GetNullableById(2);
+            Assert.IsNotNull(survey);
+            var record = GetValid(9);
+            record.Survey = survey;
+
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            var saveId = record.Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            NHibernateSessionManager.Instance.GetSession().Evict(survey);
+            record = CategoryRepository.GetNullableById(saveId);
+            Assert.IsNotNull(record);
+            Assert.AreEqual("Name2", record.Survey.Name);
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.Remove(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(CategoryRepository.GetNullableById(saveId));
+            Assert.IsNotNull(Repository.OfType<Survey>().GetNullableById(2));
+            #endregion Assert		
+        }
+        #endregion Cascade Tests
+        #endregion Survey Tests
+
+        #region Survey Tests
+        #region Invalid Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.TransientObjectException))]
+        public void TestPreviousVersionWithANewValueDoesNotSave()
+        {
+            Category category = null;
+            try
+            {
+                #region Arrange
+                category = GetValid(9);
+                category.PreviousVersion = CreateValidEntities.Category(9);
+                #endregion Arrange
+
+                #region Act
+                CategoryRepository.DbContext.BeginTransaction();
+                CategoryRepository.EnsurePersistent(category);
+                CategoryRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                Assert.IsNotNull(category);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("object references an unsaved transient instance - save the transient instance before flushing. Type: NuSurvey.Core.Domain.Category, Entity: NuSurvey.Core.Domain.Category", ex.Message);
+
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+        #region Valid Tests
+
+        [TestMethod]
+        public void TestPreviousVersionWithNullValueSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.PreviousVersion = null;
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsNull(record.PreviousVersion);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCategoryWithExistingPreviousVersionSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.PreviousVersion = CategoryRepository.GetNullableById(1);
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+        #endregion Valid Tests
+        #endregion PreviousVersion Tests
+
+        #region CategoryGoals Tests
+        #region Invalid Tests
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestCategoryGoalsWithAValueOfNullDoesNotSave()
+        {
+            Category record = null;
+            try
+            {
+                #region Arrange
+                record = GetValid(9);
+                record.CategoryGoals = null;
+                #endregion Arrange
+
+                #region Act
+                CategoryRepository.DbContext.BeginTransaction();
+                CategoryRepository.EnsurePersistent(record);
+                CategoryRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(record);
+                Assert.AreEqual(record.CategoryGoals, null);
+                var results = record.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("CategoryGoals: The CategoryGoals field is required.");
+                Assert.IsTrue(record.IsTransient());
+                Assert.IsFalse(record.IsValid());
+                throw;
+            }
+        }
+
+        #endregion Invalid Tests
+        #region Valid Tests
+        [TestMethod]
+        public void TestCategoryGoalsWithPopulatedListWillSave()
+        {
+            #region Arrange
+            Category record = GetValid(9);
+            const int addedCount = 3;
+            for (int i = 0; i < addedCount; i++)
+            {
+                record.AddCategoryGoal(CreateValidEntities.CategoryGoal(i + 1));
+            }
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(record.CategoryGoals);
+            Assert.AreEqual(addedCount, record.CategoryGoals.Count);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCategoryGoalsWithPopulatedExistingListWillSave()
+        {
+            #region Arrange
+            Category record = GetValid(9);
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+
+            const int addedCount = 3;
+            var relatedRecords = new List<CategoryGoal>();
+            for (int i = 0; i < addedCount; i++)
+            {
+                relatedRecords.Add(CreateValidEntities.CategoryGoal(i + 1));
+                relatedRecords[i].Category = record;
+                Repository.OfType<CategoryGoal>().EnsurePersistent(relatedRecords[i]);
+            }
+            #endregion Arrange
+
+            #region Act
+
+            foreach (var relatedRecord in relatedRecords)
+            {
+                record.CategoryGoals.Add(relatedRecord);
+            }
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(record.CategoryGoals);
+            Assert.AreEqual(addedCount, record.CategoryGoals.Count);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCategoryGoalsWithEmptyListWillSave()
+        {
+            #region Arrange
+            Category record = GetValid(9);
+            #endregion Arrange
+
+            #region Act
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(record.CategoryGoals);
+            Assert.AreEqual(0, record.CategoryGoals.Count);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+        #endregion Valid Tests
+        #region Cascade Tests
+
+
+        [TestMethod]
+        public void TestCategoryCascadesSaveToCategoryGoal()
+        {
+            #region Arrange
+            var count = Repository.OfType<CategoryGoal>().Queryable.Count();
+            Category record = GetValid(9);
+            const int addedCount = 3;
+            for (int i = 0; i < addedCount; i++)
+            {
+                record.AddCategoryGoal(CreateValidEntities.CategoryGoal(i+1));
+            }
+
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            var saveId = record.Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Arrange
+
+            #region Act
+            record = CategoryRepository.GetNullableById(saveId);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(record);
+            Assert.AreEqual(addedCount, record.CategoryGoals.Count);
+            Assert.AreEqual(count + addedCount, Repository.OfType<CategoryGoal>().Queryable.Count());
+            #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestCategoryCascadesUpdateToCategoryGoal1()
+        {
+            #region Arrange
+            var count = Repository.OfType<CategoryGoal>().Queryable.Count();
+            Category record = GetValid(9);
+            const int addedCount = 3;
+            for (int i = 0; i < addedCount; i++)
+            {
+                record.AddCategoryGoal(CreateValidEntities.CategoryGoal(i+1));
+            }
+
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            var saveId = record.Id;
+            var saveRelatedId = record.CategoryGoals[1].Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Arrange
+
+            #region Act
+            record = CategoryRepository.GetNullableById(saveId);
+            record.CategoryGoals[1].Name = "Updated";
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(count + addedCount, Repository.OfType<CategoryGoal>().Queryable.Count());
+            var relatedRecord = Repository.OfType<CategoryGoal>().GetNullableById(saveRelatedId);
+            Assert.IsNotNull(relatedRecord);
+            Assert.AreEqual("Updated", relatedRecord.Name);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCategoryCascadesUpdateToCategoryGoal2()
+        {
+            #region Arrange
+            var count = Repository.OfType<CategoryGoal>().Queryable.Count();
+            Category record = GetValid(9);
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+
+
+            const int addedCount = 3;
+            var relatedRecords = new List<CategoryGoal>();
+            for (int i = 0; i < addedCount; i++)
+            {
+                relatedRecords.Add(CreateValidEntities.CategoryGoal(i + 1));
+                relatedRecords[i].Category = record;
+                Repository.OfType<CategoryGoal>().EnsurePersistent(relatedRecords[i]);
+            }
+            foreach (var relatedRecord in relatedRecords)
+            {
+                record.CategoryGoals.Add(relatedRecord);
+            }
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            var saveId = record.Id;
+            var saveRelatedId = record.CategoryGoals[1].Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            foreach (var relatedRecord in relatedRecords)
+            {
+                NHibernateSessionManager.Instance.GetSession().Evict(relatedRecord);
+            }
+            #endregion Arrange
+
+            #region Act
+            record = CategoryRepository.GetNullableById(saveId);
+            record.CategoryGoals[1].Name = "Updated";
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            foreach (var relatedRecord in relatedRecords)
+            {
+                NHibernateSessionManager.Instance.GetSession().Evict(relatedRecord);
+            }
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(count + addedCount, Repository.OfType<CategoryGoal>().Queryable.Count());
+            var relatedRecord2 = Repository.OfType<CategoryGoal>().GetNullableById(saveRelatedId);
+            Assert.IsNotNull(relatedRecord2);
+            Assert.AreEqual("Updated", relatedRecord2.Name);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Does NOT Remove it
+        /// </summary>
+        [TestMethod]
+        public void TestCategoryDoesNotCascadesUpdateRemoveCategoryGoal()
+        {
+            #region Arrange
+            var count = Repository.OfType<CategoryGoal>().Queryable.Count();
+            Category record = GetValid(9);
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+
+
+            const int addedCount = 3;
+            var relatedRecords = new List<CategoryGoal>();
+            for (int i = 0; i < addedCount; i++)
+            {
+                relatedRecords.Add(CreateValidEntities.CategoryGoal(i + 1));
+                relatedRecords[i].Category = record;
+                Repository.OfType<CategoryGoal>().EnsurePersistent(relatedRecords[i]);
+            }
+            foreach (var relatedRecord in relatedRecords)
+            {
+                record.CategoryGoals.Add(relatedRecord);
+            }
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            var saveId = record.Id;
+            var saveRelatedId = record.CategoryGoals[1].Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Arrange
+
+            #region Act
+            record = CategoryRepository.GetNullableById(saveId);
+            record.CategoryGoals.RemoveAt(1);
+            CategoryRepository.DbContext.BeginTransaction();
+            CategoryRepository.EnsurePersistent(record);
+            CategoryRepository.DbContext.CommitTransaction();
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(count + (addedCount), Repository.OfType<CategoryGoal>().Queryable.Count());
+            var relatedRecord2 = Repository.OfType<CategoryGoal>().GetNullableById(saveRelatedId);
+            Assert.IsNotNull(relatedRecord2);
+            #endregion Assert
+        }
+
+
+        #endregion Cascade Tests
+
+
+        #endregion CategoryGoals Tests
+
+
 
         #region Reflection of Database.
 
@@ -984,6 +1488,10 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)1000)]", 
                  "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("CategoryGoals", "System.Collections.Generic.IList`1[NuSurvey.Core.Domain.CategoryGoal]", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
             expectedFields.Add(new NameAndType("CreateDate", "System.DateTime", new List<string>()));
             expectedFields.Add(new NameAndType("DoNotUseForCalculations", "System.Boolean", new List<string>()));
@@ -1005,7 +1513,15 @@ namespace NuSurvey.Tests.RepositoryTests
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)100)]", 
                  "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("PreviousVesion", "System.String", new List<string>
+            {
+                 ""
+            }));
             expectedFields.Add(new NameAndType("Rank", "System.Int32", new List<string>()));
+            expectedFields.Add(new NameAndType("Survey", "System.String", new List<string>
+            {
+                 ""
+            }));
             #endregion Arrange
 
             AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(Category));
