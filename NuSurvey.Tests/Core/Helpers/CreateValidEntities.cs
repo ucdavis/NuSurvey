@@ -74,5 +74,15 @@ namespace NuSurvey.Tests.Core.Helpers
 
             return rtValue;
         }
+
+        public static SurveyResponse SurveyResponse(int? counter)
+        {
+            var rtValue = new SurveyResponse();
+            rtValue.Survey = new Survey();
+            rtValue.StudentId = "SID" + counter.Extra();
+            rtValue.UserId = "UserId" + counter.Extra();
+
+            return rtValue;
+        }
     }
 }
