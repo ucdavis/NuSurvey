@@ -35,7 +35,8 @@ namespace NuSurvey.Tests.Core.Helpers
         {
             var rtValue = new Answer();
             var count = counter.HasValue ? counter.Value : 1;
-            rtValue.Score = count % 5;
+            //rtValue.Score = count % 5;
+            rtValue.Score = counter.HasValue ? counter.Value : 0;
             rtValue.SurveyResponse = new SurveyResponse();
             rtValue.Response = new Response();
             rtValue.Question = new Question();

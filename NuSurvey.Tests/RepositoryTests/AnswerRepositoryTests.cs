@@ -18,7 +18,7 @@ namespace NuSurvey.Tests.RepositoryTests
     /// Entity Name:		Answer
     /// LookupFieldName:	Score
     /// </summary>
-    [TestClass, Ignore]
+    [TestClass]
     public class AnswerRepositoryTests : AbstractRepositoryTests<Answer, int, AnswerMap>
     {
         /// <summary>
@@ -44,7 +44,13 @@ namespace NuSurvey.Tests.RepositoryTests
         /// <returns>A valid entity of type T</returns>
         protected override Answer GetValid(int? counter)
         {
-            return CreateValidEntities.Answer(counter);
+            var rtValue = CreateValidEntities.Answer(counter);
+            rtValue.Question = Repository.OfType<Question>().Queryable.First();
+            rtValue.Response = Repository.OfType<Response>().Queryable.First();
+            rtValue.Category = Repository.OfType<Category>().Queryable.First();
+            rtValue.SurveyResponse = Repository.OfType<SurveyResponse>().Queryable.First();
+
+            return rtValue;
         }
 
         /// <summary>
@@ -65,7 +71,7 @@ namespace NuSurvey.Tests.RepositoryTests
         /// <param name="counter"></param>
         protected override void FoundEntityComparison(Answer entity, int counter)
         {
-            Assert.AreEqual("Score" + counter, entity.Score);
+            Assert.AreEqual(counter, entity.Score);
         }
 
         /// <summary>
@@ -96,6 +102,13 @@ namespace NuSurvey.Tests.RepositoryTests
         /// </summary>
         protected override void LoadData()
         {
+            Repository.OfType<Survey>().DbContext.BeginTransaction();
+            RepositoryLoad.LoadSurveys(Repository, 1);
+            RepositoryLoad.LoadCategories(Repository, 3);
+            RepositoryLoad.LoadQuestions(Repository, 3);
+            RepositoryLoad.LoadResponses(Repository, 3);
+            RepositoryLoad.LoadSurveyResponses(Repository, 3);
+            Repository.OfType<Survey>().DbContext.CommitTransaction();
             AnswerRepository.DbContext.BeginTransaction();
             LoadRecords(5);
             AnswerRepository.DbContext.CommitTransaction();
