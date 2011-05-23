@@ -41,5 +41,15 @@ namespace NuSurvey.Tests.Core.Helpers
                 repository.OfType<Question>().EnsurePersistent(validEntity);
             }
         }
+
+        public static void LoadResponses(IRepository repository, int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.Response(i + 1);
+                validEntity.Question = repository.OfType<Question>().Queryable.First();
+                repository.OfType<Response>().EnsurePersistent(validEntity);
+            }
+        }
     }
 }

@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core;
 using NuSurvey.Tests.Core.Extensions;
 using NuSurvey.Tests.Core.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FluentNHibernate.Testing;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
 using UCDArch.Testing.Extensions;
@@ -1059,7 +1057,6 @@ namespace NuSurvey.Tests.RepositoryTests
 
         #endregion SurveyResponses Tests
 
-
         #region Constructor Tests
 
         [TestMethod]
@@ -1078,9 +1075,6 @@ namespace NuSurvey.Tests.RepositoryTests
             #endregion Assert		
         }
         #endregion Constructor Tests
-
-
-
         
         #region Reflection of Database.
 

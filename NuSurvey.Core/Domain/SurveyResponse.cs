@@ -39,13 +39,15 @@ namespace NuSurvey.Core.Domain
         public virtual Category PositiveCategory { get; set; }
         public virtual Category NegativeCategory1 { get; set; }
         public virtual Category NegativeCategory2 { get; set; }
+
         [Required]
         public virtual Survey Survey { get; set; }
 
         [Required]
         [DisplayName("User Id")]
         public virtual string UserId { get; set; }
-        
+
+        [Required]
         public virtual IList<Answer> Answers { get; set; }
 
         public virtual void AddAnswers(Answer answer)

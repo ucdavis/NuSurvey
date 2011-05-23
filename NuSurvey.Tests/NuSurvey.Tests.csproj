@@ -114,6 +114,7 @@
     <Compile Include="RepositoryTests\QuestionRepositoryTests.cs" />
     <Compile Include="RepositoryTests\ResponseRepositoryTests.cs" />
     <Compile Include="RepositoryTests\SurveyRepositoryTests.cs" />
+    <Compile Include="RepositoryTests\SurveyResponseRepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />

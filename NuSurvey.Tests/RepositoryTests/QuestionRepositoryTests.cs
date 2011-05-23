@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core;
 using NuSurvey.Tests.Core.Extensions;
 using NuSurvey.Tests.Core.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FluentNHibernate.Testing;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
 using UCDArch.Testing.Extensions;
@@ -744,7 +742,7 @@ namespace NuSurvey.Tests.RepositoryTests
             Question record = GetValid(99);
             var survey = Repository.OfType<Survey>().GetNullableById(2);
             record.Survey = survey;
-            Assert.IsNotNull(record.Category);
+            Assert.IsNotNull(record.Survey);
 
             QuestionRepository.DbContext.BeginTransaction();
             QuestionRepository.EnsurePersistent(record);
