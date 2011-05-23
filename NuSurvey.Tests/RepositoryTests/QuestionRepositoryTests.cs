@@ -531,7 +531,636 @@ namespace NuSurvey.Tests.RepositoryTests
         }
         #endregion CreateDate Tests
 
-        
+        #region Category Tests Tests
+        #region Invalid Tests
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestCategoryWithNullValueDoesNotSave()
+        {
+            Question question = null;
+            try
+            {
+                #region Arrange
+                question = GetValid(9);
+                question.Category = null;
+                #endregion Arrange
+
+                #region Act
+                QuestionRepository.DbContext.BeginTransaction();
+                QuestionRepository.EnsurePersistent(question);
+                QuestionRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(question);
+                var results = question.ValidationResults().AsMessageList();
+                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Category"));
+                Assert.IsTrue(question.IsTransient());
+                Assert.IsFalse(question.IsValid());
+                throw;
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.TransientObjectException))]
+        public void TestCategoryWithNewValueDoesNotSave()
+        {
+            Question question = null;
+            try
+            {
+                #region Arrange
+                question = GetValid(9);
+                question.Category = CreateValidEntities.Category(1);
+                #endregion Arrange
+
+                #region Act
+                QuestionRepository.DbContext.BeginTransaction();
+                QuestionRepository.EnsurePersistent(question);
+                QuestionRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                Assert.IsNotNull(question);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("object references an unsaved transient instance - save the transient instance before flushing. Type: NuSurvey.Core.Domain.Category, Entity: NuSurvey.Core.Domain.Category", ex.Message);
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+        #region Valid Tests
+
+        [TestMethod]
+        public void TestCategoryWithExistingValueSaves()
+        {
+            #region Arrange            
+            Question record = GetValid(99);
+            record.Category = Repository.OfType<Category>().GetNullableById(2);
+            Assert.IsNotNull(record.Category);
+            #endregion Arrange
+
+            #region Act
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitChanges();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            Assert.AreEqual(2, record.Category.Id);
+            #endregion Assert		
+        }
+        #endregion Valid Tests
+
+        #region Cascade Tests
+
+        [TestMethod]
+        public void TestDeleteQuestionDoesNotCascadeToCategory()
+        {
+            #region Arrange
+            Question record = GetValid(99);
+            var category = Repository.OfType<Category>().GetNullableById(2);
+            record.Category = category;
+            Assert.IsNotNull(record.Category);
+
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitChanges();
+            var saveId = record.Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(category);
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+
+            record = QuestionRepository.GetNullableById(saveId);
+            Assert.IsNotNull(record);
+            #endregion Arrange
+
+            #region Act
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.Remove(record);
+            QuestionRepository.DbContext.CommitChanges();
+            NHibernateSessionManager.Instance.GetSession().Evict(category);
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(QuestionRepository.GetNullableById(saveId));
+            Assert.IsNotNull(Repository.OfType<Category>().GetNullableById(2));
+            #endregion Assert		
+        }
+        #endregion Cascade Tests
+        #endregion Category Tests Tests
+
+        #region Survey Tests Tests
+        #region Invalid Tests
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestSurveyWithNullValueDoesNotSave()
+        {
+            Question question = null;
+            try
+            {
+                #region Arrange
+                question = GetValid(9);
+                question.Survey = null;
+                #endregion Arrange
+
+                #region Act
+                QuestionRepository.DbContext.BeginTransaction();
+                QuestionRepository.EnsurePersistent(question);
+                QuestionRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(question);
+                var results = question.ValidationResults().AsMessageList();
+                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Survey"));
+                Assert.IsTrue(question.IsTransient());
+                Assert.IsFalse(question.IsValid());
+                throw;
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.TransientObjectException))]
+        public void TestSurveyWithNewValueDoesNotSave()
+        {
+            Question question = null;
+            try
+            {
+                #region Arrange
+                question = GetValid(9);
+                question.Survey = CreateValidEntities.Survey(1);
+                #endregion Arrange
+
+                #region Act
+                QuestionRepository.DbContext.BeginTransaction();
+                QuestionRepository.EnsurePersistent(question);
+                QuestionRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                Assert.IsNotNull(question);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("", ex.Message);
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+        #region Valid Tests
+
+        [TestMethod]
+        public void TestSurveyWithExistingValueSaves()
+        {
+            #region Arrange
+            Question record = GetValid(99);
+            record.Survey = Repository.OfType<Survey>().GetNullableById(2);
+            Assert.IsNotNull(record.Category);
+            #endregion Arrange
+
+            #region Act
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitChanges();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            Assert.AreEqual(2, record.Survey.Id);
+            #endregion Assert
+        }
+        #endregion Valid Tests
+
+        #region Cascade Tests
+
+        [TestMethod]
+        public void TestDeleteQuestionDoesNotCascadeToSurvey()
+        {
+            #region Arrange
+            Question record = GetValid(99);
+            var survey = Repository.OfType<Survey>().GetNullableById(2);
+            record.Survey = survey;
+            Assert.IsNotNull(record.Category);
+
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitChanges();
+            var saveId = record.Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(survey);
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+
+            record = QuestionRepository.GetNullableById(saveId);
+            Assert.IsNotNull(record);
+            #endregion Arrange
+
+            #region Act
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.Remove(record);
+            QuestionRepository.DbContext.CommitChanges();
+            NHibernateSessionManager.Instance.GetSession().Evict(survey);
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(QuestionRepository.GetNullableById(saveId));
+            Assert.IsNotNull(Repository.OfType<Survey>().GetNullableById(2));
+            #endregion Assert
+        }
+        #endregion Cascade Tests
+        #endregion Survey Tests Tests
+
+        #region Responses Tests
+        #region Invalid Tests
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestResponsesWithAValueOfNullDoesNotSave()
+        {
+            Question record = null;
+            try
+            {
+                #region Arrange
+                record = GetValid(9);
+                record.Responses = null;
+                #endregion Arrange
+
+                #region Act
+                QuestionRepository.DbContext.BeginTransaction();
+                QuestionRepository.EnsurePersistent(record);
+                QuestionRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(record);
+                Assert.AreEqual(record.Responses, null);
+                var results = record.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Responses: The Responses field is required.");
+                Assert.IsTrue(record.IsTransient());
+                Assert.IsFalse(record.IsValid());
+                throw;
+            }
+        }
+
+        #endregion Invalid Tests
+        #region Valid Tests
+        [TestMethod]
+        public void TestResponsesWithPopulatedListWillSave()
+        {
+            #region Arrange
+            Question record = GetValid(9);
+            const int addedCount = 3;
+            for (int i = 0; i < addedCount; i++)
+            {
+                record.AddResponse(CreateValidEntities.Response(i+1));
+            }
+            #endregion Arrange
+
+            #region Act
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(record.Responses);
+            Assert.AreEqual(addedCount, record.Responses.Count);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestResponsesWithPopulatedExistingListWillSave()
+        {
+            #region Arrange
+            Question record = GetValid(9);
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+
+            const int addedCount = 3;
+            var relatedRecords = new List<Response>();
+            for (int i = 0; i < addedCount; i++)
+            {
+                relatedRecords.Add(CreateValidEntities.Response(i + 1));
+                relatedRecords[i].Question = record;
+                Repository.OfType<Response>().EnsurePersistent(relatedRecords[i]);
+            }
+            #endregion Arrange
+
+            #region Act
+
+            foreach (var relatedRecord in relatedRecords)
+            {
+                record.Responses.Add(relatedRecord);
+            }
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(record.Responses);
+            Assert.AreEqual(addedCount, record.Responses.Count);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestResponsesWithEmptyListWillSave()
+        {
+            #region Arrange
+            Question record = GetValid(9);
+            #endregion Arrange
+
+            #region Act
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(record.Responses);
+            Assert.AreEqual(0, record.Responses.Count);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+        #endregion Valid Tests
+        #region Cascade Tests
+
+
+        [TestMethod]
+        public void TestQuestionCascadesSaveToResponse()
+        {
+            #region Arrange
+            var count = Repository.OfType<Response>().Queryable.Count();
+            Question record = GetValid(9);
+            const int addedCount = 3;
+            for (int i = 0; i < addedCount; i++)
+            {
+                record.AddResponse(CreateValidEntities.Response(i+1));
+            }
+
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            var saveId = record.Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Arrange
+
+            #region Act
+            record = QuestionRepository.GetNullableById(saveId);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(record);
+            Assert.AreEqual(addedCount, record.Responses.Count);
+            Assert.AreEqual(count + addedCount, Repository.OfType<Response>().Queryable.Count());
+            #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestQuestionCascadesUpdateToResponse1()
+        {
+            #region Arrange
+            var count = Repository.OfType<Response>().Queryable.Count();
+            Question record = GetValid(9);
+            const int addedCount = 3;
+            for (int i = 0; i < addedCount; i++)
+            {
+                record.AddResponse(CreateValidEntities.Response(i+1));
+            }
+
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            var saveId = record.Id;
+            var saveRelatedId = record.Responses[1].Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Arrange
+
+            #region Act
+            record = QuestionRepository.GetNullableById(saveId);
+            record.Responses[1].Value = "Updated";
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(count + addedCount, Repository.OfType<Response>().Queryable.Count());
+            var relatedRecord = Repository.OfType<Response>().GetNullableById(saveRelatedId);
+            Assert.IsNotNull(relatedRecord);
+            Assert.AreEqual("Updated", relatedRecord.Value);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestQuestionCascadesUpdateToResponse2()
+        {
+            #region Arrange
+            var count = Repository.OfType<Response>().Queryable.Count();
+            Question record = GetValid(9);
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+
+
+            const int addedCount = 3;
+            var relatedRecords = new List<Response>();
+            for (int i = 0; i < addedCount; i++)
+            {
+                relatedRecords.Add(CreateValidEntities.Response(i + 1));
+                relatedRecords[i].Question = record;
+                Repository.OfType<Response>().EnsurePersistent(relatedRecords[i]);
+            }
+            foreach (var relatedRecord in relatedRecords)
+            {
+                record.Responses.Add(relatedRecord);
+            }
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            var saveId = record.Id;
+            var saveRelatedId = record.Responses[1].Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            foreach (var relatedRecord in relatedRecords)
+            {
+                NHibernateSessionManager.Instance.GetSession().Evict(relatedRecord);
+            }
+            #endregion Arrange
+
+            #region Act
+            record = QuestionRepository.GetNullableById(saveId);
+            record.Responses[1].Value = "Updated";
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            foreach (var relatedRecord in relatedRecords)
+            {
+                NHibernateSessionManager.Instance.GetSession().Evict(relatedRecord);
+            }
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(count + addedCount, Repository.OfType<Response>().Queryable.Count());
+            var relatedRecord2 = Repository.OfType<Response>().GetNullableById(saveRelatedId);
+            Assert.IsNotNull(relatedRecord2);
+            Assert.AreEqual("Updated", relatedRecord2.Value);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Does Remove it 
+        /// </summary>
+        [TestMethod]
+        public void TestQuestionCascadesUpdateRemoveResponse()
+        {
+            #region Arrange
+            var count = Repository.OfType<Response>().Queryable.Count();
+            Question record = GetValid(9);
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+
+
+            const int addedCount = 3;
+            var relatedRecords = new List<Response>();
+            for (int i = 0; i < addedCount; i++)
+            {
+                relatedRecords.Add(CreateValidEntities.Response(i + 1));
+                relatedRecords[i].Question = record;
+                Repository.OfType<Response>().EnsurePersistent(relatedRecords[i]);
+            }
+            foreach (var relatedRecord in relatedRecords)
+            {
+                record.Responses.Add(relatedRecord);
+            }
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            var saveId = record.Id;
+            var saveRelatedId = record.Responses[1].Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Arrange
+
+            #region Act
+            record = QuestionRepository.GetNullableById(saveId);
+            record.Responses.RemoveAt(1);
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(count + (addedCount-1), Repository.OfType<Response>().Queryable.Count());
+            var relatedRecord2 = Repository.OfType<Response>().GetNullableById(saveRelatedId);
+            Assert.IsNull(relatedRecord2);
+            #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestQuestionCascadesDeleteToResponse()
+        {
+            #region Arrange
+            var count = Repository.OfType<Response>().Queryable.Count();
+            Question record = GetValid(9);
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+
+
+            const int addedCount = 3;
+            var relatedRecords = new List<Response>();
+            for (int i = 0; i < addedCount; i++)
+            {
+                relatedRecords.Add(CreateValidEntities.Response(i + 1));
+                relatedRecords[i].Question = record;
+                Repository.OfType<Response>().EnsurePersistent(relatedRecords[i]);
+            }
+            foreach (var relatedRecord in relatedRecords)
+            {
+                record.Responses.Add(relatedRecord);
+            }
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            var saveId = record.Id;
+            var saveRelatedId = record.Responses[1].Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Arrange
+
+            #region Act
+            record = QuestionRepository.GetNullableById(saveId);
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.Remove(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(count, Repository.OfType<Response>().Queryable.Count());
+            var relatedRecord2 = Repository.OfType<Response>().GetNullableById(saveRelatedId);
+            Assert.IsNull(relatedRecord2);
+            #endregion Assert
+        }
+		
+
+
+        #endregion Cascade Tests
+        #endregion Responses Tests
+
+        #region Constructor Tests
+
+        [TestMethod]
+        public void TestConstructorWithNoParametersSetsExpectedValues()
+        {
+            #region Arrange
+            var record = new Question();
+            #endregion Arrange
+
+            #region Assert
+            Assert.IsNotNull(record);
+            Assert.AreEqual(1, record.Order);
+            Assert.IsNotNull(record.Responses);
+            Assert.IsTrue(record.IsActive);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestConstructorWithParametersSetsExpectedValues()
+        {
+            #region Arrange
+            var survey = CreateValidEntities.Survey(9);
+            survey.Questions.Add(CreateValidEntities.Question(1));
+            survey.Questions.Add(CreateValidEntities.Question(2));
+
+            survey.Questions[0].Order = 5;
+            survey.Questions[1].Order = 3;
+            var record = new Question(survey);
+            #endregion Arrange
+
+            #region Assert
+            Assert.IsNotNull(record);
+            Assert.AreEqual(6, record.Order);
+            Assert.IsNotNull(record.Responses);
+            Assert.IsTrue(record.IsActive);
+            #endregion Assert
+        }
+        #endregion Constructor Tests
+
+
         #region Reflection of Database.
 
         /// <summary>
@@ -543,7 +1172,14 @@ namespace NuSurvey.Tests.RepositoryTests
         {
             #region Arrange
             var expectedFields = new List<NameAndType>();
-            expectedFields.Add(new NameAndType("CreateDate", "System.DateTime", new List<string>()));
+            expectedFields.Add(new NameAndType("Category", "NuSurvey.Core.Domain.Category", new List<string>
+            {
+                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("CreateDate", "System.DateTime", new List<string>
+            {
+                 "[System.ComponentModel.DisplayNameAttribute(\"Date Created\")]"
+            }));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
@@ -551,18 +1187,27 @@ namespace NuSurvey.Tests.RepositoryTests
             }));
             expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>
             {
-                 ""
+                 "[System.ComponentModel.DisplayNameAttribute(\"Active\")]"
             }));
             expectedFields.Add(new NameAndType("IsOpenEnded", "System.Boolean", new List<string>
             {
-                 ""
+                 "[System.ComponentModel.DisplayNameAttribute(\"Open Ended\")]"
             }));
             expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
             {
-                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)100)]", 
-                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
+                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]", 
+                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)100)]",
+                 "[System.ComponentModel.DisplayNameAttribute(\"Question\")]"
             }));
             expectedFields.Add(new NameAndType("Order", "System.Int32", new List<string>()));
+            expectedFields.Add(new NameAndType("Responses", "System.Collections.Generic.IList`1[NuSurvey.Core.Domain.Response]", new List<string>
+            {
+                "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
+            }));            
+            expectedFields.Add(new NameAndType("Survey", "NuSurvey.Core.Domain.Survey", new List<string>
+            {
+                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
+            }));
             #endregion Arrange
 
             AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(Question));

@@ -84,5 +84,16 @@ namespace NuSurvey.Tests.Core.Helpers
 
             return rtValue;
         }
+
+        public static Response Response(int? counter)
+        {
+            var rtValue = new Response();
+            rtValue.Value = "Value" + counter.Extra();
+            rtValue.Score = counter.HasValue ? counter.Value : 0;
+            rtValue.IsActive = true;
+            rtValue.Question = new Question();
+
+            return rtValue;
+        }
     }
 }
