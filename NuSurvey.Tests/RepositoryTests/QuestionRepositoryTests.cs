@@ -705,7 +705,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(question);
                 Assert.IsNotNull(ex);
-                Assert.AreEqual("", ex.Message);
+                Assert.AreEqual("object references an unsaved transient instance - save the transient instance before flushing. Type: NuSurvey.Core.Domain.Survey, Entity: NuSurvey.Core.Domain.Survey", ex.Message);
                 throw;
             }
         }
