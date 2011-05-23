@@ -1636,7 +1636,7 @@ namespace NuSurvey.Tests.RepositoryTests
             const int addedCount = 3;
             for (int i = 0; i < addedCount; i++)
             {
-                record.Questions.Add(CreateValidEntities.Question(i+1));
+                record.AddQuestions(CreateValidEntities.Question(i+1));
             }
 
             CategoryRepository.DbContext.BeginTransaction();
@@ -1681,6 +1681,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 relatedRecords.Add(CreateValidEntities.Question(i + 1));
                 relatedRecords[i].Category = record;
+                relatedRecords[i].Survey = record.Survey;
                 Repository.OfType<Question>().EnsurePersistent(relatedRecords[i]);
             }
             foreach (var relatedRecord in relatedRecords)
@@ -1720,55 +1721,6 @@ namespace NuSurvey.Tests.RepositoryTests
             #endregion Assert
         }
 
-        /// <summary>
-        /// Does Remove it (Delete this test, or the one below)
-        /// </summary>
-        [TestMethod]
-        public void TestCategoryCascadesUpdateRemoveQuestion()
-        {
-            #region Arrange
-            var count = Repository.OfType<Question>().Queryable.Count();
-            Category record = GetValid(9);
-            CategoryRepository.DbContext.BeginTransaction();
-            CategoryRepository.EnsurePersistent(record);
-            CategoryRepository.DbContext.CommitTransaction();
-
-
-            const int addedCount = 3;
-            var relatedRecords = new List<Question>();
-            for (int i = 0; i < addedCount; i++)
-            {
-                relatedRecords.Add(CreateValidEntities.Question(i + 1));
-                relatedRecords[i].Category = record;
-                Repository.OfType<Question>().EnsurePersistent(relatedRecords[i]);
-            }
-            foreach (var relatedRecord in relatedRecords)
-            {
-                record.Questions.Add(relatedRecord);
-            }
-            CategoryRepository.DbContext.BeginTransaction();
-            CategoryRepository.EnsurePersistent(record);
-            CategoryRepository.DbContext.CommitTransaction();
-            var saveId = record.Id;
-            var saveRelatedId = record.Questions[1].Id;
-            NHibernateSessionManager.Instance.GetSession().Evict(record);
-            #endregion Arrange
-
-            #region Act
-            record = CategoryRepository.GetNullableById(saveId);
-            record.Questions.RemoveAt(1);
-            CategoryRepository.DbContext.BeginTransaction();
-            CategoryRepository.EnsurePersistent(record);
-            CategoryRepository.DbContext.CommitTransaction();
-            NHibernateSessionManager.Instance.GetSession().Evict(record);
-            #endregion Act
-
-            #region Assert
-            Assert.AreEqual(count + (addedCount-1), Repository.OfType<Question>().Queryable.Count());
-            var relatedRecord2 = Repository.OfType<Question>().GetNullableById(saveRelatedId);
-            Assert.IsNull(relatedRecord2);
-            #endregion Assert
-        }
 
         /// <summary>
         /// Does NOT Remove it
@@ -1790,6 +1742,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 relatedRecords.Add(CreateValidEntities.Question(i + 1));
                 relatedRecords[i].Category = record;
+                relatedRecords[i].Survey = record.Survey;
                 Repository.OfType<Question>().EnsurePersistent(relatedRecords[i]);
             }
             foreach (var relatedRecord in relatedRecords)
@@ -1820,57 +1773,54 @@ namespace NuSurvey.Tests.RepositoryTests
             #endregion Assert
         }
 
-        [TestMethod]
-        public void TestCategoryCascadesDeleteToQuestion()
-        {
-            #region Arrange
-            var count = Repository.OfType<Question>().Queryable.Count();
-            Category record = GetValid(9);
-            CategoryRepository.DbContext.BeginTransaction();
-            CategoryRepository.EnsurePersistent(record);
-            CategoryRepository.DbContext.CommitTransaction();
-
-
-            const int addedCount = 3;
-            var relatedRecords = new List<Question>();
-            for (int i = 0; i < addedCount; i++)
-            {
-                relatedRecords.Add(CreateValidEntities.Question(i + 1));
-                relatedRecords[i].Category = record;
-                Repository.OfType<Question>().EnsurePersistent(relatedRecords[i]);
-            }
-            foreach (var relatedRecord in relatedRecords)
-            {
-                record.Questions.Add(relatedRecord);
-            }
-            CategoryRepository.DbContext.BeginTransaction();
-            CategoryRepository.EnsurePersistent(record);
-            CategoryRepository.DbContext.CommitTransaction();
-            var saveId = record.Id;
-            var saveRelatedId = record.Questions[1].Id;
-            NHibernateSessionManager.Instance.GetSession().Evict(record);
-            #endregion Arrange
-
-            #region Act
-            record = CategoryRepository.GetNullableById(saveId);
-            CategoryRepository.DbContext.BeginTransaction();
-            CategoryRepository.Remove(record);
-            CategoryRepository.DbContext.CommitTransaction();
-            NHibernateSessionManager.Instance.GetSession().Evict(record);
-            #endregion Act
-
-            #region Assert
-            Assert.AreEqual(count, Repository.OfType<Question>().Queryable.Count());
-            var relatedRecord2 = Repository.OfType<Question>().GetNullableById(saveRelatedId);
-            Assert.IsNull(relatedRecord2);
-            #endregion Assert
-        }
-		
-
-
         #endregion Cascade Tests
         #endregion Questions Tests
 
+        #region Constructor Tests
+
+        [TestMethod]
+        public void TestConstructorWithNoParametersSetsExpectedValues()
+        {
+            #region Arrange
+            var record = new Category();
+            #endregion Arrange
+
+            #region Assert
+            Assert.IsNotNull(record);
+            Assert.AreEqual(1, record.Rank);
+            Assert.IsNotNull(record.Questions);
+            Assert.IsNotNull(record.CategoryGoals);
+            Assert.IsTrue(record.IsCurrentVersion);
+            Assert.IsFalse(record.IsActive);
+            Assert.IsNull(record.Survey);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestConstructorWithParametersSetsExpectedValues()
+        {
+            #region Arrange
+            var survey = CreateValidEntities.Survey(9);
+            survey.Categories.Add(new Category());
+            survey.Categories.Add(new Category());
+
+            survey.Categories[0].Rank = 7;
+            survey.Categories[1].Rank = 2;
+
+            var record = new Category(survey);
+            #endregion Arrange
+
+            #region Assert
+            Assert.IsNotNull(record);
+            Assert.AreEqual(8, record.Rank);
+            Assert.IsNotNull(record.Questions);
+            Assert.IsNotNull(record.CategoryGoals);
+            Assert.IsTrue(record.IsCurrentVersion);
+            Assert.IsFalse(record.IsActive);
+            Assert.IsNotNull(record.Survey);
+            #endregion Assert
+        }
+        #endregion Constructor Tests
 
 
         #region Reflection of Database.
@@ -1886,45 +1836,51 @@ namespace NuSurvey.Tests.RepositoryTests
             var expectedFields = new List<NameAndType>();
             expectedFields.Add(new NameAndType("Affirmation", "System.String", new List<string>
             {
-                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)1000)]", 
-                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+                 "[System.ComponentModel.DataAnnotations.DataTypeAttribute((System.ComponentModel.DataAnnotations.DataType)9)]", 
+                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
             }));
             expectedFields.Add(new NameAndType("CategoryGoals", "System.Collections.Generic.IList`1[NuSurvey.Core.Domain.CategoryGoal]", new List<string>
             {
-                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+                "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
             }));
             expectedFields.Add(new NameAndType("CreateDate", "System.DateTime", new List<string>()));
-            expectedFields.Add(new NameAndType("DoNotUseForCalculations", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("DoNotUseForCalculations", "System.Boolean", new List<string>
+            {
+                 "[System.ComponentModel.DisplayNameAttribute(\"Do Not Use For Calculations\")]"
+            }));
             expectedFields.Add(new NameAndType("Encouragement", "System.String", new List<string>
             {
-                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)1000)]", 
-                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+                 "[System.ComponentModel.DataAnnotations.DataTypeAttribute((System.ComponentModel.DataAnnotations.DataType)9)]", 
+                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
             }));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
-            expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>
+            {
+                 "[System.ComponentModel.DisplayNameAttribute(\"Active\")]"
+            }));
             expectedFields.Add(new NameAndType("IsCurrentVersion", "System.Boolean", new List<string>()));
-            expectedFields.Add(new NameAndType("LastUpdate", "System.DateTime", new List<string>()));
+            expectedFields.Add(new NameAndType("LastUpdate", "System.DateTime", new List<string>
+            {
+                 "[System.ComponentModel.DisplayNameAttribute(\"Last Updated On\")]"
+            }));
             expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
-            {
-                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)100)]", 
-                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            {                  
+                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]",
+                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)100)]"
             }));
-            expectedFields.Add(new NameAndType("PreviousVesion", "System.String", new List<string>
-            {
-                 ""
-            }));
+            expectedFields.Add(new NameAndType("PreviousVersion", "NuSurvey.Core.Domain.Category", new List<string>()));
             expectedFields.Add(new NameAndType("Questions", "System.Collections.Generic.IList`1[NuSurvey.Core.Domain.Question]", new List<string>
             {
-                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+                "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
             }));
             expectedFields.Add(new NameAndType("Rank", "System.Int32", new List<string>()));
-            expectedFields.Add(new NameAndType("Survey", "System.String", new List<string>
+            expectedFields.Add(new NameAndType("Survey", "NuSurvey.Core.Domain.Survey", new List<string>
             {
-                 ""
+                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
             }));
             #endregion Arrange
 
