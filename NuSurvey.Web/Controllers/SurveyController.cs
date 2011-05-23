@@ -115,7 +115,7 @@ namespace NuSurvey.Web.Controllers
 
                 Message = "Survey Edited Successfully";
 
-                return RedirectToAction("Index");
+                return this.RedirectToAction(a => a.Edit(surveyToEdit.Id));
             }
             else
             {

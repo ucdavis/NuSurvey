@@ -234,7 +234,8 @@ namespace NuSurvey.Web.Controllers
                 }
                 
                 
-                return this.RedirectToAction<SurveyController>(a => a.Edit(categoryToEdit.Survey.Id));
+                //return this.RedirectToAction<SurveyController>(a => a.Edit(categoryToEdit.Survey.Id));
+                return this.RedirectToAction(a => a.Edit(categoryToEdit.Id));
             }
             else
             {

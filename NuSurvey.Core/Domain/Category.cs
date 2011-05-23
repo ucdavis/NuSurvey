@@ -99,6 +99,7 @@ namespace NuSurvey.Core.Domain
         public virtual void AddQuestions(Question question)
         {
             question.Category = this;
+            question.Survey = Survey;
             Questions.Add(question);
         }
 

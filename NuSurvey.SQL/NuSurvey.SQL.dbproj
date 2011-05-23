@@ -160,6 +160,9 @@
     <NotInBuild Include="CreateSomeData\Script1.sql">
       <SubType>NotInBuild</SubType>
     </NotInBuild>
+    <NotInBuild Include="Scripts\DeleteSurveyAndRelatedRecords.sql">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Constraints\DF_SurveyResponses_DateTaken.defconst.sql">
