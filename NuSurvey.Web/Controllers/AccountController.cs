@@ -29,15 +29,24 @@ namespace NuSurvey.Web.Controllers
             base.Initialize(requestContext);
         }
 
-        public AccountController(IEmailService emailService)
+        public AccountController(IEmailService emailService, IFormsAuthenticationService formsAuthenticationService, IMembershipService membershipService)
         {
             _emailService = emailService;
+            if (formsAuthenticationService != null)
+            {
+                FormsService = formsAuthenticationService;
+            }
+            if (membershipService != null)
+            {
+                MembershipService = membershipService;
+            }
         }
 
-        // **************************************
-        // URL: /Account/LogOn
-        // **************************************
-
+        /// <summary>
+        /// #1
+        /// URL: /Account/LogOn
+        /// </summary>
+        /// <returns></returns>
         public ActionResult LogOn()
         {
             return View();

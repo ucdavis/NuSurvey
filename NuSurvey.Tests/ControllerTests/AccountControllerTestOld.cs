@@ -16,7 +16,7 @@ namespace NuSurvey.Tests.ControllerTests
 {
 
     [TestClass]
-    public class AccountControllerTest
+    public class AccountControllerTestOld
     {
 
         [TestMethod]
@@ -28,7 +28,7 @@ namespace NuSurvey.Tests.ControllerTests
             // Act
             ActionResult result = controller.ChangePassword();
 
-            // Assert
+            // AssertC:\Users\Sylvestre\Documents\Visual Studio 2010\Projects\NuSurvey\NuSurvey.Tests\Core\
             Assert.IsInstanceOfType(result, typeof(ViewResult));
             Assert.AreEqual(10, ((ViewResult)result).ViewData["PasswordLength"]);
         }
@@ -344,7 +344,7 @@ namespace NuSurvey.Tests.ControllerTests
         {
             RequestContext requestContext = new RequestContext(new MockHttpContext(), new RouteData());
             IEmailService emailService = MockRepository.GenerateStub<IEmailService>();
-            AccountController controller = new AccountController(emailService)
+            AccountController controller = new AccountController(emailService, null, null)
             {
                 FormsService = new MockFormsAuthenticationService(),
                 MembershipService = new MockMembershipService(),
