@@ -53,12 +53,12 @@ Example: Dinosaur 1  *@
 			<div class="editor-label required">
 				@Html.LabelFor(model => model.Email)<span>*</span> 
 			</div>
-			<div class="editor-field">
+			<div class="editor-field wideText">
 				@Html.EditorFor(model => model.Email)
 				@Html.ValidationMessageFor(model => model.Email)
 			</div>
 		</li>
-		<li>
+@*		<li>
 			<div class="editor-label required">
 				@Html.LabelFor(model => model.Password)<span>*</span> 
 			</div>
@@ -75,7 +75,7 @@ Example: Dinosaur 1  *@
 				@Html.EditorFor(model => model.ConfirmPassword)
 				@Html.ValidationMessageFor(model => model.ConfirmPassword)
 			</div>
-		</li>
+		</li>*@
         <li>
             <div class="editor-label">
                 @Html.Label("Roles")

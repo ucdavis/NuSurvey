@@ -71,16 +71,16 @@ namespace NuSurvey.Web.Models
         [Display(Name = "Email address")]
         public string Email { get; set; }
 
-        [Required]
-        [ValidatePasswordLength]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
+        //[Required]
+        //[ValidatePasswordLength]
+        //[DataType(DataType.Password)]
+        //[Display(Name = "Password")]
+        //public string Password { get; set; }
 
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
+        //[DataType(DataType.Password)]
+        //[Display(Name = "Confirm password")]
+        //[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        //public string ConfirmPassword { get; set; }
 
     }
 
@@ -125,6 +125,7 @@ namespace NuSurvey.Web.Models
         bool ManageRoles(string userName, string[] roles);
         bool DeleteUser(string userName);
         MembershipUser GetUser(string userName);
+        string ResetPassword(string userName);
     }
 
     public class AccountMembershipService : IMembershipService
@@ -147,6 +148,11 @@ namespace NuSurvey.Web.Models
             {
                 return _provider.MinRequiredPasswordLength;
             }
+        }
+
+        public string ResetPassword(string userName)
+        {
+            return _provider.ResetPassword(userName, null);
         }
 
         public MembershipUser GetUser(string userName)

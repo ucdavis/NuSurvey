@@ -17,7 +17,6 @@ using UCDArch.Core.CommonValidator;
 //using UCDArch.Core.NHibernateValidator.CommonValidatorAdapter;
 using UCDArch.Web.IoC;
 using UCDArch.Core.PersistanceSupport;
-using UCDArch.Data.NHibernate;
 using Castle.MicroKernel.Registration;
 
 namespace NuSurvey.Tests.Core

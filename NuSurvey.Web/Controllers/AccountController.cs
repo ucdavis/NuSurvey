@@ -10,11 +10,13 @@ using System.Web.Security;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Models;
 using MvcContrib;
+using NuSurvey.Web.Services;
 
 namespace NuSurvey.Web.Controllers
 {
     public class AccountController : ApplicationController
     {
+        private readonly IEmailService _emailService;
 
         public IFormsAuthenticationService FormsService { get; set; }
         public IMembershipService MembershipService { get; set; }
@@ -25,6 +27,11 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService == null) { MembershipService = new AccountMembershipService(); }
 
             base.Initialize(requestContext);
+        }
+
+        public AccountController(IEmailService emailService)
+        {
+            _emailService = emailService;
         }
 
         // **************************************
@@ -97,7 +104,7 @@ namespace NuSurvey.Web.Controllers
             if (ModelState.IsValid)
             {
                 // Attempt to register the user
-                MembershipCreateStatus createStatus = MembershipService.CreateUser(model.Email, model.Password, model.Email);
+                MembershipCreateStatus createStatus = MembershipService.CreateUser(model.Email, "BTDF4hd7ehd6@!", model.Email);
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
@@ -111,7 +118,12 @@ namespace NuSurvey.Web.Controllers
                         Message = "User created, but problem with roles";
                     }
 
-                    return RedirectToAction("Index", "Home");
+                    var tempPass = MembershipService.ResetPassword(model.Email.ToLower());
+                    _emailService.SendNewUser(Request, Url, model.Email.ToLower(), tempPass);
+
+                    Message = string.Format("{0} {1}", Message, "And user emailed");
+
+                    return this.RedirectToAction(a => a.ManageUsers());
                 }
                 else
                 {
@@ -257,6 +269,36 @@ namespace NuSurvey.Web.Controllers
         {
             var viewModel = new ForgotPasswordModel();
 
+            return View(viewModel);
+        }
+
+        [CaptchaValidator]
+        [HttpPost]
+        public ActionResult ForgotPassword(string userName, bool captchaValid)
+        {
+            if (!captchaValid)
+            {
+                ModelState.AddModelError("Captcha", "Recaptcha value not valid");
+            }
+            userName = userName.Trim().ToLower();
+
+            if (Membership.GetUser(userName) == null)
+            {
+                ModelState.AddModelError("UserName", "Email not found");
+            }
+
+            if (ModelState.IsValid)
+            {
+                var tempPass = MembershipService.ResetPassword(userName);
+                _emailService.SendPasswordReset(userName, tempPass);
+
+                Message = "A new password has been sent to your email. It should arrive in a few minutes. If you do not receive it, please check your email filters.";
+                return this.RedirectToAction(a => a.LogOn());
+            }
+
+            Message = "Unable to reset password";
+            var viewModel = new ForgotPasswordModel();
+            viewModel.UserName = userName;
             return View(viewModel);
         }
 
