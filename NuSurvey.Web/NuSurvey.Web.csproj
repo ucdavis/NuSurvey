@@ -183,7 +183,7 @@
     <Content Include="Scripts\jquery.placeholder.js" />
     <Content Include="Scripts\jquery.placeholder.min.js" />
     <Content Include="Scripts\jquery.tablednd_0_5.js" />
-    <Content Include="UCDArch.txt" />
+    <None Include="UCDArch.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

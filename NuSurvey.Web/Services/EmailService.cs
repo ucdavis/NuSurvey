@@ -31,7 +31,7 @@ namespace NuSurvey.Web.Services
             mail.Body = string.Format("{0}<br />{1} {2}<br />{3} {4}<br />{5} {6}<br />{7}<br />{8}",
                                       "An account has been created for you for the Nutrition Survey.",
                                       "You can access it by logging in here: ",
-                                      GetAbsoluteUrl(request, url, "/Account/LogOn"),
+                                      GetAbsoluteUrl(request, url, "~/Account/LogOn"),
                                       "With your email address: ",
                                       userName,
                                       "And this password: ",
