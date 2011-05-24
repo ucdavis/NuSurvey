@@ -273,6 +273,7 @@
     <Content Include="Views\Survey\_QuestionsList.cshtml" />
     <Content Include="Views\Category\_CategoryQuestions.cshtml" />
     <Content Include="Views\Category\_Goals.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">

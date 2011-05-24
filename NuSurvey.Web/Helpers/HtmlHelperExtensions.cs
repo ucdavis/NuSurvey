@@ -11,9 +11,8 @@ namespace NuSurvey.Web.Helpers
 {
     public static class HtmlHelperExtensions
     {
-        public static string GenerateCaptcha(this HtmlHelper helper)
+        public static MvcHtmlString GenerateCaptcha(this HtmlHelper helper)
         {
-
             var captchaControl = new Recaptcha.RecaptchaControl
             {
                 ID = "recaptcha",
@@ -26,7 +25,7 @@ namespace NuSurvey.Web.Helpers
 
             captchaControl.RenderControl(htmlWriter);
 
-            return htmlWriter.InnerWriter.ToString();
+            return new MvcHtmlString(htmlWriter.InnerWriter.ToString());
         }
     }
 }
