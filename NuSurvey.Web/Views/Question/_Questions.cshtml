@@ -44,8 +44,9 @@
 			<div class="editor-label">
 				@Html.LabelFor(model => model.Question.IsOpenEnded) 
 			</div>
-			<div class="editor-field">
-				@Html.EditorFor(model => model.Question.IsOpenEnded)
+			<div class="editor-field">            
+                @Html.CheckBoxFor(x => x.Question.IsOpenEnded, new { @title = "When you use an open ended question you should have Response <strong>Choice</strong> with:<br />1) The lowest possible value with a -<br />2) The highest possible value with a +<br />3) All the values in between<br />Example:<br />Choice -2 Score 1<br />Choice 3 Score 2<br />Choice +4 Score 3" })
+				@*@Html.EditorFor(model => model.Question.IsOpenEnded)*@
 				@Html.ValidationMessageFor(model => model.Question.IsOpenEnded)
 			</div>
 		</li>

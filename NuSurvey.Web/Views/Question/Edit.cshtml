@@ -29,6 +29,7 @@
 
 @section AdditionalScripts{
     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.tablednd_0_5.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -37,6 +38,7 @@
 
             UpdateDragAndDropTable();
 
+            $("#Question_IsOpenEnded").bt();
         });
 
         function AddResponseInput(obj) {
@@ -83,7 +85,6 @@ Example: Dinosaur 1  *@
 	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
 	<p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
     <p>Click the plus button to add more Response Choices. Drag and Drop choices to change the order.</p>
-
     @Html.Partial("_Questions")
 
 </fieldset>

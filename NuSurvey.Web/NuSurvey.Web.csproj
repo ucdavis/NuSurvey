@@ -169,6 +169,7 @@
     <Content Include="robots.txt" />
     <Content Include="Scripts\jquery-1.6.js" />
     <Content Include="Scripts\jquery-1.6.min.js" />
+    <Content Include="Scripts\jquery.bt.min.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.jqEasyCharCounter.js" />
@@ -340,7 +341,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>37849</DevelopmentServerPort>
+          <DevelopmentServerPort>12322</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

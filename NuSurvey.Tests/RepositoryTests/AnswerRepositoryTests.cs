@@ -116,8 +116,154 @@ namespace NuSurvey.Tests.RepositoryTests
 
         #endregion Init and Overrides	
         
-        //TODO: Add Tests Tests
-        
+        #region Score Tests    
+
+        /// <summary>
+        /// Tests the Score with max int value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestScoreWithMaxIntValueSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.Score = int.MaxValue;
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(record);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(int.MaxValue, record.Score);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the Score with min int value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestScoreWithMinIntValueSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.Score = int.MinValue;
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(record);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(int.MinValue, record.Score);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestScoreWithZeroValueSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.Score = 0;
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(record);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, record.Score);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Score Tests
+
+        #region OpenEndedAnswer Tests
+
+        /// <summary>
+        /// Tests the OpenEndedAnswer with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOpenEndedAnswerWithNullValueSaves()
+        {
+            #region Arrange
+            Answer record = GetValid(9);
+            record.OpenEndedAnswer = null;
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(record);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(record.OpenEndedAnswer);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the OpenEndedAnswer with max int value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOpenEndedAnswerWithMaxIntValueSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.OpenEndedAnswer = int.MaxValue;
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(record);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(int.MaxValue, record.OpenEndedAnswer);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the OpenEndedAnswer with min int value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOpenEndedAnswerWithMinIntValueSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.OpenEndedAnswer = int.MinValue;
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(record);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(int.MinValue, record.OpenEndedAnswer);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        #endregion OpenEndedAnswer Tests
         
         
         
@@ -138,7 +284,8 @@ namespace NuSurvey.Tests.RepositoryTests
                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
-
+            expectedFields.Add(new NameAndType("OpenEndedAnswer", "System.Int32", new List<string>()));
+            expectedFields.Add(new NameAndType("Score", "System.Int32", new List<string>()));
             #endregion Arrange
 
             AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(Answer));

@@ -26,6 +26,7 @@
 
 @section AdditionalScripts{
     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.tablednd_0_5.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -34,6 +35,7 @@
 
             UpdateDragAndDropTable();
 
+            $("#Question_IsOpenEnded").bt();
         });
 
         function AddResponseInput(obj) {
