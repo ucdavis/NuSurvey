@@ -650,7 +650,7 @@ namespace NuSurvey.Tests.RepositoryTests
         #endregion Cascade Tests
         #endregion Category Tests Tests
 
-        #region Survey Tests Tests
+        #region Survey Tests
         #region Invalid Tests
         [TestMethod]
         [ExpectedException(typeof(ApplicationException))]
@@ -769,7 +769,7 @@ namespace NuSurvey.Tests.RepositoryTests
             #endregion Assert
         }
         #endregion Cascade Tests
-        #endregion Survey Tests Tests
+        #endregion Survey Tests 
 
         #region Responses Tests
         #region Invalid Tests
