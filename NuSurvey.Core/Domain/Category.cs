@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using FluentNHibernate.Mapping;
-using UCDArch.Core.DomainModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Linq.Expressions;
+using FluentNHibernate.Mapping;
+using UCDArch.Core.DomainModel;
 
 namespace NuSurvey.Core.Domain
 {

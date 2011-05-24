@@ -30,3 +30,7 @@ _ReSharper*/
 !Bin/
 NuSurvey.SQL/NuSurvey.SQL.dbmdl
 *.docstates
+AppDebugSettings.config
+AppTestSettings.config
+AppReleaseSettings.config
+AppSettings.config

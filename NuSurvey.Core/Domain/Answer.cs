@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace NuSurvey.Core.Domain
 {

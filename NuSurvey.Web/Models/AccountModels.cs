@@ -17,6 +17,14 @@ namespace NuSurvey.Web.Models
 
     #region Models
 
+    public class ForgotPasswordModel
+    {
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [DisplayName("Email")]
+        public string UserName { get; set; }
+    }
+
     public class ChangePasswordModel
     {
         [Required]

@@ -253,6 +253,13 @@ namespace NuSurvey.Web.Controllers
             return this.RedirectToAction<AccountController>(a => a.ManageUsers());
         }
 
+        public ActionResult ForgotPassword()
+        {
+            var viewModel = new ForgotPasswordModel();
+
+            return View(viewModel);
+        }
+
 
         // **************************************
         // URL: /Account/ChangePassword
