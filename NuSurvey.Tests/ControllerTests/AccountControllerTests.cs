@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.Security;
 using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Controllers.Filters;
@@ -27,6 +30,8 @@ namespace NuSurvey.Tests.ControllerTests
         private readonly Type _controllerClass = typeof(AccountController);
 
         public IEmailService EmailService;
+        public IFormsAuthenticationService FormService;
+        public IMembershipService MembershipService;
         //public IRepository<Example> ExampleRepository;
 
         #region Init
@@ -36,7 +41,10 @@ namespace NuSurvey.Tests.ControllerTests
         protected override void SetupController()
         {
             EmailService = MockRepository.GenerateStub<IEmailService>();
-            Controller = new TestControllerBuilder().CreateController<AccountController>(EmailService);
+            FormService = new MockFormsAuthenticationService();
+            MembershipService = new MockMembershipService();
+
+            Controller = new TestControllerBuilder().CreateController<AccountController>(EmailService, FormService, MembershipService);
         }
 
         protected override void RegisterRoutes()
@@ -374,5 +382,118 @@ namespace NuSurvey.Tests.ControllerTests
         #endregion Controller Method Tests
 
         #endregion Reflection Tests
+
+        private class MockFormsAuthenticationService : IFormsAuthenticationService
+        {
+            public bool SignIn_WasCalled;
+            public bool SignOut_WasCalled;
+
+            public void SignIn(string userName, bool createPersistentCookie)
+            {
+                // verify that the arguments are what we expected
+                Assert.AreEqual("someUser", userName);
+                Assert.IsFalse(createPersistentCookie);
+
+                SignIn_WasCalled = true;
+            }
+
+            public void SignOut()
+            {
+                SignOut_WasCalled = true;
+            }
+        }
+
+        private class MockHttpContext : HttpContextBase
+        {
+            private readonly IPrincipal _user = new GenericPrincipal(new GenericIdentity("someUser"), null /* roles */);
+            private readonly HttpRequestBase _request = new MockHttpRequest();
+
+            public override IPrincipal User
+            {
+                get
+                {
+                    return _user;
+                }
+                set
+                {
+                    base.User = value;
+                }
+            }
+
+            public override HttpRequestBase Request
+            {
+                get
+                {
+                    return _request;
+                }
+            }
+        }
+
+        private class MockHttpRequest : HttpRequestBase
+        {
+            private readonly Uri _url = new Uri("http://mysite.example.com/");
+
+            public override Uri Url
+            {
+                get
+                {
+                    return _url;
+                }
+            }
+        }
+
+        private class MockMembershipService : IMembershipService
+        {
+            public int MinPasswordLength
+            {
+                get { return 10; }
+            }
+
+            public bool ValidateUser(string userName, string password)
+            {
+                return (userName == "someUser".ToLower() && password == "goodPassword");
+                //return (userName == "goodpassword" && password == "goodPassword");
+            }
+
+            public bool ManageRoles(string userName, string[] roles)
+            {
+                return true;
+            }
+
+            public MembershipUser GetUser(string userName)
+            {
+                return null;
+            }
+
+            public bool DeleteUser(string userName)
+            {
+                return true;
+            }
+
+
+            public MembershipCreateStatus CreateUser(string userName, string password, string email)
+            {
+                if (userName == "duplicateUser")
+                {
+                    return MembershipCreateStatus.DuplicateUserName;
+                }
+
+                // verify that values are what we expected
+                Assert.AreEqual("goodPassword", password);
+                Assert.AreEqual("goodEmail", email);
+
+                return MembershipCreateStatus.Success;
+            }
+
+            public bool ChangePassword(string userName, string oldPassword, string newPassword)
+            {
+                return (userName == "someUser" && oldPassword == "goodOldPassword" && newPassword == "goodNewPassword");
+            }
+
+            public string ResetPassword(string userName)
+            {
+                return "FakePassword";
+            }
+        }
     }
 }
