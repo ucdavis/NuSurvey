@@ -96,7 +96,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContinuousDeploymentIntegrationHack.cs" />
-    <Compile Include="ControllerTests\AccountControllerTests.cs" />
+    <Compile Include="ControllerTests\AccountControllerTests\AccountControllerTestsInit.cs" />
+    <Compile Include="ControllerTests\AccountControllerTests\AccountControllerTestsMapping.cs" />
+    <Compile Include="ControllerTests\AccountControllerTests\AccountControllerTestsPart01.cs" />
+    <Compile Include="ControllerTests\AccountControllerTests\AccountControllerTestsPart02.cs" />
+    <Compile Include="ControllerTests\AccountControllerTests\AccountControllerTestsPart03.cs" />
+    <Compile Include="ControllerTests\AccountControllerTests\AccountControllerTestsReflection.cs" />
     <Compile Include="ControllerTests\ApplicationControllerTests.cs" />
     <Compile Include="ControllerTests\ErrorControllerTests.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
