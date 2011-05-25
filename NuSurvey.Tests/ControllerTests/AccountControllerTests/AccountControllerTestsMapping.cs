@@ -80,6 +80,15 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         {
             "~/Account/Edit/".ShouldMapTo<AccountController>(a => a.Edit(new EditUserViewModel()), true);
         }
+
+        /// <summary>
+        /// #9
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteGetMapping()
+        {
+            "~/Account/Delete/test".ShouldMapTo<AccountController>(a => a.Delete("test"));
+        }
         #endregion Mapping Tests
     }
 }

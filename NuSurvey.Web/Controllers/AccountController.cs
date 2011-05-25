@@ -260,6 +260,11 @@ namespace NuSurvey.Web.Controllers
             return this.RedirectToAction<AccountController>(a => a.ManageUsers());
         }
 
+        /// <summary>
+        /// #9
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Admin]
         public ActionResult Delete(string id)
         {
@@ -268,7 +273,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Can't delete yourself";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
             }
-            if (Membership.GetUser(id) == null)
+            if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
                 return this.RedirectToAction<AccountController>(a => a.ManageUsers());
@@ -289,7 +294,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Can't delete yourself";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
             }
-            if (Membership.GetUser(id) == null)
+            if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
                 return this.RedirectToAction<AccountController>(a => a.ManageUsers());
