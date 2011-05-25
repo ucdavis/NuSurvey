@@ -1,5 +1,5 @@
 ﻿@model NuSurvey.Web.Models.RegisterModel
-
+@using NuSurvey.Core.Resources
 @{
 	ViewBag.Title = "Register";
 }
@@ -16,6 +16,32 @@
             Create
         </li>
     </ul>
+}
+
+@section AdditionalScripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Email").blur(function(event){
+                if($(this).hasClass("warning")){
+                    $(this).removeClass("warning");
+                    $(".field-warning").hide();
+                }
+                if($(this).hasClass("input-validation-error")){
+                    //Do nothing
+                }
+                else{
+                    var emailVal = $(this).val().toLowerCase();                                    
+                    if(emailVal != null && emailVal != "" && emailVal.match(@StaticValues.EmailWarningRegEx) == null){
+                        $(this).addClass("warning");
+                        $(this).next().text("This may be invalid");   
+                        $(".field-warning").show();                     
+                    }
+                }
+                 
+            });            
+        });
+    </script>    
 }
 
 <h2>Create a New Account</h2>
@@ -38,6 +64,7 @@
 			</div>
 			<div class="editor-field wideText">
 				@Html.EditorFor(model => model.Email)
+                <span class="field-warning"></span>
 				@Html.ValidationMessageFor(model => model.Email)
 			</div>
 		</li>

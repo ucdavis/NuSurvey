@@ -182,3 +182,13 @@ div.dataTables_wrapper table{margin: 0;clear:both;}
   background-color: yellow !important;
   */
 }
+
+.field-warning
+{
+	display: none;
+	border: 1px solid #ff0000;
+	background-color:Orange;
+	padding:2px 10px; 
+	margin:-2px 0 0 5px; 
+	vertical-align:top;
+}
