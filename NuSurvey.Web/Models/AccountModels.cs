@@ -279,7 +279,7 @@ namespace NuSurvey.Web.Models
             switch (createStatus)
             {
                 case MembershipCreateStatus.DuplicateUserName:
-                    return "Username already exists. Please enter a different user name.";
+                    return "User already exists. Please enter a different user.";
 
                 case MembershipCreateStatus.DuplicateEmail:
                     return "A username for that e-mail address already exists. Please enter a different e-mail address.";
