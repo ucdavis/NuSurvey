@@ -22,6 +22,7 @@ using UCDArch.Web.Attributes;
 using NuSurvey.Tests.Core.Extensions;
 
 
+
 namespace NuSurvey.Tests.ControllerTests
 {
     [TestClass]
@@ -41,8 +42,8 @@ namespace NuSurvey.Tests.ControllerTests
         protected override void SetupController()
         {
             EmailService = MockRepository.GenerateStub<IEmailService>();
-            FormService = new MockFormsAuthenticationService();
-            MembershipService = new MockMembershipService();
+            FormService = MockRepository.GenerateStub<IFormsAuthenticationService>();
+            MembershipService = MockRepository.GenerateStub<IMembershipService>();
 
             Controller = new TestControllerBuilder().CreateController<AccountController>(EmailService, FormService, MembershipService);
         }
@@ -55,12 +56,18 @@ namespace NuSurvey.Tests.ControllerTests
         #endregion Init
 
         #region Mapping Tests
+        /// <summary>
+        /// #1
+        /// </summary>
         [TestMethod]
         public void TestLogonGetMapping()
         {
             "~/Account/Logon/".ShouldMapTo<AccountController>(a => a.LogOn());
         }
 
+        /// <summary>
+        /// #2
+        /// </summary>
         [TestMethod]
         public void TestLogonPostMapping()
         {
@@ -121,11 +128,11 @@ namespace NuSurvey.Tests.ControllerTests
             var model = new LogOnModel();
             model.UserName = "UserName@test.com";
             model.Password = "Password";
-            
+            MembershipService.Expect(a => a.ValidateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
+                .Return(false).Repeat.Any();
             #endregion Arrange
 
             #region Act
-
             var result = Controller.LogOn(model, "")
                 .AssertViewRendered()
                 .WithViewData<LogOnModel>();
@@ -135,8 +142,63 @@ namespace NuSurvey.Tests.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual("UserName@test.com", result.UserName);
             Assert.AreEqual("Password", result.Password);
+            Assert.IsFalse(Controller.ModelState.IsValid);
+            Controller.ModelState.AssertErrorsAre("The email or password provided is incorrect.");
+            MembershipService.AssertWasCalled(a => a.ValidateUser("UserName@test.com".ToLower(), "Password"));
             #endregion Assert
         }
+
+        [TestMethod]
+        public void TestLogOnPostRedirectsWhenSuccessful1()
+        {
+            #region Arrange
+            var model = new LogOnModel();
+            model.UserName = "UserName@test.com";
+            model.Password = "Password";
+            MembershipService.Expect(a => a.ValidateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
+                .Return(true).Repeat.Any();
+            FormService.Expect(a => a.SignIn("UserName@test.com", false));
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.LogOn(model, "")
+                .AssertActionRedirect()
+                .ToAction<HomeController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            MembershipService.AssertWasCalled(a => a.ValidateUser("UserName@test.com".ToLower(), "Password"));
+            FormService.AssertWasCalled(a => a.SignIn("UserName@test.com", false));
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestLogOnPostRedirectsWhenSuccessful2()
+        {
+            #region Arrange
+            var model = new LogOnModel();
+            model.UserName = "UserName@test.com";
+            model.Password = "Password";
+            MembershipService.Expect(a => a.ValidateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
+                .Return(true).Repeat.Any();
+            FormService.Expect(a => a.SignIn("UserName@test.com", false));
+            
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.LogOn(model, "~/Survey")
+                .AssertResultIs<RedirectResult>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("~/Survey", result.Url);
+            MembershipService.AssertWasCalled(a => a.ValidateUser("UserName@test.com".ToLower(), "Password"));
+            FormService.AssertWasCalled(a => a.SignIn("UserName@test.com", false));
+            #endregion Assert
+        }
+
         #endregion LogOn Post Tests
         #endregion LogOn Tests
 
@@ -230,7 +292,7 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Arrange
 
             #region Act
-            var result = controllerClass.GetCustomAttributes(true).OfType<VersionAttribute>();
+            var result = controllerClass.GetCustomAttributes(true).OfType<LocVersionAttribute>();
             #endregion Act
 
             #region Assert
@@ -255,7 +317,7 @@ namespace NuSurvey.Tests.ControllerTests
 
             #region Assert
             Assert.Inconclusive("Tests are still being written. When done, remove this line.");
-            Assert.AreEqual(1, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(2, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -276,6 +338,28 @@ namespace NuSurvey.Tests.ControllerTests
 
             #region Assert
             Assert.AreEqual(0, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #2
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodLogOnPostContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "LogOn");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
             #endregion Assert
         }
 
@@ -383,117 +467,5 @@ namespace NuSurvey.Tests.ControllerTests
 
         #endregion Reflection Tests
 
-        private class MockFormsAuthenticationService : IFormsAuthenticationService
-        {
-            public bool SignIn_WasCalled;
-            public bool SignOut_WasCalled;
-
-            public void SignIn(string userName, bool createPersistentCookie)
-            {
-                // verify that the arguments are what we expected
-                Assert.AreEqual("someUser", userName);
-                Assert.IsFalse(createPersistentCookie);
-
-                SignIn_WasCalled = true;
-            }
-
-            public void SignOut()
-            {
-                SignOut_WasCalled = true;
-            }
-        }
-
-        private class MockHttpContext : HttpContextBase
-        {
-            private readonly IPrincipal _user = new GenericPrincipal(new GenericIdentity("someUser"), null /* roles */);
-            private readonly HttpRequestBase _request = new MockHttpRequest();
-
-            public override IPrincipal User
-            {
-                get
-                {
-                    return _user;
-                }
-                set
-                {
-                    base.User = value;
-                }
-            }
-
-            public override HttpRequestBase Request
-            {
-                get
-                {
-                    return _request;
-                }
-            }
-        }
-
-        private class MockHttpRequest : HttpRequestBase
-        {
-            private readonly Uri _url = new Uri("http://mysite.example.com/");
-
-            public override Uri Url
-            {
-                get
-                {
-                    return _url;
-                }
-            }
-        }
-
-        private class MockMembershipService : IMembershipService
-        {
-            public int MinPasswordLength
-            {
-                get { return 10; }
-            }
-
-            public bool ValidateUser(string userName, string password)
-            {
-                return (userName == "someUser".ToLower() && password == "goodPassword");
-                //return (userName == "goodpassword" && password == "goodPassword");
-            }
-
-            public bool ManageRoles(string userName, string[] roles)
-            {
-                return true;
-            }
-
-            public MembershipUser GetUser(string userName)
-            {
-                return null;
-            }
-
-            public bool DeleteUser(string userName)
-            {
-                return true;
-            }
-
-
-            public MembershipCreateStatus CreateUser(string userName, string password, string email)
-            {
-                if (userName == "duplicateUser")
-                {
-                    return MembershipCreateStatus.DuplicateUserName;
-                }
-
-                // verify that values are what we expected
-                Assert.AreEqual("goodPassword", password);
-                Assert.AreEqual("goodEmail", email);
-
-                return MembershipCreateStatus.Success;
-            }
-
-            public bool ChangePassword(string userName, string oldPassword, string newPassword)
-            {
-                return (userName == "someUser" && oldPassword == "goodOldPassword" && newPassword == "goodNewPassword");
-            }
-
-            public string ResetPassword(string userName)
-            {
-                return "FakePassword";
-            }
-        }
     }
 }

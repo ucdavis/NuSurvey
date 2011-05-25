@@ -100,6 +100,7 @@
     <Compile Include="ControllerTests\ApplicationControllerTests.cs" />
     <Compile Include="ControllerTests\ErrorControllerTests.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
+    <Compile Include="Core\Extensions\AssertExtensions.cs" />
     <Compile Include="Core\Extensions\RouteTestingExtensions.cs" />
     <Compile Include="Core\Extensions\StringExtension.cs" />
     <Compile Include="Core\Helpers\AttributeAndFieldValidation.cs" />

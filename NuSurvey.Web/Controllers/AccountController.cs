@@ -52,6 +52,12 @@ namespace NuSurvey.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// #2
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
