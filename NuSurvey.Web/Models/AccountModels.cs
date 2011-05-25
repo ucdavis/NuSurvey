@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Linq.Expressions;
+using DataAnnotationsExtensions;
 using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.Utils;
 
@@ -20,6 +21,7 @@ namespace NuSurvey.Web.Models
     public class ForgotPasswordModel
     {
         [Required]
+        [Email]
         [DataType(DataType.EmailAddress)]
         [DisplayName("Email")]
         public string UserName { get; set; }
@@ -67,8 +69,9 @@ namespace NuSurvey.Web.Models
         //public string UserName { get; set; }
 
         [Required]
+        [Email]
         [DataType(DataType.EmailAddress)]
-        [Display(Name = "Email address")]
+        [Display(Name = "Email address")]        
         public string Email { get; set; }
 
         //[Required]

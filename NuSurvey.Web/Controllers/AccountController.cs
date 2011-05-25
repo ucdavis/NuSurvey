@@ -97,9 +97,11 @@ namespace NuSurvey.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // **************************************
-        // URL: /Account/Register
-        // **************************************
+        /// <summary>
+        /// #4
+        /// URL: /Account/Register
+        /// </summary>
+        /// <returns></returns>
         [Admin]
         public ActionResult Register()
         {
@@ -107,7 +109,9 @@ namespace NuSurvey.Web.Controllers
             ViewBag.UserRole = RoleNames.User;
             ViewBag.AdminRole = RoleNames.Admin;
 
-            return View();
+            var viewModel = new RegisterModel();
+
+            return View(viewModel);
         }
 
         [Admin]
@@ -116,6 +120,7 @@ namespace NuSurvey.Web.Controllers
         {
             ViewBag.UserRole = RoleNames.User;
             ViewBag.AdminRole = RoleNames.Admin;
+
 
             if (ModelState.IsValid)
             {
