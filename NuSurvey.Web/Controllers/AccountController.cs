@@ -218,6 +218,11 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// #8
+        /// </summary>
+        /// <param name="editUserViewModel"></param>
+        /// <returns></returns>
         [Admin]
         [HttpPost]
         public ActionResult Edit(EditUserViewModel editUserViewModel)
@@ -227,7 +232,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Can't change yourself";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
             }
-            if (Membership.GetUser(editUserViewModel.Email) == null)
+            if (MembershipService.GetUser(editUserViewModel.Email) == null)
             {
                 Message = "User Not Found";
                 return this.RedirectToAction<AccountController>(a => a.ManageUsers());
