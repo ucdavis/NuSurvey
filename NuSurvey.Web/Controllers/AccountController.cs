@@ -165,26 +165,32 @@ namespace NuSurvey.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// #6
+        /// </summary>
+        /// <returns></returns>
         [Admin]
         public ActionResult ManageUsers()
         {
-            var users = Membership.GetAllUsers();
+            //var users = Membership.GetAllUsers();
 
-            var emails = (from MembershipUser user in users
-                    where user.UserName.ToLower() != CurrentUser.Identity.Name.ToLower()
-                    select user.UserName.ToLower()).ToList();
+            //var emails = (from MembershipUser user in users
+            //        where user.UserName.ToLower() != CurrentUser.Identity.Name.ToLower()
+            //        select user.UserName.ToLower()).ToList();
 
-            var usersRoles = new List<UsersRoles>();
-            foreach (var email in emails)
-            {
-                var userRole = new UsersRoles();
-                userRole.UserName = email;
-                userRole.User = Roles.IsUserInRole(email, RoleNames.User);
-                userRole.Admin = Roles.IsUserInRole(email, RoleNames.Admin);
-                usersRoles.Add(userRole);
-            }
+            //var usersRoles = new List<UsersRoles>();
+            //foreach (var email in emails)
+            //{
+            //    var userRole = new UsersRoles();
+            //    userRole.UserName = email;
+            //    userRole.User = Roles.IsUserInRole(email, RoleNames.User);
+            //    userRole.Admin = Roles.IsUserInRole(email, RoleNames.Admin);
+            //    usersRoles.Add(userRole);
+            //}
 
-            return View(usersRoles.AsQueryable());
+            //return View(usersRoles.AsQueryable());
+
+            return View(MembershipService.GetUsersAndRoles(CurrentUser.Identity.Name));
         }
 
         [Admin]

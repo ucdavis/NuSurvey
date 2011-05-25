@@ -18,6 +18,7 @@ using NuSurvey.Web.Services;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
+using UCDArch.Testing.Fakes;
 using UCDArch.Web.Attributes;
 using NuSurvey.Tests.Core.Extensions;
 
@@ -92,12 +93,22 @@ namespace NuSurvey.Tests.ControllerTests
             "~/Account/Register/".ShouldMapTo<AccountController>(a => a.Register());
         }
 
-        /// <s54
+        /// <summary>
+        /// #5
         /// </summary>
         [TestMethod]
         public void TestRegisterPostMapping()
         {
             "~/Account/Register/".ShouldMapTo<AccountController>(a => a.Register(new RegisterModel(), new string[0]), true);
+        }
+
+        /// <summary>
+        /// #6
+        /// </summary>
+        [TestMethod]
+        public void TestManageUsersMapping()
+        {
+            "~/Account/ManageUsers/".ShouldMapTo<AccountController>(a => a.ManageUsers());
         }
         #endregion Mapping Tests
 
@@ -396,6 +407,34 @@ namespace NuSurvey.Tests.ControllerTests
         #endregion Register Post Tests
         #endregion Register Tests
 
+        #region ManageUsers Tests
+
+        [TestMethod]
+        public void TestManageUsersReturnsViewWithExpectedValues()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "NSAdmin" }, "me@ucdavis.edu");
+            var usersAndRoles = new List<UsersRoles>();
+            usersAndRoles.Add(new UsersRoles{Admin = true, User = false, UserName = "test1.test.com"});
+            usersAndRoles.Add(new UsersRoles { Admin = false, User = false, UserName = "test2.test.com" });
+            usersAndRoles.Add(new UsersRoles { Admin = true, User = true, UserName = "test3.test.com" });
+
+            MembershipService.Expect(a => a.GetUsersAndRoles("me@ucdavis.edu")).Return(usersAndRoles.AsQueryable());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.ManageUsers()
+                .AssertViewRendered()
+                .WithViewData<IQueryable<UsersRoles>>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count());
+            #endregion Assert		
+        }
+        #endregion ManageUsers Tests
+
         #endregion Method Tests
 
         #region Reflection Tests
@@ -511,7 +550,7 @@ namespace NuSurvey.Tests.ControllerTests
 
             #region Assert
             Assert.Inconclusive("Tests are still being written. When done, remove this line.");
-            Assert.AreEqual(5, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(6, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -635,6 +674,28 @@ namespace NuSurvey.Tests.ControllerTests
             #region Act
             var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AdminAttribute>();
             var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #6
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodManageUsersContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("ManageUsers");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
             #endregion Act
 
             #region Assert

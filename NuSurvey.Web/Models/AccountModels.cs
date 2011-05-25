@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using System.Linq.Expressions;
 using DataAnnotationsExtensions;
+using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.Utils;
 
@@ -129,6 +130,7 @@ namespace NuSurvey.Web.Models
         bool DeleteUser(string userName);
         MembershipUser GetUser(string userName);
         string ResetPassword(string userName);
+        IQueryable<UsersRoles> GetUsersAndRoles(string exceptMe);
     }
 
     public class AccountMembershipService : IMembershipService
@@ -138,6 +140,27 @@ namespace NuSurvey.Web.Models
         public AccountMembershipService()
             : this(null)
         {
+        }
+
+        public IQueryable<UsersRoles> GetUsersAndRoles(string exceptMe)
+        {
+            var users = Membership.GetAllUsers();
+
+            var emails = (from MembershipUser user in users
+                          where user.UserName.ToLower() != exceptMe.ToLower()
+                          select user.UserName.ToLower()).ToList();
+
+            var usersRoles = new List<UsersRoles>();
+            foreach (var email in emails)
+            {
+                var userRole = new UsersRoles();
+                userRole.UserName = email;
+                userRole.User = Roles.IsUserInRole(email, RoleNames.User);
+                userRole.Admin = Roles.IsUserInRole(email, RoleNames.Admin);
+                usersRoles.Add(userRole);
+            }
+
+            return usersRoles.AsQueryable();
         }
 
         public AccountMembershipService(MembershipProvider provider)
