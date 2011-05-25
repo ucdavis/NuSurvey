@@ -85,10 +85,11 @@ namespace NuSurvey.Web.Controllers
             return View(model);
         }
 
-        // **************************************
-        // URL: /Account/LogOff
-        // **************************************
-
+        /// <summary>
+        /// #3
+        /// URL: /Account/LogOff
+        /// </summary>
+        /// <returns></returns>
         public ActionResult LogOff()
         {
             FormsService.SignOut();

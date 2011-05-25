@@ -60,7 +60,7 @@ namespace NuSurvey.Tests.ControllerTests
         /// #1
         /// </summary>
         [TestMethod]
-        public void TestLogonGetMapping()
+        public void TestLogOnGetMapping()
         {
             "~/Account/Logon/".ShouldMapTo<AccountController>(a => a.LogOn());
         }
@@ -69,9 +69,18 @@ namespace NuSurvey.Tests.ControllerTests
         /// #2
         /// </summary>
         [TestMethod]
-        public void TestLogonPostMapping()
+        public void TestLogOnPostMapping()
         {
             "~/Account/Logon/".ShouldMapTo<AccountController>(a => a.LogOn(new LogOnModel(), "test"), true);
+        }
+
+        /// <summary>
+        /// #3
+        /// </summary>
+        [TestMethod]
+        public void TestLogOffGetMapping()
+        {
+            "~/Account/LogOff/".ShouldMapTo<AccountController>(a => a.LogOff());
         }
         #endregion Mapping Tests
 
@@ -202,6 +211,28 @@ namespace NuSurvey.Tests.ControllerTests
         #endregion LogOn Post Tests
         #endregion LogOn Tests
 
+        #region LogOff Tests
+
+        [TestMethod]
+        public void TestLogOffRedirects()
+        {
+            #region Arrange
+            FormService.Expect(a => a.SignOut());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.LogOff()
+                .AssertActionRedirect()
+                .ToAction<HomeController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            FormService.AssertWasCalled(a => a.SignOut());
+            #endregion Assert		
+        }
+        #endregion LogOff Tests
+
         #endregion Method Tests
 
         #region Reflection Tests
@@ -317,7 +348,7 @@ namespace NuSurvey.Tests.ControllerTests
 
             #region Assert
             Assert.Inconclusive("Tests are still being written. When done, remove this line.");
-            Assert.AreEqual(2, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(3, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -363,6 +394,25 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Assert
         }
 
+        /// <summary>
+        /// #3
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodLogOnContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("LogOff");
+            #endregion Arrange
+
+            #region Act
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, allAttributes.Count());
+            #endregion Assert
+        }
 
         //Examples
 
