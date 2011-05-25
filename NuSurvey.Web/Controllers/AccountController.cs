@@ -193,6 +193,11 @@ namespace NuSurvey.Web.Controllers
             return View(MembershipService.GetUsersAndRoles(CurrentUser.Identity.Name));
         }
 
+        /// <summary>
+        /// #7
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Admin]
         public ActionResult Edit(string id)
         {
@@ -207,7 +212,7 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<AccountController>(a => a.ManageUsers());
             }
 
-            var viewModel = EditUserViewModel.Create(id);
+            var viewModel = EditUserViewModel.Create(id, MembershipService);
             viewModel.User = MembershipService.GetUser(id);
 
             return View(viewModel);
@@ -264,7 +269,7 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<AccountController>(a => a.ManageUsers());
             }
 
-            var viewModel = EditUserViewModel.Create(id);
+            var viewModel = EditUserViewModel.Create(id, MembershipService);
             viewModel.User = MembershipService.GetUser(id);
 
             return View(viewModel);

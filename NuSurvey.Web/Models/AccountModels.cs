@@ -96,14 +96,15 @@ namespace NuSurvey.Web.Models
         public bool Confirm { get; set; }
         public MembershipUser User { get; set; }
 
-        public static EditUserViewModel Create(string email)
+        public static EditUserViewModel Create(string email, IMembershipService membershipService)
         {
             Check.Require(!string.IsNullOrWhiteSpace(email));
 
             var viewModel = new EditUserViewModel {Email = email};
-            viewModel.IsAdmin = Roles.IsUserInRole(viewModel.Email, RoleNames.Admin);
-            viewModel.IsUser = Roles.IsUserInRole(viewModel.Email, RoleNames.User);
-
+            //viewModel.IsAdmin = Roles.IsUserInRole(viewModel.Email, RoleNames.Admin);
+            //viewModel.IsUser = Roles.IsUserInRole(viewModel.Email, RoleNames.User);
+            viewModel.IsAdmin = membershipService.IsUserInRole(viewModel.Email, RoleNames.Admin);
+            viewModel.IsUser = membershipService.IsUserInRole(viewModel.Email, RoleNames.User);
 
             viewModel.Confirm = false;
 
@@ -131,6 +132,7 @@ namespace NuSurvey.Web.Models
         MembershipUser GetUser(string userName);
         string ResetPassword(string userName);
         IQueryable<UsersRoles> GetUsersAndRoles(string exceptMe);
+        bool IsUserInRole(string userName, string roleName);
     }
 
     public class AccountMembershipService : IMembershipService
@@ -140,6 +142,11 @@ namespace NuSurvey.Web.Models
         public AccountMembershipService()
             : this(null)
         {
+        }
+
+        public bool IsUserInRole(string userName, string roleName)
+        {
+            return Roles.IsUserInRole(userName, roleName);
         }
 
         public IQueryable<UsersRoles> GetUsersAndRoles(string exceptMe)
