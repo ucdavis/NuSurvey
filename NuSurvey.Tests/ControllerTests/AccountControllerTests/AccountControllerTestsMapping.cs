@@ -89,6 +89,15 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         {
             "~/Account/Delete/test".ShouldMapTo<AccountController>(a => a.Delete("test"));
         }
+
+        /// <summary>
+        /// #10
+        /// </summary>
+        [TestMethod]
+        public void TestDeletePostMapping()
+        {
+            "~/Account/Delete/test?confirm=0".ShouldMapTo<AccountController>(a => a.Delete("test", false), true);
+        }
         #endregion Mapping Tests
     }
 }

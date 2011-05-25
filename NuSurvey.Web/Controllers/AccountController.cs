@@ -285,6 +285,12 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// #10
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="confirm"></param>
+        /// <returns></returns>
         [Admin]
         [HttpPost]
         public ActionResult Delete(string id, bool confirm)
