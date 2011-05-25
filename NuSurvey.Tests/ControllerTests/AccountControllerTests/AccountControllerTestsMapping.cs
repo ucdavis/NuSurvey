@@ -98,6 +98,15 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         {
             "~/Account/Delete/test?confirm=0".ShouldMapTo<AccountController>(a => a.Delete("test", false), true);
         }
+
+        /// <summary>
+        /// #11
+        /// </summary>
+        [TestMethod]
+        public void TestForgotPasswordGetMapping()
+        {
+            "~/Account/ForgotPassword/".ShouldMapTo<AccountController>(a => a.ForgotPassword());
+        }
         #endregion Mapping Tests
     }
 }

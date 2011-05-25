@@ -320,6 +320,10 @@ namespace NuSurvey.Web.Controllers
             return this.RedirectToAction<AccountController>(a => a.ManageUsers());
         }
 
+        /// <summary>
+        /// #11
+        /// </summary>
+        /// <returns></returns>
         public ActionResult ForgotPassword()
         {
             var viewModel = new ForgotPasswordModel();
