@@ -82,6 +82,23 @@ namespace NuSurvey.Tests.ControllerTests
         {
             "~/Account/LogOff/".ShouldMapTo<AccountController>(a => a.LogOff());
         }
+
+        /// <summary>
+        /// #4
+        /// </summary>
+        [TestMethod]
+        public void TestRegisterGetMapping()
+        {
+            "~/Account/Register/".ShouldMapTo<AccountController>(a => a.Register());
+        }
+
+        /// <s54
+        /// </summary>
+        [TestMethod]
+        public void TestRegisterPostMapping()
+        {
+            "~/Account/Register/".ShouldMapTo<AccountController>(a => a.Register(new RegisterModel(), new string[0]), true);
+        }
         #endregion Mapping Tests
 
         #region Method Tests
@@ -233,6 +250,152 @@ namespace NuSurvey.Tests.ControllerTests
         }
         #endregion LogOff Tests
 
+        #region Register Tests
+        #region Register Get Tests
+
+        [TestMethod]
+        public void TestRegisterGetReturnsView()
+        {
+            #region Arrange
+            
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Register()
+                .AssertViewRendered()
+                .WithViewData<RegisterModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("NSUser", Controller.ViewBag.UserRole);
+            Assert.AreEqual("NSAdmin", Controller.ViewBag.AdminRole);
+            #endregion Assert		
+        }
+        #endregion Register Get Tests
+        #region Register Post Tests
+
+        [TestMethod]
+        public void TestRegisterPostReturnsViewIfInvalid1()
+        {
+            #region Arrange
+            Controller.ModelState.AddModelError("Test", "MoreTest"); //Force Failure
+            var viewModel = new RegisterModel();
+            viewModel.Email = "Test@test.com";
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Register(viewModel, new string[0])
+                .AssertViewRendered()
+                .WithViewData<RegisterModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Test@test.com".ToLower(), result.Email);
+            Assert.AreEqual("NSUser", Controller.ViewBag.UserRole);
+            Assert.AreEqual("NSAdmin", Controller.ViewBag.AdminRole);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestRegisterPostReturnsViewIfInvalid2()
+        {
+            #region Arrange
+            var viewModel = new RegisterModel();
+            viewModel.Email = "Test@test.com";            
+            MembershipService.Expect(a => a.CreateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything))
+                .Return(MembershipCreateStatus.DuplicateUserName).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Register(viewModel, new string[0])
+                .AssertViewRendered()
+                .WithViewData<RegisterModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Test@test.com".ToLower(), result.Email);
+            Assert.AreEqual("NSUser", Controller.ViewBag.UserRole);
+            Assert.AreEqual("NSAdmin", Controller.ViewBag.AdminRole);
+            Controller.ModelState.AssertErrorsAre("User already exists. Please enter a different user.");
+            MembershipService.AssertWasCalled(a => a.CreateUser("Test@test.com".ToLower(), "BTDF4hd7ehd6@!", "Test@test.com".ToLower()));
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestRegisterPostRedirectsWhenValid1()
+        {
+            #region Arrange
+            var viewModel = new RegisterModel();
+            viewModel.Email = "Test@test.com";
+            MembershipService.Expect(a => a.CreateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything))
+                .Return(MembershipCreateStatus.Success).Repeat.Any();
+            MembershipService.Expect(a => a.ManageRoles(Arg<string>.Is.Anything, Arg<string[]>.Is.Anything))
+                .Return(true).Repeat.Any();
+            MembershipService.Expect(a => a.ResetPassword("Test@test.com".ToLower())).Return("123$$321").Repeat.Any();
+            EmailService.Expect(a =>a.SendNewUser(
+                Arg<HttpRequestBase>.Is.Anything, 
+                Arg<UrlHelper>.Is.Anything, 
+                Arg<string>.Is.Anything,
+                Arg<string>.Is.Anything));
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Register(viewModel, new[] {"NSUser", "NSAdmin"})
+                .AssertActionRedirect()
+                .ToAction<AccountController>(a => a.ManageUsers());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("NSUser", Controller.ViewBag.UserRole);
+            Assert.AreEqual("NSAdmin", Controller.ViewBag.AdminRole);
+            MembershipService.AssertWasCalled(a => a.CreateUser("Test@test.com".ToLower(), "BTDF4hd7ehd6@!", "Test@test.com".ToLower()));
+            MembershipService.AssertWasCalled(a => a.ManageRoles("Test@test.com".ToLower(), new[] { "NSUser", "NSAdmin" }));
+            EmailService.AssertWasCalled(a => a.SendNewUser(Controller.Request, Controller.Url, "Test@test.com".ToLower(), "123$$321"));
+            Assert.AreEqual("User and roles created. User emailed", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestRegisterPostRedirectsWhenValid2()
+        {
+            #region Arrange
+            var viewModel = new RegisterModel();
+            viewModel.Email = "Test@test.com";
+            MembershipService.Expect(a => a.CreateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything))
+                .Return(MembershipCreateStatus.Success).Repeat.Any();
+            MembershipService.Expect(a => a.ManageRoles(Arg<string>.Is.Anything, Arg<string[]>.Is.Anything))
+                .Return(false).Repeat.Any();
+            MembershipService.Expect(a => a.ResetPassword("Test@test.com".ToLower())).Return("123$$321").Repeat.Any();
+            EmailService.Expect(a => a.SendNewUser(
+                Arg<HttpRequestBase>.Is.Anything,
+                Arg<UrlHelper>.Is.Anything,
+                Arg<string>.Is.Anything,
+                Arg<string>.Is.Anything));
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Register(viewModel, new string[0])
+                .AssertActionRedirect()
+                .ToAction<AccountController>(a => a.ManageUsers());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("NSUser", Controller.ViewBag.UserRole);
+            Assert.AreEqual("NSAdmin", Controller.ViewBag.AdminRole);
+            MembershipService.AssertWasCalled(a => a.CreateUser("Test@test.com".ToLower(), "BTDF4hd7ehd6@!", "Test@test.com".ToLower()));
+            MembershipService.AssertWasCalled(a => a.ManageRoles("Test@test.com".ToLower(), new string[0]));
+            EmailService.AssertWasCalled(a => a.SendNewUser(Controller.Request, Controller.Url, "Test@test.com".ToLower(), "123$$321"));
+            Assert.AreEqual("User created, but problem with roles. User emailed", Controller.Message);
+            #endregion Assert
+        }
+        #endregion Register Post Tests
+        #endregion Register Tests
+
         #endregion Method Tests
 
         #region Reflection Tests
@@ -348,7 +511,7 @@ namespace NuSurvey.Tests.ControllerTests
 
             #region Assert
             Assert.Inconclusive("Tests are still being written. When done, remove this line.");
-            Assert.AreEqual(3, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(5, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -411,6 +574,72 @@ namespace NuSurvey.Tests.ControllerTests
 
             #region Assert
             Assert.AreEqual(0, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #4
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodRegisterGetContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Register");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<AdminAttribute>();
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #5
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodRegisterPostContainsExpectedAttributes1()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Register");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #5
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodRegisterPostContainsExpectedAttributes2()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Register");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AdminAttribute>();
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
             #endregion Assert
         }
 

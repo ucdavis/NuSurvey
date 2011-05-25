@@ -72,7 +72,7 @@ ul.copy, ol.copy{margin:0.5em 0 0.5em 5em;}
 /*    font          */
 /* ---------------- */
 .main h2 {text-align:left; font-size:2.5em; line-height:1em; padding-bottom:.2em; margin-top: 1.2em;}
-body {font: 11.5px/16px Verdana, Arial, sans-serif;}
+body {font: 11.5px/16px Verdana, Arial, sans-serif;min-width: 1200px;}
 
 /* ---------------- */
 /*    form          */

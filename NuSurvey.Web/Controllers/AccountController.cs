@@ -114,6 +114,12 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// #5
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="roles"></param>
+        /// <returns></returns>
         [Admin]
         [HttpPost]
         public ActionResult Register(RegisterModel model, string[] roles )
@@ -121,6 +127,7 @@ namespace NuSurvey.Web.Controllers
             ViewBag.UserRole = RoleNames.User;
             ViewBag.AdminRole = RoleNames.Admin;
 
+            model.Email = model.Email.ToLower();
 
             if (ModelState.IsValid)
             {
@@ -132,17 +139,17 @@ namespace NuSurvey.Web.Controllers
                     //FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
                     if(MembershipService.ManageRoles(model.Email, roles))
                     {
-                        Message = "User and roles created";
+                        Message = "User and roles created.";
                     }
                     else
                     {
-                        Message = "User created, but problem with roles";
+                        Message = "User created, but problem with roles.";
                     }
 
                     var tempPass = MembershipService.ResetPassword(model.Email.ToLower());
                     _emailService.SendNewUser(Request, Url, model.Email.ToLower(), tempPass);
 
-                    Message = string.Format("{0} {1}", Message, "And user emailed");
+                    Message = string.Format("{0} {1}", Message, "User emailed");
 
                     return this.RedirectToAction(a => a.ManageUsers());
                 }

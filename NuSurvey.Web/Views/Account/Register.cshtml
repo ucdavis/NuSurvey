@@ -31,7 +31,7 @@
                     //Do nothing
                 }
                 else{
-                    var emailVal = $(this).val().toLowerCase();                                    
+                    var emailVal = $(this).val().toLowerCase();                                   
                     if(emailVal != null && emailVal != "" && emailVal.match(@StaticValues.EmailWarningRegEx) == null){
                         $(this).addClass("warning");
                         $(this).next().text("This may be invalid");   
