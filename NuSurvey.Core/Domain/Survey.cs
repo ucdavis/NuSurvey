@@ -42,6 +42,7 @@ namespace NuSurvey.Core.Domain
         public virtual IList<Category> Categories { get; set; }
 
         [Required]
+        [StringLength(100)]
         [DisplayName("Quiz Type")]
         public virtual string QuizType { get; set; }
     }

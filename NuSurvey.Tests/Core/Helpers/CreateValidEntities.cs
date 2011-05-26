@@ -27,6 +27,7 @@ namespace NuSurvey.Tests.Core.Helpers
             var rtValue = new Survey();
             rtValue.Name = "Name" + counter.Extra();
             rtValue.IsActive = true;
+            rtValue.QuizType = "QuizType" + counter.Extra();
 
             return rtValue;
         }
