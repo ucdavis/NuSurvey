@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
+using System.Web.Mvc;
 
 namespace NuSurvey.Core.Domain
 {
@@ -50,6 +51,7 @@ namespace NuSurvey.Core.Domain
         [Required]
         [StringLength(100)]
         [DisplayName("Question")]
+        [AllowHtml]
         public virtual string Name { get; set; }
 
         [DisplayName("Active")]

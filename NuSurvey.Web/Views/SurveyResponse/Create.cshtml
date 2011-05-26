@@ -25,7 +25,6 @@ Example: Dinosaur 1  *@
 	<ul>
 		<li>
 			<div class="editor-label required">
-				@*<label>ID: <span>*</span></label>*@
                 @Html.LabelFor(a => a.SurveyResponse.StudentId)<span>*</span> 
 			</div>
 			<div class="editor-field">
@@ -41,7 +40,7 @@ Example: Dinosaur 1  *@
         {
             <li class="@(odd ? "odd" : "even")">
                 <div class="editor-label required">
-                    <label>@item.Order. @item.Name <span>*</span></label>
+                    <label>@item.Order. @Html.Raw(item.Name) <span>*</span></label>
                 </div>
                 <div class="editor-field ">
                     <input id="Questions[@indexCounter]_QuestionId" type="hidden" value="@item.Id" name="Questions[@indexCounter].QuestionId" />
