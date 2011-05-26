@@ -107,6 +107,15 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         {
             "~/Account/ForgotPassword/".ShouldMapTo<AccountController>(a => a.ForgotPassword());
         }
+
+        /// <summary>
+        /// #12
+        /// </summary>
+        [TestMethod]
+        public void TestForgotPasswordPostMapping()
+        {
+            "~/Account/ForgotPassword/?userName=test@testy.com&captchaValid=false".ShouldMapTo<AccountController>(a => a.ForgotPassword("test@testy.com", false));
+        }
         #endregion Mapping Tests
     }
 }

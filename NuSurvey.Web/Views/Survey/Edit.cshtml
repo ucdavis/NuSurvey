@@ -79,6 +79,15 @@ Example: Dinosaur 1  *@
 				@Html.ValidationMessageFor(model => model.ShortName)
 			</div>
 		</li>
+        <li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.QuizType) 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.QuizType)
+				@Html.ValidationMessageFor(model => model.QuizType)
+			</div>
+		</li>
 		<li>
 			<div class="editor-label">
 				@Html.LabelFor(model => model.IsActive) 

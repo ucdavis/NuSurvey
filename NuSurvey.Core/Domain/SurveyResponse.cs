@@ -30,7 +30,7 @@ namespace NuSurvey.Core.Domain
 
         [Required]
         [StringLength(10)]
-        [DisplayName("Id #")]
+        [DisplayName("Name")]
         public virtual string StudentId { get; set; }
 
         [DisplayName("Date Taken")]

@@ -1,7 +1,7 @@
 ﻿@model NuSurvey.Core.Domain.SurveyResponse
 
 @{
-    ViewBag.Title = "Parenting Quiz Results";
+    ViewBag.Title = @Model.Survey.QuizType + " Quiz Results";
 }
 
 @Html.Partial("_Results", @Model)

@@ -40,6 +40,10 @@ namespace NuSurvey.Core.Domain
         public virtual IList<SurveyResponse> SurveyResponses { get; set; }
         [Required]
         public virtual IList<Category> Categories { get; set; }
+
+        [Required]
+        [DisplayName("Quiz Type")]
+        public virtual string QuizType { get; set; }
     }
 
     public class SurveyMap : ClassMap<Survey>
@@ -50,6 +54,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.Name);
             Map(x => x.ShortName);
             Map(x => x.IsActive);
+            Map(x => x.QuizType);
 
             HasMany(x => x.Questions);
             HasMany(x => x.SurveyResponses);
