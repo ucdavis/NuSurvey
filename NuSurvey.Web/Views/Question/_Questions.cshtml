@@ -18,7 +18,7 @@
 				@Html.LabelFor(model => model.Question.Name)<span>*</span> 
 			</div>
 			<div class="editor-field wideText">
-				@Html.EditorFor(model => model.Question.Name)
+				@Html.TextBoxFor(model => model.Question.Name, new { @title = "To underline a word put &lt;u&gt; before it and &lt;/u&gt; after it." })
 				@Html.ValidationMessageFor(model => model.Question.Name)
 			</div>
 		</li>
