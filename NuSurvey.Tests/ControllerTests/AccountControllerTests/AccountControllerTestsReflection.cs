@@ -139,7 +139,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 
             #region Assert
             Assert.Inconclusive("Tests are still being written. When done, remove this line.");
-            Assert.AreEqual(11, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(12, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -240,12 +240,12 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 
             #region Act
             var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
-            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count());
+            Assert.AreEqual(2, allAttributes.Count());
             #endregion Assert
         }
 
@@ -262,12 +262,12 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 
             #region Act
             var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AdminAttribute>();
-            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count());
+            Assert.AreEqual(2, allAttributes.Count());
             #endregion Assert
         }
 
@@ -328,12 +328,12 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 
             #region Act
             var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
-            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count());
+            Assert.AreEqual(2, allAttributes.Count());
             #endregion Assert
         }
 
@@ -350,12 +350,12 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 
             #region Act
             var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AdminAttribute>();
-            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count());
+            Assert.AreEqual(2, allAttributes.Count());
             #endregion Assert
         }
 
@@ -394,12 +394,12 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 
             #region Act
             var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
-            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count());
+            Assert.AreEqual(2, allAttributes.Count());
             #endregion Assert
         }
 
@@ -416,12 +416,12 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 
             #region Act
             var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AdminAttribute>();
-            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count());
+            Assert.AreEqual(2, allAttributes.Count());
             #endregion Assert
         }
 
@@ -445,6 +445,49 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #endregion Assert
         }
 
+        /// <summary>
+        /// #12
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodForgotPasswordPostContainsExpectedAttributes1()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "ForgotPassword");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #12
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodForgotPasswordPostContainsExpectedAttributes2()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "ForgotPassword");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<CaptchaValidatorAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "CaptchaValidatorAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count());
+            #endregion Assert
+        }
         //Examples
 
         //[TestMethod]

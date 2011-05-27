@@ -26,44 +26,6 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 {
     public partial class AccountControllerTests
     {
-        #region ForgotPassword Tests
-        #region ForgotPassword Get Tests
 
-        [TestMethod]
-        public void TestForgotPasswordReturnsView()
-        {
-            #region Arrange
-            
-            #endregion Arrange
-
-            #region Act
-            var result = Controller.ForgotPassword()
-                .AssertViewRendered()
-                .WithViewData<ForgotPasswordModel>();
-            #endregion Act
-
-            #region Assert
-            Assert.IsNotNull(result);
-            Assert.IsNull(result.UserName);
-            #endregion Assert		
-        }
-        #endregion ForgotPassword Get Tests
-        #region ForgotPassword Post Tests
-
-        [TestMethod]
-        public void TestDescription()
-        {
-            #region Arrange
-            Assert.Inconclusive("Write these, and the mapping, reflection tests");
-            #endregion Arrange
-
-            #region Act
-            #endregion Act
-
-            #region Assert
-            #endregion Assert		
-        }
-        #endregion ForgotPassword Post Tests
-        #endregion ForgotPassword Tests
     }
 }

@@ -1322,7 +1322,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]",
                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)10)]",
-                "[System.ComponentModel.DisplayNameAttribute(\"Id #\")]"
+                "[System.ComponentModel.DisplayNameAttribute(\"Name\")]"
             }));
             expectedFields.Add(new NameAndType("Survey", "NuSurvey.Core.Domain.Survey", new List<string>
             {

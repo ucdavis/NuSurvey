@@ -444,6 +444,191 @@ namespace NuSurvey.Tests.RepositoryTests
         #endregion Valid Tests
         #endregion ShortName Tests
 
+        #region QuizType Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the QuizType with null value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestQuizTypeWithNullValueDoesNotSave()
+        {
+            Survey survey = null;
+            try
+            {
+                #region Arrange
+                survey = GetValid(9);
+                survey.QuizType = null;
+                #endregion Arrange
+
+                #region Act
+                SurveyRepository.DbContext.BeginTransaction();
+                SurveyRepository.EnsurePersistent(survey);
+                SurveyRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(survey);
+                var results = survey.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("QuizType: The QuizType field is required.");
+                Assert.IsTrue(survey.IsTransient());
+                Assert.IsFalse(survey.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the QuizType with empty string does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestQuizTypeWithEmptyStringDoesNotSave()
+        {
+            Survey survey = null;
+            try
+            {
+                #region Arrange
+                survey = GetValid(9);
+                survey.QuizType = string.Empty;
+                #endregion Arrange
+
+                #region Act
+                SurveyRepository.DbContext.BeginTransaction();
+                SurveyRepository.EnsurePersistent(survey);
+                SurveyRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(survey);
+                var results = survey.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("QuizType: The QuizType field is required.");
+                Assert.IsTrue(survey.IsTransient());
+                Assert.IsFalse(survey.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the QuizType with spaces only does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestQuizTypeWithSpacesOnlyDoesNotSave()
+        {
+            Survey survey = null;
+            try
+            {
+                #region Arrange
+                survey = GetValid(9);
+                survey.QuizType = " ";
+                #endregion Arrange
+
+                #region Act
+                SurveyRepository.DbContext.BeginTransaction();
+                SurveyRepository.EnsurePersistent(survey);
+                SurveyRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(survey);
+                var results = survey.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("QuizType: The QuizType field is required.");
+                Assert.IsTrue(survey.IsTransient());
+                Assert.IsFalse(survey.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the QuizType with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestQuizTypeWithTooLongValueDoesNotSave()
+        {
+            Survey survey = null;
+            try
+            {
+                #region Arrange
+                survey = GetValid(9);
+                survey.QuizType = "x".RepeatTimes((100 + 1));
+                #endregion Arrange
+
+                #region Act
+                SurveyRepository.DbContext.BeginTransaction();
+                SurveyRepository.EnsurePersistent(survey);
+                SurveyRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(survey);
+                Assert.AreEqual(100 + 1, survey.QuizType.Length);
+                var results = survey.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("QuizType: The field QuizType must be a string with a maximum length of 100.");
+                Assert.IsTrue(survey.IsTransient());
+                Assert.IsFalse(survey.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the QuizType with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestQuizTypeWithOneCharacterSaves()
+        {
+            #region Arrange
+            var survey = GetValid(9);
+            survey.QuizType = "x";
+            #endregion Arrange
+
+            #region Act
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the QuizType with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestQuizTypeWithLongValueSaves()
+        {
+            #region Arrange
+            var survey = GetValid(9);
+            survey.QuizType = "x".RepeatTimes(100);
+            #endregion Arrange
+
+            #region Act
+            SurveyRepository.DbContext.BeginTransaction();
+            SurveyRepository.EnsurePersistent(survey);
+            SurveyRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(100, survey.QuizType.Length);
+            Assert.IsFalse(survey.IsTransient());
+            Assert.IsTrue(survey.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion QuizType Tests
+
         #region IsActive Tests
 
         /// <summary>
@@ -1108,6 +1293,12 @@ namespace NuSurvey.Tests.RepositoryTests
             expectedFields.Add(new NameAndType("Questions", "System.Collections.Generic.IList`1[NuSurvey.Core.Domain.Question]", new List<string>
             {
                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("QuizType", "System.String", new List<string>
+            {
+                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]",
+                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)100)]",              
+                 "[System.ComponentModel.DisplayNameAttribute(\"Quiz Type\")]"
             }));
             expectedFields.Add(new NameAndType("ShortName", "System.String", new List<string>
             {

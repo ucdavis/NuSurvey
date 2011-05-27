@@ -1195,7 +1195,8 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                  "[System.ComponentModel.DataAnnotations.RequiredAttribute()]", 
                  "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)100)]",
-                 "[System.ComponentModel.DisplayNameAttribute(\"Question\")]"
+                 "[System.ComponentModel.DisplayNameAttribute(\"Question\")]",
+                 "[System.Web.Mvc.AllowHtmlAttribute()]"
             }));
             expectedFields.Add(new NameAndType("Order", "System.Int32", new List<string>()));
             expectedFields.Add(new NameAndType("Responses", "System.Collections.Generic.IList`1[NuSurvey.Core.Domain.Response]", new List<string>

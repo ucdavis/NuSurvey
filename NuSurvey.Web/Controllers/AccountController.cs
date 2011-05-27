@@ -341,7 +341,7 @@ namespace NuSurvey.Web.Controllers
             }
             userName = userName.Trim().ToLower();
 
-            if (Membership.GetUser(userName) == null)
+            if (MembershipService.GetUser(userName) == null)
             {
                 ModelState.AddModelError("UserName", "Email not found");
             }
