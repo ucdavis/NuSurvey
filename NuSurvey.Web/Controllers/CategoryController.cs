@@ -4,18 +4,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
+using MvcContrib;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
-using MvcContrib;
-using UCDArch.Data.NHibernate;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Attributes;
 using UCDArch.Web.Helpers;
-using System.Linq.Expressions;
-using System.Linq;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -34,7 +31,11 @@ namespace NuSurvey.Web.Controllers
             _archiveService = archiveService;
         }
 
-
+        /// <summary>
+        /// #1
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <returns></returns>
         public ActionResult ReOrder(int id)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
@@ -69,9 +70,10 @@ namespace NuSurvey.Web.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Survey>().EnsurePersistent(survey);
+                return new JsonNetResult(true);
             }
 
-            return new JsonNetResult(true);
+            return new JsonNetResult(false);
         }
 
 

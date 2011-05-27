@@ -14,4 +14,12 @@ namespace NuSurvey.Tests.Core.Helpers
             return CreateValidEntities.Answer(i);
         }
     }
+
+    public class FakeSurveys : ControllerRecordFakes<Survey>
+    {
+        protected override Survey CreateValid(int i)
+        {
+            return CreateValidEntities.Survey(i);
+        }
+    }
 }

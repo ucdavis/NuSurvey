@@ -104,6 +104,11 @@
     <Compile Include="ControllerTests\AccountControllerTests\AccountControllerTestsPart04.cs" />
     <Compile Include="ControllerTests\AccountControllerTests\AccountControllerTestsReflection.cs" />
     <Compile Include="ControllerTests\ApplicationControllerTests.cs" />
+    <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsReflection.cs" />
+    <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsInit.cs" />
+    <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsMapping.cs" />
+    <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsPart01.cs" />
+    <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsPart02.cs" />
     <Compile Include="ControllerTests\ErrorControllerTests.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\AssertExtensions.cs" />
@@ -115,6 +120,7 @@
     <Compile Include="Core\Helpers\NameAndType.cs" />
     <Compile Include="Core\Helpers\RepositoryLoad.cs" />
     <Compile Include="Core\Helpers\SpecificGuid.cs" />
+    <Compile Include="Core\ServiceLocatorInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ControllerTests\HomeControllerTest.cs" />
     <Compile Include="RepositoryTests\AnswerRepositoryTests.cs" />
