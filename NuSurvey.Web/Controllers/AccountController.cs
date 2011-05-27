@@ -361,11 +361,11 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
-
-        // **************************************
-        // URL: /Account/ChangePassword
-        // **************************************
-
+        /// <summary>
+        /// #13
+        /// URL: /Account/ChangePassword
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         public ActionResult ChangePassword()
         {
@@ -373,6 +373,11 @@ namespace NuSurvey.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// #14
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordModel model)
@@ -381,7 +386,8 @@ namespace NuSurvey.Web.Controllers
             {
                 if (MembershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
                 {
-                    return RedirectToAction("ChangePasswordSuccess");
+                    //return RedirectToAction("ChangePasswordSuccess");
+                    return this.RedirectToAction(a => a.ChangePasswordSuccess());
                 }
                 else
                 {

@@ -139,7 +139,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 
             #region Assert
             Assert.Inconclusive("Tests are still being written. When done, remove this line.");
-            Assert.AreEqual(12, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(14, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -485,6 +485,73 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "CaptchaValidatorAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #13
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodChangePasswordGetContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "ChangePassword");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<AuthorizeAttribute>();
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AuthorizeAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// #14
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodChangePasswordPostContainsExpectedAttributes1()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "ChangePassword");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #14
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodChangePasswordPostContainsExpectedAttributes2()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "ChangePassword");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AuthorizeAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AuthorizeAttribute not found");
             Assert.AreEqual(2, allAttributes.Count());
             #endregion Assert
         }
