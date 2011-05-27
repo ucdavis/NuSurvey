@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Security.Principal;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using MvcContrib;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Models;
-using MvcContrib;
 using NuSurvey.Web.Services;
 
 namespace NuSurvey.Web.Controllers
@@ -17,9 +11,8 @@ namespace NuSurvey.Web.Controllers
     public class AccountController : ApplicationController
     {
         private readonly IEmailService _emailService;
-
-        public IFormsAuthenticationService FormsService { get; set; }
-        public IMembershipService MembershipService { get; set; }
+        private IFormsAuthenticationService FormsService { get; set; }
+        private IMembershipService MembershipService { get; set; }
 
         protected override void Initialize(RequestContext requestContext)
         {
@@ -331,6 +324,12 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// #12
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="captchaValid"></param>
+        /// <returns></returns>
         [CaptchaValidator]
         [HttpPost]
         public ActionResult ForgotPassword(string userName, bool captchaValid)
@@ -400,10 +399,11 @@ namespace NuSurvey.Web.Controllers
             return View(model);
         }
 
-        // **************************************
-        // URL: /Account/ChangePasswordSuccess
-        // **************************************
-
+        /// <summary>
+        /// #15
+        /// URL: /Account/ChangePasswordSuccess
+        /// </summary>
+        /// <returns></returns>
         public ActionResult ChangePasswordSuccess()
         {
             return View();

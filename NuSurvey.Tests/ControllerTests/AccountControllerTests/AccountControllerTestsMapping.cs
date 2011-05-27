@@ -126,6 +126,24 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             "~/Account/ChangePassword/".ShouldMapTo<AccountController>(a => a.ChangePassword());
         }
 
+        /// <summary>
+        /// #14
+        /// </summary>
+        [TestMethod]
+        public void TestChangePasswordPostMapping()
+        {
+            "~/Account/ChangePassword/".ShouldMapTo<AccountController>(a => a.ChangePassword(new ChangePasswordModel()), true);
+        }
+
+        /// <summary>
+        /// #15
+        /// </summary>
+        [TestMethod]
+        public void TestChangePasswordSuccessMapping()
+        {
+            "~/Account/ChangePasswordSuccess/".ShouldMapTo<AccountController>(a => a.ChangePasswordSuccess());
+        }
+
         #endregion Mapping Tests
     }
 }

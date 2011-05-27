@@ -205,5 +205,24 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         }
         #endregion ChangePassword Post Tests
         #endregion ChangePassword Tests
+
+        #region ChangePasswordSuccess Tests
+
+        [TestMethod]
+        public void TestChangePasswordSuccessReturnsView()
+        {
+            #region Arrange
+            
+            #endregion Arrange
+
+            #region Act
+            Controller.ChangePasswordSuccess()
+                .AssertViewRendered();
+            #endregion Act
+
+            #region Assert
+            #endregion Assert		
+        }
+        #endregion ChangePasswordSuccess Tests
     }
 }

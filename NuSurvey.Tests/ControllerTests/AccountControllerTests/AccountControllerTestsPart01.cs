@@ -39,9 +39,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         public void TestLogOnPostReturnsViewIfModelInvalid()
         {
             #region Arrange
-            var model = new LogOnModel();
-            model.UserName = "UserName@test.com";
-            model.Password = "Password";
+            var model = new LogOnModel {UserName = "UserName@test.com", Password = "Password"};
             Controller.ModelState.AddModelError("Test", @"MoreTest"); //Force Failure
             #endregion Arrange
 
@@ -63,9 +61,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         public void TestLogOnPostReturnsViewIfModelValidateUserFails()
         {
             #region Arrange
-            var model = new LogOnModel();
-            model.UserName = "UserName@test.com";
-            model.Password = "Password";
+            var model = new LogOnModel {UserName = "UserName@test.com", Password = "Password"};
             MembershipService.Expect(a => a.ValidateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
                 .Return(false).Repeat.Any();
             #endregion Arrange
@@ -90,9 +86,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         public void TestLogOnPostRedirectsWhenSuccessful1()
         {
             #region Arrange
-            var model = new LogOnModel();
-            model.UserName = "UserName@test.com";
-            model.Password = "Password";
+            var model = new LogOnModel {UserName = "UserName@test.com", Password = "Password"};
             MembershipService.Expect(a => a.ValidateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
                 .Return(true).Repeat.Any();
             FormService.Expect(a => a.SignIn("UserName@test.com", false));
@@ -115,9 +109,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         public void TestLogOnPostRedirectsWhenSuccessful2()
         {
             #region Arrange
-            var model = new LogOnModel();
-            model.UserName = "UserName@test.com";
-            model.Password = "Password";
+            var model = new LogOnModel {UserName = "UserName@test.com", Password = "Password"};
             MembershipService.Expect(a => a.ValidateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
                 .Return(true).Repeat.Any();
             FormService.Expect(a => a.SignIn("UserName@test.com", false));
@@ -192,8 +184,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         {
             #region Arrange
             Controller.ModelState.AddModelError("Test", @"MoreTest"); //Force Failure
-            var viewModel = new RegisterModel();
-            viewModel.Email = "Test@test.com";
+            var viewModel = new RegisterModel {Email = "Test@test.com"};
             #endregion Arrange
 
             #region Act
@@ -214,8 +205,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         public void TestRegisterPostReturnsViewIfInvalid2()
         {
             #region Arrange
-            var viewModel = new RegisterModel();
-            viewModel.Email = "Test@test.com";
+            var viewModel = new RegisterModel {Email = "Test@test.com"};
             MembershipService.Expect(a => a.CreateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything))
                 .Return(MembershipCreateStatus.DuplicateUserName).Repeat.Any();
             #endregion Arrange
@@ -240,8 +230,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         public void TestRegisterPostRedirectsWhenValid1()
         {
             #region Arrange
-            var viewModel = new RegisterModel();
-            viewModel.Email = "Test@test.com";
+            var viewModel = new RegisterModel {Email = "Test@test.com"};
             MembershipService.Expect(a => a.CreateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything))
                 .Return(MembershipCreateStatus.Success).Repeat.Any();
             MembershipService.Expect(a => a.ManageRoles(Arg<string>.Is.Anything, Arg<string[]>.Is.Anything))
@@ -275,8 +264,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         public void TestRegisterPostRedirectsWhenValid2()
         {
             #region Arrange
-            var viewModel = new RegisterModel();
-            viewModel.Email = "Test@test.com";
+            var viewModel = new RegisterModel {Email = "Test@test.com"};
             MembershipService.Expect(a => a.CreateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything))
                 .Return(MembershipCreateStatus.Success).Repeat.Any();
             MembershipService.Expect(a => a.ManageRoles(Arg<string>.Is.Anything, Arg<string[]>.Is.Anything))
@@ -315,10 +303,12 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "NSAdmin" }, "me@ucdavis.edu");
-            var usersAndRoles = new List<UsersRoles>();
-            usersAndRoles.Add(new UsersRoles { Admin = true, User = false, UserName = "test1.test.com" });
-            usersAndRoles.Add(new UsersRoles { Admin = false, User = false, UserName = "test2.test.com" });
-            usersAndRoles.Add(new UsersRoles { Admin = true, User = true, UserName = "test3.test.com" });
+            var usersAndRoles = new List<UsersRoles>
+            {
+                new UsersRoles {Admin = true, User = false, UserName = "test1.test.com"},
+                new UsersRoles {Admin = false, User = false, UserName = "test2.test.com"},
+                new UsersRoles {Admin = true, User = true, UserName = "test3.test.com"}
+            };
 
             MembershipService.Expect(a => a.GetUsersAndRoles("me@ucdavis.edu")).Return(usersAndRoles.AsQueryable());
             #endregion Arrange

@@ -87,8 +87,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "me@ucdavis.edu");
-            var viewModel = new EditUserViewModel();
-            viewModel.Email = "Me@ucdavis.edu";
+            var viewModel = new EditUserViewModel {Email = "Me@ucdavis.edu"};
             #endregion Arrange
 
             #region Act
@@ -108,8 +107,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "me@ucdavis.edu");
             MembershipService.Expect(a => a.GetUser("test@ucdavis.edu")).Return(null).Repeat.Any();
-            var viewModel = new EditUserViewModel();
-            viewModel.Email = "test@ucdavis.edu";
+            var viewModel = new EditUserViewModel {Email = "test@ucdavis.edu"};
             #endregion Arrange
 
             #region Act
@@ -131,10 +129,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "me@ucdavis.edu");
             var memberShipUser = new MembershipUser("AspNetSqlMembershipProvider", "test@ucdavis.edu", "", "test@ucdavis.edu", string.Empty, string.Empty, true, false, new DateTime(2011, 01, 02), new DateTime(2011, 01, 03), new DateTime(2011, 01, 04), new DateTime(2011, 01, 05), new DateTime(2011, 01, 06));
             MembershipService.Expect(a => a.GetUser("test@ucdavis.edu")).Return(memberShipUser).Repeat.Any();
-            var viewModel = new EditUserViewModel();
-            viewModel.Email = "test@ucdavis.edu";
-            viewModel.IsAdmin = true;
-            viewModel.IsUser = true;
+            var viewModel = new EditUserViewModel {Email = "test@ucdavis.edu", IsAdmin = true, IsUser = true};
 
             MembershipService.Expect(a => a.ManageRoles("test@ucdavis.edu", new[] {"NSAdmin", "NSUser"}))
                 .Return(true).Repeat.Any();
@@ -159,10 +154,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "me@ucdavis.edu");
             var memberShipUser = new MembershipUser("AspNetSqlMembershipProvider", "test@ucdavis.edu", "", "test@ucdavis.edu", string.Empty, string.Empty, true, false, new DateTime(2011, 01, 02), new DateTime(2011, 01, 03), new DateTime(2011, 01, 04), new DateTime(2011, 01, 05), new DateTime(2011, 01, 06));
             MembershipService.Expect(a => a.GetUser("test@ucdavis.edu")).Return(memberShipUser).Repeat.Any();
-            var viewModel = new EditUserViewModel();
-            viewModel.Email = "test@ucdavis.edu";
-            viewModel.IsAdmin = false;
-            viewModel.IsUser = true;
+            var viewModel = new EditUserViewModel {Email = "test@ucdavis.edu", IsAdmin = false, IsUser = true};
 
             MembershipService.Expect(a => a.ManageRoles("test@ucdavis.edu", new[] { "", "NSUser" }))
                 .Return(true).Repeat.Any();
@@ -187,10 +179,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "me@ucdavis.edu");
             var memberShipUser = new MembershipUser("AspNetSqlMembershipProvider", "test@ucdavis.edu", "", "test@ucdavis.edu", string.Empty, string.Empty, true, false, new DateTime(2011, 01, 02), new DateTime(2011, 01, 03), new DateTime(2011, 01, 04), new DateTime(2011, 01, 05), new DateTime(2011, 01, 06));
             MembershipService.Expect(a => a.GetUser("test@ucdavis.edu")).Return(memberShipUser).Repeat.Any();
-            var viewModel = new EditUserViewModel();
-            viewModel.Email = "test@ucdavis.edu";
-            viewModel.IsAdmin = true;
-            viewModel.IsUser = false;
+            var viewModel = new EditUserViewModel {Email = "test@ucdavis.edu", IsAdmin = true, IsUser = false};
 
             MembershipService.Expect(a => a.ManageRoles("test@ucdavis.edu", new[] { "NSAdmin", "" }))
                 .Return(true).Repeat.Any();
@@ -214,10 +203,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "me@ucdavis.edu");
             var memberShipUser = new MembershipUser("AspNetSqlMembershipProvider", "test@ucdavis.edu", "", "test@ucdavis.edu", string.Empty, string.Empty, true, false, new DateTime(2011, 01, 02), new DateTime(2011, 01, 03), new DateTime(2011, 01, 04), new DateTime(2011, 01, 05), new DateTime(2011, 01, 06));
             MembershipService.Expect(a => a.GetUser("test@ucdavis.edu")).Return(memberShipUser).Repeat.Any();
-            var viewModel = new EditUserViewModel();
-            viewModel.Email = "test@ucdavis.edu";
-            viewModel.IsAdmin = false;
-            viewModel.IsUser = false;
+            var viewModel = new EditUserViewModel {Email = "test@ucdavis.edu", IsAdmin = false, IsUser = false};
 
             MembershipService.Expect(a => a.ManageRoles("test@ucdavis.edu", new[] { "", "" }))
                 .Return(true).Repeat.Any();
@@ -242,10 +228,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "me@ucdavis.edu");
             var memberShipUser = new MembershipUser("AspNetSqlMembershipProvider", "test@ucdavis.edu", "", "test@ucdavis.edu", string.Empty, string.Empty, true, false, new DateTime(2011, 01, 02), new DateTime(2011, 01, 03), new DateTime(2011, 01, 04), new DateTime(2011, 01, 05), new DateTime(2011, 01, 06));
             MembershipService.Expect(a => a.GetUser("test@ucdavis.edu")).Return(memberShipUser).Repeat.Any();
-            var viewModel = new EditUserViewModel();
-            viewModel.Email = "test@ucdavis.edu";
-            viewModel.IsAdmin = true;
-            viewModel.IsUser = true;
+            var viewModel = new EditUserViewModel {Email = "test@ucdavis.edu", IsAdmin = true, IsUser = true};
 
             MembershipService.Expect(a => a.ManageRoles("test@ucdavis.edu", new[] { "NSAdmin", "NSUser" }))
                 .Return(false).Repeat.Any();
