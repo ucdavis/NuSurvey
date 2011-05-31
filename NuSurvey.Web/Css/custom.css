@@ -1,0 +1,134 @@
+﻿.result_fieldset_page
+{
+	border:none;
+	background-color:#BDD8F2;
+}
+
+.result_fieldset_positive
+{
+	border:none;
+	margin-left: 25px;
+	margin-right: 25px;
+	background-color: #D8E9F8;
+}
+
+.result_fieldset_goals
+{
+	border:none;
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-bottom: 25px;
+	background-color: #D8E9F8;
+}
+
+.result_fieldset_majorgoal
+{
+	border:none;
+	margin-left: 25px;
+}
+
+.result_legend_majorgoal
+{
+	font-weight: bold;
+	color: Orange;
+	font-size:1.5em;
+	padding-left: 10px;
+}
+
+.result_fieldset_minorgoals
+{
+	border:none;
+	margin-left: 25px;
+}
+
+.result_legend_minorgoal
+{
+	font-weight: bold;
+	color: blue;
+	font-size:1.2em;
+	padding-left: 25px;
+}
+
+.result_quiz
+{
+	font-size:3em;
+	font-weight:bold;
+	margin-bottom: 0px; 
+	padding-bottom: 30px; 
+	border-top-width: 0px; 
+	margin-top: 10px;
+}
+
+.result_instructions
+{
+	font-weight: bold;
+	border-bottom-width: 10px; 
+	margin-bottom: 10px; 
+	margin-left: 30px; 
+	border-right-width: 30px;
+}
+
+.result_checkbox
+{
+	font-size:2.5em;
+	display:inline-block;
+}
+
+.result_category.positive
+{
+	margin-top: 0px; 
+	padding-top: 20px; 
+	padding-bottom: 30px;
+	font-size:2.5em;
+	font-weight:bold;
+}
+
+.result_majorgoal
+{
+	font-weight:bold;
+}
+
+.result_minorgoals
+{
+	
+}
+
+
+.result_minorgoal
+{
+	
+}
+
+.result_thanks
+{
+	font-weight:bold;
+	margin-left: 30px; 
+	margin-right: 30px;
+	margin-top: 20px;
+}
+
+.result_category.group
+{
+	margin-top: 0px; 
+	padding-top: 0px; 
+	padding-bottom: 30px;
+}
+
+.result_goalcount
+{
+	padding-left: 30px; 
+	padding-bottom: 10px; 
+	padding-top: 5px;
+}
+
+.result_or
+{
+	border-bottom-width: 30px; 
+	margin-bottom: 30px;
+	color:Orange;
+	font-size: 2em;
+	font-weight: bolder;
+	margin-left: 5px
+}
+
+	

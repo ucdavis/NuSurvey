@@ -1,8 +1,11 @@
 ﻿@model NuSurvey.Core.Domain.SurveyResponse
 
+
 @{
-    ViewBag.Title = @Model.Survey.QuizType + " Quiz Results";
+    ViewBag.Title = "Quiz Results";
 }
+
+
 
 @Html.Partial("_Results", @Model)
 
@@ -11,4 +14,13 @@
     @Html.ActionLink("Back to Survey List", "Index")
 </p>
 
+@section AdditionalScripts{
+
+    <style type="text/css">
+        .col1.results
+        {
+        	display:none;
+        }
+    </style>
+}
 

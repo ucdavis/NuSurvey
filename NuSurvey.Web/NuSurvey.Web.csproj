@@ -146,6 +146,7 @@
     <Compile Include="Services\EmailService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Css\custom.css" />
     <Content Include="Css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Css\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Css\images\ui-bg_glass_0_014a81_1x400.png" />
