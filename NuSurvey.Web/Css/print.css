@@ -1,0 +1,136 @@
+﻿#branding 
+{
+    display: none;
+}
+
+#personalbar 
+{
+    display: none;
+}
+
+#footer
+{
+	display: none;
+}
+
+p 
+{
+	display: none;
+}
+
+body
+{
+	margin-left: -50px;
+	width: 580px;
+}
+
+.result_fieldset_page
+{
+	width: 580px;
+}
+
+.result_fieldset_positive
+{
+	margin-left: 10px;
+	margin-right: 10px;
+	width: 580px;
+	line-height: 2.5em;
+}
+
+.result_fieldset_goals
+{
+
+	margin-left: 0px;
+	width: 580px;
+
+}
+
+.result_fieldset_majorgoal
+{
+
+	margin-left: 10px;
+	margin-right: 10px;
+	width: 580px;
+
+}
+
+.result_legend_majorgoal
+{
+
+	padding-left: 10px;
+}
+
+.result_fieldset_minorgoals
+{
+	margin-left: 10px;
+}
+
+.result_legend_minorgoal
+{
+
+}
+
+.result_quiz
+{
+
+}
+
+.result_instructions
+{
+	margin-left: 5px; 
+	width: 580px;
+
+}
+
+.result_checkbox
+{
+
+}
+
+
+.result_category.positive
+{
+
+}
+
+.result_majorgoal
+{
+	font-weight:bold;
+}
+
+.result_minorgoals
+{
+	
+}
+
+
+.result_minorgoal
+{
+	
+}
+
+.result_thanks
+{
+	margin-left: 5px; 
+}
+
+
+.result_goalcount
+{
+	padding-left: 5px; 
+
+}
+
+.result_or
+{
+
+	margin-left: 5px
+}
+
+.result_goalname
+{	
+    width: 530px;
+}
+
+
+	

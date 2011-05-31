@@ -162,6 +162,7 @@
     <Content Include="Css\images\ui-icons_fffff_256x240.png" />
     <Content Include="Css\jquery-ui-1.8.11.custom.css" />
     <Content Include="Css\main.css" />
+    <Content Include="Css\print.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\comment.png" />
