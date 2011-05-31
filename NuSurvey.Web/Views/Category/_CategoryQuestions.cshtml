@@ -37,7 +37,8 @@
 				    @item.Order
 			    </td>
 			    <td>
-				    @Html.Raw(item.Name)
+				    @*@Html.Raw(item.Name)*@
+                    @Html.HtmlEncode(item.Name)
 			    </td>
                 <td>
                     @if (item.IsOpenEnded)
