@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
@@ -6,6 +7,7 @@ using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core.Extensions;
 using NuSurvey.Tests.Core.Helpers;
 using NuSurvey.Web.Controllers;
+using Rhino.Mocks;
 using UCDArch.Testing;
 using UCDArch.Web.ActionResults;
 
@@ -122,29 +124,101 @@ namespace NuSurvey.Tests.ControllerTests.CategoryControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.ReOrder(3, new int[3]{1,3,4})
+            var result = Controller.ReOrder(3, new []{1,3,4})
                 .AssertResultIs<JsonNetResult>();
             #endregion Act
 
             #region Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(false, result.Data);
-            Controller.ModelState.AssertErrorsAre("");
+            Controller.ModelState.AssertErrorsAre("QuizType: The QuizType field is required.");
             #endregion Assert		
         }
 
+        /// <summary>
+        /// Tests the FieldToTest with A value of TestValue does not save.
+        /// </summary>
         [TestMethod]
-        public void TestDescription()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestReOrderThorowsExceptionIfTableOrderIdIsNotFound()
+        {
+            var thisFar = false;
+            try
+            {
+                #region Arrange
+                var surveys = new List<Survey>();
+                for (int i = 0; i < 3; i++)
+                {
+                    surveys.Add(CreateValidEntities.Survey(i + 1));
+                }
+                var categories = new List<Category>();
+                for (int i = 0; i < 4; i++)
+                {
+                    categories.Add(CreateValidEntities.Category(i + 1));
+                    categories[i].Survey = surveys[2];
+                    categories[i].Rank = 10 - i;
+                    categories[i].SetIdTo(i + 1);
+                }
+                categories[1].IsCurrentVersion = false;
+                surveys[2].Categories = categories;
+
+                var fakeSurveys = new FakeSurveys();
+                fakeSurveys.Records(0, SurveyRepository, surveys);
+                #endregion Arrange
+
+                #region Act
+                thisFar = true;
+                Controller.ReOrder(3, new  []{ 1, 99, 4 });
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.IsTrue(thisFar);
+                Assert.AreEqual("Sequence contains no elements", ex.Message);
+                throw;
+            }	
+        }
+
+        [TestMethod]
+        public void TestReOrderPostReturnsTrueAndSavesNewRankIfTheSurveyIsValid()
         {
             #region Arrange
-            Assert.Inconclusive("Continue these tests");
+            var surveys = new List<Survey>();
+            for (int i = 0; i < 3; i++)
+            {
+                surveys.Add(CreateValidEntities.Survey(i + 1));
+            }
+            var categories = new List<Category>();
+            for (int i = 0; i < 4; i++)
+            {
+                categories.Add(CreateValidEntities.Category(i + 1));
+                categories[i].Survey = surveys[2];
+                categories[i].Rank = 10 - i;
+                categories[i].SetIdTo(i + 1);
+            }
+            categories[1].IsCurrentVersion = false;
+            surveys[2].Categories = categories;
+
+            var fakeSurveys = new FakeSurveys();
+            fakeSurveys.Records(0, SurveyRepository, surveys);
             #endregion Arrange
 
             #region Act
+            var result = Controller.ReOrder(3, new []{ 3, 1, 4 })
+                .AssertResultIs<JsonNetResult>();
             #endregion Act
 
             #region Assert
-            #endregion Assert		
+            Assert.IsNotNull(result);
+            Assert.AreEqual(true, result.Data);
+            SurveyRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Survey>.Is.Anything));
+            var args = (Survey)SurveyRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Survey>.Is.Anything))[0][0]; 
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.Categories.Where(a => a.Id == 3).Single().Rank);
+            Assert.AreEqual(2, args.Categories.Where(a => a.Id == 1).Single().Rank);
+            Assert.AreEqual(3, args.Categories.Where(a => a.Id == 4).Single().Rank);
+            #endregion Assert
         }
 
         #endregion ReOrder Post Tests

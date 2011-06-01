@@ -48,6 +48,12 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// #2
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="tableOrder">Array of category Ids</param>
+        /// <returns></returns>
         [HttpPost]
         [BypassAntiForgeryToken]
         public ActionResult ReOrder(int id, int[] tableOrder)
