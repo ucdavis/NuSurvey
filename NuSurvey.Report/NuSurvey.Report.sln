@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "NuSurvey.Report", "NuSurvey.Report\NuSurvey.Report.rptproj", "{CEFC6617-48AB-4663-8C8B-A9B538FC3EDA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		DebugLocal|Default = DebugLocal|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEFC6617-48AB-4663-8C8B-A9B538FC3EDA}.Debug|Default.ActiveCfg = Debug
+		{CEFC6617-48AB-4663-8C8B-A9B538FC3EDA}.Debug|Default.Build.0 = DebugLocal
+		{CEFC6617-48AB-4663-8C8B-A9B538FC3EDA}.Debug|Default.Deploy.0 = DebugLocal
+		{CEFC6617-48AB-4663-8C8B-A9B538FC3EDA}.DebugLocal|Default.ActiveCfg = DebugLocal
+		{CEFC6617-48AB-4663-8C8B-A9B538FC3EDA}.DebugLocal|Default.Build.0 = DebugLocal
+		{CEFC6617-48AB-4663-8C8B-A9B538FC3EDA}.Release|Default.ActiveCfg = Release
+		{CEFC6617-48AB-4663-8C8B-A9B538FC3EDA}.Release|Default.Build.0 = Release
+		{CEFC6617-48AB-4663-8C8B-A9B538FC3EDA}.Release|Default.Deploy.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

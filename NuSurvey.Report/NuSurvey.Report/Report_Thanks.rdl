@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
+  <DataSources>
+    <DataSource Name="NuSurveyDataSource">
+      <DataSourceReference>NuSurveyDataSource</DataSourceReference>
+      <rd:DataSourceID>92530324-3b40-4cb3-a220-08429144b14f</rd:DataSourceID>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet_Thanks">
+      <Fields>
+        <Field Name="id">
+          <DataField>id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="StudentId">
+          <DataField>StudentId</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Name">
+          <DataField>Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>NuSurveyDataSource</DataSourceName>
+        <CommandText>SELECT     SurveyResponses.id, SurveyResponses.StudentId, Surveys.Name
+FROM         SurveyResponses INNER JOIN
+                      Surveys ON SurveyResponses.SurveyId = Surveys.id
+WHERE     (SurveyResponses.id = @SurveyResponseId)</CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@SurveyResponseId">
+            <Value>=Parameters!SurveyResponseId.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+      </Query>
+    </DataSet>
+  </DataSets>
+  <Body>
+    <ReportItems>
+      <Textbox Name="StudentId">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Thank you </Value>
+                <Style>
+                  <FontSize>12pt</FontSize>
+                </Style>
+              </TextRun>
+              <TextRun>
+                <Label>Name</Label>
+                <Value>=First(Fields!StudentId.Value, "DataSet_Thanks")</Value>
+                <Style>
+                  <FontSize>12pt</FontSize>
+                </Style>
+              </TextRun>
+              <TextRun>
+                <Value> for taking the time to complete the </Value>
+                <Style>
+                  <FontSize>12pt</FontSize>
+                </Style>
+              </TextRun>
+              <TextRun>
+                <Label>Survey Name</Label>
+                <Value>=First(Fields!Name.Value, "DataSet_Thanks")</Value>
+                <Style>
+                  <FontSize>12pt</FontSize>
+                </Style>
+              </TextRun>
+              <TextRun>
+                <Value> quiz. We hope this feedback will help you and your family make healthy food and activity choices.</Value>
+                <Style>
+                  <FontSize>12pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>StudentId</rd:DefaultName>
+        <Height>0.77083in</Height>
+        <Width>5.98625in</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+    </ReportItems>
+    <Height>0.77083in</Height>
+    <Style />
+  </Body>
+  <ReportParameters>
+    <ReportParameter Name="SurveyResponseId">
+      <DataType>String</DataType>
+      <Prompt>Survey Response Id</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <Width>5.98625in</Width>
+  <Page>
+    <LeftMargin>1in</LeftMargin>
+    <RightMargin>1in</RightMargin>
+    <TopMargin>1in</TopMargin>
+    <BottomMargin>1in</BottomMargin>
+    <Style />
+  </Page>
+  <Language>en-US</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportID>dd891617-d89e-4a77-ba78-bf1531b6f389</rd:ReportID>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+</Report>
