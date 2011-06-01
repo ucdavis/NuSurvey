@@ -82,19 +82,8 @@ namespace NuSurvey.Web.Controllers
             return new JsonNetResult(false);
         }
 
-
-        ////
-        //// GET: /Category/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    var category = _categoryRepository.GetNullableById(id);
-
-        //    if (category == null) return RedirectToAction("Index");
-
-        //    return View(category);
-        //}
-
         /// <summary>
+        /// #3
         /// GET: /Category/Create
         /// </summary>
         /// <param name="id">Survey Id</param>
@@ -113,6 +102,7 @@ namespace NuSurvey.Web.Controllers
         } 
 
         /// <summary>
+        /// #4
         /// POST: /Category/Create
         /// </summary>
         /// <param name="id">Survey Id</param>

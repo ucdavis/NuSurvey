@@ -11,6 +11,7 @@ using MvcContrib.TestHelper;
 using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Helpers;
 using NuSurvey.Web.Services;
 using Rhino.Mocks;
 using UCDArch.Core.CommonValidator;
@@ -50,6 +51,12 @@ namespace NuSurvey.Tests.ControllerTests.CategoryControllerTests
             Controller = new TestControllerBuilder().CreateController<CategoryController>(CategoryRepository, ArchiveService);
         }
 
+        protected override void RegisterAdditionalServices(IWindsorContainer container)
+        {
+            AutomapperConfig.Configure();
+            base.RegisterAdditionalServices(container);
+        }
+
         protected override void RegisterRoutes()
         {
             new RouteConfigurator().RegisterRoutes(); //Try this one if below doesn't work
@@ -60,7 +67,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryControllerTests
         {
             var container = Core.ServiceLocatorInitializer.Init();
 
-            base.RegisterAdditionalServices(container);
+            RegisterAdditionalServices(container);
         }
         public CategoryControllerTests()
         {
