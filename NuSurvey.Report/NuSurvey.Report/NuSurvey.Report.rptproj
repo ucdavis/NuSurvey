@@ -24,6 +24,10 @@
       <Name>Report_Thanks.rdl</Name>
       <FullPath>Report_Thanks.rdl</FullPath>
     </ProjectItem>
+    <ProjectItem>
+      <Name>Report_MultiSurveyResponse.rdl</Name>
+      <FullPath>Report_MultiSurveyResponse.rdl</FullPath>
+    </ProjectItem>
   </Reports>
   <Configurations>
     <Configuration>
