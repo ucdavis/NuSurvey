@@ -9,10 +9,6 @@
   </DataSources>
   <Reports>
     <ProjectItem>
-      <Name>Report_Thanks.rdl</Name>
-      <FullPath>Report_Thanks.rdl</FullPath>
-    </ProjectItem>
-    <ProjectItem>
       <Name>Report_Affirmation.rdl</Name>
       <FullPath>Report_Affirmation.rdl</FullPath>
     </ProjectItem>
@@ -24,13 +20,18 @@
       <Name>Report_SurveyResponse.rdl</Name>
       <FullPath>Report_SurveyResponse.rdl</FullPath>
     </ProjectItem>
+    <ProjectItem>
+      <Name>Report_Thanks.rdl</Name>
+      <FullPath>Report_Thanks.rdl</FullPath>
+    </ProjectItem>
   </Reports>
   <Configurations>
     <Configuration>
       <Name>Debug</Name>
       <Platform>Win32</Platform>
       <Options>
-        <TargetFolder>NuSurvey.Report</TargetFolder>
+        <TargetServerURL>http://testreports.caes.ucdavis.edu/reportserver</TargetServerURL>
+        <TargetFolder>NuSurvey</TargetFolder>
         <TargetDataSourceFolder>Data Sources</TargetDataSourceFolder>
       </Options>
     </Configuration>

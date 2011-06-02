@@ -114,7 +114,7 @@ WHERE     (id = @SurveyResponseId)</CommandText>
         </Style>
       </Subreport>
     </ReportItems>
-    <Height>12.50708in</Height>
+    <Height>11.61125in</Height>
     <Style>
       <Border>
         <Style>None</Style>
