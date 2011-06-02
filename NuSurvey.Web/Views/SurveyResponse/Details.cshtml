@@ -163,7 +163,11 @@
 	</tbody>
 </table>
 
-<h2>Results</h2>
+
+<h2 class="col1">Results</h2>
+
+<a class="col2" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id })' target="_blank"><img alt="Print this result" src="@Url.Image("big_print.png")"/></a>
+
 <fieldset class="display-form">
 @Html.Partial("_Results", @Model.SurveyResponse)
 </fieldset>
