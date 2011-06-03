@@ -5,7 +5,14 @@
 }
 
 @section AdditionalScripts{
-     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#printButton").bt();
+        });
+    </script>
 
     <script type="text/javascript">
         $(function () {
@@ -48,21 +55,30 @@
     <h3><a href="#">Filters</a></h3>
     @using (Html.BeginForm("Details", "Survey", FormMethod.Post)) {
         @Html.AntiForgeryToken();
-        <ul>        
-        <li>
-            @Html.Label("Response On or After Date")
-            @Html.TextBoxFor(a => a.FilterBeginDate)
-        </li>
-        <li>
-            @Html.Label("Response On or Before Date")
-            @Html.TextBoxFor(a => a.FilterEndDate)
-        </li>
-        <li>
-            <label>&nbsp;</label>
-			<input class="button" type="submit" value="Apply" />
-        </li>
-        @*<li>@Html.SubmitButton("Submit", "Filter")</li>*@
-    </ul>
+
+            <ul>        
+                <li>
+                    <div class="editor-label">
+                        @Html.Label("Response On or After Date")
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(a => a.FilterBeginDate)
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-label">
+                        @Html.Label("Response On or Before Date")
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(a => a.FilterEndDate)
+                    </div>
+                </li>
+                <li>
+                    <label>&nbsp;</label>
+			        <input class="button" type="submit" value="Apply" />
+                </li>
+            </ul>
+
     }
 </div>
 
@@ -123,8 +139,8 @@
 	</tbody>
 </table>
 
-<div>
-<a href='@Url.Action("Results", "Print", new { id = @Model.Survey.Id, beginDate = @Model.FilterBeginDate, endDate = @Model.FilterEndDate })' target="_blank"><img alt="Print these results" src="@Url.Image("big_print.png")"/></a>
+<div >
+<a id="printButton" title="To limit the pages printed, use the filter on the table above." href='@Url.Action("Results", "Print", new { id = @Model.Survey.Id, beginDate = @Model.FilterBeginDate, endDate = @Model.FilterEndDate })' target="_blank"><img alt="Print these results" src="@Url.Image("big_print.png")"/></a>
 </div>
 
 
