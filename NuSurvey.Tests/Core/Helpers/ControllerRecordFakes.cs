@@ -22,4 +22,12 @@ namespace NuSurvey.Tests.Core.Helpers
             return CreateValidEntities.Survey(i);
         }
     }
+
+    public class FakeCategories : ControllerRecordFakes<Category>
+    {
+        protected override Category CreateValid(int i)
+        {
+            return CreateValidEntities.Category(i);
+        }
+    }
 }

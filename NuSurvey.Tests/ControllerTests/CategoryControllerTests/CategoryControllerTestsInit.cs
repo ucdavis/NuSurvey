@@ -40,6 +40,8 @@ namespace NuSurvey.Tests.ControllerTests.CategoryControllerTests
         public IArchiveService ArchiveService;
         public IRepository<Survey> SurveyRepository;
 
+        public IRepository<Answer> AnswerRepository;
+
         #region Init
         /// <summary>
         /// Setups the controller.
@@ -73,6 +75,9 @@ namespace NuSurvey.Tests.ControllerTests.CategoryControllerTests
         {
             SurveyRepository = FakeRepository<Survey>();
             Controller.Repository.Expect(a => a.OfType<Survey>()).Return(SurveyRepository).Repeat.Any();
+
+            AnswerRepository = FakeRepository<Answer>();
+            Controller.Repository.Expect(a => a.OfType<Answer>()).Return(AnswerRepository).Repeat.Any();
 
             Controller.Repository.Expect(a => a.OfType<Category>()).Return(CategoryRepository).Repeat.Any();	
         }

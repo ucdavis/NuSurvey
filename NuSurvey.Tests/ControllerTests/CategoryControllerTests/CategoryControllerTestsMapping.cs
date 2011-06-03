@@ -46,6 +46,15 @@ namespace NuSurvey.Tests.ControllerTests.CategoryControllerTests
         {
             "~/Category/Create/5".ShouldMapTo<CategoryController>(a => a.Create(5, new Category()), true);
         }
+
+        /// <summary>
+        /// #5
+        /// </summary>
+        [TestMethod]
+        public void TestEditGetMapping()
+        {
+            "~/Category/Edit/5".ShouldMapTo<CategoryController>(a => a.Edit(5));
+        }
         #endregion Mapping Tests
 
     }
