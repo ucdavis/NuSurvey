@@ -71,10 +71,13 @@ namespace NuSurvey.Web.Controllers
                 endDate = DateTime.Now.AddYears(1);
             }
 
-            if (endDate.Value.Date <= beginDate.Value.Date)
+            if (endDate.Value.Date < beginDate.Value.Date)
             {
-                endDate = beginDate.Value.Date.AddDays(1);
+                endDate = beginDate.Value.Date;
             }
+
+            beginDate = beginDate.Value.Date;
+            endDate = endDate.Value.Date.AddDays(1).AddMinutes(-1);
 
             return _printService.PrintMultiple(id, beginDate, endDate);
 

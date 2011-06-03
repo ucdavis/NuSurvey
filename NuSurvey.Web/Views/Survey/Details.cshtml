@@ -1,4 +1,4 @@
-﻿@model NuSurvey.Core.Domain.Survey
+﻿@model NuSurvey.Web.Controllers.SurveyResponseDetailViewModel
 
 @{
 	ViewBag.Title = "Survey Responses";
@@ -11,6 +11,20 @@
         $(function () {
             $("table.datatable").dataTable({ "bJQueryUI": true });
         });    
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#filter_container").accordion({ collapsible: true, autoHeight: false, active: false });
+        });
+    </script>
+ 
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#FilterBeginDate").datepicker();
+            $("#FilterEndDate").datepicker();
+        });
     </script>
 }
 @section SubNav {
@@ -30,9 +44,28 @@
 
 @*<h2>Details</h2>*@
 
-@*<p>
-	@Html.ActionLink("Create New", "Create")
-</p>*@
+<div id="filter_container">
+    <h3><a href="#">Filters</a></h3>
+    @using (Html.BeginForm("Details", "Survey", FormMethod.Post)) {
+        @Html.AntiForgeryToken();
+        <ul>        
+        <li>
+            @Html.Label("Response On or After Date")
+            @Html.TextBoxFor(a => a.FilterBeginDate)
+        </li>
+        <li>
+            @Html.Label("Response On or Before Date")
+            @Html.TextBoxFor(a => a.FilterEndDate)
+        </li>
+        <li>
+            <label>&nbsp;</label>
+			<input class="button" type="submit" value="Apply" />
+        </li>
+        @*<li>@Html.SubmitButton("Submit", "Filter")</li>*@
+    </ul>
+    }
+</div>
+
 <table class="datatable">
 	<thead>
 		<tr>
@@ -89,6 +122,10 @@
 }
 	</tbody>
 </table>
+
+<div>
+<a href='@Url.Action("Results", "Print", new { id = @Model.Survey.Id, beginDate = @Model.FilterBeginDate, endDate = @Model.FilterEndDate })' target="_blank"><img alt="Print these results" src="@Url.Image("big_print.png")"/></a>
+</div>
 
 
 

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web.Mvc;
 using AutoMapper;
 using NuSurvey.Core.Domain;
@@ -34,13 +36,15 @@ namespace NuSurvey.Web.Controllers
 
         //
         // GET: /Survey/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, DateTime? filterBeginDate, DateTime? filterEndDate)
         {
             var survey = _surveyRepository.GetNullableById(id);
 
-            if (survey == null) return RedirectToAction("Index");          
+            if (survey == null) return RedirectToAction("Index");
 
-            return View(survey);
+            var viewModel = SurveyResponseDetailViewModel.Create(Repository, survey, filterBeginDate, filterEndDate);
+
+            return View(viewModel);
         }
 
         //
@@ -169,4 +173,33 @@ namespace NuSurvey.Web.Controllers
 			return viewModel;
 		}
 	}
+
+    public class SurveyResponseDetailViewModel
+    {
+        public Survey Survey { get; set; }
+        public DateTime? FilterBeginDate { get; set; }
+        public DateTime? FilterEndDate { get; set; }
+        public IEnumerable<SurveyResponse> SurveyResponses { get; set; }
+
+        public static SurveyResponseDetailViewModel Create(IRepository repository, Survey survey, DateTime? beginDate, DateTime? endDate)
+        {
+            Check.Require(repository != null, "Repository must be supplied");
+            Check.Require(survey != null, "Survey must be supplied");
+
+            var viewModel = new SurveyResponseDetailViewModel { Survey = survey, FilterBeginDate = beginDate, FilterEndDate = endDate};
+            viewModel.SurveyResponses = viewModel.Survey.SurveyResponses.AsQueryable();
+            if (beginDate != null)
+            {
+                beginDate = beginDate.Value.Date;
+                viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.DateTaken > beginDate);
+            }
+            if (endDate != null)
+            {
+                endDate = endDate.Value.Date.AddDays(1).AddMinutes(-1);
+                viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.DateTaken < endDate);
+            }
+
+            return viewModel;
+        }
+    }
 }

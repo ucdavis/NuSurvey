@@ -153,7 +153,7 @@
     <Compile Include="RouteConfigurator.asax.cs" />
     <Compile Include="Services\ArchiveService.cs" />
     <Compile Include="Services\EmailService.cs" />
-    <Compile Include="Services\IPrintService.cs" />
+    <Compile Include="Services\PrintService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Css\custom.css" />
