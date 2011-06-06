@@ -32,7 +32,7 @@
 	<ul>
 		<li>
 			<div class="display-label">@Html.LabelFor(a => a.Question.Name)</div>
-			<div class="display-details">@Model.Question.Name</div>
+			<div class="display-details">@Html.HtmlEncode(@Model.Question.Name)</div>
 		</li>
 		<li>     
             <div class="display-label">@Html.LabelFor(a => a.Question.IsActive)</div>       
