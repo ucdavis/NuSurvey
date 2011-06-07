@@ -41,7 +41,7 @@
                 <label>@Model.CurrentQuestion.Order. @Html.HtmlEncode(Model.CurrentQuestion.Name) <span>*</span></label>
             </div>
             @{ var ans = string.Empty;}
-            <div class="editor-field ">
+            <div class="editor-field required">
                 <input id="QuestionId" type="hidden" value="@Model.CurrentQuestion.Id" name="Questions.QuestionId" />
                 @if (Model.CurrentQuestion.IsOpenEnded)
                 {

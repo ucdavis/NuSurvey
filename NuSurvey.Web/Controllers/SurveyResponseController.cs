@@ -169,7 +169,29 @@ namespace NuSurvey.Web.Controllers
         [HttpPost]
         public ActionResult AnswerNext(int id, QuestionAnswerParameter questions)
         {
-            throw new NotImplementedException();
+            var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (surveyResponse == null || !surveyResponse.IsPending)
+            {
+                Message = "Pending survey not found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            if (surveyResponse.UserId != CurrentUser.Identity.Name)
+            {
+                Message = "Not your survey";
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
+
+            var question = Repository.OfType<Question>().GetNullableById(questions.QuestionId);
+            if (question == null)
+            {
+                Message = "Question survey not found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+
+            if (question.IsOpenEnded)
+            {
+                
+            }
         }
 
         /// <summary>
