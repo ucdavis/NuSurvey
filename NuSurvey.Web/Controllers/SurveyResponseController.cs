@@ -188,10 +188,54 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
 
-            if (question.IsOpenEnded)
+            var answer = new Answer();
+            answer.Question = question;
+            answer.Category = question.Category;
+            if (answer.Question.IsOpenEnded)
             {
-                
+                int number;
+                if (Int32.TryParse(questions.Answer, out number))
+                {
+                    answer.OpenEndedAnswer = number;
+                    answer.Response = answer.Question.Responses.Where(a => a.Value == number.ToString()).FirstOrDefault();
+                    if (answer.Response == null)
+                    {
+                        var highResponse = answer.Question.Responses.Where(a => a.Value.Contains("+")).FirstOrDefault();
+                        if (highResponse != null)
+                        {
+                            int highValue;
+                            if (Int32.TryParse(highResponse.Value, out highValue))
+                            {
+                                if (number >= highValue)
+                                {
+                                    answer.Response = highResponse;
+                                }
+                            }
+                        }
+                    }
+                    if (answer.Response == null)
+                    {
+                        var lowResponse = answer.Question.Responses.Where(a => a.Value.Contains("-")).FirstOrDefault();
+                        if (lowResponse != null)
+                        {
+                            int lowValue;
+                            if (Int32.TryParse(lowResponse.Value, out lowValue))
+                            {
+                                if (number <= Math.Abs(lowValue))
+                                {
+                                    answer.Response = lowResponse;
+                                }
+                            }
+                        }
+                    }
+                }
             }
+            else
+            {
+                answer.Response = answer.Question.Responses.Where(a => a.Id == questions.ResponseId).FirstOrDefault();
+            }
+            throw new NotImplementedException();
+
         }
 
         /// <summary>
@@ -446,6 +490,8 @@ namespace NuSurvey.Web.Controllers
 
         //    return RedirectToAction("Index");
         //}
+
+  
         
         /// <summary>
         /// Transfer editable values from source to destination
@@ -468,7 +514,7 @@ namespace NuSurvey.Web.Controllers
                 var answer = new Answer();
                 answer.Question = question;
                 answer.Category = question.Category;                
-                if (question.IsOpenEnded)
+                if (answer.Question.IsOpenEnded)
                 {
                     #region Open Ended Logic
 
@@ -476,10 +522,10 @@ namespace NuSurvey.Web.Controllers
                     if (Int32.TryParse(passedQuestion.Answer, out number))
                     {
                         answer.OpenEndedAnswer = number;
-                        answer.Response = question1.Responses.Where(a => a.Value == number.ToString()).FirstOrDefault();
+                        answer.Response = answer.Question.Responses.Where(a => a.Value == number.ToString()).FirstOrDefault();
                         if (answer.Response == null)
                         {
-                            var highResponse = question1.Responses.Where(a => a.Value.Contains("+")).FirstOrDefault();
+                            var highResponse = answer.Question.Responses.Where(a => a.Value.Contains("+")).FirstOrDefault();
                             if (highResponse != null)
                             {
                                 int highValue;
@@ -494,7 +540,7 @@ namespace NuSurvey.Web.Controllers
                         }
                         if (answer.Response == null)
                         {
-                            var lowResponse = question1.Responses.Where(a => a.Value.Contains("-")).FirstOrDefault();
+                            var lowResponse = answer.Question.Responses.Where(a => a.Value.Contains("-")).FirstOrDefault();
                             if (lowResponse != null)
                             {
                                 int lowValue;
