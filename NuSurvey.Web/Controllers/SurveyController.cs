@@ -47,6 +47,17 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult PendingDetails(int id)
+        {
+            var survey = _surveyRepository.GetNullableById(id);
+
+            if (survey == null) return RedirectToAction("Index");
+
+            var viewModel = SurveyPendingResponseDetailViewModel.Create(Repository, survey);
+
+            return View(viewModel);
+        }
+
         //
         // GET: /Survey/Create
         public ActionResult Create()
@@ -127,32 +138,32 @@ namespace NuSurvey.Web.Controllers
             }
         }
         
-        //
-        // GET: /Survey/Delete/5 
-        public ActionResult Delete(int id)
-        {
-			var survey = _surveyRepository.GetNullableById(id);
+        ////
+        //// GET: /Survey/Delete/5 
+        //public ActionResult Delete(int id)
+        //{
+        //    var survey = _surveyRepository.GetNullableById(id);
 
-            if (survey == null) return RedirectToAction("Index");
+        //    if (survey == null) return RedirectToAction("Index");
 
-            return View(survey);
-        }
+        //    return View(survey);
+        //}
 
-        //
-        // POST: /Survey/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, Survey survey)
-        {
-			var surveyToDelete = _surveyRepository.GetNullableById(id);
+        ////
+        //// POST: /Survey/Delete/5
+        //[HttpPost]
+        //public ActionResult Delete(int id, Survey survey)
+        //{
+        //    var surveyToDelete = _surveyRepository.GetNullableById(id);
 
-            if (surveyToDelete == null) return RedirectToAction("Index");
+        //    if (surveyToDelete == null) return RedirectToAction("Index");
 
-            _surveyRepository.Remove(surveyToDelete);
+        //    _surveyRepository.Remove(surveyToDelete);
 
-            Message = "Survey Removed Successfully";
+        //    Message = "Survey Removed Successfully";
 
-            return RedirectToAction("Index");
-        }
+        //    return RedirectToAction("Index");
+        //}
 
 
     }
@@ -180,6 +191,7 @@ namespace NuSurvey.Web.Controllers
         public DateTime? FilterBeginDate { get; set; }
         public DateTime? FilterEndDate { get; set; }
         public IEnumerable<SurveyResponse> SurveyResponses { get; set; }
+        public bool HasPendingResponses { get; set; }
 
         public static SurveyResponseDetailViewModel Create(IRepository repository, Survey survey, DateTime? beginDate, DateTime? endDate)
         {
@@ -187,7 +199,8 @@ namespace NuSurvey.Web.Controllers
             Check.Require(survey != null, "Survey must be supplied");
 
             var viewModel = new SurveyResponseDetailViewModel { Survey = survey, FilterBeginDate = beginDate, FilterEndDate = endDate};
-            viewModel.SurveyResponses = viewModel.Survey.SurveyResponses.AsQueryable();
+            viewModel.SurveyResponses = viewModel.Survey.SurveyResponses.AsQueryable().Where(a => !a.IsPending);
+            viewModel.HasPendingResponses = viewModel.Survey.SurveyResponses.Where(a => a.IsPending).Any();
             if (beginDate != null)
             {
                 beginDate = beginDate.Value.Date;
@@ -198,6 +211,23 @@ namespace NuSurvey.Web.Controllers
                 endDate = endDate.Value.Date.AddDays(1).AddMinutes(-1);
                 viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.DateTaken < endDate);
             }
+
+            return viewModel;
+        }
+    }
+
+    public class SurveyPendingResponseDetailViewModel
+    {
+        public Survey Survey { get; set; }
+        public IEnumerable<SurveyResponse> SurveyResponses { get; set; }
+
+        public static SurveyPendingResponseDetailViewModel Create(IRepository repository, Survey survey)
+        {
+            Check.Require(repository != null, "Repository must be supplied");
+            Check.Require(survey != null, "Survey must be supplied");
+
+            var viewModel = new SurveyPendingResponseDetailViewModel { Survey = survey };
+            viewModel.SurveyResponses = viewModel.Survey.SurveyResponses.AsQueryable().Where(a => a.IsPending);
 
             return viewModel;
         }

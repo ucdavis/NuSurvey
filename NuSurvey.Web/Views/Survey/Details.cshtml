@@ -45,6 +45,11 @@
         <li>
             Responses
         </li>
+        @if (Model.HasPendingResponses) { 
+        <li>
+            <a href="@Url.Action("PendingDetails", "Survey", new { id = @Model.Survey.Id })">Pending Responses</a>
+        </li>
+        }
     </ul>
 }
 
@@ -87,7 +92,7 @@
 		<tr>
 			<th></th>
 			<th>
-				StudentId
+				Name
 			</th>
 			<th>
 				DateTaken

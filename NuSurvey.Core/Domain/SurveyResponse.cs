@@ -25,6 +25,7 @@ namespace NuSurvey.Core.Domain
         {
             Answers = new List<Answer>();
             DateTaken = DateTime.Now;
+            IsPending = false;
         }
         #endregion Constructor
 
@@ -47,6 +48,8 @@ namespace NuSurvey.Core.Domain
         [DisplayName("User Id")]
         public virtual string UserId { get; set; }
 
+        public virtual bool IsPending { get; set; }  //TODO: If a category is versioned and there are any pending Survey Responses for that survey, they should be deleted.
+
         [Required]
         public virtual IList<Answer> Answers { get; set; }
 
@@ -65,6 +68,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.StudentId);
             Map(x => x.DateTaken);
             Map(x => x.UserId);
+            Map(x => x.IsPending);
 
             References(x => x.PositiveCategory).Column("PositiveCategoryId");
             References(x => x.NegativeCategory1).Column("NegativeCategoryId1");

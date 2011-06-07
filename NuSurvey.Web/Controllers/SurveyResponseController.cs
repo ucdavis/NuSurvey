@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
 using NuSurvey.Core.Domain;
@@ -29,14 +30,13 @@ namespace NuSurvey.Web.Controllers
         // GET: /SurveyResponse/
         public ActionResult Index()
         {
-            //var surveyResponseList = _surveyResponseRepository.Queryable;
+            var isPublic = !(CurrentUser.IsInRole(RoleNames.User) || CurrentUser.IsInRole(RoleNames.Admin));
+            var viewModel = ActiveSurveyViewModel.Create(Repository, isPublic);
 
-            //return View(surveyResponseList.ToList());
-
-            var activeSurveyList = Repository.OfType<Survey>().Queryable.Where(a => a.IsActive);
-
-            return View(activeSurveyList);
+            return View(viewModel);
         }
+
+        
 
         
         /// <summary>
@@ -57,11 +57,137 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult StartSurvey(int id)
+        {
+            var survey = Repository.OfType<Survey>().GetNullableById(id);
+            if (survey == null || !survey.IsActive)
+            {
+                Message = "Survey not found or not active.";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+
+            var count = 0;
+            foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
+            {
+                var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
+                if (totalMax == null) //No Questions most likely
+                {
+                    continue;
+                }
+                count++;
+                if (count > 3)
+                {
+                    break;
+                }
+            }
+
+            if (count < 3)
+            {
+                Message = "Survey does not have enough active categories to complete survey.";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            var cannotContinue = false;
+
+            var pendingExists = _surveyResponseRepository.Queryable
+                .Where(a => a.Survey.Id == id && a.IsPending && a.UserId == CurrentUser.Identity.Name).FirstOrDefault();
+            if (pendingExists != null)
+            {
+                foreach (var answer in pendingExists.Answers)
+                {
+                    if (!answer.Category.IsCurrentVersion)
+                    {
+                        Message =
+                            "The unfinished survey's questions have been modifed. Unable to continue. Delete survey and start again.";
+                        cannotContinue = true;
+                        break;
+                    }
+                }
+                if (!cannotContinue)
+                {
+                    Message = "Unfinished survey found.";
+                }
+            }
+
+            var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, survey, pendingExists);
+            viewModel.CannotContinue = cannotContinue;
+
+            return View(viewModel);
+
+        }
+
+        [HttpPost]
+        public ActionResult StartSurvey(int id, SurveyResponse surveyResponse)
+        {
+            var survey = Repository.OfType<Survey>().GetNullableById(id);
+            if (survey == null || !survey.IsActive)
+            {
+                Message = "Survey not found or not active.";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+
+            surveyResponse.IsPending = true;
+            surveyResponse.Survey = survey;
+            surveyResponse.UserId = CurrentUser.Identity.Name;
+
+            ModelState.Clear();
+            surveyResponse.TransferValidationMessagesTo(ModelState);
+
+            if (ModelState.IsValid)
+            {
+                _surveyResponseRepository.EnsurePersistent(surveyResponse);
+
+                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id));
+            }
+
+            Message = "Please correct errors to continue";
+
+            var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, survey, null);
+            viewModel.SurveyResponse = surveyResponse;
+
+            return View(viewModel);
+        }
+
+
+        public ActionResult AnswerNext(int id)
+        {
+            var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (surveyResponse == null || !surveyResponse.IsPending)
+            {
+                Message = "Pending survey not found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            if (surveyResponse.UserId != CurrentUser.Identity.Name)
+            {
+                Message = "Not your survey";
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
+            var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult AnswerNext(int id, QuestionAnswerParameter questions)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">SurveyResponse Id</param>
+        /// <returns></returns>
+        public ActionResult DeletePending(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// GET: /SurveyResponse/Create
         /// </summary>
         /// <param name="id">Survey Id</param>
         /// <returns></returns>
+        [User]
         public ActionResult Create(int id)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
@@ -100,6 +226,7 @@ namespace NuSurvey.Web.Controllers
         //
         // POST: /SurveyResponse/Create
         [HttpPost]
+        [User]
         public ActionResult Create(int id, SurveyResponse surveyResponse, QuestionAnswerParameter[] questions)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
@@ -388,6 +515,68 @@ namespace NuSurvey.Web.Controllers
                 }
                 
             }      
+        }
+    }
+
+    public class ActiveSurveyViewModel
+    {
+        public IEnumerable<Survey> Surveys { get; set; }
+        public bool IsPublic { get; set; }
+
+        public static ActiveSurveyViewModel Create(IRepository repository, bool isPublic)
+        {
+            Check.Require(repository != null, "Repository must be supplied");
+
+            var viewModel = new ActiveSurveyViewModel { IsPublic = isPublic};
+            viewModel.Surveys = repository.OfType<Survey>().Queryable.Where(a => a.IsActive);
+
+            return viewModel;
+        }
+    }
+
+    public class SingleAnswerSurveyResponseViewModel
+    {
+        public Survey Survey { get; set; }
+        public SurveyResponse PendingSurveyResponse { get; set; }
+        [DisplayName("Total Questions")]
+        public int TotalActiveQuestions { get; set; }
+        [DisplayName("Answered")]
+        public int AnsweredQuestions { get; set; }
+        public IList<Question> Questions { get; set; }
+        public Question CurrentQuestion { get; set; }
+        public bool CannotContinue { get; set; }
+        public bool PendingSurveyResponseExists { get; set; }
+        public SurveyResponse SurveyResponse { get; set; }
+        public QuestionAnswerParameter SurveyAnswer { get; set; }
+
+        public static SingleAnswerSurveyResponseViewModel Create(IRepository repository, Survey survey, SurveyResponse pendingSurveyResponse)
+        {
+            Check.Require(repository != null, "Repository must be supplied");
+            Check.Require(survey != null);
+
+            var viewModel = new SingleAnswerSurveyResponseViewModel{Survey = survey, PendingSurveyResponse = pendingSurveyResponse, SurveyResponse = new SurveyResponse(survey)};
+            viewModel.Questions = viewModel.Survey.Questions
+                .Where(a => a.IsActive && a.Category != null && a.Category.IsActive && a.Category.IsCurrentVersion)
+                .OrderBy(a => a.Order).ToList();
+            viewModel.TotalActiveQuestions = viewModel.Questions.Count;
+            if (viewModel.PendingSurveyResponse != null)
+            {
+                viewModel.PendingSurveyResponseExists = true;
+                viewModel.AnsweredQuestions = viewModel.PendingSurveyResponse.Answers.Count;
+                var answeredQuestionIds = viewModel.PendingSurveyResponse.Answers.Select(a => a.Question.Id).ToList();
+                viewModel.CurrentQuestion = viewModel.Questions
+                    .Where(a => !answeredQuestionIds.Contains(a.Id))
+                    .OrderBy(a => a.Order)
+                    .FirstOrDefault();
+            }
+            else
+            {
+                viewModel.PendingSurveyResponseExists = false;
+                viewModel.AnsweredQuestions = 0;
+                viewModel.CurrentQuestion = viewModel.Questions.FirstOrDefault();
+            }
+
+            return viewModel;
         }
     }
 

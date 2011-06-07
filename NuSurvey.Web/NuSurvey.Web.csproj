@@ -248,6 +248,10 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LogOnPartial.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Survey\PendingDetails.cshtml" />
+    <Content Include="Views\SurveyResponse\StartSurvey.cshtml" />
+    <Content Include="Views\SurveyResponse\_SurveyResponseProgress.cshtml" />
+    <Content Include="Views\SurveyResponse\AnswerNext.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
