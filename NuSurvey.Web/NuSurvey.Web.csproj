@@ -175,6 +175,8 @@
     <Content Include="Css\print.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\Admin.png" />
+    <Content Include="Images\AnswerSurvey.png" />
     <Content Include="Images\big_print.png" />
     <Content Include="Images\comment.png" />
     <Content Include="Images\delete.png" />
@@ -187,6 +189,7 @@
     <Content Include="Images\small_print.png" />
     <Content Include="Images\top_blue_bar.jpg" />
     <Content Include="Images\updown.png" />
+    <Content Include="Images\Users.png" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\jquery-1.6.js" />
     <Content Include="Scripts\jquery-1.6.min.js" />

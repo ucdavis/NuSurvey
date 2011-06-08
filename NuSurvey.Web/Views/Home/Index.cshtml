@@ -2,7 +2,21 @@
     ViewBag.Title = "Home Page";
 }
 
-<h1>
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.balloon').bt({ positions: 'bottom' });
+        });
+    </script>
+}
+
+
+<a class="balloon" href='@Url.Action("Index", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
+
+@*<h1>
     <a href="@Url.Action("Index", "SurveyResponse")">Answer Surveys</a> 
-</h1>
+</h1>*@
 
