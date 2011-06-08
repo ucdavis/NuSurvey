@@ -1184,10 +1184,10 @@ namespace NuSurvey.Tests.RepositoryTests
         }
 
         /// <summary>
-        /// Does NOT Remove it
+        /// Does Remove it 
         /// </summary>
         [TestMethod]
-        public void TestSurveyResponseDoesNotCascadesUpdateRemoveAnswer()
+        public void TestSurveyResponseCascadesUpdateRemoveAnswer()
         {
             #region Arrange
             var count = Repository.OfType<Answer>().Queryable.Count();
@@ -1230,11 +1230,12 @@ namespace NuSurvey.Tests.RepositoryTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(count + (addedCount), Repository.OfType<Answer>().Queryable.Count());
+            Assert.AreEqual(count + (addedCount - 1), Repository.OfType<Answer>().Queryable.Count());
             var relatedRecord2 = Repository.OfType<Answer>().GetNullableById(saveRelatedId);
-            Assert.IsNotNull(relatedRecord2);
+            Assert.IsNull(relatedRecord2);
             #endregion Assert
         }
+
 
         [TestMethod]
         public void TestSurveyResponseCascadesDeleteToAnswer()
@@ -1291,6 +1292,58 @@ namespace NuSurvey.Tests.RepositoryTests
 
         #endregion Answers Tests
 
+        #region IsPending Tests
+
+        /// <summary>
+        /// Tests the IsPending is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestIsPendingIsFalseSaves()
+        {
+            #region Arrange
+            SurveyResponse surveyResponse = GetValid(9);
+            surveyResponse.IsPending = false;
+            #endregion Arrange
+
+            #region Act
+            SurveyResponseRepository.DbContext.BeginTransaction();
+            SurveyResponseRepository.EnsurePersistent(surveyResponse);
+            SurveyResponseRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(surveyResponse.IsPending);
+            Assert.IsFalse(surveyResponse.IsTransient());
+            Assert.IsTrue(surveyResponse.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the IsPending is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestIsPendingIsTrueSaves()
+        {
+            #region Arrange
+            var surveyResponse = GetValid(9);
+            surveyResponse.IsPending = true;
+            #endregion Arrange
+
+            #region Act
+            SurveyResponseRepository.DbContext.BeginTransaction();
+            SurveyResponseRepository.EnsurePersistent(surveyResponse);
+            SurveyResponseRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(surveyResponse.IsPending);
+            Assert.IsFalse(surveyResponse.IsTransient());
+            Assert.IsTrue(surveyResponse.IsValid());
+            #endregion Assert
+        }
+
+        #endregion IsPending Tests        
+    
         #region Reflection of Database.
 
         /// <summary>
@@ -1315,6 +1368,7 @@ namespace NuSurvey.Tests.RepositoryTests
                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("IsPending", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("NegativeCategory1", "NuSurvey.Core.Domain.Category", new List<string>()));
             expectedFields.Add(new NameAndType("NegativeCategory2", "NuSurvey.Core.Domain.Category", new List<string>()));
             expectedFields.Add(new NameAndType("PositiveCategory", "NuSurvey.Core.Domain.Category", new List<string>()));
@@ -1340,7 +1394,6 @@ namespace NuSurvey.Tests.RepositoryTests
         }
 
         #endregion Reflection of Database.	
-		
-		
+			
     }
 }
