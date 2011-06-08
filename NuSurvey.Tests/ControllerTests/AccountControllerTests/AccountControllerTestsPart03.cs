@@ -42,7 +42,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Delete("test@ucdavis.edu")
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers());
+                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
             #endregion Act
 
             #region Assert
@@ -110,7 +110,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Delete("test@ucdavis.edu", false)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers());
+                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
             #endregion Act
 
             #region Assert
@@ -147,7 +147,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Delete("test@ucdavis.edu", true)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers());
+                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
             #endregion Act
 
             #region Assert
@@ -171,7 +171,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Delete("test@ucdavis.edu", true)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers());
+                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
             #endregion Act
 
             #region Assert
@@ -195,7 +195,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Delete("test@ucdavis.edu", false)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers());
+                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
             #endregion Act
 
             #region Assert
@@ -219,7 +219,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Delete("test@ucdavis.edu", true)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers());
+                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
             #endregion Act
 
             #region Assert
