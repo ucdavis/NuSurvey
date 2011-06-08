@@ -162,7 +162,10 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
             }
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
-
+            if (viewModel.CurrentQuestion == null)
+            {
+                return this.RedirectToAction(a => a.FinalizePending(surveyResponse.Id));
+            }
             return View(viewModel);
         }
 
@@ -188,7 +191,16 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
 
-            var answer = new Answer();
+            Answer answer;
+            if (surveyResponse.Answers.Where(a => a.Question.Id == question.Id).Any())
+            {
+                answer = surveyResponse.Answers.Where(a => a.Question.Id == question.Id).First();
+            }
+            else
+            {
+                answer = new Answer(); 
+            }
+            
             answer.Question = question;
             answer.Category = question.Category;
             if (answer.Question.IsOpenEnded)
@@ -229,13 +241,128 @@ namespace NuSurvey.Web.Controllers
                         }
                     }
                 }
+                else
+                {
+                    //TryParse failed
+                }
             }
             else
             {
                 answer.Response = answer.Question.Responses.Where(a => a.Id == questions.ResponseId).FirstOrDefault();
             }
-            throw new NotImplementedException();
+            if (answer.Category.DoNotUseForCalculations && answer.Response == null && answer.OpenEndedAnswer != null)
+            {
+                answer.Score = 0;
+                surveyResponse.AddAnswers(answer);
+            }
+            if (answer.Response != null)
+            {
+                if (answer.Question.Category.DoNotUseForCalculations)
+                {
+                    answer.Score = 0;
+                }
+                else
+                {
+                    answer.Score = answer.Response.Score;
+                }
+                surveyResponse.AddAnswers(answer);
+            }
+            else
+            {
+                if (answer.Question.IsOpenEnded)
+                {
+                    if (string.IsNullOrWhiteSpace(questions.Answer))
+                    {
+                        ModelState.AddModelError(string.Format("Questions"), "Numeric answer to Question is required");
+                    }
+                    else if(answer.OpenEndedAnswer == null)
+                    {
+                        ModelState.AddModelError(string.Format("Questions"), "Answer must be a number");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Format("Questions"), "Answer is required");
+                }
+            }
 
+            if (ModelState.IsValid)
+            {
+                _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                return this.RedirectToAction<SurveyResponseController>(a => a.AnswerNext(surveyResponse.Id));
+            }
+
+            var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
+
+            return View(viewModel);
+            
+
+        }
+
+        public ActionResult FinalizePending(int id)
+        {
+            var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (surveyResponse == null || !surveyResponse.IsPending)
+            {
+                Message = "Pending survey not found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            if (surveyResponse.UserId != CurrentUser.Identity.Name)
+            {
+                Message = "Not your survey";
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
+            var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
+            if (viewModel.CurrentQuestion == null)
+            {
+                CalculateScores(surveyResponse);
+                surveyResponse.IsPending = false;
+                _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                return this.RedirectToAction(a => a.Results(surveyResponse.Id));
+            }
+            else
+            {
+                Message = "Error finalizing survey.";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+        }
+
+        private void CalculateScores(SurveyResponse surveyResponse)
+        {
+            var scores = new List<Scores>();
+            foreach (var category in surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
+            {
+                var score = new Scores();
+                score.Category = category;
+                var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
+                if (totalMax == null) //No Questions most likely
+                {
+                    continue;
+                }
+                score.MaxScore = totalMax.TotalMaxScore;
+                score.TotalScore =
+                    surveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);
+                score.Percent = (score.TotalScore / score.MaxScore) * 100m;
+                score.Rank = category.Rank;
+                scores.Add(score);
+
+            }
+
+            surveyResponse.PositiveCategory = scores
+                .OrderByDescending(a => a.Percent)
+                .ThenBy(a => a.Rank)
+                .FirstOrDefault().Category;
+
+            surveyResponse.NegativeCategory1 = scores
+                .Where(a => a.Category != surveyResponse.PositiveCategory)
+                .OrderBy(a => a.Percent)
+                .ThenBy(a => a.Rank)
+                .FirstOrDefault().Category;
+            surveyResponse.NegativeCategory2 = scores
+                .Where(a => a.Category != surveyResponse.PositiveCategory && a.Category != surveyResponse.NegativeCategory1)
+                .OrderBy(a => a.Percent)
+                .ThenBy(a => a.Rank)
+                .FirstOrDefault().Category;
         }
 
         /// <summary>
@@ -344,40 +471,41 @@ namespace NuSurvey.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var scores = new List<Scores>();
-                foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
-                {
-                    var score = new Scores();
-                    score.Category = category;
-                    var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
-                    if (totalMax == null) //No Questions most likely
-                    {
-                        continue;
-                    }
-                    score.MaxScore = totalMax.TotalMaxScore;
-                    score.TotalScore =
-                        surveyResponseToCreate.Answers.Where(a => a.Category == category).Sum(b => b.Score);
-                    score.Percent = (score.TotalScore/score.MaxScore)*100m;
-                    score.Rank = category.Rank;
-                    scores.Add(score);
+                CalculateScores(surveyResponseToCreate);
+                //var scores = new List<Scores>();
+                //foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
+                //{
+                //    var score = new Scores();
+                //    score.Category = category;
+                //    var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
+                //    if (totalMax == null) //No Questions most likely
+                //    {
+                //        continue;
+                //    }
+                //    score.MaxScore = totalMax.TotalMaxScore;
+                //    score.TotalScore =
+                //        surveyResponseToCreate.Answers.Where(a => a.Category == category).Sum(b => b.Score);
+                //    score.Percent = (score.TotalScore/score.MaxScore)*100m;
+                //    score.Rank = category.Rank;
+                //    scores.Add(score);
 
-                }
+                //}
 
-                surveyResponseToCreate.PositiveCategory = scores
-                    .OrderByDescending(a => a.Percent)
-                    .ThenBy(a => a.Rank)
-                    .FirstOrDefault().Category;
+                //surveyResponseToCreate.PositiveCategory = scores
+                //    .OrderByDescending(a => a.Percent)
+                //    .ThenBy(a => a.Rank)
+                //    .FirstOrDefault().Category;
 
-                surveyResponseToCreate.NegativeCategory1 = scores
-                    .Where(a => a.Category != surveyResponseToCreate.PositiveCategory)
-                    .OrderBy(a => a.Percent)
-                    .ThenBy(a => a.Rank)
-                    .FirstOrDefault().Category;
-                surveyResponseToCreate.NegativeCategory2 = scores                    
-                    .Where(a => a.Category != surveyResponseToCreate.PositiveCategory && a.Category != surveyResponseToCreate.NegativeCategory1)
-                    .OrderBy(a => a.Percent)
-                    .ThenBy(a => a.Rank)
-                    .FirstOrDefault().Category;
+                //surveyResponseToCreate.NegativeCategory1 = scores
+                //    .Where(a => a.Category != surveyResponseToCreate.PositiveCategory)
+                //    .OrderBy(a => a.Percent)
+                //    .ThenBy(a => a.Rank)
+                //    .FirstOrDefault().Category;
+                //surveyResponseToCreate.NegativeCategory2 = scores                    
+                //    .Where(a => a.Category != surveyResponseToCreate.PositiveCategory && a.Category != surveyResponseToCreate.NegativeCategory1)
+                //    .OrderBy(a => a.Percent)
+                //    .ThenBy(a => a.Rank)
+                //    .FirstOrDefault().Category;
                 _surveyResponseRepository.EnsurePersistent(surveyResponseToCreate);
 
                 Message = "SurveyResponse Created Successfully";

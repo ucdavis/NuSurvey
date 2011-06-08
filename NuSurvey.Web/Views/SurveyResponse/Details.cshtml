@@ -144,7 +144,7 @@
                 @ans.Question.Order
             </td>
             <td>
-                @ans.Question.Name
+                @Html.HtmlEncode(ans.Question.Name)
             </td>
             <td>
                 @if (!ans.OpenEndedAnswer.HasValue){ 
