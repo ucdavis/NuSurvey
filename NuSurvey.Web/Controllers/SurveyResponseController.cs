@@ -8,7 +8,6 @@ using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
-using UCDArch.Testing.Extensions;
 using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
@@ -57,6 +56,12 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Start or continue a survey with one question at a time
+        /// GET: /SurveyResponse/StartSurvey/5
+        /// </summary>
+        /// <param name="id">Survey ID</param>
+        /// <returns></returns>
         public ActionResult StartSurvey(int id)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
@@ -115,6 +120,13 @@ namespace NuSurvey.Web.Controllers
 
         }
 
+        /// <summary>
+        /// Start or continue a survey with one question at a time
+        /// POST: 
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="surveyResponse"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult StartSurvey(int id, SurveyResponse surveyResponse)
         {
@@ -147,7 +159,12 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
-
+        /// <summary>
+        /// Load the next available question, or finalize if all questions are answered.
+        /// GET: /SurveyResponse/AnswerNext/5
+        /// </summary>
+        /// <param name="id">SurveyResponse Id</param>
+        /// <returns></returns>
         public ActionResult AnswerNext(int id)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
@@ -169,6 +186,12 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// POST:
+        /// </summary>
+        /// <param name="id">SurveyResponse Id</param>
+        /// <param name="questions"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AnswerNext(int id, QuestionAnswerParameter questions)
         {
@@ -289,7 +312,7 @@ namespace NuSurvey.Web.Controllers
             if (ModelState.IsValid)
             {
                 _surveyResponseRepository.EnsurePersistent(surveyResponse);
-                return this.RedirectToAction<SurveyResponseController>(a => a.AnswerNext(surveyResponse.Id));
+                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id));
             }
 
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
@@ -299,6 +322,11 @@ namespace NuSurvey.Web.Controllers
 
         }
 
+        /// <summary>
+        /// Calculate the pasitive and two negative categories and set the pending flag to false
+        /// </summary>
+        /// <param name="id">SurveyResponse Id</param>
+        /// <returns></returns>
         public ActionResult FinalizePending(int id)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
@@ -366,13 +394,69 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
-        /// 
+        /// GET:
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>
+        /// <param name="fromAdmin"></param>
         /// <returns></returns>
-        public ActionResult DeletePending(int id)
+        public ActionResult DeletePending(int id, bool fromAdmin)
         {
-            throw new NotImplementedException();
+            var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (surveyResponse == null || !surveyResponse.IsPending)
+            {
+                Message = "Pending survey not found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            if (surveyResponse.UserId != CurrentUser.Identity.Name)
+            {
+                Message = "Not your survey";
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
+            var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
+            viewModel.FromAdmin = fromAdmin;
+
+            return View(viewModel);
+        }
+
+        /// <summary>
+        /// POST:
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="confirm"></param>
+        /// <param name="fromAdmin"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DeletePending(int id, bool confirm, bool fromAdmin)
+        {
+            var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (surveyResponse == null || !surveyResponse.IsPending)
+            {
+                Message = "Pending survey not found";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            if (surveyResponse.UserId != CurrentUser.Identity.Name)
+            {
+                Message = "Not your survey";
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
+
+            if (confirm == false)
+            {
+                if (fromAdmin)
+                {
+                    return this.RedirectToAction<SurveyController>(a => a.PendingDetails(id));
+                }
+                return this.RedirectToAction(a => a.StartSurvey(surveyResponse.Survey.Id));
+            }
+
+            _surveyResponseRepository.Remove(surveyResponse);
+
+            if (fromAdmin)
+            {
+                return this.RedirectToAction<SurveyController>(a => a.PendingDetails(id));
+            }
+            return this.RedirectToAction<HomeController>(a => a.Index());
+
         }
 
         /// <summary>
@@ -744,6 +828,7 @@ namespace NuSurvey.Web.Controllers
         public bool PendingSurveyResponseExists { get; set; }
         public SurveyResponse SurveyResponse { get; set; }
         public QuestionAnswerParameter SurveyAnswer { get; set; }
+        public bool FromAdmin { get; set; }
 
         public static SingleAnswerSurveyResponseViewModel Create(IRepository repository, Survey survey, SurveyResponse pendingSurveyResponse)
         {

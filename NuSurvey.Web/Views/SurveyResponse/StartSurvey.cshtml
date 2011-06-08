@@ -41,7 +41,7 @@ else if (Model.PendingSurveyResponseExists)
 			    @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
 			    <label>&nbsp;</label>
                 <a href="@Url.Action("AnswerNext", "SurveyResponse", new { id = @Model.PendingSurveyResponse.Id })">Continue</a>
-			    | <a href="@Url.Action("DeletePending", "SurveyResponse", new { id = @Model.PendingSurveyResponse.Id })">Delete Survey</a> 
+			    | <a href="@Url.Action("DeletePending", "SurveyResponse", new { id = @Model.PendingSurveyResponse.Id, fromAdmin = false})">Delete Survey</a> 
                 | @Html.ActionLink("Cancel", "Index")
             </li>
         </ul>

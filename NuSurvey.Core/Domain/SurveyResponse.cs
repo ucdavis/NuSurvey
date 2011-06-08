@@ -75,7 +75,7 @@ namespace NuSurvey.Core.Domain
             References(x => x.NegativeCategory2).Column("NegativeCategoryId2");
             References(x => x.Survey);
 
-            HasMany(x => x.Answers).Cascade.All();
+            HasMany(x => x.Answers).Cascade.AllDeleteOrphan().Inverse();
         }
     }
 }
