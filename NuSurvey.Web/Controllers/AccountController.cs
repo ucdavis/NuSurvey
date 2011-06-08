@@ -146,7 +146,7 @@ namespace NuSurvey.Web.Controllers
 
                     Message = string.Format("{0} {1}", Message, "User emailed");
 
-                    return this.RedirectToAction(a => a.ManageUsers(false, false, true));
+                    return this.RedirectToAction(a => a.ManageUsers(false, false, false));
                 }
                 else
                 {
@@ -188,7 +188,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, true));
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
             }
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
@@ -214,7 +214,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(editUserViewModel.Email) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, true));
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
             }
 
             var roles = new string[]{"", ""};
@@ -236,7 +236,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Problem with Updating Roles";
             }
 
-            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, true));
+            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, true));
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
             }
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
@@ -282,7 +282,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, true));
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
             }
             if (confirm)
             {
@@ -296,7 +296,7 @@ namespace NuSurvey.Web.Controllers
                 }
             }
 
-            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, true));
+            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
         }
 
         /// <summary>
