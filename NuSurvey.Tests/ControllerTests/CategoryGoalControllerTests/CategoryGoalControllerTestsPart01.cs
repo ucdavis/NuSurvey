@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MvcContrib.TestHelper;
+using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core.Extensions;
 using NuSurvey.Tests.Core.Helpers;
 using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Core.Domain;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MvcContrib.TestHelper;
-using NuSurvey.Web;
 using Rhino.Mocks;
-using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
-using UCDArch.Web.Attributes;
 namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
 {
     public partial class CategoryGoalControllerTests
@@ -84,7 +75,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Create(4)
+            Controller.Create(5)
                 .AssertActionRedirect()
                 .ToAction<ErrorController>(a => a.Index());
             #endregion Act
@@ -102,7 +93,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Create(2)
+            Controller.Create(1)
                 .AssertActionRedirect()
                 .ToAction<ErrorController>(a => a.Index());
             #endregion Act
@@ -121,7 +112,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.Create(1)
+            var result = Controller.Create(3)
                 .AssertViewRendered()
                 .WithViewData<CategoryGoalViewModel>();
             #endregion Act
@@ -129,7 +120,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
             #region Assert
             Assert.IsNotNull(result);
             Assert.IsTrue(result.CategoryGoal.IsTransient());
-            Assert.AreEqual("Name1", result.Category.Name);
+            Assert.AreEqual("Name3", result.Category.Name);
             Assert.AreEqual("Name3", result.Survey.Name);
             #endregion Assert			
         }
@@ -145,7 +136,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Create(4, new CategoryGoal())
+            Controller.Create(5, new CategoryGoal())
                 .AssertActionRedirect()
                 .ToAction<ErrorController>(a => a.Index());
             #endregion Act
@@ -163,7 +154,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Create(2, new CategoryGoal())
+            Controller.Create(1, new CategoryGoal())
                 .AssertActionRedirect()
                 .ToAction<ErrorController>(a => a.Index());
             #endregion Act
@@ -225,5 +216,156 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
         }
         #endregion Create Post Tests
         #endregion Create Tests
+
+        #region Edit Tests
+        #region Edit Get Tests
+        [TestMethod]
+        public void TestEditGetRedirectsWhenCategoryGoalNotFound()
+        {
+            #region Arrange
+            SetupData1();
+            #endregion Arrange
+
+            #region Act
+            Controller.Edit(4)
+                .AssertActionRedirect()
+                .ToAction<ErrorController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("CategoryGoal Not Found", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestEditGetRedirectsWhenCategoryNotCurrent()
+        {
+            #region Arrange
+            SetupData1();
+            #endregion Arrange
+
+            #region Act
+            Controller.Edit(1)
+                .AssertActionRedirect()
+                .ToAction<ErrorController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Related Category is not Current", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestEditGetReturnsView()
+        {
+            #region Arrange
+            SetupData1();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(2)
+                .AssertViewRendered()
+                .WithViewData<CategoryGoalViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.CategoryGoal.IsTransient());
+            Assert.AreEqual("Name2", result.CategoryGoal.Name);
+            Assert.AreEqual("Name3", result.Category.Name);
+            Assert.AreEqual("Name3", result.Survey.Name);
+            #endregion Assert
+        }
+        #endregion Edit Get Tests
+        #region Edit Post Tests
+        [TestMethod]
+        public void TestEditPostRedirectsWhenCategoryGoalNotFound()
+        {
+            #region Arrange
+            SetupData1();
+            #endregion Arrange
+
+            #region Act
+            Controller.Edit(4, new CategoryGoal())
+                .AssertActionRedirect()
+                .ToAction<ErrorController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("CategoryGoal Not Found", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestEditPostRedirectsWhenCategoryNotCurrent()
+        {
+            #region Arrange
+            SetupData1();
+            #endregion Arrange
+
+            #region Act
+            Controller.Edit(1, new CategoryGoal())
+                .AssertActionRedirect()
+                .ToAction<ErrorController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Related Category is not Current", Controller.Message);
+            #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestEditPostWhenInvalidReturnsView()
+        {
+            #region Arrange
+            SetupData1();
+            var editCategoryGoal = CreateValidEntities.CategoryGoal(2);
+            editCategoryGoal.SetIdTo(2);
+            editCategoryGoal.Name = string.Empty; //Invalid
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(2, editCategoryGoal)
+                .AssertViewRendered()
+                .WithViewData<CategoryGoalViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(string.Empty, result.CategoryGoal.Name);
+            Assert.AreEqual("Name3", result.Category.Name);
+            Assert.AreEqual("Name3", result.Survey.Name);
+            Controller.ModelState.AssertErrorsAre("Name: The Name field is required.");
+            CategoryGoalRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<CategoryGoal>.Is.Anything));
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestEditPostWhenValidRedirects()
+        {
+            #region Arrange
+            SetupData1();
+            var editCategoryGoal = CreateValidEntities.CategoryGoal(2);
+            editCategoryGoal.SetIdTo(2);
+            editCategoryGoal.Name = "Updated";
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(2, editCategoryGoal)
+                .AssertActionRedirect()
+                .ToAction<CategoryController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.RouteValues["id"]);
+            CategoryGoalRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<CategoryGoal>.Is.Anything));
+            var args = (CategoryGoal) CategoryGoalRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<CategoryGoal>.Is.Anything))[0][0]; 
+            Assert.AreEqual("Updated", args.Name);
+            #endregion Assert
+        }
+        #endregion Edit Post Tests
+        #endregion Edit Tests
     }
 }

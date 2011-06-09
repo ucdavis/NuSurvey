@@ -1,22 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using System.Web.Routing;
 using Castle.Windsor;
-using NuSurvey.Tests.Core.Helpers;
-using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Core.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
+using NuSurvey.Core.Domain;
+using NuSurvey.Tests.Core.Helpers;
 using NuSurvey.Web;
+using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Helpers;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
-using UCDArch.Web.Attributes;
 
 
 namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
@@ -74,11 +68,13 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
         {
             var survey = CreateValidEntities.Survey(3);
             var categories = new List<Category>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 categories.Add(CreateValidEntities.Category(i + 1));
                 categories[i].Survey = survey;
+                categories[i].IsCurrentVersion = true;
             }
+            categories[0].IsCurrentVersion = false;
             categories[1].IsCurrentVersion = false;
             var fakeCategories = new FakeCategories();
             fakeCategories.Records(0, CategoryRepository, categories);
@@ -87,9 +83,8 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
             for (int i = 0; i < 3; i++)
             {
                 categoryGoals.Add(CreateValidEntities.CategoryGoal(i + 1));
-                categoryGoals[i].Category = categories[1];
+                categoryGoals[i].Category = categories[i+1];
             }
-            categoryGoals[0].Category.IsCurrentVersion = false;
 
             var fakeCategoryGoals = new FakeCategoryGoals();
             fakeCategoryGoals.Records(0, CategoryGoalRepository, categoryGoals);
