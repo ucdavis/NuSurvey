@@ -3,7 +3,6 @@ using MvcContrib.TestHelper;
 using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core.Extensions;
 using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Models;
 
 namespace NuSurvey.Tests.ControllerTests.CategoryControllerTests
 {

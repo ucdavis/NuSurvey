@@ -105,7 +105,6 @@
     <Compile Include="ControllerTests\AccountControllerTests\AccountControllerTestsReflection.cs" />
     <Compile Include="ControllerTests\ApplicationControllerTests.cs" />
     <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsPart03.cs" />
-    <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsPart04.cs" />
     <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsReflection.cs" />
     <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsInit.cs" />
     <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsMapping.cs" />
