@@ -26,14 +26,10 @@
 
 <fieldset class="display-form">
 	<ul>
-@*		<li>
-			<div class="display-label">Goal</div>
-			<div class="display-field">@Model.CategoryGoal.Name</div>
+        <li>
+			<div class="display-label">@Html.Label("Category")</div>
+			<div class="display-details">@Html.DisplayFor(a => a.Category.Name)</div>
 		</li>
-		<li>
-			<div class="display-label">Active</div>
-			<div class="display-field">@Model.CategoryGoal.IsActive</div>
-		</li>*@
         <li>
 			<div class="display-label">@Html.LabelFor(a => a.CategoryGoal.Name)</div>
 			<div class="display-details">@Html.DisplayFor(a => a.CategoryGoal.Name)</div>

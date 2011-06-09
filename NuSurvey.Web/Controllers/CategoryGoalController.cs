@@ -25,6 +25,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #1
         /// GET: /CategoryGoal/Details/5
         /// </summary>
         /// <param name="id"></param>
@@ -46,6 +47,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #2
         /// GET: /CategoryGoal/Create
         /// </summary>
         /// <param name="id">Category Id</param>
@@ -70,6 +72,7 @@ namespace NuSurvey.Web.Controllers
         } 
 
         /// <summary>
+        /// #3
         /// POST: /CategoryGoal/Create
         /// </summary>
         /// <param name="id">Category Id</param>
@@ -178,34 +181,6 @@ namespace NuSurvey.Web.Controllers
                 return View(viewModel);
             }
         }
-        
-        ////
-        //// GET: /CategoryGoal/Delete/5 
-        //public ActionResult Delete(int id)
-        //{
-        //    var categoryGoal = _categoryGoalRepository.GetNullableById(id);
-
-        //    if (categoryGoal == null) return RedirectToAction("Index");
-
-        //    return View(categoryGoal);
-        //}
-
-        ////
-        //// POST: /CategoryGoal/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, CategoryGoal categoryGoal)
-        //{
-        //    var categoryGoalToDelete = _categoryGoalRepository.GetNullableById(id);
-
-        //    if (categoryGoalToDelete == null) return RedirectToAction("Index");
-
-        //    _categoryGoalRepository.Remove(categoryGoalToDelete);
-
-        //    Message = "CategoryGoal Removed Successfully";
-
-        //    return RedirectToAction("Index");
-        //}
-              
 
     }
 

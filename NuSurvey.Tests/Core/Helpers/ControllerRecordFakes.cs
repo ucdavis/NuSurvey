@@ -30,4 +30,12 @@ namespace NuSurvey.Tests.Core.Helpers
             return CreateValidEntities.Category(i);
         }
     }
+
+    public class FakeCategoryGoals : ControllerRecordFakes<CategoryGoal>
+    {
+        protected override CategoryGoal CreateValid(int i)
+        {
+            return CreateValidEntities.CategoryGoal(i);
+        }
+    }
 }
