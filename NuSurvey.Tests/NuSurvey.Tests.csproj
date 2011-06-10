@@ -115,7 +115,7 @@
     <Compile Include="ControllerTests\CategoryGoalControllerTests\CategoryGoalControllerTestsPart01.cs" />
     <Compile Include="ControllerTests\CategoryGoalControllerTests\CategoryGoalControllerTestsReflection.cs" />
     <Compile Include="ControllerTests\ErrorControllerTests.cs" />
-    <Compile Include="ControllerTests\HomeControllerControllerTests.cs" />
+    <Compile Include="ControllerTests\HomeControllerTests.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\AssertExtensions.cs" />
     <Compile Include="Core\Extensions\RouteTestingExtensions.cs" />

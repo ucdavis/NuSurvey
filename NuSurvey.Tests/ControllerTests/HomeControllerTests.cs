@@ -13,7 +13,7 @@ using UCDArch.Web.Attributes;
 namespace NuSurvey.Tests.ControllerTests
 {
     [TestClass]
-    public class HomeControllerControllerTests : ControllerTestBase<HomeController>
+    public class HomeControllerTests : ControllerTestBase<HomeController>
     {
         private readonly Type _controllerClass = typeof(HomeController);
 
