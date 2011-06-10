@@ -30,17 +30,13 @@ namespace NuSurvey.Web.Controllers
             _archiveService = archiveService;
         }
 
-        ////
-        //// GET: /Question/
-        //public ActionResult Index()
-        //{
-        //    var questionList = _questionRepository.Queryable;
-
-        //    return View(questionList.ToList());
-        //}
-
-        //
-        // GET: /Question/Details/5
+        /// <summary>
+        /// #1
+        /// GET: /Question/Details/5
+        /// </summary>
+        /// <param name="id">Question Id</param>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         public ActionResult Details(int id, int? categoryId)
         {
             var question = _questionRepository.GetNullableById(id);
@@ -60,8 +56,13 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
-        //
-        // GET: /Question/Create
+        /// <summary>
+        /// #2
+        /// GET: /Question/Create
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         public ActionResult Create(int id, int? categoryId)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);

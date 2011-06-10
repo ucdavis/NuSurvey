@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NuSurvey.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing.Fakes;
@@ -65,6 +66,24 @@ namespace NuSurvey.Tests.Core.Helpers
         protected override CategoryGoal CreateValid(int i)
         {
             return CreateValidEntities.CategoryGoal(i);
+        }
+    }
+
+    public class FakeQuestions : ControllerRecordFakes<Question>
+    {
+        protected override Question CreateValid(int i)
+        {
+            return CreateValidEntities.Question(i);
+        }
+
+        public FakeQuestions(int count, IRepository<Question> repository, List<Question> specificRecords)
+        {
+            Records(count, repository, specificRecords);
+        }
+
+        public FakeQuestions(int count, IRepository<Question> repository)
+        {
+            Records(count, repository);
         }
     }
 }
