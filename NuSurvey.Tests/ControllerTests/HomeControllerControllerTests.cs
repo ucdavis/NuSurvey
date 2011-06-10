@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using NuSurvey.Web;
@@ -12,9 +13,9 @@ using UCDArch.Web.Attributes;
 namespace NuSurvey.Tests.ControllerTests
 {
     [TestClass]
-    public class ErrorControllerTests : ControllerTestBase<ErrorController>
+    public class HomeControllerControllerTests : ControllerTestBase<HomeController>
     {
-        private readonly Type _controllerClass = typeof(ErrorController);
+        private readonly Type _controllerClass = typeof(HomeController);
 
         #region Init
         /// <summary>
@@ -22,7 +23,7 @@ namespace NuSurvey.Tests.ControllerTests
         /// </summary>
         protected override void SetupController()
         {
-            Controller = new TestControllerBuilder().CreateController<ErrorController>();
+            Controller = new TestControllerBuilder().CreateController<HomeController>();
         }
 
         protected override void RegisterRoutes()
@@ -39,33 +40,38 @@ namespace NuSurvey.Tests.ControllerTests
         [TestMethod]
         public void TestIndexMapping()
         {
-            "~/Error/Index/".ShouldMapTo<ErrorController>(a => a.Index());
+            "~/Home/Index/".ShouldMapTo<HomeController>(a => a.Index());
         }
 
         /// <summary>
         /// #2
         /// </summary>
         [TestMethod]
-        public void TestNotAuthorizedMapping()
+        public void TestAdministrationMapping()
         {
-            "~/Error/NotAuthorized/".ShouldMapTo<ErrorController>(a => a.NotAuthorized());
+            "~/Home/Administration/".ShouldMapTo<HomeController>(a => a.Administration());
         }
 
         /// <summary>
         /// #3
         /// </summary>
         [TestMethod]
-        public void TestFileNotFoundMapping()
+        public void TestAboutMapping()
         {
-            "~/Error/FileNotFound/".ShouldMapTo<ErrorController>(a => a.FileNotFound());
+            "~/Home/About/".ShouldMapTo<HomeController>(a => a.About());
+        }
+
+        /// <summary>
+        /// #4
+        /// </summary>
+        [TestMethod]
+        public void TestSampleMapping()
+        {
+            "~/Home/Sample/".ShouldMapTo<HomeController>(a => a.Sample());
         }
         #endregion Mapping Tests
 
         #region Method Tests
-
-        /// <summary>
-        /// #1
-        /// </summary>
         [TestMethod]
         public void TestIndexReturnsView()
         {
@@ -73,25 +79,26 @@ namespace NuSurvey.Tests.ControllerTests
                 .AssertViewRendered();
         }
 
-        /// <summary>
-        /// #2
-        /// </summary>
         [TestMethod]
-        public void TestNotAuthorizedReturnsView()
+        public void TestAboutReturnsView()
         {
-            Controller.NotAuthorized()
+            Controller.About()
                 .AssertViewRendered();
         }
 
-        /// <summary>
-        /// #3
-        /// </summary>
         [TestMethod]
-        public void TestFileNotFoundReturnsView()
+        public void TestAdministrationReturnsView()
         {
-            Controller.FileNotFound()
+            Controller.Administration()
                 .AssertViewRendered();
         }
+
+        [TestMethod]
+        public void TestSampleReturnsView()
+        {
+            Controller.Sample()
+                .AssertViewRendered();
+        }   
         #endregion Method Tests
 
         #region Reflection Tests
@@ -118,10 +125,10 @@ namespace NuSurvey.Tests.ControllerTests
         }
 
         /// <summary>
-        /// Tests the controller has only three attributes.
+        /// Tests the controller has Five attributes.
         /// </summary>
         [TestMethod]
-        public void TestControllerHasOnlyThreeAttributes()
+        public void TestControllerHasFiveAttributes()
         {
             #region Arrange
             var controllerClass = _controllerClass;
@@ -132,7 +139,7 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(3, result.Count());
+            Assert.AreEqual(5, result.Count());
             #endregion Assert
         }
 
@@ -186,7 +193,39 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Act
 
             #region Assert
-            Assert.IsTrue(result.Count() > 0, "VersionAttribute not found.");
+            Assert.IsTrue(result.Count() > 0, "LocVersionAttribute not found.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestControllerHasHandleTransactionsManuallyAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<HandleTransactionsManuallyAttribute>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "HandleTransactionsManuallyAttribute not found.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestControllerHasAuthorizeAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<AuthorizeAttribute>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "AuthorizeAttribute not found.");
             #endregion Assert
         }
 
@@ -206,7 +245,7 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(3, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(4, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -234,11 +273,11 @@ namespace NuSurvey.Tests.ControllerTests
         /// #2
         /// </summary>
         [TestMethod]
-        public void TestControllerMethodNotAuthorizedContainsExpectedAttributes()
+        public void TestControllerMethodAboutContainsExpectedAttributes()
         {
             #region Arrange
             var controllerClass = _controllerClass;
-            var controllerMethod = controllerClass.GetMethod("NotAuthorized");
+            var controllerMethod = controllerClass.GetMethod("About");
             #endregion Arrange
 
             #region Act
@@ -254,19 +293,43 @@ namespace NuSurvey.Tests.ControllerTests
         /// #3
         /// </summary>
         [TestMethod]
-        public void TestControllerMethodFileNotFoundContainsExpectedAttributes()
+        public void TestControllerMethodAdministrationContainsExpectedAttributes()
         {
             #region Arrange
             var controllerClass = _controllerClass;
-            var controllerMethod = controllerClass.GetMethod("FileNotFound");
+            var controllerMethod = controllerClass.GetMethod("Administration");
             #endregion Arrange
 
             #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminAttribute>();
             var allAttributes = controllerMethod.GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(0, allAttributes.Count());
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #4
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodSampleContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("Sample");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
             #endregion Assert
         }
 
