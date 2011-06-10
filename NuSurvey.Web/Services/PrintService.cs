@@ -12,6 +12,11 @@ namespace NuSurvey.Web.Services
 
     public class PrintService : IPrintService
     {
+        /// <summary>
+        /// Print Single
+        /// </summary>
+        /// <param name="id">Survey Response Id</param>
+        /// <returns></returns>
         public virtual FileContentResult PrintSingle(int id)
         {
             var rview = new Microsoft.Reporting.WebForms.ReportViewer();
@@ -43,6 +48,13 @@ namespace NuSurvey.Web.Services
             return new FileContentResult(bytes, "application/pdf");// File(bytes, "application/pdf");
         }
 
+        /// <summary>
+        /// Print Multiple
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="beginDate">Begin Date Filter</param>
+        /// <param name="endDate">End Date Filter</param>
+        /// <returns></returns>
         public virtual FileContentResult PrintMultiple(int id, DateTime? beginDate, DateTime? endDate)
         {
             var rview = new Microsoft.Reporting.WebForms.ReportViewer();

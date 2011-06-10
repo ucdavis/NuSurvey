@@ -116,6 +116,10 @@
     <Compile Include="ControllerTests\CategoryGoalControllerTests\CategoryGoalControllerTestsReflection.cs" />
     <Compile Include="ControllerTests\ErrorControllerTests.cs" />
     <Compile Include="ControllerTests\HomeControllerTests.cs" />
+    <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsInit.cs" />
+    <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsMapping.cs" />
+    <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsPart01.cs" />
+    <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsReflection.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\AssertExtensions.cs" />
     <Compile Include="Core\Extensions\RouteTestingExtensions.cs" />

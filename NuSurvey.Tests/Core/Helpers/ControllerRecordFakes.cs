@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NuSurvey.Core.Domain;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing.Fakes;
 
 namespace NuSurvey.Tests.Core.Helpers
@@ -20,6 +18,37 @@ namespace NuSurvey.Tests.Core.Helpers
         protected override Survey CreateValid(int i)
         {
             return CreateValidEntities.Survey(i);
+        }
+        public FakeSurveys(int count, IRepository<Survey> survey, List<Survey> specificRecords)
+        {
+            Records(count, survey, specificRecords);
+        }
+
+        public FakeSurveys(int count, IRepository<Survey> survey)
+        {
+            Records(count, survey);
+        }
+        public FakeSurveys()
+        {
+            
+        }
+    }
+
+    public class FakeSurveyResponses : ControllerRecordFakes<SurveyResponse>
+    {
+        protected override SurveyResponse CreateValid(int i)
+        {
+            return CreateValidEntities.SurveyResponse(i);
+        }
+
+        public FakeSurveyResponses(int count, IRepository<SurveyResponse> surveyResponse, List<SurveyResponse> specificRecords)
+        {
+            Records(count, surveyResponse, specificRecords);
+        }
+
+        public FakeSurveyResponses(int count, IRepository<SurveyResponse> surveyResponse)
+        {
+            Records(count, surveyResponse);
         }
     }
 
