@@ -215,6 +215,12 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
 
+            if (!question.Category.IsCurrentVersion)
+            {
+                Message = "Question's related category is not current version";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+
 
 			var viewModel = QuestionViewModel.Create(Repository, survey);
 			viewModel.Question = question;
@@ -279,6 +285,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Question Not Found.";
                 return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
             }
+
 
             //Save the Id of the original Category in case we need to version it.
             originalCategoryId = questionToEdit.Category.Id;
