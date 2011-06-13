@@ -150,7 +150,7 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
 
             #region Assert
             Assert.Inconclusive("Tests are still being written. When done, remove this line.");
-            Assert.AreEqual(1, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(2, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -170,6 +170,26 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             #endregion Act
 
             #region Assert
+            Assert.AreEqual(0, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #2
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodCreateContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
+            #endregion Arrange
+
+            #region Act            
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert         
             Assert.AreEqual(0, allAttributes.Count());
             #endregion Assert
         }

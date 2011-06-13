@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Castle.Windsor;
 using NuSurvey.Core.Domain;
+using NuSurvey.Tests.Core.Helpers;
 using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Controllers.Filters;
@@ -28,6 +29,7 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
         public IRepository<Question> QuestionRepository;
         public IArchiveService ArchiveService;
         public IRepository<Survey> SurveyRepository;
+        public IRepository<Category> CategoryRepository;
 
         #region Init
         /// <summary>
@@ -63,9 +65,35 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             SurveyRepository = FakeRepository<Survey>();
             Controller.Repository.Expect(a => a.OfType<Survey>()).Return(SurveyRepository).Repeat.Any();
 
+            CategoryRepository = FakeRepository<Category>();
+            Controller.Repository.Expect(a => a.OfType<Category>()).Return(CategoryRepository).Repeat.Any();
+
             Controller.Repository.Expect(a => a.OfType<Question>()).Return(QuestionRepository).Repeat.Any();	
         }
         #endregion Init
 
+
+        protected void SetupData1()
+        {
+            var categories = new List<Category>();
+            for (int i = 0; i < 10; i++)
+            {
+                categories.Add(CreateValidEntities.Category(i + 1));
+            }
+            categories[2].IsCurrentVersion = false;
+            categories[3].IsActive = false;
+
+            var surveys = new List<Survey>();
+            for (int i = 0; i < 3; i++)
+            {
+                surveys.Add(CreateValidEntities.Survey(i + 1));
+            }
+            surveys[2].Categories.Add(categories[1]);
+            surveys[2].Categories.Add(categories[2]);
+            surveys[2].Categories.Add(categories[3]);
+            surveys[2].Categories.Add(categories[4]);
+            new FakeSurveys(0, SurveyRepository, surveys);
+            new FakeCategories(0, CategoryRepository, categories);
+        }
     }
 }

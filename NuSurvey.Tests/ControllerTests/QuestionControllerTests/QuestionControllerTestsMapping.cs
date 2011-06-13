@@ -14,6 +14,12 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
         {
             "~/Question/Details/5".ShouldMapTo<QuestionController>(a => a.Details(5, null));
         }
+
+        [TestMethod]
+        public void TestCreateGetMapping()
+        {
+            "~/Question/Create/5".ShouldMapTo<QuestionController>(a => a.Create(5, null));
+        }
         #endregion Mapping Tests
     }
 }

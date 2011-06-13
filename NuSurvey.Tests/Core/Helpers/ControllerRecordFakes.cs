@@ -59,6 +59,19 @@ namespace NuSurvey.Tests.Core.Helpers
         {
             return CreateValidEntities.Category(i);
         }
+        public FakeCategories(int count, IRepository<Category> repository, List<Category> specificRecords)
+        {
+            Records(count, repository, specificRecords);
+        }
+
+        public FakeCategories(int count, IRepository<Category> repository)
+        {
+            Records(count, repository);
+        }
+        public FakeCategories()
+        {
+            
+        }
     }
 
     public class FakeCategoryGoals : ControllerRecordFakes<CategoryGoal>
