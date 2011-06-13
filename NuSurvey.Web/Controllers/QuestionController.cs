@@ -185,8 +185,14 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
-        //
-        // GET: /Question/Edit/5
+        /// <summary>
+        /// #4
+        /// GET: /Question/Edit/5
+        /// </summary>
+        /// <param name="id">Question Id</param>
+        /// <param name="surveyId"></param>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         public ActionResult Edit(int id, int surveyId, int? categoryId)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(surveyId);
@@ -202,6 +208,13 @@ namespace NuSurvey.Web.Controllers
                 Message = "Question Not Found.";
                 return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
             }
+
+            if (question.Survey.Id != survey.Id)
+            {
+                Message = "Question not related to current survey";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+
 
 			var viewModel = QuestionViewModel.Create(Repository, survey);
 			viewModel.Question = question;
@@ -220,8 +233,17 @@ namespace NuSurvey.Web.Controllers
 			return View(viewModel);
         }
         
-        //
-        // POST: /Question/Edit/5
+
+        /// <summary>
+        /// #5
+        /// POST: /Question/Edit/5
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="surveyId"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="question"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Edit(int id, int surveyId, int? categoryId, Question question, ResponsesParameter[] response)
         {
