@@ -35,6 +35,24 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
         {
             "~/Question/Create/5".ShouldMapTo<QuestionController>(a => a.Create(5, null, new Question(),new ResponsesParameter[0] ), true);
         }
+
+        /// <summary>
+        /// #4
+        /// </summary>
+        [TestMethod]
+        public void TestEditGetMapping()
+        {
+            "~/Question/Edit/5".ShouldMapTo<QuestionController>(a => a.Edit(5, 3, null), true);
+        }
+
+        /// <summary>
+        /// #5
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostMapping()
+        {
+            "~/Question/Edit/5".ShouldMapTo<QuestionController>(a => a.Edit(5, 3, null, new Question(),new ResponsesParameter[0] ), true);
+        }
         #endregion Mapping Tests
     }
 }

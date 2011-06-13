@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using System.Web.Routing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MvcContrib.TestHelper;
 using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core.Extensions;
 using NuSurvey.Tests.Core.Helpers;
-using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Web.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MvcContrib.TestHelper;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
-using UCDArch.Testing;
-using UCDArch.Web.Attributes;
 
 namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
 {
@@ -527,7 +518,7 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
                 .GetArgumentsForCallsMadeOn(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything))[0];
             Assert.IsNotNull(archiveArgs);
             Assert.AreEqual(1, archiveArgs[1]);
-            Assert.AreEqual("Name1", (archiveArgs[2] as Category).Name);
+            Assert.AreEqual("Name1", ((Category) archiveArgs[2]).Name);
             ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
             QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
@@ -576,7 +567,7 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
                 .GetArgumentsForCallsMadeOn(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything))[0];
             Assert.IsNotNull(archiveArgs);
             Assert.AreEqual(1, archiveArgs[1]);
-            Assert.AreEqual("Name1", (archiveArgs[2] as Category).Name);
+            Assert.AreEqual("Name1", ((Category) archiveArgs[2]).Name);
             ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
             QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];

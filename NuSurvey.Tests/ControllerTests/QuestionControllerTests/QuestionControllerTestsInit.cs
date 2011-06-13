@@ -110,5 +110,75 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             }
             new FakeAnswers(0, AnswerRepository, answers);           
         }
+
+        /// <summary>
+        /// create 3 surveys (use #2)
+        /// Create categories (have two of each of these categories):
+        /// 1) Has no answers, current version, active
+        ///     1.1) Question is active
+        ///     1.2) Question is Not Active
+        /// 2) has no answers, current version, not active
+        ///     2.1) Question is active
+        ///     2.2) Question is not active
+        /// 3) has answers, is not current version //This one can't be edited (and should not be in the select list)
+        ///     3.1) Question is active
+        ///     3.2) Question is not active
+        /// 4) Has Answers, current version, active 
+        ///     4.1) Question is active
+        ///     4.2) Question is not active
+        /// </summary>
+        protected void SetupData3()
+        {
+            new FakeSurveys(3, SurveyRepository);
+            var categories = new List<Category>();
+            for (int i = 0; i < 8; i++)
+            {
+                categories.Add(CreateValidEntities.Category(i+1));
+                categories[i].Survey = SurveyRepository.GetNullableById(2);
+                categories[i].AddQuestions(CreateValidEntities.Question((i * 2) + 1));
+                categories[i].AddQuestions(CreateValidEntities.Question((i * 2) + 2));
+                categories[i].Questions[0].IsActive = true;
+                categories[i].Questions[1].IsActive = false;
+                categories[i].Questions[0].Responses.Add(CreateValidEntities.Response((i * 2) + 1));
+                categories[i].Questions[0].Responses.Add(CreateValidEntities.Response((i * 2) + 2));
+                categories[i].Questions[1].Responses.Add(CreateValidEntities.Response((i * 2) + 3));
+                categories[i].Questions[1].Responses.Add(CreateValidEntities.Response((i * 2) + 4));
+                categories[i].Questions[0].SetIdTo((i * 2) + 1);
+                categories[i].Questions[1].SetIdTo((i * 2) + 2);
+            }
+            categories[0].IsActive = true;
+            categories[0].IsCurrentVersion = true;
+            categories[1].IsActive = true;
+            categories[1].IsCurrentVersion = true;
+            categories[2].IsActive = false;
+            categories[2].IsCurrentVersion = true;
+            categories[3].IsActive = false;
+            categories[3].IsCurrentVersion = true;
+            categories[4].IsActive = true;
+            categories[4].IsCurrentVersion = false;
+            categories[5].IsActive = true;
+            categories[5].IsCurrentVersion = false;
+            categories[6].IsActive = true;
+            categories[6].IsCurrentVersion = true;
+            categories[7].IsActive = true;
+            categories[7].IsCurrentVersion = true;
+
+            new FakeCategories(0, CategoryRepository, categories);
+
+            var answers = new List<Answer>();
+            for (int i = 0; i < 4; i++)
+            {
+                answers.Add(CreateValidEntities.Answer(i+1));
+            }
+            answers[0].Category = CategoryRepository.GetNullableById(4);
+            answers[1].Category = CategoryRepository.GetNullableById(5);
+            answers[2].Category = CategoryRepository.GetNullableById(6);
+            answers[3].Category = CategoryRepository.GetNullableById(7);
+            foreach (var answer in answers)
+            {
+                answer.Question = answer.Category.Questions[0];
+            }
+            new FakeAnswers(0, AnswerRepository, answers);
+        }
     }
 }
