@@ -12,6 +12,19 @@ namespace NuSurvey.Tests.Core.Helpers
         {
             return CreateValidEntities.Answer(i);
         }
+        public FakeAnswers(int count, IRepository<Answer> repository, List<Answer> specificRecords)
+        {
+            Records(count, repository, specificRecords);
+        }
+
+        public FakeAnswers(int count, IRepository<Answer> repository)
+        {
+            Records(count, repository);
+        }
+        public FakeAnswers()
+        {
+            
+        }
     }
 
     public class FakeSurveys : ControllerRecordFakes<Survey>

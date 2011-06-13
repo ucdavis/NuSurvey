@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -81,8 +80,15 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         } 
 
-        //
-        // POST: /Question/Create
+        /// <summary>
+        /// #3
+        /// POST: /Question/Create
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="categoryId"></param>
+        /// <param name="question"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(int id, int? categoryId, Question question, ResponsesParameter[] response)
         {

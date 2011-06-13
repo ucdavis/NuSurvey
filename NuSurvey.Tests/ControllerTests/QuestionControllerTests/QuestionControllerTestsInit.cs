@@ -30,6 +30,7 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
         public IArchiveService ArchiveService;
         public IRepository<Survey> SurveyRepository;
         public IRepository<Category> CategoryRepository;
+        public IRepository<Answer> AnswerRepository;
 
         #region Init
         /// <summary>
@@ -68,6 +69,9 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             CategoryRepository = FakeRepository<Category>();
             Controller.Repository.Expect(a => a.OfType<Category>()).Return(CategoryRepository).Repeat.Any();
 
+            AnswerRepository = FakeRepository<Answer>();
+            Controller.Repository.Expect(a => a.OfType<Answer>()).Return(AnswerRepository).Repeat.Any();
+
             Controller.Repository.Expect(a => a.OfType<Question>()).Return(QuestionRepository).Repeat.Any();	
         }
         #endregion Init
@@ -94,6 +98,17 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             surveys[2].Categories.Add(categories[4]);
             new FakeSurveys(0, SurveyRepository, surveys);
             new FakeCategories(0, CategoryRepository, categories);
+        }
+
+        protected void SetupData2()
+        {
+            var answers = new List<Answer>();
+            for (int i = 0; i < 3; i++)
+            {
+                answers.Add(CreateValidEntities.Answer(i + 1));
+                answers[i].Category = CategoryRepository.GetNullableById(1);
+            }
+            new FakeAnswers(0, AnswerRepository, answers);           
         }
     }
 }
