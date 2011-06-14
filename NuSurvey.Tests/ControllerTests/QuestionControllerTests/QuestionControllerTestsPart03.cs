@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using System.Web.Routing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MvcContrib.TestHelper;
 using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core.Extensions;
 using NuSurvey.Tests.Core.Helpers;
-using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Web.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MvcContrib.TestHelper;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
-using UCDArch.Web.Attributes;
 
 namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
 {
@@ -919,7 +911,7 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             Assert.AreEqual(2, result.RouteValues["id"]);
             ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
             //ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
-            ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));            
             QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
@@ -1012,10 +1004,11 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
 
             #region Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(4, result.RouteValues["id"]);
+            Assert.AreEqual(2, result.RouteValues["id"]);
             ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
             //ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
             ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 8, questionToEdit));
             QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
@@ -1024,8 +1017,253 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             Assert.IsTrue(args.Responses[1].IsActive);
             Assert.AreEqual("updated", args.Responses[2].Value);
             Assert.AreEqual(99, args.Responses[2].Score);
-            Assert.AreEqual("Name1", args.Category.Name);
-            Assert.AreEqual("Question Edited Successfully Previously Related Category Versioned Newly Related Category Not Versioned", Controller.Message);
+            Assert.AreEqual("Name4", args.Category.Name); //It is 4, because this is what we faked the new category to
+            Assert.AreEqual("Question Edited Successfully Previously Related Category Versioned Newly Related Category Versioned", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Question (active)/Category has answers, move to category With answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects4B()
+        {
+            #region Arrange
+            const int questionId = 13;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(8);
+
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            ArchiveService.Expect(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything))
+                .Return(CategoryRepository.GetNullableById(4)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, 8, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<CategoryController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(4, result.RouteValues["id"]); //Redirected here because this is the new version I faked.
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            //ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 8, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name4", args.Category.Name); //It is 4, because this is what we faked the new category to
+            Assert.AreEqual("Question Edited Successfully Previously Related Category Versioned Newly Related Category Versioned", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Question (Inactive)/Category has answers, move to category With answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects5A()
+        {
+            #region Arrange
+            const int questionId = 14;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(8);
+            questionToEdit.IsActive = false;
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            //ArchiveService.Expect(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything))
+            //    .Return(CategoryRepository.GetNullableById(4)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<SurveyController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            //ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            //ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 8, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name8", args.Category.Name); //It is 4, because this is what we faked the new category to
+            Assert.AreEqual("Question Edited Successfully", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Question (Inactive)/Category has answers, move to category With answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects5B()
+        {
+            #region Arrange
+            const int questionId = 14;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(8);
+            questionToEdit.IsActive = false;
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            //ArchiveService.Expect(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything))
+            //    .Return(CategoryRepository.GetNullableById(4)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, 7, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<CategoryController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(8, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            //ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            //ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 8, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name8", args.Category.Name); //It is 4, because this is what we faked the new category to
+            Assert.AreEqual("Question Edited Successfully", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Question (Inactive)/Category has answers, move to category With No answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects6A()
+        {
+            #region Arrange
+            const int questionId = 14;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(1);
+            questionToEdit.IsActive = false;
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            //ArchiveService.Expect(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything))
+            //    .Return(CategoryRepository.GetNullableById(4)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<SurveyController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            //ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            //ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 8, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name1", args.Category.Name); //It is 4, because this is what we faked the new category to
+            Assert.AreEqual("Question Edited Successfully", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Question (Inactive)/Category has answers, move to category With no answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects6B()
+        {
+            #region Arrange
+            const int questionId = 14;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(1);
+            questionToEdit.IsActive = false;
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            //ArchiveService.Expect(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything))
+            //    .Return(CategoryRepository.GetNullableById(4)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, 7, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<CategoryController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            //ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            //ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 8, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name1", args.Category.Name); //It is 4, because this is what we faked the new category to
+            Assert.AreEqual("Question Edited Successfully", Controller.Message);
             #endregion Assert
         }
         #endregion Edit Post Tests

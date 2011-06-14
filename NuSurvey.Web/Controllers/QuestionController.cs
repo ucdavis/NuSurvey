@@ -716,32 +716,7 @@ namespace NuSurvey.Web.Controllers
 
         }
 
-        ////
-        //// GET: /Question/Delete/5 
-        //public ActionResult Delete(int id)
-        //{
-        //    var question = _questionRepository.GetNullableById(id);
 
-        //    if (question == null) return RedirectToAction("Index");
-
-        //    return View(question);
-        //}
-
-        ////
-        //// POST: /Question/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, Question question)
-        //{
-        //    var questionToDelete = _questionRepository.GetNullableById(id);
-
-        //    if (questionToDelete == null) return RedirectToAction("Index");
-
-        //    _questionRepository.Remove(questionToDelete);
-
-        //    Message = "Question Removed Successfully";
-
-        //    return RedirectToAction("Index");
-        //}
         
 
     }

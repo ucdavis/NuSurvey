@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Web.Mvc;
-using System.Web.Routing;
-using NuSurvey.Core.Domain;
-using NuSurvey.Web;
-using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Web.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MvcContrib.TestHelper;
-using Rhino.Mocks;
-using UCDArch.Core.PersistanceSupport;
-using UCDArch.Testing;
+using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Web.Attributes;
 
 namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
@@ -150,7 +138,7 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
 
             #region Assert
             Assert.Inconclusive("Tests are still being written. When done, remove this line.");
-            Assert.AreEqual(4, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(5, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -236,103 +224,27 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             #endregion Assert
         }
 
-        //Examples
+        /// <summary>
+        /// #5
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodEditPostContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Edit");
+            #endregion Arrange
 
-        //[TestMethod]
-        //public void TestControllerMethodLogOnContainsExpectedAttributes()
-        //{
-        //    #region Arrange
-        //    var controllerClass = _controllerClass;
-        //    var controllerMethod = controllerClass.GetMethod("LogOn");
-        //    #endregion Arrange
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
 
-        //    #region Act
-        //    //var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<UserOnlyAttribute>();
-        //    var allAttributes = controllerMethod.GetCustomAttributes(true);
-        //    #endregion Act
-
-        //    #region Assert
-        //    //Assert.AreEqual(1, expectedAttribute.Count(), "UserOnlyAttribute not found");
-        //    Assert.AreEqual(0, allAttributes.Count());
-        //    #endregion Assert
-        //}
-
-        //[TestMethod]
-        //public void TestControllerMethodLogOutContainsExpectedAttributes()
-        //{
-        //    #region Arrange
-        //    var controllerClass = _controllerClass;
-        //    var controllerMethod = controllerClass.GetMethod("LogOut");
-        //    #endregion Arrange
-
-        //    #region Act
-        //    //var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<UserOnlyAttribute>();
-        //    var allAttributes = controllerMethod.GetCustomAttributes(true);
-        //    #endregion Act
-
-        //    #region Assert
-        //    //Assert.AreEqual(1, expectedAttribute.Count(), "UserOnlyAttribute not found");
-        //    Assert.AreEqual(0, allAttributes.Count());
-        //    #endregion Assert
-        //}
-
-
-        //[TestMethod]
-        //public void TestControllerMethodCreateContainsExpectedAttributes1()
-        //{
-        //    #region Arrange
-        //    var controllerClass = _controllerClass;
-        //    var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
-        //    #endregion Arrange
-
-        //    #region Act
-        //    var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<UserOnlyAttribute>();
-        //    var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
-        //    #endregion Act
-
-        //    #region Assert
-        //    Assert.AreEqual(1, expectedAttribute.Count(), "UserOnlyAttribute not found");
-        //    Assert.AreEqual(1, allAttributes.Count());
-        //    #endregion Assert
-        //}
-
-        //[TestMethod]
-        //public void TestControllerMethodCreateContainsExpectedAttributes2()
-        //{
-        //    #region Arrange
-        //    var controllerClass = _controllerClass;
-        //    var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
-        //    #endregion Arrange
-
-        //    #region Act
-        //    var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
-        //    var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
-        //    #endregion Act
-
-        //    #region Assert
-        //    Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
-        //    Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
-        //    #endregion Assert
-        //}
-
-        //[TestMethod]
-        //public void TestControllerMethodCreateContainsExpectedAttributes3()
-        //{
-        //    #region Arrange
-        //    var controllerClass = _controllerClass;
-        //    var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
-        //    #endregion Arrange
-
-        //    #region Act
-        //    var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<UserOnlyAttribute>();
-        //    var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
-        //    #endregion Act
-
-        //    #region Assert
-        //    Assert.AreEqual(1, expectedAttribute.Count(), "UserOnlyAttribute not found");
-        //    Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
-        //    #endregion Assert
-        //}
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
 
 
         #endregion Controller Method Tests
