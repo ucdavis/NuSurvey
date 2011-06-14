@@ -666,6 +666,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #6
         /// ReOrder Get
         /// </summary>
         /// <param name="id">Survey Id</param>
@@ -683,6 +684,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #7
         /// ReOrder Questions within a survey
         /// </summary>
         /// <param name="id">Survey Id</param>
@@ -716,8 +718,6 @@ namespace NuSurvey.Web.Controllers
 
         }
 
-
-        
 
     }
 

@@ -137,8 +137,7 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             #endregion Act
 
             #region Assert
-            Assert.Inconclusive("Tests are still being written. When done, remove this line.");
-            Assert.AreEqual(5, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(7, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -243,6 +242,70 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #6
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodReOrderGetContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "ReOrder");
+            #endregion Arrange
+
+            #region Act
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #7
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodReOrderPostContainsExpectedAttributes1()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "ReOrder");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #7
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodReOrderPostContainsExpectedAttributes2()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "ReOrder");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<BypassAntiForgeryTokenAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "BypassAntiForgeryTokenAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count());
             #endregion Assert
         }
 
