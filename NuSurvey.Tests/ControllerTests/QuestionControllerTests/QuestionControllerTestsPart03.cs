@@ -313,6 +313,9 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
 
             #region Assert
             Assert.AreEqual("Survey Not Found", Controller.Message);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
 
@@ -333,6 +336,9 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
 
             #region Assert
             Assert.AreEqual("Survey Not Found", Controller.Message);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
 
@@ -356,6 +362,9 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             Assert.AreEqual("Question Not Found.", Controller.Message);
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
 
@@ -379,29 +388,645 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             Assert.AreEqual("Question Not Found.", Controller.Message);
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
 
 
         [TestMethod]
-        public void TestEditPostWithInvalidDataReturnsView()
+        public void TestEditPostWithInvalidDataReturnsView1()
         {
             #region Arrange
+            const int questionId = 1;
             SetupData3();
-            var questionToEdit = CreateValidEntities.Question(1);
-            questionToEdit.SetIdTo(1);
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
             questionToEdit.Name = string.Empty;
+            questionToEdit.Survey = null; //this is ignored
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            foreach (var responsesParameter in responses)
+            {
+                responsesParameter.Remove = true;
+            }
             #endregion Arrange
 
             #region Act
-            var result = Controller.Edit(1, 2, null, questionToEdit, new ResponsesParameter[0])
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
                 .AssertViewRendered()
                 .WithViewData<QuestionViewModel>();
             #endregion Act
 
             #region Assert
-            Controller.ModelState.AssertErrorsAre("", "");
+            Controller.ModelState.AssertErrorsAre("Name: The Name field is required.", "Active Responses are required.");
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Responses.Count);
+            Assert.IsTrue(result.Responses[0].Remove);
+            Assert.AreEqual(2, result.Responses[0].ResponseId); //Reversed
+            Assert.IsTrue(result.Responses[1].Remove);
+            Assert.AreEqual(1, result.Responses[1].ResponseId);
+            Assert.AreEqual(2, result.Question.Responses.Count);
+            Assert.AreEqual("Name2", result.Question.Survey.Name);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestEditPostWithInvalidDataReturnsView2()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Name = string.Empty;
+            questionToEdit.Survey = null; //this is ignored
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Controller.ModelState.AssertErrorsAre("Name: The Name field is required.");
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Responses.Count); //Reversed
+            Assert.AreEqual(0, result.Responses[0].ResponseId); //Added
+            Assert.AreEqual(2, result.Responses[1].ResponseId); 
+            Assert.AreEqual(1, result.Responses[2].ResponseId);
+            Assert.AreEqual(3, result.Question.Responses.Count);
+            Assert.AreEqual("Name2", result.Question.Survey.Name);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestEditPostWithInvalidDataReturnsView3()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[1].Score = null;
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Controller.ModelState.AssertErrorsAre("All responses need a score");
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Responses.Count); //Reversed
+            Assert.AreEqual(0, result.Responses[0].ResponseId); //Added
+            Assert.AreEqual(2, result.Responses[1].ResponseId);
+            Assert.AreEqual(1, result.Responses[2].ResponseId);
+            Assert.AreEqual(3, result.Question.Responses.Count);
+            Assert.AreEqual("Name2", result.Question.Survey.Name);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestEditPostWithInvalidDataReturnsView4()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[1].Value = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Controller.ModelState.AssertErrorsAre("Response 3 must have a choice.");
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Responses.Count); //Reversed
+            Assert.AreEqual(0, result.Responses[0].ResponseId); //Added
+            Assert.AreEqual(2, result.Responses[1].ResponseId);
+            Assert.AreEqual(1, result.Responses[2].ResponseId);
+            Assert.AreEqual(3, result.Question.Responses.Count);
+            Assert.AreEqual("Name2", result.Question.Survey.Name);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestEditPostWithInvalidDataReturnsView5()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CreateValidEntities.Category(99);
+            questionToEdit.Category.IsCurrentVersion = false;
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Controller.ModelState.AssertErrorsAre("Selected Category is not current.");
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Responses.Count); //Reversed
+            Assert.AreEqual(0, result.Responses[0].ResponseId); //Added
+            Assert.AreEqual(2, result.Responses[1].ResponseId);
+            Assert.AreEqual(1, result.Responses[2].ResponseId);
+            Assert.AreEqual(3, result.Question.Responses.Count);
+            Assert.AreEqual("Name2", result.Question.Survey.Name);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Saving to same category (no answers)
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostWithValidDataAndNoVersioningSavesAndRedirects1()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = QuestionRepository.GetNullableById(questionId).Category;
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<SurveyController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question) QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0]; 
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Question Edited Successfully", Controller.Message);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Saving to same category (no answers)
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostWithValidDataAndNoVersioningSavesAndRedirects2()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = QuestionRepository.GetNullableById(questionId).Category;
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, 1, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<CategoryController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Question Edited Successfully", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Saving to different category (no answers)
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostWithValidDataAndNoVersioningSavesAndRedirects3()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(2);
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<SurveyController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name2", args.Category.Name);
+            Assert.AreEqual("Question Edited Successfully", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Saving to different category (no answers)
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostWithValidDataAndNoVersioningSavesAndRedirects4()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(2);
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, 1, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<CategoryController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name2", args.Category.Name);
+            Assert.AreEqual("Question Edited Successfully", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Question (active)/Category has no answers, move to category With answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects1A()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(7);
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            ArchiveService.Expect(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit))
+                .Return(CategoryRepository.GetNullableById(8)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<SurveyController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name8", args.Category.Name);
+            Assert.AreEqual("Question Edited Successfully Previously Related Category Not Versioned Newly Related category Versioned", Controller.Message);
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Question (active)/Category has no answers, move to category With answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects1B()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(7);
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            ArchiveService.Expect(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit))
+                .Return(CategoryRepository.GetNullableById(8)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, 1, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<CategoryController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name8", args.Category.Name);
+            Assert.AreEqual("Question Edited Successfully Previously Related Category Not Versioned Newly Related category Versioned", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Question (Inactive)/Category has no answers, move to category With answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects2A()
+        {
+            #region Arrange
+            const int questionId = 1;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(7);
+            questionToEdit.IsActive = false;
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            //ArchiveService.Expect(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit))
+            //    .Return(CategoryRepository.GetNullableById(8)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<SurveyController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            //ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name7", args.Category.Name);
+            Assert.AreEqual("Question Edited Successfully", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Question (active)/Category has answers, move to category With no answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects3A()
+        {
+            #region Arrange
+            const int questionId = 13;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(1);
+            //questionToEdit.IsActive = false;
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            ArchiveService.Expect(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything))
+                .Return(CategoryRepository.GetNullableById(8)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<SurveyController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            //ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name1", args.Category.Name);
+            Assert.AreEqual("Question Edited Successfully Previously Related Category Versioned Newly Related Category Not Versioned", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Question (active)/Category has answers, move to category With no answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects3B()
+        {
+            #region Arrange
+            const int questionId = 13;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(1);
+            //questionToEdit.IsActive = false;
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            ArchiveService.Expect(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything))
+                .Return(CategoryRepository.GetNullableById(8)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, 7, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<CategoryController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(8, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            //ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name1", args.Category.Name);
+            Assert.AreEqual("Question Edited Successfully Previously Related Category Versioned Newly Related Category Not Versioned", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Question (active)/Category has answers, move to category With answers
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostRedirects4A()
+        {
+            #region Arrange
+            const int questionId = 13;
+            SetupData3();
+            var questionToEdit = CreateValidEntities.Question(questionId);
+            questionToEdit.SetIdTo(questionId);
+            questionToEdit.Category = CategoryRepository.GetNullableById(8);
+
+            var responses = new ResponsesParameter[4];
+            SetupResponses(responses, questionId);
+            responses[0].Value = "updated";
+            responses[0].Score = 99;
+            responses[1].Remove = false;
+
+            ArchiveService.Expect(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything))
+                .Return(CategoryRepository.GetNullableById(4)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(questionId, 2, null, questionToEdit, responses)
+                .AssertActionRedirect()
+                .ToAction<SurveyController>(a => a.Edit(2));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(4, result.RouteValues["id"]);
+            ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Category>.Is.Anything));
+            //ArchiveService.AssertWasNotCalled(a => a.ArchiveCategory(Arg<IRepository>.Is.Anything, Arg<int>.Is.Anything, Arg<Question>.Is.Anything));
+            ArchiveService.AssertWasCalled(a => a.ArchiveCategory(Controller.Repository, 7, questionToEdit));
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            var args = (Question)QuestionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Question>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(3, args.Responses.Count);
+            Assert.AreEqual("added", args.Responses[0].Value);
+            Assert.IsTrue(args.Responses[1].IsActive);
+            Assert.AreEqual("updated", args.Responses[2].Value);
+            Assert.AreEqual(99, args.Responses[2].Score);
+            Assert.AreEqual("Name1", args.Category.Name);
+            Assert.AreEqual("Question Edited Successfully Previously Related Category Versioned Newly Related Category Not Versioned", Controller.Message);
+            #endregion Assert
         }
         #endregion Edit Post Tests
         #endregion Edit Tests
