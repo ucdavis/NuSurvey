@@ -133,5 +133,116 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Assert
         }
         #endregion Index Tests
+
+        #region Details Tests
+
+        [TestMethod]
+        public void TestDetailsRedirectsWhenSurveyResponseNotFound()
+        {
+            #region Arrange
+            new FakeSurveyResponses(3, SurveyResponseRepository);
+            #endregion Arrange
+
+            #region Act
+            Controller.Details(4)
+                .AssertActionRedirect()
+                .ToAction<ErrorController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Survey Response Details Not Found.", Controller.Message);
+            #endregion Assert		
+        }
+
+
+        [TestMethod]
+        public void TestDetailsReturnsView1()
+        {
+            #region Arrange
+            new FakeSurveyResponses(3, SurveyResponseRepository);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Details(3)
+                .AssertViewRendered()
+                .WithViewData<SurveyReponseDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("UserId3", result.SurveyResponse.UserId);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestDetailsReturnsView2()
+        {
+            #region Arrange
+
+            var survey = CreateValidEntities.Survey(9);
+            var categories = new List<Category>();
+            for (int i = 0; i < 5; i++)
+            {
+                categories.Add(CreateValidEntities.Category(i+1));
+            }
+            categories[4].DoNotUseForCalculations = true;
+            new FakeCategories(0, CategoryRepository, categories);
+            
+            var categoryTotalMaxScores = new List<CategoryTotalMaxScore>();
+
+            var answers = new List<Answer>();
+            var count = 0;
+            foreach (var category in CategoryRepository.Queryable)
+            {                                
+                categoryTotalMaxScores.Add(CreateValidEntities.CategoryTotalMaxScore(category.Id));
+
+                for (int i = 0; i < 3; i++)
+                {
+                    count++;
+                    var answer = CreateValidEntities.Answer(count);
+                    answer.Category = category;
+                    answers.Add(answer);
+                }
+            }
+
+
+            survey.Categories = CategoryRepository.Queryable.ToList();
+            var surveyResponses = new List<SurveyResponse>();
+            surveyResponses.Add(CreateValidEntities.SurveyResponse(1));
+            surveyResponses[0].Survey = survey;
+            surveyResponses[0].Answers = answers;
+
+            new FakeSurveyResponses(0, SurveyResponseRepository, surveyResponses);
+
+            var scoreMax = 0;
+            foreach (var categoryTotalMaxScore in categoryTotalMaxScores)
+            {
+                scoreMax++;
+                categoryTotalMaxScore.TotalMaxScore = scoreMax*25;
+                CategoryTotalMaxScoreRepository.Expect(a => a.GetNullableById(categoryTotalMaxScore.Id)).Return(
+                    categoryTotalMaxScore);
+            }
+
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Details(1)
+                .AssertViewRendered()
+                .WithViewData<SurveyReponseDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(4, result.Scores.Count);
+            Assert.AreEqual(24, result.Scores[0].Percent);
+            Assert.AreEqual(6, result.Scores[0].TotalScore);
+            Assert.AreEqual(25, result.Scores[0].MaxScore);
+            Assert.AreEqual(30, result.Scores[1].Percent);
+            Assert.AreEqual(32, result.Scores[2].Percent);
+            Assert.AreEqual(33, result.Scores[3].Percent);
+            Assert.AreEqual("UserId1", result.SurveyResponse.UserId);
+            #endregion Assert
+        }
+        #endregion Details Tests
     }
 }

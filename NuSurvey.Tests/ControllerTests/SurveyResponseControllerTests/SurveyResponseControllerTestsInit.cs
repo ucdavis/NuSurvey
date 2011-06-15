@@ -27,6 +27,8 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         public IRepository<SurveyResponse> SurveyResponseRepository;
         //public IExampleService ExampleService;
         public IRepository<Survey> SurveyRepository;
+        public IRepository<Category> CategoryRepository;
+        public IRepository<CategoryTotalMaxScore> CategoryTotalMaxScoreRepository;
 
         #region Init
         /// <summary>
@@ -63,6 +65,12 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         {
             SurveyRepository = FakeRepository<Survey>();
             Controller.Repository.Expect(a => a.OfType<Survey>()).Return(SurveyRepository).Repeat.Any();
+
+            CategoryRepository = FakeRepository<Category>();
+            Controller.Repository.Expect(a => a.OfType<Category>()).Return(CategoryRepository).Repeat.Any();
+
+            CategoryTotalMaxScoreRepository = FakeRepository<CategoryTotalMaxScore>();
+            Controller.Repository.Expect(a => a.OfType<CategoryTotalMaxScore>()).Return(CategoryTotalMaxScoreRepository).Repeat.Any();
 
             Controller.Repository.Expect(a => a.OfType<SurveyResponse>()).Return(SurveyResponseRepository).Repeat.Any();	
         }

@@ -40,17 +40,23 @@ namespace NuSurvey.Web.Controllers
         
         
         /// <summary>
+        /// #2
         /// Called from the Survey Details.
         /// GET: /SurveyResponse/Details/5
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">SurveyResponse Id</param>
         /// <returns></returns>
         [Admin]
         public ActionResult Details(int id)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
 
-            if (surveyResponse == null) return RedirectToAction("Index");
+            if (surveyResponse == null)
+            {
+                Message = "Survey Response Details Not Found.";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+                //return RedirectToAction("Index");
+            }
 
             var viewModel = SurveyReponseDetailViewModel.Create(Repository, surveyResponse);
 
@@ -899,7 +905,7 @@ namespace NuSurvey.Web.Controllers
             var viewModel = new SurveyReponseDetailViewModel {SurveyResponse = surveyResponse};
 
             //Get all the related categories that had answers.
-            var relatedCategoryIds = viewModel.SurveyResponse.Answers.Select(x => x.Category.Id).ToList();
+            var relatedCategoryIds = viewModel.SurveyResponse.Answers.Select(x => x.Category.Id).Distinct().ToList();
             viewModel.Scores = new List<Scores>();
             foreach (var category in viewModel.SurveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && relatedCategoryIds.Contains(a.Id)))
             {
