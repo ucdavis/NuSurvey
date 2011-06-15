@@ -25,8 +25,11 @@ namespace NuSurvey.Web.Controllers
             _surveyResponseRepository = surveyResponseRepository;
         }
     
-        //
-        // GET: /SurveyResponse/
+        /// <summary>
+        /// #1
+        /// GET: /SurveyResponse/
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             var isPublic = !(CurrentUser.IsInRole(RoleNames.User) || CurrentUser.IsInRole(RoleNames.Admin));
@@ -34,9 +37,7 @@ namespace NuSurvey.Web.Controllers
 
             return View(viewModel);
         }
-
         
-
         
         /// <summary>
         /// Called from the Survey Details.
