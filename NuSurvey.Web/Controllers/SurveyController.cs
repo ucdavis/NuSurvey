@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Web.Mvc;
 using AutoMapper;
 using NuSurvey.Core.Domain;
@@ -9,6 +8,7 @@ using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
+using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -25,8 +25,11 @@ namespace NuSurvey.Web.Controllers
             _surveyRepository = surveyRepository;
         }
     
-        //
-        // GET: /Survey/
+        /// <summary>
+        /// #1
+        /// GET: /Survey/
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             var surveyList = _surveyRepository.Queryable;
@@ -34,32 +37,54 @@ namespace NuSurvey.Web.Controllers
             return View(surveyList.ToList());
         }
 
-        //
-        // GET: /Survey/Details/5
+        /// <summary>
+        /// #2
+        /// GET: /Survey/Details/5
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="filterBeginDate"></param>
+        /// <param name="filterEndDate"></param>
+        /// <returns></returns>
         public ActionResult Details(int id, DateTime? filterBeginDate, DateTime? filterEndDate)
         {
             var survey = _surveyRepository.GetNullableById(id);
 
-            if (survey == null) return RedirectToAction("Index");
+            if (survey == null)
+            {
+                return this.RedirectToAction(a => a.Index());
+                //return RedirectToAction("Index");
+            }
 
             var viewModel = SurveyResponseDetailViewModel.Create(Repository, survey, filterBeginDate, filterEndDate);
 
             return View(viewModel);
         }
 
+        /// <summary>
+        /// #3
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult PendingDetails(int id)
         {
             var survey = _surveyRepository.GetNullableById(id);
 
-            if (survey == null) return RedirectToAction("Index");
+            if (survey == null)
+            {
+                return this.RedirectToAction(a => a.Index());
+                //return RedirectToAction("Index");
+            }
 
             var viewModel = SurveyPendingResponseDetailViewModel.Create(Repository, survey);
 
             return View(viewModel);
         }
 
-        //
-        // GET: /Survey/Create
+        /// <summary>
+        /// #4
+        /// GET: /Survey/Create
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Create()
         {
 			var viewModel = SurveyViewModel.Create(Repository);
@@ -67,18 +92,21 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         } 
 
-        //
-        // POST: /Survey/Create
+        /// <summary>
+        /// #5
+        /// POST: /Survey/Create
+        /// </summary>
+        /// <param name="survey"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(Survey survey)
         {
-            //var surveyToCreate = new Survey();
-
-            //TransferValues(survey, surveyToCreate);
+            //Not sure if this is really needed
+            //ModelState.Clear();
+            //survey.TransferValidationMessagesTo(ModelState); 
 
             if (ModelState.IsValid)
             {
-                //_surveyRepository.EnsurePersistent(surveyToCreate);
                 _surveyRepository.EnsurePersistent(survey);
 
                 Message = "Survey Created Successfully";
@@ -94,8 +122,12 @@ namespace NuSurvey.Web.Controllers
             }
         }
 
-        //
-        // GET: /Survey/Edit/5
+        /// <summary>
+        /// #6
+        /// GET: /Survey/Edit/5
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <returns></returns>
         public ActionResult Edit(int id)
         {
             var survey = _surveyRepository.GetNullableById(id);
@@ -108,8 +140,13 @@ namespace NuSurvey.Web.Controllers
 			return View(survey);
         }
         
-        //
-        // POST: /Survey/Edit/5
+        /// <summary>
+        /// #7
+        /// POST: /Survey/Edit/5
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="survey"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Edit(int id, Survey survey)
         {
@@ -122,6 +159,9 @@ namespace NuSurvey.Web.Controllers
             }
 
             Mapper.Map(survey, surveyToEdit);
+
+            ModelState.Clear();
+            surveyToEdit.TransferValidationMessagesTo(ModelState);
 
 
             if (ModelState.IsValid)
@@ -138,34 +178,6 @@ namespace NuSurvey.Web.Controllers
             }
         }
         
-        ////
-        //// GET: /Survey/Delete/5 
-        //public ActionResult Delete(int id)
-        //{
-        //    var survey = _surveyRepository.GetNullableById(id);
-
-        //    if (survey == null) return RedirectToAction("Index");
-
-        //    return View(survey);
-        //}
-
-        ////
-        //// POST: /Survey/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, Survey survey)
-        //{
-        //    var surveyToDelete = _surveyRepository.GetNullableById(id);
-
-        //    if (surveyToDelete == null) return RedirectToAction("Index");
-
-        //    _surveyRepository.Remove(surveyToDelete);
-
-        //    Message = "Survey Removed Successfully";
-
-        //    return RedirectToAction("Index");
-        //}
-
-
     }
 
 	/// <summary>
@@ -204,12 +216,12 @@ namespace NuSurvey.Web.Controllers
             if (beginDate != null)
             {
                 beginDate = beginDate.Value.Date;
-                viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.DateTaken > beginDate);
+                viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.DateTaken >= beginDate);
             }
             if (endDate != null)
             {
                 endDate = endDate.Value.Date.AddDays(1).AddMinutes(-1);
-                viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.DateTaken < endDate);
+                viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.DateTaken <= endDate);
             }
 
             return viewModel;
