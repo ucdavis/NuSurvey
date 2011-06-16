@@ -13,6 +13,7 @@ a img {border:none;}
 /*system wide status*/
 /* ---------------- */
 #system_wide_status_text {margin:0.5em auto; text-align:center;}
+#system_wide_status_text .critical {font-weight:bolder; color:Red; font-size:1.5em;}
 #system_wide_status {border:3px solid #C83900; background-color:#fcf0f0;}
 
 /* ---------------- */

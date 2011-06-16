@@ -2,7 +2,7 @@
 using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Web.Attributes;
 //using Elmah;
-//using MvcContrib;
+using MvcContrib;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -16,10 +16,6 @@ namespace NuSurvey.Web.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            //HttpContext.Cache.Remove("ServiceMessage");
-            //var cache = ControllerContext.HttpContext.Cache["ServiceMessage"];
-
-            //var messsages = ViewData["ServiceMessage"];
             return View();
         }
 
@@ -50,6 +46,20 @@ namespace NuSurvey.Web.Controllers
         public ViewResult Sample()
         {
             return View();
+        }
+
+        [Admin]
+        public ActionResult ResetCache()
+        {
+            //HttpContext.Cache.Remove("ServiceMessage");
+            //var cache = ControllerContext.HttpContext.Cache["ServiceMessages"];
+            //var messsages = ViewData["ServiceMessage"];
+
+            HttpContext.Cache.Remove("ServiceMessages");
+
+            //ControllerContext.HttpContext.Cache.Remove("ServiceMessages");
+
+            return this.RedirectToAction(a => a.Index());
         }
 
     }
