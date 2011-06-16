@@ -187,6 +187,7 @@
     <Content Include="Images\logo-ucdavis.png" />
     <Content Include="Images\plus.png" />
     <Content Include="Images\small_print.png" />
+    <Content Include="Images\test.png" />
     <Content Include="Images\top_blue_bar.jpg" />
     <Content Include="Images\updown.png" />
     <Content Include="Images\Users.png" />
@@ -256,6 +257,7 @@
     <Content Include="Views\SurveyResponse\_SurveyResponseProgress.cshtml" />
     <Content Include="Views\SurveyResponse\AnswerNext.cshtml" />
     <Content Include="Views\SurveyResponse\DeletePending.cshtml" />
+    <Content Include="Views\Shared\_SystemMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

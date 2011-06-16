@@ -16,6 +16,10 @@ namespace NuSurvey.Web.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            //HttpContext.Cache.Remove("ServiceMessage");
+            //var cache = ControllerContext.HttpContext.Cache["ServiceMessage"];
+
+            //var messsages = ViewData["ServiceMessage"];
             return View();
         }
 
