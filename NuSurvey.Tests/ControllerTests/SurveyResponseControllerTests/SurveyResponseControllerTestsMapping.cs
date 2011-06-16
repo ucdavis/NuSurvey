@@ -49,6 +49,15 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         {
             "~/SurveyResponse/Details/5".ShouldMapTo<SurveyResponseController>(a => a.Details(5));
         }
+
+        /// <summary>
+        /// #3
+        /// </summary>
+        [TestMethod]
+        public void TestStartSurveyGetMapping()
+        {
+            "~/SurveyResponse/StartSurvey/5".ShouldMapTo<SurveyResponseController>(a => a.StartSurvey(5));
+        }
         #endregion Mapping Tests
     }
 }

@@ -112,4 +112,22 @@ namespace NuSurvey.Tests.Core.Helpers
             Records(count, repository);
         }
     }
+
+    public class FakeCategoryTotalMaxScore : ControllerRecordFakes<CategoryTotalMaxScore>
+    {
+        protected override CategoryTotalMaxScore CreateValid(int i)
+        {
+            return CreateValidEntities.CategoryTotalMaxScore(i);
+        }
+
+        public FakeCategoryTotalMaxScore(int count, IRepository<CategoryTotalMaxScore> repository, List<CategoryTotalMaxScore> specificRecords)
+        {
+            Records(count, repository, specificRecords);
+        }
+
+        public FakeCategoryTotalMaxScore(int count, IRepository<CategoryTotalMaxScore> repository)
+        {
+            Records(count, repository);
+        }
+    }
 }

@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using System.Web.Routing;
-using Castle.Windsor;
-using NuSurvey.Tests.Core.Helpers;
-using NuSurvey.Web;
-using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Core.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
-using NuSurvey.Web.Helpers;
+using NuSurvey.Core.Domain;
+using NuSurvey.Tests.Core.Helpers;
+using NuSurvey.Web.Controllers;
+using NuSurvey.Web.Controllers.Filters;
 using Rhino.Mocks;
-using UCDArch.Core.PersistanceSupport;
-using UCDArch.Testing;
 using UCDArch.Testing.Fakes;
-using UCDArch.Web.Attributes;
 
 namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 {
@@ -219,7 +209,8 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             {
                 scoreMax++;
                 categoryTotalMaxScore.TotalMaxScore = scoreMax*25;
-                CategoryTotalMaxScoreRepository.Expect(a => a.GetNullableById(categoryTotalMaxScore.Id)).Return(
+                CategoryTotalMaxScore score = categoryTotalMaxScore;
+                CategoryTotalMaxScoreRepository.Expect(a => a.GetNullableById(score.Id)).Return(
                     categoryTotalMaxScore);
             }
 

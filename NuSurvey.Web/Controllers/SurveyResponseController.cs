@@ -64,6 +64,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #3
         /// Start or continue a survey with one question at a time
         /// GET: /SurveyResponse/StartSurvey/5
         /// </summary>
@@ -78,6 +79,7 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
 
+            #region Check To See if there are enough available Categories
             var count = 0;
             foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
             {
@@ -98,6 +100,8 @@ namespace NuSurvey.Web.Controllers
                 Message = "Survey does not have enough active categories to complete survey.";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
+            #endregion Check To See if there are enough available Categories
+
             var cannotContinue = false;
 
             var pendingExists = _surveyResponseRepository.Queryable
