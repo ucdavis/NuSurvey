@@ -166,7 +166,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
             #region Assert
             Assert.Inconclusive("Tests are still being written. When done, remove this line.");
-            Assert.AreEqual(2, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(3, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -209,6 +209,28 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
             Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #3
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodStartSurveyGetContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "StartSurvey");
+            #endregion Arrange
+
+            #region Act
+            //var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<UserOnlyAttribute>();
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            //Assert.AreEqual(1, expectedAttribute.Count(), "UserOnlyAttribute not found");
+            Assert.AreEqual(0, allAttributes.Count());
             #endregion Assert
         }
 
