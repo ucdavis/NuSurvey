@@ -6,6 +6,7 @@ using MvcContrib.TestHelper;
 using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Helpers;
 using UCDArch.Testing;
 using UCDArch.Web.Attributes;
 
@@ -69,6 +70,15 @@ namespace NuSurvey.Tests.ControllerTests
         {
             "~/Home/Sample/".ShouldMapTo<HomeController>(a => a.Sample());
         }
+
+        /// <summary>
+        /// #5
+        /// </summary>
+        [TestMethod]
+        public void TestResetCacheMapping()
+        {
+            "~/Home/ResetCache/".ShouldMapTo<HomeController>(a => a.ResetCache());
+        }
         #endregion Mapping Tests
 
         #region Method Tests
@@ -98,7 +108,16 @@ namespace NuSurvey.Tests.ControllerTests
         {
             Controller.Sample()
                 .AssertViewRendered();
-        }   
+        }
+
+
+        [TestMethod]
+        public void TestResetCacheRedirectsToIndex()
+        {
+            Controller.ResetCache()
+                .AssertActionRedirect()
+                .ToAction<HomeController>(a => a.Index());
+        }
         #endregion Method Tests
 
         #region Reflection Tests
@@ -125,10 +144,10 @@ namespace NuSurvey.Tests.ControllerTests
         }
 
         /// <summary>
-        /// Tests the controller has Five attributes.
+        /// Tests the controller has six attributes.
         /// </summary>
         [TestMethod]
-        public void TestControllerHasFiveAttributes()
+        public void TestControllerHasSixAttributes()
         {
             #region Arrange
             var controllerClass = _controllerClass;
@@ -139,7 +158,7 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(5, result.Count());
+            Assert.AreEqual(6, result.Count());
             #endregion Assert
         }
 
@@ -198,6 +217,22 @@ namespace NuSurvey.Tests.ControllerTests
         }
 
         [TestMethod]
+        public void TestControllerHasLocServiceMessageAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<LocServiceMessageAttribute>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "LocServiceMessageAttribute not found.");
+            #endregion Assert
+        }
+
+        [TestMethod]
         public void TestControllerHasHandleTransactionsManuallyAttribute()
         {
             #region Arrange
@@ -245,7 +280,7 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(4, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(5, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -320,6 +355,28 @@ namespace NuSurvey.Tests.ControllerTests
             #region Arrange
             var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethod("Sample");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #5
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodResetCacheContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("ResetCache");
             #endregion Arrange
 
             #region Act
