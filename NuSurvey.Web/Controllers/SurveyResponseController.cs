@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Mvc;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
@@ -19,12 +20,14 @@ namespace NuSurvey.Web.Controllers
     public class SurveyResponseController : ApplicationController
     {
 	    private readonly IRepository<SurveyResponse> _surveyResponseRepository;
+        private readonly IScoreService _scoreService;
 
-        public SurveyResponseController(IRepository<SurveyResponse> surveyResponseRepository)
+        public SurveyResponseController(IRepository<SurveyResponse> surveyResponseRepository, IScoreService scoreService)
         {
             _surveyResponseRepository = surveyResponseRepository;
+            _scoreService = scoreService;
         }
-    
+
         /// <summary>
         /// #1
         /// GET: /SurveyResponse/
@@ -172,6 +175,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #5
         /// Load the next available question, or finalize if all questions are answered.
         /// GET: /SurveyResponse/AnswerNext/5
         /// </summary>
@@ -199,6 +203,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #6
         /// POST:
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>
@@ -235,91 +240,104 @@ namespace NuSurvey.Web.Controllers
             {
                 answer = new Answer(); 
             }
-            
-            answer.Question = question;
-            answer.Category = question.Category;
-            if (answer.Question.IsOpenEnded)
+
+            questions = _scoreService.ScoreQuestion(surveyResponse.Survey.Questions.AsQueryable(), questions);
+            if (questions.Invalid)
             {
-                int number;
-                if (Int32.TryParse(questions.Answer, out number))
-                {
-                    answer.OpenEndedAnswer = number;
-                    answer.Response = answer.Question.Responses.Where(a => a.Value == number.ToString()).FirstOrDefault();
-                    if (answer.Response == null)
-                    {
-                        var highResponse = answer.Question.Responses.Where(a => a.Value.Contains("+")).FirstOrDefault();
-                        if (highResponse != null)
-                        {
-                            int highValue;
-                            if (Int32.TryParse(highResponse.Value, out highValue))
-                            {
-                                if (number >= highValue)
-                                {
-                                    answer.Response = highResponse;
-                                }
-                            }
-                        }
-                    }
-                    if (answer.Response == null)
-                    {
-                        var lowResponse = answer.Question.Responses.Where(a => a.Value.Contains("-")).FirstOrDefault();
-                        if (lowResponse != null)
-                        {
-                            int lowValue;
-                            if (Int32.TryParse(lowResponse.Value, out lowValue))
-                            {
-                                if (number <= Math.Abs(lowValue))
-                                {
-                                    answer.Response = lowResponse;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    //TryParse failed
-                }
+                ModelState.AddModelError("Questions", questions.Message);
             }
             else
             {
-                answer.Response = answer.Question.Responses.Where(a => a.Id == questions.ResponseId).FirstOrDefault();
-            }
-            if (answer.Category.DoNotUseForCalculations && answer.Response == null && answer.OpenEndedAnswer != null)
-            {
-                answer.Score = 0;
+                answer.Question = question;
+                answer.Category = question.Category;
+                answer.OpenEndedAnswer = questions.OpenEndedNumericAnswer;
+                answer.Response = Repository.OfType<Response>().GetNullableById(questions.ResponseId);
+                answer.Score = questions.Score;
+
                 surveyResponse.AddAnswers(answer);
             }
-            if (answer.Response != null)
-            {
-                if (answer.Question.Category.DoNotUseForCalculations)
-                {
-                    answer.Score = 0;
-                }
-                else
-                {
-                    answer.Score = answer.Response.Score;
-                }
-                surveyResponse.AddAnswers(answer);
-            }
-            else
-            {
-                if (answer.Question.IsOpenEnded)
-                {
-                    if (string.IsNullOrWhiteSpace(questions.Answer))
-                    {
-                        ModelState.AddModelError(string.Format("Questions"), "Numeric answer to Question is required");
-                    }
-                    else if(answer.OpenEndedAnswer == null)
-                    {
-                        ModelState.AddModelError(string.Format("Questions"), "Answer must be a number");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Format("Questions"), "Answer is required");
-                }
-            }
+            //if (answer.Question.IsOpenEnded)
+            //{
+            //    int number;
+            //    if (Int32.TryParse(questions.Answer, out number))
+            //    {
+            //        answer.OpenEndedAnswer = number;
+            //        answer.Response = answer.Question.Responses.Where(a => a.Value == number.ToString()).FirstOrDefault();
+            //        if (answer.Response == null)
+            //        {
+            //            var highResponse = answer.Question.Responses.Where(a => a.Value.Contains("+")).FirstOrDefault();
+            //            if (highResponse != null)
+            //            {
+            //                int highValue;
+            //                if (Int32.TryParse(highResponse.Value, out highValue))
+            //                {
+            //                    if (number >= highValue)
+            //                    {
+            //                        answer.Response = highResponse;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        if (answer.Response == null)
+            //        {
+            //            var lowResponse = answer.Question.Responses.Where(a => a.Value.Contains("-")).FirstOrDefault();
+            //            if (lowResponse != null)
+            //            {
+            //                int lowValue;
+            //                if (Int32.TryParse(lowResponse.Value, out lowValue))
+            //                {
+            //                    if (number <= Math.Abs(lowValue))
+            //                    {
+            //                        answer.Response = lowResponse;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        //TryParse failed
+            //    }
+            //}
+            //else
+            //{
+            //    answer.Response = answer.Question.Responses.Where(a => a.Id == questions.ResponseId).FirstOrDefault();
+            //}
+            //if (answer.Category.DoNotUseForCalculations && answer.Response == null && answer.OpenEndedAnswer != null)
+            //{
+            //    answer.Score = 0;
+            //    surveyResponse.AddAnswers(answer);
+            //}
+            //if (answer.Response != null)
+            //{
+            //    if (answer.Question.Category.DoNotUseForCalculations)
+            //    {
+            //        answer.Score = 0;
+            //    }
+            //    else
+            //    {
+            //        answer.Score = answer.Response.Score;
+            //    }
+            //    surveyResponse.AddAnswers(answer);
+            //}
+            //else
+            //{
+            //    if (answer.Question.IsOpenEnded)
+            //    {
+            //        if (string.IsNullOrWhiteSpace(questions.Answer))
+            //        {
+            //            ModelState.AddModelError(string.Format("Questions"), "Numeric answer to Question is required");
+            //        }
+            //        else if(answer.OpenEndedAnswer == null)
+            //        {
+            //            ModelState.AddModelError(string.Format("Questions"), "Answer must be a number");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        ModelState.AddModelError(string.Format("Questions"), "Answer is required");
+            //    }
+            //}
 
             if (ModelState.IsValid)
             {
@@ -715,7 +733,8 @@ namespace NuSurvey.Web.Controllers
         //    return RedirectToAction("Index");
         //}
 
-  
+
+
         
         /// <summary>
         /// Transfer editable values from source to destination
@@ -935,11 +954,16 @@ namespace NuSurvey.Web.Controllers
         }
     }
 
+
     public class QuestionAnswerParameter
     {
         public int QuestionId { get; set; }
         public string Answer { get; set; }
         public int ResponseId { get; set; }
+        public bool Invalid { get; set; } 
+        public string Message { get; set; } //Error message when invalid
+        public int Score { get; set; } //Score when Valid
+        public int? OpenEndedNumericAnswer { get; set; } //When Open ended and could parse int (may need to change for time, or other types currently not supported)
     }
 
     public class Scores

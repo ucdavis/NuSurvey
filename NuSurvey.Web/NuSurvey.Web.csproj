@@ -157,6 +157,7 @@
     <Compile Include="Services\ArchiveService.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\PrintService.cs" />
+    <Compile Include="Services\ScoreService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Css\custom.css" />
