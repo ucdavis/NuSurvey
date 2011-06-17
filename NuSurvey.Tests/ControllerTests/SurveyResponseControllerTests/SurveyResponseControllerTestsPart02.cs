@@ -6,6 +6,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Castle.Windsor;
+using NuSurvey.Tests.Core.Extensions;
 using NuSurvey.Tests.Core.Helpers;
 using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
@@ -28,7 +29,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         #region StartSurvey Get Tests
 
         [TestMethod]
-        public void TestStartSurveyRedirectsWhenSurveyNotFoundOrNotActive1()
+        public void TestStartSurveyGetRedirectsWhenSurveyNotFoundOrNotActive1()
         {
             #region Arrange
             var surveys = new List<Survey>();
@@ -52,7 +53,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         }
 
         [TestMethod]
-        public void TestStartSurveyRedirectsWhenSurveyNotFoundOrNotActive2()
+        public void TestStartSurveyGetRedirectsWhenSurveyNotFoundOrNotActive2()
         {
             #region Arrange
             var surveys = new List<Survey>();
@@ -77,7 +78,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
 
         [TestMethod]
-        public void TestStartSurveyRedirectsWhenNotEnoughCategories()
+        public void TestStartSurveyGetRedirectsWhenNotEnoughCategories()
         {
             #region Arrange
             var categories = new List<Category>();
@@ -112,7 +113,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
 
         [TestMethod]
-        public void TestStartSurveyReturnsViewIfPendingSurveyResponseLinkedToOlderVersion()
+        public void TestStartSurveyGetReturnsViewIfPendingSurveyResponseLinkedToOlderVersion()
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
@@ -157,7 +158,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         }
 
         [TestMethod]
-        public void TestStartSurveyReturnsViewIfPendingSurveyResponse()
+        public void TestStartSurveyGetReturnsViewIfPendingSurveyResponse()
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
@@ -203,7 +204,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
 
         [TestMethod]
-        public void TestStartSurveyReturnsViewWhenNoPendingSurvey()
+        public void TestStartSurveyGetReturnsViewWhenNoPendingSurvey()
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
@@ -249,7 +250,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
 
         [TestMethod]
-        public void TestStartSurveyReturnsViewWithExpectedData1()
+        public void TestStartSurveyGetReturnsViewWithExpectedData1()
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
@@ -274,7 +275,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         }
 
         [TestMethod]
-        public void TestStartSurveyReturnsViewWithExpectedData2()
+        public void TestStartSurveyGetReturnsViewWithExpectedData2()
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
@@ -307,6 +308,111 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Assert
         }
         #endregion StartSurvey Get Tests
+        #region StartSurvey Post Tests
+
+        [TestMethod]
+        public void TestStartSurveyPostRedirectsIfSurveyNotFoundOrActive1()
+        {
+            #region Arrange
+            var surveys = new List<Survey>();
+            for (int i = 0; i < 3; i++)
+            {
+                surveys.Add(CreateValidEntities.Survey(i + 1));
+            }
+            surveys[2].IsActive = false;
+            new FakeSurveys(0, SurveyRepository, surveys);
+            #endregion Arrange
+
+            #region Act
+            Controller.StartSurvey(3, new SurveyResponse())
+                .AssertActionRedirect()
+                .ToAction<ErrorController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Survey not found or not active.", Controller.Message);
+            #endregion Assert			
+        }
+
+        [TestMethod]
+        public void TestStartSurveyPostRedirectsWhenSurveyNotFoundOrNotActive2()
+        {
+            #region Arrange
+            var surveys = new List<Survey>();
+            for (int i = 0; i < 3; i++)
+            {
+                surveys.Add(CreateValidEntities.Survey(i + 1));
+            }
+            surveys[2].IsActive = false;
+            new FakeSurveys(0, SurveyRepository, surveys);
+            #endregion Arrange
+
+            #region Act
+            Controller.StartSurvey(4, new SurveyResponse())
+                .AssertActionRedirect()
+                .ToAction<ErrorController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Survey not found or not active.", Controller.Message);
+            #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestStartSurveyPostReturnsViewWhenInvalid()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] {""}, "Me@test.com");
+            new FakeSurveys(3, SurveyRepository);
+            var surveyResponse = CreateValidEntities.SurveyResponse(1);
+            surveyResponse.StudentId = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.StartSurvey(2, surveyResponse)
+                .AssertViewRendered()
+                .WithViewData<SingleAnswerSurveyResponseViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Controller.ModelState.AssertErrorsAre("StudentId: The StudentId field is required."); //TODO: Try to get this to match the screen when javaScript is enabled.
+            Assert.AreEqual("Please correct errors to continue", Controller.Message);
+            #endregion Assert		
+        }
+
+
+        [TestMethod]
+        public void TestStartSurveyPostWithValidDataRedirectsAndSaves()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "Me@test.com");
+            SetupDataForSingleAnswer();
+            var surveyResponse = CreateValidEntities.SurveyResponse(99);
+            surveyResponse.SetIdTo(99);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.StartSurvey(1, surveyResponse)
+                .AssertActionRedirect()
+                .ToAction<SurveyResponseController>(a => a.AnswerNext(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(99, result.RouteValues["id"]);
+            SurveyResponseRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
+            var args = (SurveyResponse) SurveyResponseRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything))[0][0]; 
+            Assert.IsNotNull(args);
+            Assert.AreEqual("Name1", args.Survey.Name);
+            Assert.AreEqual("Me@test.com", args.UserId);
+            Assert.IsTrue(args.IsPending);
+            Assert.AreEqual(0, args.Answers.Count);
+            Assert.AreEqual("SID99", args.StudentId);
+            #endregion Assert		
+        }
+        #endregion StartSurvey Post Tests
         #endregion StartSurvey Tests
     }
 }

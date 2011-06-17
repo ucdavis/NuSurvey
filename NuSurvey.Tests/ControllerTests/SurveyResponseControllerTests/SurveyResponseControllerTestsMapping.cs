@@ -16,6 +16,7 @@ using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
 using UCDArch.Web.Attributes;
+using NuSurvey.Tests.Core.Extensions;
 
 namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 {
@@ -57,6 +58,15 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         public void TestStartSurveyGetMapping()
         {
             "~/SurveyResponse/StartSurvey/5".ShouldMapTo<SurveyResponseController>(a => a.StartSurvey(5));
+        }
+
+        /// <summary>
+        /// #4
+        /// </summary>
+        [TestMethod]
+        public void TestStartSurveyPostMapping()
+        {
+            "~/SurveyResponse/StartSurvey/5".ShouldMapTo<SurveyResponseController>(a => a.StartSurvey(5, new SurveyResponse()), true);
         }
         #endregion Mapping Tests
     }
