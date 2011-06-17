@@ -13,6 +13,7 @@ using NuSurvey.Core.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using NuSurvey.Web.Helpers;
+using NuSurvey.Web.Services;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
@@ -26,7 +27,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
     {
         private readonly Type _controllerClass = typeof(SurveyResponseController);
         public IRepository<SurveyResponse> SurveyResponseRepository;
-        //public IExampleService ExampleService;
+        public IScoreService ScoreService;
         public IRepository<Survey> SurveyRepository;
         public IRepository<Category> CategoryRepository;
         public IRepository<CategoryTotalMaxScore> CategoryTotalMaxScoreRepository;
@@ -39,8 +40,8 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         protected override void SetupController()
         {
             SurveyResponseRepository = FakeRepository<SurveyResponse>();
-            //ExampleService = MockRepository.GenerateStub<IExampleService>();  
-            Controller = new TestControllerBuilder().CreateController<SurveyResponseController>(SurveyResponseRepository);
+            ScoreService = MockRepository.GenerateStub<IScoreService>();  
+            Controller = new TestControllerBuilder().CreateController<SurveyResponseController>(SurveyResponseRepository, ScoreService);
             //Controller = new TestControllerBuilder().CreateController<SurveyResponseController>(SurveyResponseRepository, ExampleService);
         }
 

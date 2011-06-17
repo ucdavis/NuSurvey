@@ -68,6 +68,24 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         {
             "~/SurveyResponse/StartSurvey/5".ShouldMapTo<SurveyResponseController>(a => a.StartSurvey(5, new SurveyResponse()), true);
         }
+
+        /// <summary>
+        /// #5
+        /// </summary>
+        [TestMethod]
+        public void TestAnswerNextGetMapping()
+        {
+            "~/SurveyResponse/AnswerNext/5".ShouldMapTo<SurveyResponseController>(a => a.AnswerNext(5));
+        }
+
+        /// <summary>
+        /// #6
+        /// </summary>
+        [TestMethod]
+        public void TestAnswerNextPostMapping()
+        {
+            "~/SurveyResponse/AnswerNext/5".ShouldMapTo<SurveyResponseController>(a => a.AnswerNext(5, new QuestionAnswerParameter()), true);
+        }
         #endregion Mapping Tests
     }
 }
