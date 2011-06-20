@@ -224,7 +224,7 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Arrange
 
             #region Act
-            var result = controllerClass.GetCustomAttributes(true).OfType<LocServiceMessageAttribute>();
+            var result = controllerClass.GetCustomAttributes(true).OfType<ServiceMessageAttribute>();
             #endregion Act
 
             #region Assert

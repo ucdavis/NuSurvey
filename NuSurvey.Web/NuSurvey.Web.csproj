@@ -149,7 +149,6 @@
     </Compile>
     <Compile Include="Helpers\AutomapperConfig.cs" />
     <Compile Include="Helpers\HtmlHelperExtensions.cs" />
-    <Compile Include="Helpers\ServiceMessages.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -206,7 +205,7 @@
     <Content Include="Scripts\jquery.placeholder.js" />
     <Content Include="Scripts\jquery.placeholder.min.js" />
     <Content Include="Scripts\jquery.tablednd_0_5.js" />
-    <None Include="UCDArch.txt" />
+    <Content Include="UCDArch.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

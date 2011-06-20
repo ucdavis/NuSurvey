@@ -51,9 +51,9 @@ namespace NuSurvey.Web.Controllers
         [Admin]
         public ActionResult ResetCache()
         {
-            //HttpContext.Cache.Remove("ServiceMessage");
-            //var cache = ControllerContext.HttpContext.Cache["ServiceMessages"];
-            //var messsages = ViewData["ServiceMessage"];
+            HttpContext.Cache.Remove("ServiceMessages");
+            var cache = ControllerContext.HttpContext.Cache["ServiceMessages"];
+            var messsages = ViewData["ServiceMessages"];
 
             HttpContext.Cache.Remove("ServiceMessages");
 

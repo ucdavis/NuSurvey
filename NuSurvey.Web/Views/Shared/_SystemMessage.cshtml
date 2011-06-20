@@ -1,6 +1,6 @@
 ﻿@{
-    var messages = ViewData["ServiceMessages"] as ServiceMessage[];
-    var showIt = messages.Count() > 0 ? true : false;
+    var messages = ViewData["ServiceMessages"] as UCDArch.Web.Services.ServiceMessage[];
+    var showIt = messages!=null && messages.Count() > 0 ? true : false;
 }        
         @if (showIt){ 
         <div id="system_wide_status">

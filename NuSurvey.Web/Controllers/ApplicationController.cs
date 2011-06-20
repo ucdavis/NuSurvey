@@ -5,7 +5,7 @@ using UCDArch.Web.Controller;
 
 namespace NuSurvey.Web.Controllers
 {
-    [LocServiceMessage("NuSurvey", ViewDataKey = "ServiceMessages", MessageServiceAppSettingsKey = "MessageServer")]
+    [ServiceMessage("NuSurvey", ViewDataKey = "ServiceMessages", MessageServiceAppSettingsKey = "MessageServer")]
     [LocVersion]
     public class ApplicationController : SuperController { }
 
