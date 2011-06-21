@@ -11,7 +11,7 @@ namespace NuSurvey.Web.Services
     public interface IScoreService
     {
         QuestionAnswerParameter ScoreQuestion(IQueryable<Question> questions, QuestionAnswerParameter questionAnswerParameter);
-        SurveyResponse CalculateScores(IRepository repository, SurveyResponse surveyResponse);
+        void CalculateScores(IRepository repository, SurveyResponse surveyResponse);
     }
 
     public class ScoreService : IScoreService
@@ -143,7 +143,7 @@ namespace NuSurvey.Web.Services
             return questionAnswerParameter;
         }
 
-        public SurveyResponse CalculateScores(IRepository repository, SurveyResponse surveyResponse)
+        public void CalculateScores(IRepository repository, SurveyResponse surveyResponse)
         {
             var scores = new List<Scores>();
             foreach (var category in surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
@@ -180,7 +180,7 @@ namespace NuSurvey.Web.Services
                 .ThenBy(a => a.Rank)
                 .FirstOrDefault().Category;
 
-            return surveyResponse;
+            return;
         }
     }
 }
