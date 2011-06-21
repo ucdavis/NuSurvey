@@ -4,12 +4,14 @@ using System.Linq;
 using System.Web;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers;
+using UCDArch.Core.PersistanceSupport;
 
 namespace NuSurvey.Web.Services
 {
     public interface IScoreService
     {
         QuestionAnswerParameter ScoreQuestion(IQueryable<Question> questions, QuestionAnswerParameter questionAnswerParameter);
+        SurveyResponse CalculateScores(IRepository repository, SurveyResponse surveyResponse);
     }
 
     public class ScoreService : IScoreService
@@ -139,6 +141,46 @@ namespace NuSurvey.Web.Services
             }
 
             return questionAnswerParameter;
+        }
+
+        public SurveyResponse CalculateScores(IRepository repository, SurveyResponse surveyResponse)
+        {
+            var scores = new List<Scores>();
+            foreach (var category in surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
+            {
+                var score = new Scores();
+                score.Category = category;
+                var totalMax = repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
+                if (totalMax == null) //No Questions most likely
+                {
+                    continue;
+                }
+                score.MaxScore = totalMax.TotalMaxScore;
+                score.TotalScore =
+                    surveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);
+                score.Percent = (score.TotalScore / score.MaxScore) * 100m;
+                score.Rank = category.Rank;
+                scores.Add(score);
+
+            }
+
+            surveyResponse.PositiveCategory = scores
+                .OrderByDescending(a => a.Percent)
+                .ThenBy(a => a.Rank)
+                .FirstOrDefault().Category;
+
+            surveyResponse.NegativeCategory1 = scores
+                .Where(a => a.Category != surveyResponse.PositiveCategory)
+                .OrderBy(a => a.Percent)
+                .ThenBy(a => a.Rank)
+                .FirstOrDefault().Category;
+            surveyResponse.NegativeCategory2 = scores
+                .Where(a => a.Category != surveyResponse.PositiveCategory && a.Category != surveyResponse.NegativeCategory1)
+                .OrderBy(a => a.Percent)
+                .ThenBy(a => a.Rank)
+                .FirstOrDefault().Category;
+
+            return surveyResponse;
         }
     }
 }

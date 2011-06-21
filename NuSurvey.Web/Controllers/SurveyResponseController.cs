@@ -293,7 +293,7 @@ namespace NuSurvey.Web.Controllers
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
             if (viewModel.CurrentQuestion == null)
             {
-                CalculateScores(surveyResponse);
+                _scoreService.CalculateScores(Repository, surveyResponse);
                 surveyResponse.IsPending = false;
                 _surveyResponseRepository.EnsurePersistent(surveyResponse);
                 return this.RedirectToAction(a => a.Results(surveyResponse.Id));
@@ -305,43 +305,6 @@ namespace NuSurvey.Web.Controllers
             }
         }
 
-        private void CalculateScores(SurveyResponse surveyResponse)
-        {
-            var scores = new List<Scores>();
-            foreach (var category in surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
-            {
-                var score = new Scores();
-                score.Category = category;
-                var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
-                if (totalMax == null) //No Questions most likely
-                {
-                    continue;
-                }
-                score.MaxScore = totalMax.TotalMaxScore;
-                score.TotalScore =
-                    surveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);
-                score.Percent = (score.TotalScore / score.MaxScore) * 100m;
-                score.Rank = category.Rank;
-                scores.Add(score);
-
-            }
-
-            surveyResponse.PositiveCategory = scores
-                .OrderByDescending(a => a.Percent)
-                .ThenBy(a => a.Rank)
-                .FirstOrDefault().Category;
-
-            surveyResponse.NegativeCategory1 = scores
-                .Where(a => a.Category != surveyResponse.PositiveCategory)
-                .OrderBy(a => a.Percent)
-                .ThenBy(a => a.Rank)
-                .FirstOrDefault().Category;
-            surveyResponse.NegativeCategory2 = scores
-                .Where(a => a.Category != surveyResponse.PositiveCategory && a.Category != surveyResponse.NegativeCategory1)
-                .OrderBy(a => a.Percent)
-                .ThenBy(a => a.Rank)
-                .FirstOrDefault().Category;
-        }
 
         /// <summary>
         /// GET:
@@ -505,41 +468,8 @@ namespace NuSurvey.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                CalculateScores(surveyResponseToCreate);
-                //var scores = new List<Scores>();
-                //foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
-                //{
-                //    var score = new Scores();
-                //    score.Category = category;
-                //    var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
-                //    if (totalMax == null) //No Questions most likely
-                //    {
-                //        continue;
-                //    }
-                //    score.MaxScore = totalMax.TotalMaxScore;
-                //    score.TotalScore =
-                //        surveyResponseToCreate.Answers.Where(a => a.Category == category).Sum(b => b.Score);
-                //    score.Percent = (score.TotalScore/score.MaxScore)*100m;
-                //    score.Rank = category.Rank;
-                //    scores.Add(score);
+                _scoreService.CalculateScores(Repository, surveyResponseToCreate);
 
-                //}
-
-                //surveyResponseToCreate.PositiveCategory = scores
-                //    .OrderByDescending(a => a.Percent)
-                //    .ThenBy(a => a.Rank)
-                //    .FirstOrDefault().Category;
-
-                //surveyResponseToCreate.NegativeCategory1 = scores
-                //    .Where(a => a.Category != surveyResponseToCreate.PositiveCategory)
-                //    .OrderBy(a => a.Percent)
-                //    .ThenBy(a => a.Rank)
-                //    .FirstOrDefault().Category;
-                //surveyResponseToCreate.NegativeCategory2 = scores                    
-                //    .Where(a => a.Category != surveyResponseToCreate.PositiveCategory && a.Category != surveyResponseToCreate.NegativeCategory1)
-                //    .OrderBy(a => a.Percent)
-                //    .ThenBy(a => a.Rank)
-                //    .FirstOrDefault().Category;
                 _surveyResponseRepository.EnsurePersistent(surveyResponseToCreate);
 
                 Message = "SurveyResponse Created Successfully";
