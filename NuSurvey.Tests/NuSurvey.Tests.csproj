@@ -141,6 +141,7 @@
     <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart04.cs" />
     <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart05.cs" />
     <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart06.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart07.cs" />
     <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsReflection.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\AssertExtensions.cs" />

@@ -358,6 +358,28 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Assert
         }
 
+        /// <summary>
+        /// #10
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodDCreateGetContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<UserAttribute>();
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "UserAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
 
         #endregion Controller Method Tests
 
