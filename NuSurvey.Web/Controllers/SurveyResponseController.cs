@@ -307,6 +307,7 @@ namespace NuSurvey.Web.Controllers
 
 
         /// <summary>
+        /// #8
         /// GET:
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>
@@ -320,7 +321,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Pending survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            if (surveyResponse.UserId != CurrentUser.Identity.Name)
+            if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId != CurrentUser.Identity.Name)
             {
                 Message = "Not your survey";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
@@ -347,7 +348,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Pending survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            if (surveyResponse.UserId != CurrentUser.Identity.Name)
+            if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId != CurrentUser.Identity.Name)
             {
                 Message = "Not your survey";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
