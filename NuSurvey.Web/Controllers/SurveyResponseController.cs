@@ -333,9 +333,10 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #9
         /// POST:
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">SurveyResponse Id</param>
         /// <param name="confirm"></param>
         /// <param name="fromAdmin"></param>
         /// <returns></returns>
@@ -354,20 +355,22 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
             }
 
+            var surveyId = surveyResponse.Survey.Id;
+
             if (confirm == false)
             {
                 if (fromAdmin)
                 {
-                    return this.RedirectToAction<SurveyController>(a => a.PendingDetails(id));
+                    return this.RedirectToAction<SurveyController>(a => a.PendingDetails(surveyId));
                 }
-                return this.RedirectToAction(a => a.StartSurvey(surveyResponse.Survey.Id));
+                return this.RedirectToAction(a => a.StartSurvey(surveyId));
             }
 
             _surveyResponseRepository.Remove(surveyResponse);
 
             if (fromAdmin)
             {
-                return this.RedirectToAction<SurveyController>(a => a.PendingDetails(id));
+                return this.RedirectToAction<SurveyController>(a => a.PendingDetails(surveyId));
             }
             return this.RedirectToAction<HomeController>(a => a.Index());
 
