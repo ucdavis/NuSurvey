@@ -273,7 +273,7 @@ namespace NuSurvey.Web.Controllers
 
         /// <summary>
         /// #7
-        /// Calculate the pasitive and two negative categories and set the pending flag to false
+        /// Calculate the positive and two negative categories and set the pending flag to false
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>
         /// <returns></returns>

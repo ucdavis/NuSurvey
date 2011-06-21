@@ -86,6 +86,9 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         }
         #endregion Init
 
+        /// <summary>
+        /// Active Question Ids are 4,5,8,10,13,14
+        /// </summary>
         protected void SetupDataForSingleAnswer()
         {
             new FakeCategoryTotalMaxScore(5, CategoryTotalMaxScoreRepository);
