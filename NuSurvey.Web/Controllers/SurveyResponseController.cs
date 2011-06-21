@@ -83,22 +83,7 @@ namespace NuSurvey.Web.Controllers
             }
 
             #region Check To See if there are enough available Categories
-            var count = 0;
-            foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
-            {
-                var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
-                if (totalMax == null) //No Questions most likely
-                {
-                    continue;
-                }
-                count++;
-                if (count > 3)
-                {
-                    break;
-                }
-            }
-
-            if (count < 3)
+            if (GetCountActiveCategoriesWithScore(survey) < 3)
             {
                 Message = "Survey does not have enough active categories to complete survey.";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
@@ -132,6 +117,25 @@ namespace NuSurvey.Web.Controllers
 
             return View(viewModel);
 
+        }
+
+        private int GetCountActiveCategoriesWithScore(Survey survey)
+        {
+            var count = 0;
+            foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
+            {
+                var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
+                if (totalMax == null) //No Questions most likely
+                {
+                    continue;
+                }
+                count++;
+                if (count > 3)
+                {
+                    break;
+                }
+            }
+            return count;
         }
 
         /// <summary>
@@ -377,6 +381,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #10
         /// GET: /SurveyResponse/Create
         /// </summary>
         /// <param name="id">Survey Id</param>
@@ -391,26 +396,13 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
 
-            var count = 0;
-            foreach (var category in survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
-            {                
-                var totalMax = Repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id);
-                if (totalMax == null) //No Questions most likely
-                {
-                    continue;
-                }
-                count++;
-                if (count > 3)
-                {
-                    break;
-                }
-            }
-
-            if (count < 3)
+            #region Check To See if there are enough available Categories
+            if (GetCountActiveCategoriesWithScore(survey) < 3)
             {
                 Message = "Survey does not have enough active categories to complete survey.";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
+            #endregion Check To See if there are enough available Categories
 
 			var viewModel = SurveyResponseViewModel.Create(Repository, survey);
             
