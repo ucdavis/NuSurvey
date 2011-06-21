@@ -96,6 +96,14 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             "~/SurveyResponse/FinalizePending/5".ShouldMapTo<SurveyResponseController>(a => a.FinalizePending(5));
         }
 
+        /// <summary>
+        /// #8
+        /// </summary>
+        [TestMethod]
+        public void TestDeletePendingGetMapping()
+        {
+            "~/SurveyResponse/DeletePending/5".ShouldMapTo<SurveyResponseController>(a => a.DeletePending(5, false), true);
+        }
         
         #endregion Mapping Tests
     }
