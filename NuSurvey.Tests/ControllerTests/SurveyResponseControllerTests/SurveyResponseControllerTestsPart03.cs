@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using System.Web.Routing;
-using Castle.Windsor;
-using NuSurvey.Web;
-using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Core.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
-using NuSurvey.Web.Helpers;
-using Rhino.Mocks;
-using UCDArch.Core.PersistanceSupport;
-using UCDArch.Testing;
-using UCDArch.Testing.Fakes;
-using UCDArch.Web.Attributes;
+using NuSurvey.Core.Domain;
+using NuSurvey.Tests.Core.Extensions;
 using NuSurvey.Tests.Core.Helpers;
+using NuSurvey.Web.Controllers;
+using Rhino.Mocks;
+using UCDArch.Testing.Fakes;
 
 namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 {
@@ -148,7 +138,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
             SetupDataForSingleAnswer();
 
-            var questionIds = new int[] {4, 5, 8, 10, 13, 14};
+            var questionIds = new[] {4, 5, 8, 10, 13, 14};
             var answers = new List<Answer>();
             for (int i = 0; i < 6; i++)
             {
@@ -199,6 +189,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
             #region Assert
             Assert.AreEqual("Pending survey not found", Controller.Message);
+            SurveyResponseRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
             #endregion Assert
         }
 
@@ -223,6 +214,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
             #region Assert
             Assert.AreEqual("Pending survey not found", Controller.Message);
+            SurveyResponseRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
             #endregion Assert
         }
         [TestMethod]
@@ -252,12 +244,13 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
             #region Assert
             Assert.AreEqual("Not your survey", Controller.Message);
+            SurveyResponseRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
             #endregion Assert
         }
 
 
         [TestMethod]
-        public void TestAnswerNextRedirectsIfQuestionNotFound()
+        public void TestAnswerNextPostRedirectsIfQuestionNotFound()
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
@@ -285,22 +278,207 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
             #region Assert
             Assert.AreEqual("Question survey not found", Controller.Message);
+            SurveyResponseRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
             #endregion Assert		
         }
 
-        /*
-         * Answer tests:
-         * Test when answer is a radio button:
-         *  1) Response ID exists
-         *  2) Score matches what the response id's score was.
-         *  
-         * When answer is open ended:
-         *  when answer is an int
-         *      1) score is calculated correctly exact match, + value, - value
-         *      2) What about if value exists between + and -, but no exact match found?
-         *  when answer is not an int
-         *      What to do if date? what to do if some other answer type?
-         */
+
+        [TestMethod]
+        public void TestAnswerNextPostReturnsViewIfAnswerNotValid()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
+            SetupDataForSingleAnswer();
+
+            var answer = CreateValidEntities.Answer(1);
+            answer.Question = QuestionRepository.GetNullableById(4);
+
+            var surveyResponses = new List<SurveyResponse>();
+            surveyResponses.Add(CreateValidEntities.SurveyResponse(1));
+            surveyResponses[0].UserId = "test@testy.com";
+            surveyResponses[0].IsPending = true;
+            surveyResponses[0].Answers.Add(answer);
+            surveyResponses[0].Survey = SurveyRepository.GetNullableById(1);
+            new FakeSurveyResponses(0, SurveyResponseRepository, surveyResponses);
+
+            var questionAnswer = new QuestionAnswerParameter();
+            questionAnswer.QuestionId = QuestionRepository.GetNullableById(5).Id;
+
+            var scoredQuestionAnswer = new QuestionAnswerParameter();
+            scoredQuestionAnswer.QuestionId = questionAnswer.QuestionId;
+            scoredQuestionAnswer.Invalid = true;
+            scoredQuestionAnswer.Message = "You Made a Mistake";
+
+            ScoreService
+                .Expect(a => a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything))
+                .Return(scoredQuestionAnswer).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.AnswerNext(1, questionAnswer)
+                .AssertViewRendered()
+                .WithViewData<SingleAnswerSurveyResponseViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.PendingSurveyResponseExists);
+            Assert.AreEqual(1, result.AnsweredQuestions);
+            Assert.AreEqual(5, result.CurrentQuestion.Id);
+            Assert.AreEqual(6, result.TotalActiveQuestions);
+
+            ScoreService.AssertWasCalled(a => a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything));
+            var args =
+                ScoreService.GetArgumentsForCallsMadeOn(
+                    a =>
+                    a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything))[0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(15, (args[0] as IQueryable<Question>).Count());
+            Assert.AreEqual(5, ((QuestionAnswerParameter) args[1]).QuestionId);
+            Controller.ModelState.AssertErrorsAre("You Made a Mistake");
+            SurveyResponseRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
+            #endregion Assert	
+        }
+
+
+        [TestMethod]
+        public void TestAnswerNextPostRedirectsAndSavesWhenValid1()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
+            SetupDataForSingleAnswer();
+
+            var answer = CreateValidEntities.Answer(1);
+            answer.Question = QuestionRepository.GetNullableById(4);
+
+            var surveyResponses = new List<SurveyResponse>();
+            surveyResponses.Add(CreateValidEntities.SurveyResponse(1));
+            surveyResponses[0].UserId = "test@testy.com";
+            surveyResponses[0].IsPending = true;
+            surveyResponses[0].Answers.Add(answer);
+            surveyResponses[0].Survey = SurveyRepository.GetNullableById(1);
+            new FakeSurveyResponses(0, SurveyResponseRepository, surveyResponses);
+
+            new FakeResponses(5, ResponseRepository);
+
+
+            var questionAnswer = new QuestionAnswerParameter();
+            questionAnswer.QuestionId = QuestionRepository.GetNullableById(5).Id;
+
+            var scoredQuestionAnswer = new QuestionAnswerParameter();
+            scoredQuestionAnswer.QuestionId = questionAnswer.QuestionId;
+            scoredQuestionAnswer.Invalid = false;
+            scoredQuestionAnswer.ResponseId = 4;
+            scoredQuestionAnswer.Score = 89;
+
+            ScoreService
+                .Expect(a => a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything))
+                .Return(scoredQuestionAnswer).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.AnswerNext(1, questionAnswer)
+                .AssertActionRedirect()
+                .ToAction<SurveyResponseController>(a => a.AnswerNext(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.RouteValues["id"]);
+
+            ScoreService.AssertWasCalled(a => a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything));
+            var args =
+                ScoreService.GetArgumentsForCallsMadeOn(
+                    a =>
+                    a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything))[0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(15, (args[0] as IQueryable<Question>).Count());
+            Assert.AreEqual(5, ((QuestionAnswerParameter)args[1]).QuestionId);
+
+            SurveyResponseRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
+            var surveyResponseArgs = (SurveyResponse) SurveyResponseRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything))[0][0]; 
+            Assert.IsNotNull(surveyResponseArgs);
+            Assert.AreEqual(1, surveyResponseArgs.Id);
+            Assert.IsTrue(surveyResponseArgs.IsPending);
+            Assert.AreEqual(2, surveyResponseArgs.Answers.Count);
+            Assert.AreEqual(89, surveyResponseArgs.Answers[1].Score);
+            Assert.AreEqual(4, surveyResponseArgs.Answers[1].Response.Id);
+            Assert.AreEqual(null, surveyResponseArgs.Answers[1].OpenEndedAnswer);
+            Assert.AreEqual(5, surveyResponseArgs.Answers[1].Question.Id);
+            Assert.AreEqual(5, surveyResponseArgs.Answers[1].Category.Id);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestAnswerNextPostRedirectsAndSavesWhenValid2()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
+            SetupDataForSingleAnswer();
+
+            var answer = CreateValidEntities.Answer(1);
+            answer.Question = QuestionRepository.GetNullableById(4);           
+
+            var surveyResponses = new List<SurveyResponse>();
+            surveyResponses.Add(CreateValidEntities.SurveyResponse(1));
+            surveyResponses[0].UserId = "test@testy.com";
+            surveyResponses[0].IsPending = true;
+            surveyResponses[0].Answers.Add(answer);
+            surveyResponses[0].Survey = SurveyRepository.GetNullableById(1);
+            new FakeSurveyResponses(0, SurveyResponseRepository, surveyResponses);
+
+            new FakeResponses(5, ResponseRepository);
+
+
+            var questionAnswer = new QuestionAnswerParameter();
+            questionAnswer.QuestionId = QuestionRepository.GetNullableById(5).Id;
+            questionAnswer.Answer = "33";
+
+            var scoredQuestionAnswer = new QuestionAnswerParameter();
+            scoredQuestionAnswer.QuestionId = questionAnswer.QuestionId;
+            scoredQuestionAnswer.Invalid = false;
+            scoredQuestionAnswer.OpenEndedNumericAnswer = 33;
+            scoredQuestionAnswer.ResponseId = 0;
+            scoredQuestionAnswer.Score = 9;
+            scoredQuestionAnswer.Answer = questionAnswer.Answer;
+
+            ScoreService
+                .Expect(a => a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything))
+                .Return(scoredQuestionAnswer).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.AnswerNext(1, questionAnswer)
+                .AssertActionRedirect()
+                .ToAction<SurveyResponseController>(a => a.AnswerNext(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.RouteValues["id"]);
+
+            ScoreService.AssertWasCalled(a => a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything));
+            var args =
+                ScoreService.GetArgumentsForCallsMadeOn(
+                    a =>
+                    a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything))[0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(15, (args[0] as IQueryable<Question>).Count());
+            Assert.AreEqual(5, ((QuestionAnswerParameter)args[1]).QuestionId);
+
+            SurveyResponseRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
+            var surveyResponseArgs = (SurveyResponse)SurveyResponseRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything))[0][0];
+            Assert.IsNotNull(surveyResponseArgs);
+            Assert.AreEqual(1, surveyResponseArgs.Id);
+            Assert.IsTrue(surveyResponseArgs.IsPending);
+            Assert.AreEqual(2, surveyResponseArgs.Answers.Count);
+            Assert.AreEqual(9, surveyResponseArgs.Answers[1].Score);
+            Assert.AreEqual(null, surveyResponseArgs.Answers[1].Response);
+            Assert.AreEqual(33, surveyResponseArgs.Answers[1].OpenEndedAnswer);
+            Assert.AreEqual(5, surveyResponseArgs.Answers[1].Question.Id);
+            Assert.AreEqual(5, surveyResponseArgs.Answers[1].Category.Id);
+            #endregion Assert
+        }
 
         #endregion AnswerNext Post Tests
         #endregion AnswerNext Tests

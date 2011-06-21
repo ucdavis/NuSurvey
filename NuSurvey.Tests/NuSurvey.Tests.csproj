@@ -139,6 +139,7 @@
     <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart02.cs" />
     <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart03.cs" />
     <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart04.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart05.cs" />
     <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsReflection.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\AssertExtensions.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Core\Helpers\RepositoryLoad.cs" />
     <Compile Include="Core\Helpers\SpecificGuid.cs" />
     <Compile Include="Core\ServiceLocatorInitializer.cs" />
+    <Compile Include="InterfaceTests\ScoreServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryTests\AnswerRepositoryTests.cs" />
     <Compile Include="RepositoryTests\CategoryGoalRepositoryTests.cs" />
@@ -173,9 +175,7 @@
       <Name>NuSurvey.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="InterfaceTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

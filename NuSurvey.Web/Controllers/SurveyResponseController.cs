@@ -248,6 +248,7 @@ namespace NuSurvey.Web.Controllers
             }
             else
             {
+                //It is valid, add the answer.
                 answer.Question = question;
                 answer.Category = question.Category;
                 answer.OpenEndedAnswer = questions.OpenEndedNumericAnswer;
@@ -256,88 +257,6 @@ namespace NuSurvey.Web.Controllers
 
                 surveyResponse.AddAnswers(answer);
             }
-            //if (answer.Question.IsOpenEnded)
-            //{
-            //    int number;
-            //    if (Int32.TryParse(questions.Answer, out number))
-            //    {
-            //        answer.OpenEndedAnswer = number;
-            //        answer.Response = answer.Question.Responses.Where(a => a.Value == number.ToString()).FirstOrDefault();
-            //        if (answer.Response == null)
-            //        {
-            //            var highResponse = answer.Question.Responses.Where(a => a.Value.Contains("+")).FirstOrDefault();
-            //            if (highResponse != null)
-            //            {
-            //                int highValue;
-            //                if (Int32.TryParse(highResponse.Value, out highValue))
-            //                {
-            //                    if (number >= highValue)
-            //                    {
-            //                        answer.Response = highResponse;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        if (answer.Response == null)
-            //        {
-            //            var lowResponse = answer.Question.Responses.Where(a => a.Value.Contains("-")).FirstOrDefault();
-            //            if (lowResponse != null)
-            //            {
-            //                int lowValue;
-            //                if (Int32.TryParse(lowResponse.Value, out lowValue))
-            //                {
-            //                    if (number <= Math.Abs(lowValue))
-            //                    {
-            //                        answer.Response = lowResponse;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        //TryParse failed
-            //    }
-            //}
-            //else
-            //{
-            //    answer.Response = answer.Question.Responses.Where(a => a.Id == questions.ResponseId).FirstOrDefault();
-            //}
-            //if (answer.Category.DoNotUseForCalculations && answer.Response == null && answer.OpenEndedAnswer != null)
-            //{
-            //    answer.Score = 0;
-            //    surveyResponse.AddAnswers(answer);
-            //}
-            //if (answer.Response != null)
-            //{
-            //    if (answer.Question.Category.DoNotUseForCalculations)
-            //    {
-            //        answer.Score = 0;
-            //    }
-            //    else
-            //    {
-            //        answer.Score = answer.Response.Score;
-            //    }
-            //    surveyResponse.AddAnswers(answer);
-            //}
-            //else
-            //{
-            //    if (answer.Question.IsOpenEnded)
-            //    {
-            //        if (string.IsNullOrWhiteSpace(questions.Answer))
-            //        {
-            //            ModelState.AddModelError(string.Format("Questions"), "Numeric answer to Question is required");
-            //        }
-            //        else if(answer.OpenEndedAnswer == null)
-            //        {
-            //            ModelState.AddModelError(string.Format("Questions"), "Answer must be a number");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        ModelState.AddModelError(string.Format("Questions"), "Answer is required");
-            //    }
-            //}
 
             if (ModelState.IsValid)
             {
@@ -353,6 +272,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #7
         /// Calculate the pasitive and two negative categories and set the pending flag to false
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>

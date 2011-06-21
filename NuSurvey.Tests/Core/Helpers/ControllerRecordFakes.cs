@@ -130,4 +130,25 @@ namespace NuSurvey.Tests.Core.Helpers
             Records(count, repository);
         }
     }
+
+    public class FakeResponses : ControllerRecordFakes<Response>
+    {
+        protected override Response CreateValid(int i)
+        {
+            return CreateValidEntities.Response(i);
+        }
+        public FakeResponses(int count, IRepository<Response> repository, List<Response> specificRecords)
+        {
+            Records(count, repository, specificRecords);
+        }
+
+        public FakeResponses(int count, IRepository<Response> repository)
+        {
+            Records(count, repository);
+        }
+        public FakeResponses()
+        {
+
+        }
+    }
 }
