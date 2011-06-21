@@ -63,7 +63,7 @@ namespace NuSurvey.Web.Controllers
         /// <summary>
         /// #3
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Survey Id</param>
         /// <returns></returns>
         public ActionResult PendingDetails(int id)
         {
