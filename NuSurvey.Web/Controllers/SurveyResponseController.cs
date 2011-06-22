@@ -497,7 +497,7 @@ namespace NuSurvey.Web.Controllers
         /// #11
         /// POST: /SurveyResponse/Create
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Survey Id</param>
         /// <param name="surveyResponse"></param>
         /// <param name="questions"></param>
         /// <returns></returns>
@@ -561,6 +561,7 @@ namespace NuSurvey.Web.Controllers
             if (survey.Questions.Where(a => a.IsActive && a.Category.IsActive && a.Category.IsCurrentVersion).Count() != questions.Count())
             {
                 Message = "You must answer all survey questions.";
+                ModelState.AddModelError("Question", "You must answer all survey questions.");
             }
 
 
