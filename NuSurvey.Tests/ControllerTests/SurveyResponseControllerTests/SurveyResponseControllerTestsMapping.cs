@@ -122,6 +122,15 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         {
             "~/SurveyResponse/Create/5".ShouldMapTo<SurveyResponseController>(a => a.Create(5));
         }
+
+        /// <summary>
+        /// #11
+        /// </summary>
+        [TestMethod]
+        public void TestCreatePostMapping()
+        {
+            "~/SurveyResponse/Create/5".ShouldMapTo<SurveyResponseController>(a => a.Create(5, new SurveyResponse(),new QuestionAnswerParameter[0] ), true);
+        }
         #endregion Mapping Tests
     }
 }

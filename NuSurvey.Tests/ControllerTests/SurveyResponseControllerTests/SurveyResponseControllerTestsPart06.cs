@@ -131,7 +131,53 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         }
         #endregion Create Get Tests
         #region Create Post Tests
-        
+        [TestMethod]
+        public void TestCreatePostRedirectsWhenSurveyNotFoundOrNotActive1()
+        {
+            #region Arrange
+            var surveys = new List<Survey>();
+            for (int i = 0; i < 3; i++)
+            {
+                surveys.Add(CreateValidEntities.Survey(i + 1));
+            }
+            surveys[2].IsActive = false;
+            new FakeSurveys(0, SurveyRepository, surveys);
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(3, new SurveyResponse(),new QuestionAnswerParameter[0] )
+                .AssertActionRedirect()
+                .ToAction<ErrorController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Survey not found or not active.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCreatePostRedirectsWhenSurveyNotFoundOrNotActive2()
+        {
+            #region Arrange
+            var surveys = new List<Survey>();
+            for (int i = 0; i < 3; i++)
+            {
+                surveys.Add(CreateValidEntities.Survey(i + 1));
+            }
+            surveys[2].IsActive = false;
+            new FakeSurveys(0, SurveyRepository, surveys);
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(4, new SurveyResponse(), new QuestionAnswerParameter[0])
+                .AssertActionRedirect()
+                .ToAction<ErrorController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Survey not found or not active.", Controller.Message);
+            #endregion Assert
+        }
         #endregion Create Post Tests
         #endregion Create Tests
     }
