@@ -409,8 +409,98 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         } 
 
-        //
-        // POST: /SurveyResponse/Create
+        ///// <summary>
+        ///// #11
+        ///// POST: /SurveyResponse/Create
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <param name="surveyResponse"></param>
+        ///// <param name="questions"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //[User]
+        //public ActionResult CreateOld(int id, SurveyResponse surveyResponse, QuestionAnswerParameter[] questions)
+        //{
+        //    var survey = Repository.OfType<Survey>().GetNullableById(id);
+        //    if (survey == null || !survey.IsActive)
+        //    {
+        //        Message = "Survey not found or not active.";
+        //        return this.RedirectToAction<ErrorController>(a => a.Index());
+        //    }
+
+        //    var surveyResponseToCreate = new SurveyResponse(survey);
+        //    if (questions == null)
+        //    {
+        //        questions = new QuestionAnswerParameter[0];
+        //    }
+
+        //    TransferValues(surveyResponse, surveyResponseToCreate, questions);
+        //    surveyResponseToCreate.UserId = CurrentUser.Identity.Name;
+
+        //    if (survey.Questions.Where(a => a.IsActive && a.Category.IsActive && a.Category.IsCurrentVersion).Count() != questions.Count())
+        //    {
+        //        Message = "You must answer all survey questions.";
+        //    }
+        //    ModelState.Clear();
+        //    surveyResponseToCreate.TransferValidationMessagesTo(ModelState);
+
+        //    for (int i = 0; i < questions.Count(); i++)
+        //    {
+        //        var i1 = i;
+        //        if (!surveyResponseToCreate.Answers.Where(a => a.Question.Id == questions[i1].QuestionId).Any())
+        //        {
+        //            if (survey.Questions.Where(a => a.Id == questions[i1].QuestionId).Single().IsOpenEnded)
+        //            {
+        //                if (string.IsNullOrWhiteSpace(questions[i1].Answer))
+        //                {
+        //                    ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Numeric answer to Question is required"); 
+        //                }
+        //                else
+        //                {
+        //                    ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Answer must be a number");  
+        //                }                 
+        //            }
+        //            else
+        //            {
+        //                ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Answer is required");
+        //            }
+        //        }
+        //    }
+
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        _scoreService.CalculateScores(Repository, surveyResponseToCreate);
+
+        //        _surveyResponseRepository.EnsurePersistent(surveyResponseToCreate);
+
+        //        Message = "SurveyResponse Created Successfully";
+
+        //        return this.RedirectToAction<SurveyResponseController>(a => a.Results(surveyResponseToCreate.Id));
+        //    }
+        //    else
+        //    {
+        //        //foreach (var modelState in ModelState.Values.Where(a => a.Errors.Count() > 0))
+        //        //{
+        //        //    var x = modelState;
+        //        //}
+        //        var viewModel = SurveyResponseViewModel.Create(Repository, survey);
+        //        viewModel.SurveyResponse = surveyResponse;
+        //        viewModel.SurveyAnswers = questions;
+
+        //        return View(viewModel);
+        //    }
+        //}
+
+
+        /// <summary>
+        /// #11
+        /// POST: /SurveyResponse/Create
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="surveyResponse"></param>
+        /// <param name="questions"></param>
+        /// <returns></returns>
         [HttpPost]
         [User]
         public ActionResult Create(int id, SurveyResponse surveyResponse, QuestionAnswerParameter[] questions)
@@ -428,37 +518,49 @@ namespace NuSurvey.Web.Controllers
                 questions = new QuestionAnswerParameter[0];
             }
 
-            TransferValues(surveyResponse, surveyResponseToCreate, questions);
+            ModelState.Clear();            
+
+            surveyResponseToCreate.StudentId = surveyResponse.StudentId;
             surveyResponseToCreate.UserId = CurrentUser.Identity.Name;
+            var length = questions.Length;
+            for (int i = 0; i < length; i++)
+            {
+                var question = Repository.OfType<Question>().GetNullableById(questions[i].QuestionId);
+                Check.Require(question != null, string.Format("Question not found./n SurveyId: {0}/n QuestionId: {1}/n Question #: {2}", id, questions[i].QuestionId, i));
+                Check.Require(question.Category.IsActive, string.Format("Related Category is not active for question Id {0}", questions[i].QuestionId));
+                Check.Require(question.Category.IsCurrentVersion, string.Format("Related Category is not current version for question Id {0}", questions[i].QuestionId));
+
+                Answer answer;
+                if (surveyResponseToCreate.Answers.Where(a => a.Question.Id == question.Id).Any())
+                {
+                    answer = surveyResponseToCreate.Answers.Where(a => a.Question.Id == question.Id).First();
+                }
+                else
+                {
+                    answer = new Answer();
+                }
+
+                questions[i] = _scoreService.ScoreQuestion(surveyResponseToCreate.Survey.Questions.AsQueryable(), questions[i]);
+                if (questions[i].Invalid)
+                {
+                    ModelState.AddModelError(string.Format("Questions[{0}]", i), questions[i].Message);
+                }
+
+                answer.Question = question;
+                answer.Category = question.Category;
+                answer.OpenEndedAnswer = questions[i].OpenEndedNumericAnswer;
+                answer.Response = Repository.OfType<Response>().GetNullableById(questions[i].ResponseId);
+                answer.Score = questions[i].Score;
+
+                surveyResponseToCreate.AddAnswers(answer);
+            }
+
+
+            surveyResponseToCreate.TransferValidationMessagesTo(ModelState);
 
             if (survey.Questions.Where(a => a.IsActive && a.Category.IsActive && a.Category.IsCurrentVersion).Count() != questions.Count())
             {
                 Message = "You must answer all survey questions.";
-            }
-            ModelState.Clear();
-            surveyResponseToCreate.TransferValidationMessagesTo(ModelState);
-
-            for (int i = 0; i < questions.Count(); i++)
-            {
-                var i1 = i;
-                if (!surveyResponseToCreate.Answers.Where(a => a.Question.Id == questions[i1].QuestionId).Any())
-                {
-                    if (survey.Questions.Where(a => a.Id == questions[i1].QuestionId).Single().IsOpenEnded)
-                    {
-                        if (string.IsNullOrWhiteSpace(questions[i1].Answer))
-                        {
-                            ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Numeric answer to Question is required"); 
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Answer must be a number");  
-                        }                 
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Answer is required");
-                    }
-                }
             }
 
 
@@ -478,7 +580,7 @@ namespace NuSurvey.Web.Controllers
                 //{
                 //    var x = modelState;
                 //}
-				var viewModel = SurveyResponseViewModel.Create(Repository, survey);
+                var viewModel = SurveyResponseViewModel.Create(Repository, survey);
                 viewModel.SurveyResponse = surveyResponse;
                 viewModel.SurveyAnswers = questions;
 
@@ -510,74 +612,6 @@ namespace NuSurvey.Web.Controllers
             return View(surveyResponse);
         }
 
-        //
-        // GET: /SurveyResponse/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    var surveyResponse = _surveyResponseRepository.GetNullableById(id);
-
-        //    if (surveyResponse == null) return RedirectToAction("Index");
-
-        //    var viewModel = SurveyResponseViewModel.Create(Repository);
-        //    viewModel.SurveyResponse = surveyResponse;
-
-        //    return View(viewModel);
-        //}
-        
-        //
-        // POST: /SurveyResponse/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(int id, SurveyResponse surveyResponse)
-        //{
-        //    var surveyResponseToEdit = _surveyResponseRepository.GetNullableById(id);
-
-        //    if (surveyResponseToEdit == null) return RedirectToAction("Index");
-
-        //    TransferValues(surveyResponse, surveyResponseToEdit);
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        _surveyResponseRepository.EnsurePersistent(surveyResponseToEdit);
-
-        //        Message = "SurveyResponse Edited Successfully";
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    else
-        //    {
-        //        var viewModel = SurveyResponseViewModel.Create(Repository);
-        //        viewModel.SurveyResponse = surveyResponse;
-
-        //        return View(viewModel);
-        //    }
-        //}
-        
-        //
-        // GET: /SurveyResponse/Delete/5 
-        //public ActionResult Delete(int id)
-        //{
-        //    var surveyResponse = _surveyResponseRepository.GetNullableById(id);
-
-        //    if (surveyResponse == null) return RedirectToAction("Index");
-
-        //    return View(surveyResponse);
-        //}
-
-        //
-        // POST: /SurveyResponse/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, SurveyResponse surveyResponse)
-        //{
-        //    var surveyResponseToDelete = _surveyResponseRepository.GetNullableById(id);
-
-        //    if (surveyResponseToDelete == null) return RedirectToAction("Index");
-
-        //    _surveyResponseRepository.Remove(surveyResponseToDelete);
-
-        //    Message = "SurveyResponse Removed Successfully";
-
-        //    return RedirectToAction("Index");
-        //}
 
 
 
