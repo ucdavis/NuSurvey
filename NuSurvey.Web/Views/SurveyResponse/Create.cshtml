@@ -12,7 +12,7 @@
 @using (Html.BeginForm())
 {
 	@Html.AntiForgeryToken()
-	@Html.ValidationSummary("Correct Errors before submitting")
+	@Html.ValidationSummary(true)
     @Html.HiddenFor(x => x.Survey.Id)
 
 <fieldset>

@@ -581,6 +581,10 @@ namespace NuSurvey.Web.Controllers
                 //{
                 //    var x = modelState;
                 //}
+                if (string.IsNullOrWhiteSpace(Message))
+                {
+                    Message = "Please correct all errors and submit.";
+                }
                 var viewModel = SurveyResponseViewModel.Create(Repository, survey);
                 viewModel.SurveyResponse = surveyResponse;
                 viewModel.SurveyAnswers = questions;

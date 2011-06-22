@@ -15,6 +15,7 @@ using NuSurvey.Web.Helpers;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
+using UCDArch.Testing.Fakes;
 using UCDArch.Web.Attributes;
 using NuSurvey.Tests.Core.Helpers;
 
@@ -177,6 +178,24 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #region Assert
             Assert.AreEqual("Survey not found or not active.", Controller.Message);
             #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestCreatePostReturnsViewWhenAllQuestionsAreNotAnswered1()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] {""});
+            SetupDataForSingleAnswer();
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(1, CreateValidEntities.SurveyResponse(9), new QuestionAnswerParameter[0]);
+            #endregion Act
+
+            #region Assert
+            Assert.Inconclusive("need to complete this test");
+            #endregion Assert		
         }
         #endregion Create Post Tests
         #endregion Create Tests
