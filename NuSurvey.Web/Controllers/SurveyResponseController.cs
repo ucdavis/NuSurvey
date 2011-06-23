@@ -605,7 +605,8 @@ namespace NuSurvey.Web.Controllers
             {
                 Message = "Not Found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
-            }
+            }            
+
             if (!CurrentUser.IsInRole(RoleNames.Admin))
             {
                 if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
@@ -614,7 +615,13 @@ namespace NuSurvey.Web.Controllers
                 }
             }
 
-            return View(surveyResponse);
+            var viewModel = ResultsViewModel.Create(surveyResponse, false);
+            if (CurrentUser.IsInRole(RoleNames.Admin) || CurrentUser.IsInRole(RoleNames.User))
+            {
+                viewModel.ShowPdfPrint = true;
+            }
+
+            return View(viewModel);
         }
 
 
@@ -712,6 +719,21 @@ namespace NuSurvey.Web.Controllers
                 
             }      
         }
+    }
+
+    public class ResultsViewModel
+    {
+        public SurveyResponse SurveyResponse { get; set; }
+        public bool ShowPdfPrint { get; set; }
+
+        public static ResultsViewModel Create(SurveyResponse surveyResponse, bool showPdfPrint)
+        {
+            Check.Require(surveyResponse != null);
+            var viewModel = new ResultsViewModel {SurveyResponse = surveyResponse, ShowPdfPrint = showPdfPrint};
+
+            return viewModel;
+        }
+        
     }
 
     public class ActiveSurveyViewModel
