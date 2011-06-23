@@ -39,6 +39,23 @@ Example: Dinosaur 1  *@
         @foreach (var item in Model.Questions)
         {
             <li class="@(odd ? "odd" : "even")">
+                <div class="editor-field">
+                    @{var isBypassChecked = string.Empty;
+                          if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null)
+                          {
+                              if (Model.SurveyAnswers.ElementAtOrDefault(indexCounter).BypassQuestion)
+                              {
+                                  isBypassChecked = "checked=\"checked\"";
+                              }
+                          }
+                      }
+                    <input id="Questions[@indexCounter]_BypassQuestion" class="check-box" type="checkbox" @isBypassChecked value="true" name="Questions[@indexCounter].BypassQuestion" >
+                </div>
+                <div class="editor-label">
+                    @Html.Label("Bypass Question")
+                </div>
+                <br />
+
                 <div class="editor-label required">
                     <label>@item.Order. @Html.HtmlEncode(item.Name) <span>*</span></label>
                 </div>
@@ -71,6 +88,7 @@ Example: Dinosaur 1  *@
                     }
                     @Html.ValidationMessage("Questions[" + @indexCounter + "]")
                 </div>
+                
             </li>
                     odd = !odd;
                     indexCounter = indexCounter + 1;

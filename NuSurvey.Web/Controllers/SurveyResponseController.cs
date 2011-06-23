@@ -541,16 +541,31 @@ namespace NuSurvey.Web.Controllers
                 }
 
                 questions[i] = _scoreService.ScoreQuestion(surveyResponseToCreate.Survey.Questions.AsQueryable(), questions[i]);
-                if (questions[i].Invalid)
+                if (questions[i].Invalid && !questions[i].BypassQuestion)
                 {
                     ModelState.AddModelError(string.Format("Questions[{0}]", i), questions[i].Message);
                 }
 
+                if (questions[i].BypassQuestion)
+                {
+                    answer.OpenEndedAnswer = null;
+                    answer.Response = null;
+                    answer.Score = 0;
+                    answer.BypassScore = true;
+                    questions[i].Answer = string.Empty;
+                    questions[i].ResponseId = 0;
+                }
+                else
+                {
+                    answer.OpenEndedAnswer = questions[i].OpenEndedNumericAnswer;
+                    answer.Response = Repository.OfType<Response>().GetNullableById(questions[i].ResponseId);
+                    answer.Score = questions[i].Score;
+                    answer.BypassScore = false;
+                }
+
                 answer.Question = question;
                 answer.Category = question.Category;
-                answer.OpenEndedAnswer = questions[i].OpenEndedNumericAnswer;
-                answer.Response = Repository.OfType<Response>().GetNullableById(questions[i].ResponseId);
-                answer.Score = questions[i].Score;
+                
 
                 surveyResponseToCreate.AddAnswers(answer);
             }
@@ -871,6 +886,7 @@ namespace NuSurvey.Web.Controllers
         public string Message { get; set; } //Error message when invalid
         public int Score { get; set; } //Score when Valid
         public int? OpenEndedNumericAnswer { get; set; } //When Open ended and could parse int (may need to change for time, or other types currently not supported)
+        public bool BypassQuestion { get; set; }
     }
 
     public class Scores

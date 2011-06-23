@@ -30,6 +30,7 @@ namespace NuSurvey.Core.Domain
             CreateDate = DateTime.Now;
             IsActive = true;
             Responses = new List<Response>();
+            OpenEndedQuestionType = 0;
         }
 
         private void SetPostDefaults()
@@ -73,6 +74,9 @@ namespace NuSurvey.Core.Domain
         [Required]
         public virtual IList<Response> Responses { get; set; }
 
+        [DisplayName("Question Type")]
+        public virtual int OpenEndedQuestionType { get; set; }
+
         #region Methods
         public virtual void AddResponse(Response response)
         {
@@ -91,6 +95,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.Order).Column("`Order`");
             Map(x => x.IsOpenEnded);
             Map(x => x.CreateDate);
+            Map(x => x.OpenEndedQuestionType);
 
             References(x => x.Category);
             References(x => x.Survey);
