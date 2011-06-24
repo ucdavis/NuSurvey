@@ -147,11 +147,16 @@
                 @Html.HtmlEncode(ans.Question.Name)
             </td>
             <td>
-                @if (!ans.OpenEndedAnswer.HasValue){ 
-                    @ans.Response.Value
+                @if (ans.BypassScore) {
+                   @Html.Encode("*****")
                 }
-                else{
-                    @ans.OpenEndedAnswer 
+                else { 
+                    if (!ans.OpenEndedAnswer.HasValue) { 
+                        @ans.Response.Value
+                    }
+                    else {
+                        @ans.OpenEndedAnswer 
+                    }
                 }
             </td>
             <td>
