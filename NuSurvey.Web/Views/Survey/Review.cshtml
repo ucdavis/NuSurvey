@@ -60,7 +60,7 @@
 				@item.IsActive
 			</td>
             <td>
-                @item.SurveyResponses.Where(a => a.UserId == this.User.Identity.Name).Count()
+                @item.SurveyResponses.Where(a => a.UserId == this.User.Identity.Name && !a.IsPending).Count()
             </td>
 		</tr>
 		odd = !odd;
