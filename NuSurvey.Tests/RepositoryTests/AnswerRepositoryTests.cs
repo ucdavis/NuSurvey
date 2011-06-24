@@ -751,6 +751,58 @@ namespace NuSurvey.Tests.RepositoryTests
         #endregion Cascade Tests
         #endregion Response Tests 
 
+        #region BypassScore Tests
+
+        /// <summary>
+        /// Tests the BypassScore is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestBypassScoreIsFalseSaves()
+        {
+            #region Arrange
+            Answer answer = GetValid(9);
+            answer.BypassScore = false;
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(answer);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(answer.BypassScore);
+            Assert.IsFalse(answer.IsTransient());
+            Assert.IsTrue(answer.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the BypassScore is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestBypassScoreIsTrueSaves()
+        {
+            #region Arrange
+            var answer = GetValid(9);
+            answer.BypassScore = true;
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(answer);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(answer.BypassScore);
+            Assert.IsFalse(answer.IsTransient());
+            Assert.IsTrue(answer.IsValid());
+            #endregion Assert
+        }
+
+        #endregion BypassScore Tests
+
         
         #region Reflection of Database.
 
@@ -763,6 +815,7 @@ namespace NuSurvey.Tests.RepositoryTests
         {
             #region Arrange
             var expectedFields = new List<NameAndType>();
+            expectedFields.Add(new NameAndType("BypassScore", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("Category", "NuSurvey.Core.Domain.Category", new List<string>
             {
                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"

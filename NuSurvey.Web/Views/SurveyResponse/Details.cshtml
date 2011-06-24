@@ -1,7 +1,7 @@
 ﻿@model NuSurvey.Web.Controllers.SurveyReponseDetailViewModel
 
 @{
-	ViewBag.Title = @Model.SurveyResponse.Survey.Name + " Survey Response";
+    ViewBag.Title = @Model.SurveyResponse.Survey.Name + " Survey Response";
 }
 
 
@@ -17,18 +17,34 @@
 
 @section SubNav {
     <ul class="navigation">
-        <li>
-            <a href="@Url.Action("Administration", "Home")">Admin Home</a> 
-        </li>
-        <li>
-            <a href="@Url.Action("Index", "Survey")">Surveys</a>
-        </li>
-        <li>
-            <a href="@Url.Action("Details", "Survey", new { id = @Model.SurveyResponse.Survey.Id })">Responses</a> 
-        </li>
-        <li>
-            Details
-        </li>
+        @if (Model.FromYourDetails) {
+            <li>
+                <a href="@Url.Action("Index", "Home")">Home</a> 
+            </li>
+            <li>
+                <a href="@Url.Action("Review", "Survey")">Surveys</a>
+            </li>
+            <li>
+                <a href="@Url.Action("YourDetails", "Survey", new { id = @Model.SurveyResponse.Survey.Id })">Responses</a> 
+            </li>
+            <li>
+                Details
+            </li>
+        }
+        else { 
+            <li>
+                <a href="@Url.Action("Administration", "Home")">Admin Home</a> 
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Survey")">Surveys</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Details", "Survey", new { id = @Model.SurveyResponse.Survey.Id })">Responses</a> 
+            </li>
+            <li>
+                Details
+            </li>
+        }
     </ul>
 }
 
@@ -96,7 +112,7 @@
                 @String.Format("{0:0.00}", @score.Percent)%
             </td>
 		</tr>
-		odd = !odd;
+           odd = !odd;
 }
 	</tbody>
 </table>
@@ -147,15 +163,19 @@
                 @Html.HtmlEncode(ans.Question.Name)
             </td>
             <td>
-                @if (ans.BypassScore) {
+                @if (ans.BypassScore)
+                {
                    @Html.Encode("*****")
                 }
-                else { 
-                    if (!ans.OpenEndedAnswer.HasValue) { 
+                else
+                {
+                    if (!ans.OpenEndedAnswer.HasValue)
+                    { 
                         @ans.Response.Value
                     }
-                    else {
-                        @ans.OpenEndedAnswer 
+                    else
+                    {
+                        @ans.OpenEndedStringAnswer 
                     }
                 }
             </td>
@@ -163,7 +183,7 @@
                 @ans.Score
             </td>
 		</tr>
-                odd = !odd;
+           odd = !odd;
 }
 	</tbody>
 </table>

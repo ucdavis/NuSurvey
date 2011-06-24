@@ -189,6 +189,7 @@
     <Content Include="Images\logo-caes-long-cap.png" />
     <Content Include="Images\logo-ucdavis.png" />
     <Content Include="Images\plus.png" />
+    <Content Include="Images\review.png" />
     <Content Include="Images\small_print.png" />
     <Content Include="Images\test.png" />
     <Content Include="Images\top_blue_bar.jpg" />
@@ -303,6 +304,8 @@
     <Content Include="Views\Category\_CategoryQuestions.cshtml" />
     <Content Include="Views\Category\_Goals.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Survey\Review.cshtml" />
+    <Content Include="Views\Survey\YourDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">

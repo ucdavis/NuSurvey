@@ -15,7 +15,7 @@ namespace NuSurvey.Web.Controllers
     /// <summary>
     /// Controller for the Survey class
     /// </summary>
-    [Admin]
+    [Authorize]
     public class SurveyController : ApplicationController
     {
 	    private readonly IRepository<Survey> _surveyRepository;
@@ -30,6 +30,7 @@ namespace NuSurvey.Web.Controllers
         /// GET: /Survey/
         /// </summary>
         /// <returns></returns>
+        [Admin]
         public ActionResult Index()
         {
             var surveyList = _surveyRepository.Queryable;
@@ -45,6 +46,7 @@ namespace NuSurvey.Web.Controllers
         /// <param name="filterBeginDate"></param>
         /// <param name="filterEndDate"></param>
         /// <returns></returns>
+        [Admin]
         public ActionResult Details(int id, DateTime? filterBeginDate, DateTime? filterEndDate)
         {
             var survey = _surveyRepository.GetNullableById(id);
@@ -65,6 +67,7 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <param name="id">Survey Id</param>
         /// <returns></returns>
+        [Admin]
         public ActionResult PendingDetails(int id)
         {
             var survey = _surveyRepository.GetNullableById(id);
@@ -85,6 +88,7 @@ namespace NuSurvey.Web.Controllers
         /// GET: /Survey/Create
         /// </summary>
         /// <returns></returns>
+        [Admin]
         public ActionResult Create()
         {
 			var viewModel = SurveyViewModel.Create(Repository);
@@ -98,6 +102,7 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <param name="survey"></param>
         /// <returns></returns>
+        [Admin]
         [HttpPost]
         public ActionResult Create(Survey survey)
         {
@@ -128,6 +133,7 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <param name="id">Survey Id</param>
         /// <returns></returns>
+        [Admin]
         public ActionResult Edit(int id)
         {
             var survey = _surveyRepository.GetNullableById(id);
@@ -147,6 +153,7 @@ namespace NuSurvey.Web.Controllers
         /// <param name="id">Survey Id</param>
         /// <param name="survey"></param>
         /// <returns></returns>
+        [Admin]
         [HttpPost]
         public ActionResult Edit(int id, Survey survey)
         {
@@ -177,6 +184,44 @@ namespace NuSurvey.Web.Controllers
                 return View(surveyToEdit);
             }
         }
+
+        /// <summary>
+        /// GET: /Survey/Review
+        /// </summary>
+        /// <returns></returns>
+        [User]
+        public ActionResult Review()
+        {
+            var surveyList = _surveyRepository.Queryable.Where(a => a.IsActive);
+
+            return View(surveyList.ToList());
+        }
+
+        /// <summary>
+        ///
+        /// GET: /Survey/YourDetails/5
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="filterBeginDate"></param>
+        /// <param name="filterEndDate"></param>
+        /// <returns></returns>
+        [User]
+        public ActionResult YourDetails(int id, DateTime? filterBeginDate, DateTime? filterEndDate)
+        {
+            var survey = _surveyRepository.GetNullableById(id);
+
+            if (survey == null)
+            {
+                return this.RedirectToAction(a => a.Review());
+            }
+
+            var viewModel = SurveyResponseDetailViewModel.Create(Repository, survey, filterBeginDate, filterEndDate);
+            viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.UserId == CurrentUser.Identity.Name);
+
+            return View(viewModel);
+        }
+
+
         
     }
 

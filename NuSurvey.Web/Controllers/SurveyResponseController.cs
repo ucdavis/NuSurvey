@@ -40,17 +40,18 @@ namespace NuSurvey.Web.Controllers
 
             return View(viewModel);
         }
-        
-        
+
+
         /// <summary>
         /// #2
         /// Called from the Survey Details.
         /// GET: /SurveyResponse/Details/5
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>
+        /// <param name="fromYourDetails">if set to <c>true</c> [from your details].</param>
         /// <returns></returns>
-        [Admin]
-        public ActionResult Details(int id)
+        [User]
+        public ActionResult Details(int id, bool fromYourDetails = false)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
 
@@ -60,8 +61,13 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.Index());
                 //return RedirectToAction("Index");
             }
+            if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId != CurrentUser.Identity.Name)
+            {
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
 
             var viewModel = SurveyReponseDetailViewModel.Create(Repository, surveyResponse);
+            viewModel.FromYourDetails = fromYourDetails;
 
             return View(viewModel);
         }
@@ -256,6 +262,7 @@ namespace NuSurvey.Web.Controllers
                 answer.Question = question;
                 answer.Category = question.Category;
                 answer.OpenEndedAnswer = questions.OpenEndedNumericAnswer;
+                answer.OpenEndedStringAnswer = questions.Answer; // The actual answer they gave.
                 answer.Response = Repository.OfType<Response>().GetNullableById(questions.ResponseId);
                 answer.Score = questions.Score;
 
@@ -558,6 +565,7 @@ namespace NuSurvey.Web.Controllers
                 else
                 {
                     answer.OpenEndedAnswer = questions[i].OpenEndedNumericAnswer;
+                    answer.OpenEndedStringAnswer = questions[i].Answer;
                     answer.Response = Repository.OfType<Response>().GetNullableById(questions[i].ResponseId);
                     answer.Score = questions[i].Score;
                     answer.BypassScore = false;
@@ -843,6 +851,7 @@ namespace NuSurvey.Web.Controllers
         //TODO: Look into removing ths score duplicate code to use the service instead.
         public SurveyResponse SurveyResponse { get; set; }
         public IList<Scores> Scores { get; set; }
+        public bool FromYourDetails { get; set; }
 
         public static SurveyReponseDetailViewModel Create(IRepository repository, SurveyResponse surveyResponse)
         {

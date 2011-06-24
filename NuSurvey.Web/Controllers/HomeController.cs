@@ -16,7 +16,8 @@ namespace NuSurvey.Web.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            return View();
+            var viewModel = HomeViewModel.Create(CurrentUser.IsInRole(RoleNames.Admin), CurrentUser.IsInRole(RoleNames.User));
+            return View(viewModel);
         }
 
         /// <summary>
@@ -60,6 +61,20 @@ namespace NuSurvey.Web.Controllers
             //ControllerContext.HttpContext.Cache.Remove("ServiceMessages");
 
             return this.RedirectToAction(a => a.Index());
+        }
+
+        public class HomeViewModel
+        {
+
+            public bool Admin { get; set; }
+            public bool User { get; set; }
+
+            public static HomeViewModel Create(bool isAdmin, bool isUser)
+            {
+                var viewModel = new HomeViewModel { Admin = isAdmin, User = isUser};
+
+                return viewModel;
+            }
         }
 
     }

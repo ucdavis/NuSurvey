@@ -48,7 +48,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         [TestMethod]
         public void TestDetailsMapping()
         {
-            "~/SurveyResponse/Details/5".ShouldMapTo<SurveyResponseController>(a => a.Details(5));
+            "~/SurveyResponse/Details/5".ShouldMapTo<SurveyResponseController>(a => a.Details(5, false));
         }
 
         /// <summary>

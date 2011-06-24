@@ -1,4 +1,6 @@
-﻿@{
+﻿@model NuSurvey.Web.Controllers.HomeController+HomeViewModel
+           
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -15,6 +17,10 @@
 
 
 <a class="balloon" href='@Url.Action("Index", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
+
+@if (Model.Admin || Model.User) { 
+    <a class="balloon" href='@Url.Action("Review", "Survey")' title="Review Your Surveys"><img alt="Review Your Surveys" src="@Url.Image("review.png")"/></a>
+}
 
 @*<h1>
     <a href="@Url.Action("Index", "SurveyResponse")">Answer Surveys</a> 
