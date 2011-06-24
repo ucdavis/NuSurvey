@@ -40,7 +40,26 @@
 
             $("#Question_IsOpenEnded").bt();
             $("#Question_Name").bt();
+
+            if ($('#Question_IsOpenEnded').is(":checked")) {
+                $('#openType').show();
+            }
+
+            $('#Question_IsOpenEnded').change(function () {
+                if ($('#Question_IsOpenEnded').is(":checked")) {
+                    $('#openType').show('fast', function () {
+                        // Animation complete.
+                    });
+                }
+                else {
+                    $('#openType').hide('fast', function () {
+                        // Animation complete.
+                    });                    
+                }
+            });
         });
+
+
 
         function AddResponseInput(obj) {
             var index = $("#ResponseTable > tbody tr").length;

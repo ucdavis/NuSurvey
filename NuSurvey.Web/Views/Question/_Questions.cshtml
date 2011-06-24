@@ -50,6 +50,17 @@
 				@Html.ValidationMessageFor(model => model.Question.IsOpenEnded)
 			</div>
 		</li>
+        <li id="openType" style="display:none">
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Question.OpenEndedQuestionType) 
+			</div>
+			<div class="editor-field">  
+                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, 0) <label for="Question_OpenEndedQuestionType">Whole Number</label> <br />
+                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, 1) <label for="Question_OpenEndedQuestionType">Decimal</label>  <br />
+                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, 2) <label for="Question_OpenEndedQuestionType">Time</label>  <br /> 
+                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, 3) <label for="Question_OpenEndedQuestionType">Time Range</label>  <br /> 
+			</div>
+		</li>
 @*		<li>
 			<div class="editor-label">
 				@Html.LabelFor(model => model.Question.CreateDate) 
