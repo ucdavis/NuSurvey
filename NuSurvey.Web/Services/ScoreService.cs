@@ -160,7 +160,7 @@ namespace NuSurvey.Web.Services
                 score.MaxScore = totalMax.TotalMaxScore;
                 foreach (var bypassedAnswer in bypassedAnswers.Where(a => a.Category == category))
                 {
-                    score.MaxScore = score.MaxScore - bypassedAnswer.Question.Responses.Max(a => a.Score);
+                    score.MaxScore = score.MaxScore - bypassedAnswer.Question.Responses.Where(a => a.IsActive).Max(a => a.Score);
                 }
                 score.TotalScore =
                     surveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);

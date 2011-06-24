@@ -840,6 +840,7 @@ namespace NuSurvey.Web.Controllers
 
     public class SurveyReponseDetailViewModel
     {
+        //TODO: Look into removing ths score duplicate code to use the service instead.
         public SurveyResponse SurveyResponse { get; set; }
         public IList<Scores> Scores { get; set; }
 
@@ -866,7 +867,7 @@ namespace NuSurvey.Web.Controllers
                 score.MaxScore = totalMax.TotalMaxScore;
                 foreach (var bypassedAnswer in bypassedAnswers.Where(a => a.Category == category))
                 {
-                    score.MaxScore = score.MaxScore - bypassedAnswer.Question.Responses.Max(a => a.Score);
+                    score.MaxScore = score.MaxScore - bypassedAnswer.Question.Responses.Where(a => a.IsActive).Max(a => a.Score);
                 }
                 //score.MaxScore = repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id).TotalMaxScore;
                 score.TotalScore = viewModel.SurveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);
