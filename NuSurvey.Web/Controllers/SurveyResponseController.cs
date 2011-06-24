@@ -852,6 +852,7 @@ namespace NuSurvey.Web.Controllers
 
             //Get all the related categories that had answers.
             var relatedCategoryIds = viewModel.SurveyResponse.Answers.Select(x => x.Category.Id).Distinct().ToList();
+            var bypassedAnswers = viewModel.SurveyResponse.Answers.Where(a => a.BypassScore);
             viewModel.Scores = new List<Scores>();
             foreach (var category in viewModel.SurveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && relatedCategoryIds.Contains(a.Id)))
             {
@@ -862,11 +863,21 @@ namespace NuSurvey.Web.Controllers
                 {
                     continue;
                 }
-                score.MaxScore = totalMax.TotalMaxScore; 
-
+                score.MaxScore = totalMax.TotalMaxScore;
+                foreach (var bypassedAnswer in bypassedAnswers.Where(a => a.Category == category))
+                {
+                    score.MaxScore = score.MaxScore - bypassedAnswer.Question.Responses.Max(a => a.Score);
+                }
                 //score.MaxScore = repository.OfType<CategoryTotalMaxScore>().GetNullableById(category.Id).TotalMaxScore;
                 score.TotalScore = viewModel.SurveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);
-                score.Percent = (score.TotalScore / score.MaxScore) * 100m;
+                if (score.MaxScore == 0)
+                {
+                    score.Percent = 100;
+                }
+                else
+                {
+                    score.Percent = (score.TotalScore / score.MaxScore) * 100m; 
+                }
                 score.Rank = category.Rank;
                 viewModel.Scores.Add(score);
             }

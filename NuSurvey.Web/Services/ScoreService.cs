@@ -145,6 +145,8 @@ namespace NuSurvey.Web.Services
 
         public void CalculateScores(IRepository repository, SurveyResponse surveyResponse)
         {
+            var bypassedAnswers = surveyResponse.Answers.Where(a => a.BypassScore);
+            
             var scores = new List<Scores>();
             foreach (var category in surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion))
             {
@@ -156,29 +158,65 @@ namespace NuSurvey.Web.Services
                     continue;
                 }
                 score.MaxScore = totalMax.TotalMaxScore;
+                foreach (var bypassedAnswer in bypassedAnswers.Where(a => a.Category == category))
+                {
+                    score.MaxScore = score.MaxScore - bypassedAnswer.Question.Responses.Max(a => a.Score);
+                }
                 score.TotalScore =
                     surveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);
+                if (score.MaxScore == 0)
+                {
+                    //?Don't score it?
+                    continue;
+                }
                 score.Percent = (score.TotalScore / score.MaxScore) * 100m;
                 score.Rank = category.Rank;
                 scores.Add(score);
 
             }
 
+            if (scores.OrderByDescending(a => a.Percent)
+                .FirstOrDefault() != null)
+            { 
             surveyResponse.PositiveCategory = scores
                 .OrderByDescending(a => a.Percent)
                 .ThenBy(a => a.Rank)
                 .FirstOrDefault().Category;
-
-            surveyResponse.NegativeCategory1 = scores
+            }
+            if (scores.Where(a => a.Category != surveyResponse.PositiveCategory)                
+                .FirstOrDefault() != null)
+            {
+                surveyResponse.NegativeCategory1 = scores
                 .Where(a => a.Category != surveyResponse.PositiveCategory)
                 .OrderBy(a => a.Percent)
                 .ThenBy(a => a.Rank)
                 .FirstOrDefault().Category;
-            surveyResponse.NegativeCategory2 = scores
+            }
+            if (scores.Where(a => a.Category != surveyResponse.PositiveCategory && a.Category != surveyResponse.NegativeCategory1)
+                .FirstOrDefault() != null)
+            {
+                surveyResponse.NegativeCategory2 = scores
                 .Where(a => a.Category != surveyResponse.PositiveCategory && a.Category != surveyResponse.NegativeCategory1)
                 .OrderBy(a => a.Percent)
                 .ThenBy(a => a.Rank)
                 .FirstOrDefault().Category;
+            }
+
+
+            //If some are null because not questions are all answers were skipped for that category, still try to put something in.
+            if (surveyResponse.PositiveCategory == null)
+            {
+                surveyResponse.PositiveCategory = surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion).OrderBy(a => a.Rank).FirstOrDefault();
+            }
+            if (surveyResponse.NegativeCategory1 == null)
+            {
+                surveyResponse.NegativeCategory1 = surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion && a != surveyResponse.PositiveCategory).OrderBy(a => a.Rank).FirstOrDefault();
+            }
+            if (surveyResponse.NegativeCategory2 == null)
+            {
+                surveyResponse.NegativeCategory2 = surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion && a != surveyResponse.PositiveCategory && a != surveyResponse.NegativeCategory1).OrderBy(a => a.Rank).FirstOrDefault();
+            }
+
 
             return;
         }
