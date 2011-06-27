@@ -151,6 +151,32 @@ namespace NuSurvey.Web.Controllers
                 {
                     ModelState.AddModelError("Question", "All responses need a score");
                 }
+                else
+                {
+                    if(questionToCreate.IsOpenEnded)
+                    {
+                        switch ((QuestionType)questionToCreate.OpenEndedQuestionType)
+                        {
+                            case QuestionType.WholeNumber:
+                                int number;
+                                if (!int.TryParse(responsesParameter.Value, out number))
+                                {
+                                    ModelState.AddModelError("Question", "Choices must be whole numbers");
+                                }
+                                break;
+                            case QuestionType.Decimal:
+                                float floatNumber;
+                                if (!float.TryParse(responsesParameter.Value, out floatNumber))
+                                {
+                                    ModelState.AddModelError("Question", "Choices must be numbers (decimal ok)");
+                                }
+                                break;
+                            default:
+                                ModelState.AddModelError("Question", "time and time range not supported yet");
+                                break;
+                        }
+                    }
+                }
             }
 
             if (questionToCreate.Responses.Where(a => a.IsActive).Count() == 0)
@@ -423,6 +449,29 @@ namespace NuSurvey.Web.Controllers
                 if (!responsesParameter.Score.HasValue)
                 {
                     ModelState.AddModelError("Question", "All responses need a score");
+                }
+                if (question.IsOpenEnded && !responsesParameter.Remove)
+                {
+                    switch ((QuestionType)question.OpenEndedQuestionType)
+                    {
+                        case QuestionType.WholeNumber:
+                            int number;
+                            if (!int.TryParse(responsesParameter.Value, out number))
+                            {
+                                ModelState.AddModelError("Question", "Choices must be whole numbers");
+                            }
+                            break;
+                        case QuestionType.Decimal:
+                            float floatNumber;
+                            if (!float.TryParse(responsesParameter.Value, out floatNumber))
+                            {
+                                ModelState.AddModelError("Question", "Choices must be numbers (decimal ok)");
+                            }
+                            break;
+                        default:
+                            ModelState.AddModelError("Question", "time and time range not supported yet");
+                            break;
+                    }
                 }
             }
 
