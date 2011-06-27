@@ -288,6 +288,14 @@
         <Value>True</Value>
       </PropertyElementName>
       <PropertyElementName>
+        <Name>TargetDatabaseName</Name>
+        <Value>NuSurvey</Value>
+      </PropertyElementName>
+      <PropertyElementName>
+        <Name>TargetConnectionString</Name>
+        <Value>Data Source=VOGEL;Initial Catalog=NuSurvey;Integrated Security=True;Pooling=False</Value>
+      </PropertyElementName>
+      <PropertyElementName>
         <Name>VerifyDeployment</Name>
         <Value>True</Value>
       </PropertyElementName>

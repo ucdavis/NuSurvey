@@ -6,8 +6,11 @@
     [NegativeCategoryId1] INT           NULL,
     [NegativeCategoryId2] INT           NULL,
     [SurveyId]            INT           NOT NULL,
-    [UserId]              VARCHAR (250) NOT NULL
+    [UserId]              VARCHAR (250) NOT NULL,
+    [IsPending]           BIT           NOT NULL
 );
+
+
 
 
 
