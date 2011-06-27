@@ -102,4 +102,12 @@ namespace NuSurvey.Core.Domain
             HasMany(x => x.Responses).Cascade.AllDeleteOrphan();
         }
     }
+
+    public enum QuestionType
+    {
+        WholeNumber,
+        Decimal,
+        Time,
+        TimeRange
+    }
 }

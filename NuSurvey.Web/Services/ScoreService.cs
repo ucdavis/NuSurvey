@@ -5,6 +5,7 @@ using System.Web;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers;
 using UCDArch.Core.PersistanceSupport;
+using UCDArch.Core.Utils;
 
 namespace NuSurvey.Web.Services
 {
@@ -42,79 +43,199 @@ namespace NuSurvey.Web.Services
                 }
                 else
                 {
-                    #region Open Ended Int Question
-                    int number;
                     int? responseId = null;
-                    if (int.TryParse(questionAnswerParameter.Answer, out number))
+                    switch ((QuestionType)question.OpenEndedQuestionType)
                     {
-                        questionAnswerParameter.OpenEndedNumericAnswer = number;
-
-                        #region Exact Match
-                        var response = question.Responses.Where(a => a.IsActive && a.Value == number.ToString()).FirstOrDefault();
-                        if (response != null)
-                        {
-                            responseId = response.Id;
-                        }
-                        #endregion Exact Match
-
-                        #region High Value
-                        if (responseId == null)
-                        {
-                            //Check For High Value
-                            response = question.Responses.Where(a => a.IsActive && a.Value.Contains("+")).FirstOrDefault();
-                            if (response != null)
+                        case QuestionType.WholeNumber:
+                            #region Open Ended Int Question
+                            int number;                            
+                            if (int.TryParse(questionAnswerParameter.Answer, out number))
                             {
-                                int highValue;
-                                if (Int32.TryParse(response.Value, out highValue))
+                                questionAnswerParameter.OpenEndedNumericAnswer = number;
+
+                                #region Exact Match
+                                var response = question.Responses.Where(a => a.IsActive && a.Value == number.ToString()).FirstOrDefault();
+                                if (response != null)
                                 {
-                                    if (number >= highValue)
+                                    responseId = response.Id;
+                                }
+                                #endregion Exact Match
+
+                                #region High Value
+                                if (responseId == null)
+                                {
+                                    //Check For High Value
+                                    response =
+                                        question.Responses.Where(a => a.IsActive && a.Value.Contains("+")).FirstOrDefault();
+                                    if (response != null)
                                     {
-                                        responseId = response.Id;
+                                        int highValue;
+                                        if (Int32.TryParse(response.Value, out highValue))
+                                        {
+                                            if (number >= highValue)
+                                            {
+                                                responseId = response.Id;
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                        #endregion High Value
+                                #endregion High Value
 
-                        #region Low Value
-                        if (responseId == null)
-                        {
-                            //Check for low value
-                            response = question.Responses.Where(a => a.IsActive && a.Value.Contains("-")).FirstOrDefault();
-                            if (response != null)
-                            {
-                                int lowValue;
-                                if (Int32.TryParse(response.Value, out lowValue))
+                                #region Low Value
+                                if (responseId == null)
                                 {
-                                    if (number <= Math.Abs(lowValue))
+                                    //Check for low value
+                                    response = question.Responses.Where(a => a.IsActive && a.Value.Contains("-")).FirstOrDefault();
+                                    if (response != null)
                                     {
-                                        responseId = response.Id;
+                                        int lowValue;
+                                        if (Int32.TryParse(response.Value, out lowValue))
+                                        {
+                                            if (number <= Math.Abs(lowValue))
+                                            {
+                                                responseId = response.Id;
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                        #endregion Low Value
+                                #endregion Low Value
 
-                        //Found an exact match, or a high/low score
-                        if (responseId != null)
-                        {
-                            questionAnswerParameter.ResponseId = responseId.Value;
-                            questionAnswerParameter.Score = question.Responses.Where(a => a.Id == responseId.Value).Single().Score;
-                        }
-                        else
-                        {
-                            //questionAnswerParameter.Invalid = true;
-                            questionAnswerParameter.Message = "Matching Value to score not found";
-                            questionAnswerParameter.Score = 0;
-                        }
+                                //Found an exact match, or a high/low score
+                                if (responseId != null)
+                                {
+                                    questionAnswerParameter.ResponseId = responseId.Value;
+                                    questionAnswerParameter.Score = question.Responses.Where(a => a.Id == responseId.Value).Single().Score;
+                                }
+                                else
+                                {
+                                    //questionAnswerParameter.Invalid = true;
+                                    questionAnswerParameter.Message = "Matching Value to score not found";
+                                    questionAnswerParameter.Score = 0;
+                                }
+                            }
+                            else
+                            {
+                                questionAnswerParameter.Invalid = true;
+                                questionAnswerParameter.Message = "Answer must be a whole number";
+                                questionAnswerParameter.Score = 0;
+                            }
+                            #endregion Open Ended Int Question
+                            break;
+
+                        case QuestionType.Decimal:
+                            //If it finds an exact match it uses that.
+                            //If the passed value is less than smallest response, it uses the smallest response
+                            //if the passed value is greater than the largest response, it uses the largest response
+                            //If the passed value is between two responses, it uses the one that it is closer to
+                            //... if exactly in the middle, it chooses the one with the higher score.
+                            #region Open Ended Int Question
+                            float floatNumber;
+                            if (float.TryParse(questionAnswerParameter.Answer, out floatNumber))
+                            {
+                                var floatDict = new Dictionary<float, int>();
+                                int? high = null;
+
+                                //Get a list of all active responses don't use any that can't be changed into a float.
+                                foreach (var response in question.Responses.Where(a => a.IsActive))
+                                {
+                                    float tempFloat;
+                                    if (float.TryParse(response.Value, out tempFloat))
+                                    {
+                                        floatDict.Add(tempFloat, response.Id);
+                                    }
+                                }
+
+                                //Sort the valid responses.
+                                var sortedDict = floatDict.OrderBy(a => a.Key);
+                                for (int i = 0; i < sortedDict.Count(); i++)
+                                {
+                                    if (floatNumber == sortedDict.ElementAt(i).Key)
+                                    {
+                                        responseId = sortedDict.ElementAt(i).Value;
+                                        break;
+                                    }
+                                    if (floatNumber < sortedDict.ElementAt(i).Key)
+                                    {
+                                        high = i;
+                                        break;
+                                    }
+                                }
+
+                                //Didn't find an exact match
+                                if (responseId == null)
+                                {
+                                    if (high != null)
+                                    {
+                                        if (high.Value == 0) //Use the lowest value
+                                        {
+                                            responseId = sortedDict.ElementAt(high.Value).Value;
+                                        }
+                                        else //Somewhere inbetween. pick closest one, or one with highest score
+                                        {
+                                            var lowDiff = floatNumber - sortedDict.ElementAt(high.Value - 1).Key;
+                                            var highDiff = sortedDict.ElementAt(high.Value).Key - floatNumber;
+                                            if (lowDiff == highDiff)
+                                            {
+                                                if (question.Responses.Where(a => a.Id == sortedDict.ElementAt(high.Value - 1).Value).Single().Score > question.Responses.Where(a => a.Id == sortedDict.ElementAt(high.Value).Value).Single().Score)
+                                                {
+                                                    responseId = sortedDict.ElementAt(high.Value - 1).Value;
+                                                }
+                                                else
+                                                {
+                                                    responseId = sortedDict.ElementAt(high.Value).Value;
+                                                }
+                                            }
+                                            else if (lowDiff < highDiff)
+                                            {
+                                                responseId = sortedDict.ElementAt(high.Value - 1).Value;
+                                            }
+                                            else
+                                            {
+                                                responseId = sortedDict.ElementAt(high.Value).Value;
+                                            }
+                                        }
+                                    } else if (sortedDict.Count() > 0) //Use the highest value
+                                    {
+                                        responseId = sortedDict.ElementAt(sortedDict.Count()-1).Value;
+                                    }
+                                }
+
+
+
+
+                                //Found an exact match, or a high/low score
+                                if (responseId != null)
+                                {
+                                    questionAnswerParameter.ResponseId = responseId.Value;
+                                    questionAnswerParameter.Score = question.Responses.Where(a => a.Id == responseId.Value).Single().Score;
+                                }
+                                else
+                                {
+                                    //questionAnswerParameter.Invalid = true;
+                                    questionAnswerParameter.Message = "Matching Value to score not found";
+                                    questionAnswerParameter.Score = 0;
+                                }
+                            }
+                            else
+                            {
+                                questionAnswerParameter.Invalid = true;
+                                questionAnswerParameter.Message = "Answer must be a number (decimal ok)";
+                                questionAnswerParameter.Score = 0;
+                            }
+                            #endregion Open Ended Int Question
+                            break;
+
+                        case QuestionType.Time:
+                            break;
+
+                        case QuestionType.TimeRange:
+                            break;
+
+                        default:
+                            Check.Require(false, string.Format("Unknown QuestionType encountered: '{0}'", question.OpenEndedQuestionType));
+                            break;
                     }
-                    else
-                    {
-                        questionAnswerParameter.Invalid = true;
-                        questionAnswerParameter.Message = "Answer must be a number";
-                        questionAnswerParameter.Score = 0;
-                    }
-                    #endregion Open Ended Int Question
+
                 }
                 #endregion Open Ended Question
             }
