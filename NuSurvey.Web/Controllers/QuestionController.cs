@@ -338,6 +338,9 @@ namespace NuSurvey.Web.Controllers
                 } else if (questionToEdit.IsOpenEnded != question.IsOpenEnded) //OpenEnded Question Changed
                 {
                     originalHasChanges = true;
+                } else if (questionToEdit.OpenEndedQuestionType != question.OpenEndedQuestionType)  //type of open ended question changed
+                {
+                    originalHasChanges = true;
                 } else if (questionToEdit.Name.ToLower() != question.Name.ToLower()) //Question (name) has changed
                 {
                     originalHasChanges = true;
@@ -459,6 +462,7 @@ namespace NuSurvey.Web.Controllers
                         newQuestion.Category = newOriginalCategory;
                         newQuestion.IsActive = question.IsActive;
                         newQuestion.IsOpenEnded = question.IsOpenEnded;
+                        newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                         newQuestion.Name = question.Name;
                         newQuestion.Order = questionToEdit.Order;
                         foreach (var responsesParameter in viewModel.Responses)
@@ -498,6 +502,7 @@ namespace NuSurvey.Web.Controllers
                             newQuestion.Category = newNewCategory;
                             newQuestion.IsActive = question.IsActive;
                             newQuestion.IsOpenEnded = question.IsOpenEnded;
+                            newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                             newQuestion.Name = question.Name;
                             newQuestion.Order = questionToEdit.Order;
                             foreach (var responsesParameter in viewModel.Responses)
@@ -533,6 +538,7 @@ namespace NuSurvey.Web.Controllers
                             newQuestion.Category = question.Category;
                             newQuestion.IsActive = question.IsActive;
                             newQuestion.IsOpenEnded = question.IsOpenEnded;
+                            newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                             newQuestion.Name = question.Name;
                             newQuestion.Order = questionToEdit.Order;
                             foreach (var responsesParameter in viewModel.Responses)
@@ -581,6 +587,7 @@ namespace NuSurvey.Web.Controllers
                     newQuestion.Category = newNewCategory;
                     newQuestion.IsActive = question.IsActive;
                     newQuestion.IsOpenEnded = question.IsOpenEnded;
+                    newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                     newQuestion.Name = question.Name;
                     newQuestion.Order = questionToEdit.Order;
                     foreach (var responsesParameter in viewModel.Responses)
