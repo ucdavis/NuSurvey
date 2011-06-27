@@ -1,0 +1,66 @@
+﻿
+
+
+
+
+@model NuSurvey.Web.Controllers.HomeController+DemoViewModel
+
+
+@{
+	ViewBag.Title = "Demo";
+
+}
+
+<h2>Demo</h2>
+
+@*@Html.DropDownListFor(x => x.Times, new SelectList(Model.Times))*@
+
+
+
+@*<form action="#">
+<fieldset>
+<select name="speed" id="speed" >
+  <option value="Slower">Slower</option>
+  <option value="Slow">Slow</option>
+  <option value="Med" selected="selected">Med</option>
+  <option value="Fast">Fast</option>
+  <option value="Faster">Faster</option>
+</select>
+</fieldset>
+</form>*@
+
+<input id="timepicker1" class="time" type="text" value="" style="width: 70px;" /> PM
+<input id="timepicker2" class="time" type="text" value="" style="width: 70px;" /> AM
+
+
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.ui.timepicker.js")'></script>
+    <link href="@Url.Css("jquery-ui-timepicker.css")" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.time').timepicker({
+                defaultTime: '1:00',
+                showLeadingZero: false,
+                showPeriodLabels: false,   
+                hours: {
+                        starts: 1,                  // first displayed hour
+                        ends: 12                    // last displayed hour
+                    },
+                minutes: {
+                    starts: 0,                  // first displayed minute
+                    ends: 55,                   // last displayed minute
+                    interval: 5                 // interval of displayed minutes
+                },
+                rows: 3                                                  
+            });
+        });
+
+
+    </script>
+
+}
+
+
+
+

@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Web.Attributes;
 //using Elmah;
@@ -63,6 +65,22 @@ namespace NuSurvey.Web.Controllers
             return this.RedirectToAction(a => a.Index());
         }
 
+        public ActionResult Demo()
+        {
+            var timeList = new List<string>();
+            var dateTime = DateTime.MinValue.Date;
+            for (int i = 0; i < 48; i++)
+            {
+                var temp = dateTime.AddMinutes(15*i).ToString("h:mm   ");
+                timeList.Add(temp);
+            }
+
+            var viewModel = DemoViewModel.Create();
+            viewModel.Times = timeList;
+
+            return View(viewModel);
+        }
+
         public class HomeViewModel
         {
 
@@ -72,6 +90,18 @@ namespace NuSurvey.Web.Controllers
             public static HomeViewModel Create(bool isAdmin, bool isUser)
             {
                 var viewModel = new HomeViewModel { Admin = isAdmin, User = isUser};
+
+                return viewModel;
+            }
+        }
+
+        public class DemoViewModel
+        {
+            public List<string> Times { get; set;
+            }
+            public static DemoViewModel Create()
+            {
+                var viewModel = new DemoViewModel { };
 
                 return viewModel;
             }

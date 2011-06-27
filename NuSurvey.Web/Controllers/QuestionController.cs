@@ -171,6 +171,10 @@ namespace NuSurvey.Web.Controllers
                                     ModelState.AddModelError("Question", "Choices must be numbers (decimal ok)");
                                 }
                                 break;
+                            case QuestionType.Time:
+                                //TODO: Add validation logic
+                                break;
+
                             default:
                                 ModelState.AddModelError("Question", "time and time range not supported yet");
                                 break;
@@ -467,6 +471,9 @@ namespace NuSurvey.Web.Controllers
                             {
                                 ModelState.AddModelError("Question", "Choices must be numbers (decimal ok)");
                             }
+                            break;
+                        case QuestionType.Time:
+                            //TODO: Add validation
                             break;
                         default:
                             ModelState.AddModelError("Question", "time and time range not supported yet");
