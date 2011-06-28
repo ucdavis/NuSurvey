@@ -179,6 +179,13 @@ namespace NuSurvey.Web.Controllers
                                     ModelState.AddModelError("Question", "Choices must be Time (hh:mm)");
                                 }
                                 break;
+                            case QuestionType.TimeAmPm:
+                                float floatTimeAmPm;
+                                if (!responsesParameter.Value.TimeTryParseAmPm(out floatTimeAmPm))
+                                {
+                                    ModelState.AddModelError("Question", "Choices must be Time (hh:mm AM/PM)");
+                                }
+                                break;
                             case QuestionType.TimeRange:
                                 float timeRangeNumber;
                                 if (!float.TryParse(responsesParameter.Value, out timeRangeNumber))
@@ -489,6 +496,13 @@ namespace NuSurvey.Web.Controllers
                             if (!responsesParameter.Value.TimeTryParse(out floatTime))
                             {
                                 ModelState.AddModelError("Question", "Choices must be Time (hh:mm)");
+                            }
+                            break;
+                        case QuestionType.TimeAmPm:
+                            float floatTimeAmPm;
+                            if (!responsesParameter.Value.TimeTryParseAmPm(out floatTimeAmPm))
+                            {
+                                ModelState.AddModelError("Question", "Choices must be Time (hh:mm AM/PM)");
                             }
                             break;
                         case QuestionType.TimeRange:

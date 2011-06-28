@@ -55,10 +55,11 @@
 				@Html.LabelFor(model => model.Question.OpenEndedQuestionType) 
 			</div>
 			<div class="editor-field">  
-                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, 0) <label for="Question_OpenEndedQuestionType">Whole Number</label> <br />
-                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, 1) <label for="Question_OpenEndedQuestionType">Decimal</label>  <br />
-                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, 2) <label for="Question_OpenEndedQuestionType">Time</label>  <br /> 
-                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, 3) <label for="Question_OpenEndedQuestionType">Time Range</label>  <br /> 
+                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, (int)NuSurvey.Core.Domain.QuestionType.WholeNumber) <label for="Question_OpenEndedQuestionType">Whole Number</label> <br />
+                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, (int)NuSurvey.Core.Domain.QuestionType.Decimal) <label for="Question_OpenEndedQuestionType">Decimal</label>  <br />
+                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, (int)NuSurvey.Core.Domain.QuestionType.Time) <label for="Question_OpenEndedQuestionType">Time</label>  <br /> 
+                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, (int)NuSurvey.Core.Domain.QuestionType.TimeAmPm) <label for="Question_OpenEndedQuestionType">Time With AM/PM</label>  <br /> 
+                @Html.RadioButtonFor(x => x.Question.OpenEndedQuestionType, (int)NuSurvey.Core.Domain.QuestionType.TimeRange) <label for="Question_OpenEndedQuestionType">Time Range</label>  <br /> 
 			</div>
 		</li>
 @*		<li>

@@ -108,6 +108,7 @@ namespace NuSurvey.Core.Domain
         WholeNumber,
         Decimal,
         Time,
-        TimeRange
+        TimeRange,
+        TimeAmPm
     }
 }

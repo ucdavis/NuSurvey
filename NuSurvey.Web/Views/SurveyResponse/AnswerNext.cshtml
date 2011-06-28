@@ -85,6 +85,10 @@
                     {
                         <input id="Questions" class="text-box single-line time" type="text" value="@ans" name="Questions.Answer"/>
                     } 
+                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeAmPm)
+                    {
+                        <input id="Questions" class="text-box single-line timeRange" type="text" value="@ans" name="Questions.Answer"/>
+                    } 
                     if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeRange)
                     {
                         if (Model.SurveyAnswer != null && Model.SurveyAnswer.AnswerRange != null)

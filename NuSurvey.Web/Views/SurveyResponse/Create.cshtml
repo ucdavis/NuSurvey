@@ -29,6 +29,13 @@
                 },
                 rows: 3
             });
+
+            $('.timeRange').timepicker({
+                defaultTime: '1:00',
+                showLeadingZero: false,
+                showPeriod: true,
+                rows: 4
+            });
         });
 
 
@@ -62,9 +69,12 @@ Example: Dinosaur 1  *@
 			</div>
 		</li>
 
-        @{ var odd = false; }
-        @{ var indexCounter = 0;}
-        @{ var ans = string.Empty;}
+        @{ 
+            var odd = false;
+            var indexCounter = 0;
+            var ans = string.Empty; 
+            var ansRange = string.Empty;
+        }
         @foreach (var item in Model.Questions)
         {
             <li class="@(odd ? "odd" : "even")">
@@ -104,7 +114,27 @@ Example: Dinosaur 1  *@
                             var timeId = "Questions" + indexCounter;
                             <input id="@timeId" class="text-box single-line time" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
                         }
-                        else
+                        if (item.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeAmPm)
+                        {
+                            var timeId = "Questions" + indexCounter;
+                            <input id="@timeId" class="text-box single-line timeRange" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
+                        }
+                        if (item.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeRange)
+                        {
+                            if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter).AnswerRange != null)
+                            {
+                                ansRange = Model.SurveyAnswers.ElementAtOrDefault(indexCounter).AnswerRange;
+                            }
+                            else
+                            {
+                                ansRange = string.Empty;
+                            }
+                            var timeId = "Questions" + indexCounter;
+                            var timeRangeId = "QuestionsRange" + indexCounter;
+                            <input id="@timeId" class="text-box single-line timeRange" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
+                            <input id="@timeRangeId" class="text-box single-line timeRange" type="text" value="@ansRange" name="Questions[@indexCounter].AnswerRange"/>
+                        }
+                        if (item.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.WholeNumber || item.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Decimal)
                         {
                             <input id="Questions[@indexCounter]" class="text-box single-line" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
                         }

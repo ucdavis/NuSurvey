@@ -572,7 +572,14 @@ namespace NuSurvey.Web.Controllers
                 else
                 {
                     answer.OpenEndedAnswer = questions[i].OpenEndedNumericAnswer;
-                    answer.OpenEndedStringAnswer = questions[i].Answer;
+                    if (question.IsOpenEnded && question.OpenEndedQuestionType == (int)QuestionType.TimeRange)
+                    {
+                        answer.OpenEndedStringAnswer = string.Format("{0}_{1}", questions[i].Answer, questions[i].AnswerRange);
+                    }
+                    else
+                    {
+                        answer.OpenEndedStringAnswer = questions[i].Answer; // The actual answer they gave. 
+                    }                       
                     answer.Response = Repository.OfType<Response>().GetNullableById(questions[i].ResponseId);
                     answer.Score = questions[i].Score;
                     answer.BypassScore = false;
