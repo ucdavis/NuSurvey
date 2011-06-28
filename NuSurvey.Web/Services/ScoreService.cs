@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers;
+using NuSurvey.Web.Helpers;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 
@@ -12,7 +13,7 @@ namespace NuSurvey.Web.Services
     public interface IScoreService
     {
         QuestionAnswerParameter ScoreQuestion(IQueryable<Question> questions, QuestionAnswerParameter questionAnswerParameter);
-        void CalculateScores(IRepository repository, SurveyResponse surveyResponse);
+        void CalculateScores(IRepository repository, SurveyResponse surveyResponse);        
     }
 
     public class ScoreService : IScoreService
@@ -328,7 +329,103 @@ namespace NuSurvey.Web.Services
                             break;
 
                         case QuestionType.Time:
-                            throw new NotImplementedException("Time is not implemented yet.");
+                            //Works the same way as the Decimal above by first converting the time into a float.
+                            #region Open Ended Time Question
+                            float floatTime;
+                            if (questionAnswerParameter.Answer.TimeTryParse(out floatTime))
+                            {
+                                var floatDict = new Dictionary<float, int>();
+                                int? high = null;
+
+                                //Get a list of all active responses don't use any that can't be changed into a float.
+                                foreach (var response in question.Responses.Where(a => a.IsActive))
+                                {
+                                    float tempFloat;
+                                    if (response.Value.TimeTryParse(out tempFloat))
+                                    {
+                                        floatDict.Add(tempFloat, response.Id);
+                                    }
+                                }
+
+                                //Sort the valid responses.
+                                var sortedDict = floatDict.OrderBy(a => a.Key);
+                                for (int i = 0; i < sortedDict.Count(); i++)
+                                {
+                                    if (floatTime == sortedDict.ElementAt(i).Key)
+                                    {
+                                        responseId = sortedDict.ElementAt(i).Value;
+                                        break;
+                                    }
+                                    if (floatTime < sortedDict.ElementAt(i).Key)
+                                    {
+                                        high = i;
+                                        break;
+                                    }
+                                }
+
+                                //Didn't find an exact match
+                                if (responseId == null)
+                                {
+                                    if (high != null)
+                                    {
+                                        if (high.Value == 0) //Use the lowest value
+                                        {
+                                            responseId = sortedDict.ElementAt(high.Value).Value;
+                                        }
+                                        else //Somewhere inbetween. pick closest one, or one with highest score
+                                        {
+                                            var lowDiff = floatTime - sortedDict.ElementAt(high.Value - 1).Key;
+                                            var highDiff = sortedDict.ElementAt(high.Value).Key - floatTime;
+                                            if (lowDiff == highDiff)
+                                            {
+                                                if (question.Responses.Where(a => a.Id == sortedDict.ElementAt(high.Value - 1).Value).Single().Score > question.Responses.Where(a => a.Id == sortedDict.ElementAt(high.Value).Value).Single().Score)
+                                                {
+                                                    responseId = sortedDict.ElementAt(high.Value - 1).Value;
+                                                }
+                                                else
+                                                {
+                                                    responseId = sortedDict.ElementAt(high.Value).Value;
+                                                }
+                                            }
+                                            else if (lowDiff < highDiff)
+                                            {
+                                                responseId = sortedDict.ElementAt(high.Value - 1).Value;
+                                            }
+                                            else
+                                            {
+                                                responseId = sortedDict.ElementAt(high.Value).Value;
+                                            }
+                                        }
+                                    } else if (sortedDict.Count() > 0) //Use the highest value
+                                    {
+                                        responseId = sortedDict.ElementAt(sortedDict.Count()-1).Value;
+                                    }
+                                }
+
+
+
+
+                                //Found an exact match, or a high/low score
+                                if (responseId != null)
+                                {
+                                    questionAnswerParameter.ResponseId = responseId.Value;
+                                    questionAnswerParameter.Score = question.Responses.Where(a => a.Id == responseId.Value).Single().Score;
+                                }
+                                else
+                                {
+                                    //questionAnswerParameter.Invalid = true;
+                                    questionAnswerParameter.Message = "Matching Value to score not found";
+                                    questionAnswerParameter.Score = 0;
+                                }
+                            }
+                            else
+                            {
+                                questionAnswerParameter.Invalid = true;
+                                questionAnswerParameter.Message = "Answer must be a Time (hh:mm)";
+                                questionAnswerParameter.Score = 0;
+                            }
+                            #endregion Open Ended Time Question
+
                             break;
 
                         case QuestionType.TimeRange:
@@ -445,5 +542,7 @@ namespace NuSurvey.Web.Services
 
             return;
         }
+
+
     }
 }

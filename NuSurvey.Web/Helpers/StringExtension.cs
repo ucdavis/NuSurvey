@@ -28,5 +28,63 @@ namespace NuSurvey.Web.Helpers
                 yield return offset;
             }
         }
+
+        /// <summary>
+        /// Try to parse a time like 6:20 into a float 6.333333333
+        /// </summary>
+        /// <param name="source">string with time h:mm</param>
+        /// <param name="parsed"></param>
+        /// <returns>true if successful</returns>
+        public static bool TimeTryParse(this string source, out float parsed)
+        {
+            parsed = 0;
+            try
+            {
+                if (string.IsNullOrWhiteSpace(source))
+                {
+                    return false;
+                }
+                if (!source.Contains(":"))
+                {
+                    return false;
+                }
+                if (source.Length < 4 || source.Length > 5)
+                {
+                    return false;
+                }
+
+                var hour = source.Split(':').ElementAt(0);
+                int iHour;
+                if (!int.TryParse(hour, out iHour))
+                {
+                    return false;
+                }
+                if (iHour > 12)
+                {
+                    return false;
+                }
+                var minute = source.Split(':').ElementAt(1);
+                int iMinute;
+                if (!int.TryParse(minute, out iMinute))
+                {
+                    return false;
+                }
+                if (iMinute > 59)
+                {
+                    return false;
+                }
+
+                parsed = iHour + (iMinute / 60.0F);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+
+
+        }
     }
 }
