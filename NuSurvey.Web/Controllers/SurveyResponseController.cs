@@ -262,7 +262,14 @@ namespace NuSurvey.Web.Controllers
                 answer.Question = question;
                 answer.Category = question.Category;
                 answer.OpenEndedAnswer = questions.OpenEndedNumericAnswer;
-                answer.OpenEndedStringAnswer = questions.Answer; // The actual answer they gave.
+                if (question.IsOpenEnded && question.OpenEndedQuestionType == (int)QuestionType.TimeRange)
+                {
+                    answer.OpenEndedStringAnswer = string.Format("{0}_{1}", questions.Answer, questions.AnswerRange);
+                }
+                else
+                {
+                    answer.OpenEndedStringAnswer = questions.Answer; // The actual answer they gave. 
+                }                
                 answer.Response = Repository.OfType<Response>().GetNullableById(questions.ResponseId);
                 answer.Score = questions.Score;
 
@@ -902,6 +909,7 @@ namespace NuSurvey.Web.Controllers
     {
         public int QuestionId { get; set; }
         public string Answer { get; set; }
+        public string AnswerRange { get; set; } //For use when a time range is used
         public int ResponseId { get; set; }
         public bool Invalid { get; set; } 
         public string Message { get; set; } //Error message when invalid

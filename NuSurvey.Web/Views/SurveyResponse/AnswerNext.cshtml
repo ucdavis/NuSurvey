@@ -34,6 +34,13 @@
                 },
                 rows: 3
             });
+
+            $('.timeRange').timepicker({
+                defaultTime: '1:00',
+                showLeadingZero: false,
+                showPeriod: true,
+                rows: 4
+            });
         });
     </script>
 }
@@ -58,7 +65,10 @@
             <div class="editor-label required">
                 <label>@Model.CurrentQuestion.Order. @Html.HtmlEncode(Model.CurrentQuestion.Name) <span>*</span></label>
             </div>
-            @{ var ans = string.Empty;}
+            @{ 
+                var ans = string.Empty; 
+                var ansRange = string.Empty;
+            }
             <div class="editor-field required">
                 <input id="QuestionId" type="hidden" value="@Model.CurrentQuestion.Id" name="Questions.QuestionId" />
                 @if (Model.CurrentQuestion.IsOpenEnded)
@@ -74,8 +84,21 @@
                     if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Time)
                     {
                         <input id="Questions" class="text-box single-line time" type="text" value="@ans" name="Questions.Answer"/>
+                    } 
+                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeRange)
+                    {
+                        if (Model.SurveyAnswer != null && Model.SurveyAnswer.AnswerRange != null)
+                        {
+                            ansRange = Model.SurveyAnswer.AnswerRange;
+                        }
+                        else 
+                        {
+                            ansRange = string.Empty;
+                        }
+                        <input id="Questions" class="text-box single-line timeRange" type="text" value="@ans" name="Questions.Answer"/>
+                        <input id="QuestionsRange" class="text-box single-line timeRange" type="text" value="@ansRange" name="Questions.AnswerRange"/>
                     }
-                    else
+                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.WholeNumber || Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Decimal)
                     {
                         <input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer"/>
                     }

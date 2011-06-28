@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Helpers;
 using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
@@ -172,7 +173,18 @@ namespace NuSurvey.Web.Controllers
                                 }
                                 break;
                             case QuestionType.Time:
-                                //TODO: Add validation logic
+                                float floatTime;
+                                if (!responsesParameter.Value.TimeTryParse(out floatTime))
+                                {
+                                    ModelState.AddModelError("Question", "Choices must be Time (hh:mm)");
+                                }
+                                break;
+                            case QuestionType.TimeRange:
+                                float timeRangeNumber;
+                                if (!float.TryParse(responsesParameter.Value, out timeRangeNumber))
+                                {
+                                    ModelState.AddModelError("Question", "Choices must be numbers (decimal ok)");
+                                }
                                 break;
 
                             default:
@@ -473,7 +485,18 @@ namespace NuSurvey.Web.Controllers
                             }
                             break;
                         case QuestionType.Time:
-                            //TODO: Add validation
+                            float floatTime;
+                            if (!responsesParameter.Value.TimeTryParse(out floatTime))
+                            {
+                                ModelState.AddModelError("Question", "Choices must be Time (hh:mm)");
+                            }
+                            break;
+                        case QuestionType.TimeRange:
+                            float timeRangeNumber;
+                            if (!float.TryParse(responsesParameter.Value, out timeRangeNumber))
+                            {
+                                ModelState.AddModelError("Question", "Choices must be numbers (decimal ok)");
+                            }
                             break;
                         default:
                             ModelState.AddModelError("Question", "time and time range not supported yet");

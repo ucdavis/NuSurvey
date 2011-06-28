@@ -169,7 +169,7 @@
                 }
                 else
                 {
-                    if (!ans.OpenEndedAnswer.HasValue)
+                    if (string.IsNullOrWhiteSpace(ans.OpenEndedStringAnswer))
                     { 
                         @ans.Response.Value
                     }
