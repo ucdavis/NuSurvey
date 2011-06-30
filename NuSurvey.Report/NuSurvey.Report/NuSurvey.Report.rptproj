@@ -17,6 +17,10 @@
       <FullPath>Report_Encouragement.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
+      <Name>Report_MultiSurveyResponse.rdl</Name>
+      <FullPath>Report_MultiSurveyResponse.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
       <Name>Report_SurveyResponse.rdl</Name>
       <FullPath>Report_SurveyResponse.rdl</FullPath>
     </ProjectItem>
@@ -25,8 +29,8 @@
       <FullPath>Report_Thanks.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>Report_MultiSurveyResponse.rdl</Name>
-      <FullPath>Report_MultiSurveyResponse.rdl</FullPath>
+      <Name>Report_PickListSurveyResponse.rdl</Name>
+      <FullPath>Report_PickListSurveyResponse.rdl</FullPath>
     </ProjectItem>
   </Reports>
   <Configurations>

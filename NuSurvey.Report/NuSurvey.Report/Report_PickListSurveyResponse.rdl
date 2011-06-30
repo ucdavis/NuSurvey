@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
+  <DataSources>
+    <DataSource Name="NuSurveyDataSource">
+      <DataSourceReference>NuSurveyDataSource</DataSourceReference>
+      <rd:DataSourceID>0d972ee8-0231-4bef-ba5a-aa99ad23ac01</rd:DataSourceID>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet_PickList">
+      <Fields>
+        <Field Name="id">
+          <DataField>id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="SurveyId">
+          <DataField>SurveyId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>NuSurveyDataSource</DataSourceName>
+        <CommandText>SELECT     Surveys.id, SurveyResponses.id AS SurveyId
+FROM         Surveys INNER JOIN
+                      SurveyResponses ON Surveys.id = SurveyResponses.SurveyId
+WHERE     (Surveys.id = @Id) AND (SurveyResponses.id IN
+                          (SELECT     Number
+                            FROM          dbo.fn_SplitInt(@SurveyResponseIds, ',') AS fn_SplitInt_1))</CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@Id">
+            <Value>=Parameters!Id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@SurveyResponseIds">
+            <Value>=Parameters!SurveyResponseIds.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+      </Query>
+    </DataSet>
+  </DataSets>
+  <Body>
+    <Height>2.84208in</Height>
+    <Style />
+  </Body>
+  <ReportParameters>
+    <ReportParameter Name="Id">
+      <DataType>String</DataType>
+      <Prompt>Id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="SurveyResponseIds">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <Width>6.14583in</Width>
+  <Page>
+    <LeftMargin>1in</LeftMargin>
+    <RightMargin>1in</RightMargin>
+    <TopMargin>1in</TopMargin>
+    <BottomMargin>1in</BottomMargin>
+    <Style />
+  </Page>
+  <Language>en-US</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportID>cc0c0b53-2076-43d7-9a68-30d5578aa189</rd:ReportID>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+</Report>
