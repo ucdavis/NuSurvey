@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Helpers;
 using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
@@ -30,17 +30,13 @@ namespace NuSurvey.Web.Controllers
             _archiveService = archiveService;
         }
 
-        ////
-        //// GET: /Question/
-        //public ActionResult Index()
-        //{
-        //    var questionList = _questionRepository.Queryable;
-
-        //    return View(questionList.ToList());
-        //}
-
-        //
-        // GET: /Question/Details/5
+        /// <summary>
+        /// #1
+        /// GET: /Question/Details/5
+        /// </summary>
+        /// <param name="id">Question Id</param>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         public ActionResult Details(int id, int? categoryId)
         {
             var question = _questionRepository.GetNullableById(id);
@@ -60,8 +56,13 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
-        //
-        // GET: /Question/Create
+        /// <summary>
+        /// #2
+        /// GET: /Question/Create
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         public ActionResult Create(int id, int? categoryId)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
@@ -80,8 +81,15 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         } 
 
-        //
-        // POST: /Question/Create
+        /// <summary>
+        /// #3
+        /// POST: /Question/Create
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="categoryId"></param>
+        /// <param name="question"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(int id, int? categoryId, Question question, ResponsesParameter[] response)
         {
@@ -144,6 +152,54 @@ namespace NuSurvey.Web.Controllers
                 {
                     ModelState.AddModelError("Question", "All responses need a score");
                 }
+                else
+                {
+                    if(questionToCreate.IsOpenEnded)
+                    {
+                        switch ((QuestionType)questionToCreate.OpenEndedQuestionType)
+                        {
+                            case QuestionType.WholeNumber:
+                                int number;
+                                if (!int.TryParse(responsesParameter.Value, out number))
+                                {
+                                    ModelState.AddModelError("Question", "Choices must be whole numbers");
+                                }
+                                break;
+                            case QuestionType.Decimal:
+                                float floatNumber;
+                                if (!float.TryParse(responsesParameter.Value, out floatNumber))
+                                {
+                                    ModelState.AddModelError("Question", "Choices must be numbers (decimal ok)");
+                                }
+                                break;
+                            case QuestionType.Time:
+                                float floatTime;
+                                if (!responsesParameter.Value.TimeTryParse(out floatTime))
+                                {
+                                    ModelState.AddModelError("Question", "Choices must be Time (hh:mm)");
+                                }
+                                break;
+                            case QuestionType.TimeAmPm:
+                                float floatTimeAmPm;
+                                if (!responsesParameter.Value.TimeTryParseAmPm(out floatTimeAmPm))
+                                {
+                                    ModelState.AddModelError("Question", "Choices must be Time (hh:mm AM/PM)");
+                                }
+                                break;
+                            case QuestionType.TimeRange:
+                                float timeRangeNumber;
+                                if (!float.TryParse(responsesParameter.Value, out timeRangeNumber))
+                                {
+                                    ModelState.AddModelError("Question", "Choices must be numbers (decimal ok)");
+                                }
+                                break;
+
+                            default:
+                                ModelState.AddModelError("Question", "time and time range not supported yet");
+                                break;
+                        }
+                    }
+                }
             }
 
             if (questionToCreate.Responses.Where(a => a.IsActive).Count() == 0)
@@ -178,8 +234,14 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
-        //
-        // GET: /Question/Edit/5
+        /// <summary>
+        /// #4
+        /// GET: /Question/Edit/5
+        /// </summary>
+        /// <param name="id">Question Id</param>
+        /// <param name="surveyId"></param>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         public ActionResult Edit(int id, int surveyId, int? categoryId)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(surveyId);
@@ -195,6 +257,19 @@ namespace NuSurvey.Web.Controllers
                 Message = "Question Not Found.";
                 return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
             }
+
+            if (question.Survey.Id != survey.Id)
+            {
+                Message = "Question not related to current survey";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+
+            if (!question.Category.IsCurrentVersion)
+            {
+                Message = "Question's related category is not current version";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+
 
 			var viewModel = QuestionViewModel.Create(Repository, survey);
 			viewModel.Question = question;
@@ -213,8 +288,17 @@ namespace NuSurvey.Web.Controllers
 			return View(viewModel);
         }
         
-        //
-        // POST: /Question/Edit/5
+
+        /// <summary>
+        /// #5
+        /// POST: /Question/Edit/5
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="surveyId"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="question"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Edit(int id, int surveyId, int? categoryId, Question question, ResponsesParameter[] response)
         {
@@ -250,6 +334,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Question Not Found.";
                 return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
             }
+
 
             //Save the Id of the original Category in case we need to version it.
             originalCategoryId = questionToEdit.Category.Id;
@@ -300,6 +385,9 @@ namespace NuSurvey.Web.Controllers
                 {
                     originalHasChanges = true;
                 } else if (questionToEdit.IsOpenEnded != question.IsOpenEnded) //OpenEnded Question Changed
+                {
+                    originalHasChanges = true;
+                } else if (questionToEdit.OpenEndedQuestionType != question.OpenEndedQuestionType)  //type of open ended question changed
                 {
                     originalHasChanges = true;
                 } else if (questionToEdit.Name.ToLower() != question.Name.ToLower()) //Question (name) has changed
@@ -385,6 +473,50 @@ namespace NuSurvey.Web.Controllers
                 {
                     ModelState.AddModelError("Question", "All responses need a score");
                 }
+                if (question.IsOpenEnded && !responsesParameter.Remove)
+                {
+                    switch ((QuestionType)question.OpenEndedQuestionType)
+                    {
+                        case QuestionType.WholeNumber:
+                            int number;
+                            if (!int.TryParse(responsesParameter.Value, out number))
+                            {
+                                ModelState.AddModelError("Question", "Choices must be whole numbers");
+                            }
+                            break;
+                        case QuestionType.Decimal:
+                            float floatNumber;
+                            if (!float.TryParse(responsesParameter.Value, out floatNumber))
+                            {
+                                ModelState.AddModelError("Question", "Choices must be numbers (decimal ok)");
+                            }
+                            break;
+                        case QuestionType.Time:
+                            float floatTime;
+                            if (!responsesParameter.Value.TimeTryParse(out floatTime))
+                            {
+                                ModelState.AddModelError("Question", "Choices must be Time (hh:mm)");
+                            }
+                            break;
+                        case QuestionType.TimeAmPm:
+                            float floatTimeAmPm;
+                            if (!responsesParameter.Value.TimeTryParseAmPm(out floatTimeAmPm))
+                            {
+                                ModelState.AddModelError("Question", "Choices must be Time (hh:mm AM/PM)");
+                            }
+                            break;
+                        case QuestionType.TimeRange:
+                            float timeRangeNumber;
+                            if (!float.TryParse(responsesParameter.Value, out timeRangeNumber))
+                            {
+                                ModelState.AddModelError("Question", "Choices must be numbers (decimal ok)");
+                            }
+                            break;
+                        default:
+                            ModelState.AddModelError("Question", "time and time range not supported yet");
+                            break;
+                    }
+                }
             }
 
             foreach (var responseCheck in question.Responses)
@@ -423,6 +555,7 @@ namespace NuSurvey.Web.Controllers
                         newQuestion.Category = newOriginalCategory;
                         newQuestion.IsActive = question.IsActive;
                         newQuestion.IsOpenEnded = question.IsOpenEnded;
+                        newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                         newQuestion.Name = question.Name;
                         newQuestion.Order = questionToEdit.Order;
                         foreach (var responsesParameter in viewModel.Responses)
@@ -462,6 +595,7 @@ namespace NuSurvey.Web.Controllers
                             newQuestion.Category = newNewCategory;
                             newQuestion.IsActive = question.IsActive;
                             newQuestion.IsOpenEnded = question.IsOpenEnded;
+                            newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                             newQuestion.Name = question.Name;
                             newQuestion.Order = questionToEdit.Order;
                             foreach (var responsesParameter in viewModel.Responses)
@@ -497,6 +631,7 @@ namespace NuSurvey.Web.Controllers
                             newQuestion.Category = question.Category;
                             newQuestion.IsActive = question.IsActive;
                             newQuestion.IsOpenEnded = question.IsOpenEnded;
+                            newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                             newQuestion.Name = question.Name;
                             newQuestion.Order = questionToEdit.Order;
                             foreach (var responsesParameter in viewModel.Responses)
@@ -545,6 +680,7 @@ namespace NuSurvey.Web.Controllers
                     newQuestion.Category = newNewCategory;
                     newQuestion.IsActive = question.IsActive;
                     newQuestion.IsOpenEnded = question.IsOpenEnded;
+                    newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                     newQuestion.Name = question.Name;
                     newQuestion.Order = questionToEdit.Order;
                     foreach (var responsesParameter in viewModel.Responses)
@@ -630,6 +766,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #6
         /// ReOrder Get
         /// </summary>
         /// <param name="id">Survey Id</param>
@@ -647,6 +784,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #7
         /// ReOrder Questions within a survey
         /// </summary>
         /// <param name="id">Survey Id</param>
@@ -680,33 +818,6 @@ namespace NuSurvey.Web.Controllers
 
         }
 
-        ////
-        //// GET: /Question/Delete/5 
-        //public ActionResult Delete(int id)
-        //{
-        //    var question = _questionRepository.GetNullableById(id);
-
-        //    if (question == null) return RedirectToAction("Index");
-
-        //    return View(question);
-        //}
-
-        ////
-        //// POST: /Question/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, Question question)
-        //{
-        //    var questionToDelete = _questionRepository.GetNullableById(id);
-
-        //    if (questionToDelete == null) return RedirectToAction("Index");
-
-        //    _questionRepository.Remove(questionToDelete);
-
-        //    Message = "Question Removed Successfully";
-
-        //    return RedirectToAction("Index");
-        //}
-        
 
     }
 

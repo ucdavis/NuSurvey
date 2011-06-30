@@ -5,6 +5,8 @@ using MvcContrib;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Models;
 using NuSurvey.Web.Services;
+using System.Linq.Expressions;
+using System.Linq;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -144,7 +146,7 @@ namespace NuSurvey.Web.Controllers
 
                     Message = string.Format("{0} {1}", Message, "User emailed");
 
-                    return this.RedirectToAction(a => a.ManageUsers());
+                    return this.RedirectToAction(a => a.ManageUsers(false, false, false));
                 }
                 else
                 {
@@ -163,27 +165,11 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [Admin]
-        public ActionResult ManageUsers()
+        public ActionResult ManageUsers(bool hideAdmin = false, bool hideUser= false, bool hidePublic = true)
         {
-            //var users = Membership.GetAllUsers();
+            var viewModel = ManageUsersViewModel.Create(MembershipService.GetUsersAndRoles(CurrentUser.Identity.Name), hideAdmin, hideUser, hidePublic);
 
-            //var emails = (from MembershipUser user in users
-            //        where user.UserName.ToLower() != CurrentUser.Identity.Name.ToLower()
-            //        select user.UserName.ToLower()).ToList();
-
-            //var usersRoles = new List<UsersRoles>();
-            //foreach (var email in emails)
-            //{
-            //    var userRole = new UsersRoles();
-            //    userRole.UserName = email;
-            //    userRole.User = Roles.IsUserInRole(email, RoleNames.User);
-            //    userRole.Admin = Roles.IsUserInRole(email, RoleNames.Admin);
-            //    usersRoles.Add(userRole);
-            //}
-
-            //return View(usersRoles.AsQueryable());
-
-            return View(MembershipService.GetUsersAndRoles(CurrentUser.Identity.Name));
+            return View(viewModel);
         }
 
         /// <summary>
@@ -202,7 +188,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
             }
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
@@ -228,7 +214,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(editUserViewModel.Email) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
             }
 
             var roles = new string[]{"", ""};
@@ -250,7 +236,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Problem with Updating Roles";
             }
 
-            return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
         }
 
         /// <summary>
@@ -269,7 +255,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
             }
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
@@ -296,7 +282,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
             }
             if (confirm)
             {
@@ -310,7 +296,7 @@ namespace NuSurvey.Web.Controllers
                 }
             }
 
-            return this.RedirectToAction<AccountController>(a => a.ManageUsers());
+            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
         }
 
         /// <summary>
@@ -416,5 +402,38 @@ namespace NuSurvey.Web.Controllers
         public string UserName { get; set; }
         public bool Admin { get; set; }
         public bool User { get; set; }
+    }
+
+    public class ManageUsersViewModel
+    {
+        public bool HideAdmin { get; set; }
+        public bool HideUser { get; set; }
+        public bool HidePublic { get; set; }
+        public IQueryable<UsersRoles> Users { get; set; }
+
+        public static ManageUsersViewModel Create(IQueryable<UsersRoles> users, bool hideAdmin, bool hideUser, bool hidePublic)
+        {
+            var viewModel = new ManageUsersViewModel
+                                {HideAdmin = hideAdmin, HidePublic = hidePublic, HideUser = hideUser, Users = users};
+
+            if (viewModel.HidePublic)
+            {
+                viewModel.Users = viewModel.Users.Where(a => a.Admin || a.User);
+            }
+            else
+            {
+                if (viewModel.HideAdmin)
+                {
+                    viewModel.Users = viewModel.Users.Where(a => !a.Admin);
+                }
+                if (viewModel.HideUser)
+                {
+                    viewModel.Users = viewModel.Users.Where(a => !a.User);
+                }
+            }
+
+            return viewModel;
+
+        }
     }
 }

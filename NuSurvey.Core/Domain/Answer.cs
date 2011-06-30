@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
 
@@ -21,6 +22,11 @@ namespace NuSurvey.Core.Domain
         /// This is only required for non-open ended questions that are for categories that are used for calculations
         /// </summary>
         public virtual Response Response { get; set; }
+
+        [DisplayName("Bypass Score")]
+        public virtual bool BypassScore { get; set; }
+        [StringLength(50)]
+        public virtual string OpenEndedStringAnswer { get; set; }
     }
 
 
@@ -31,6 +37,8 @@ namespace NuSurvey.Core.Domain
             Id(x => x.Id);
             Map(x => x.Score);
             Map(x => x.OpenEndedAnswer);
+            Map(x => x.BypassScore);
+            Map(x => x.OpenEndedStringAnswer);
 
             References(x => x.SurveyResponse);
             References(x => x.Category);

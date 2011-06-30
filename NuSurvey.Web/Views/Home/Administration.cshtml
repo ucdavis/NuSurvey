@@ -6,13 +6,26 @@
 
 }
 
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.balloon').bt({ positions: 'bottom' });
+        });
+    </script>
+}
+
 @*<h2>Administration</h2>*@
 
-<h1>
-    <a href="@Url.Action("Index", "Survey")">Surveys</a>
-</h1>
-<br />
-<h1>
-    <a href="@Url.Action("ManageUsers", "Account")">Manage Users</a>
-</h1>    
+    
+    <a class="balloon" href='@Url.Action("Index", "Survey")' title="Manage Surveys"><img alt="Manage Surveys" src="@Url.Image("Admin.png")"/></a>
+    @*<a href="@Url.Action("Index", "Survey")">Surveys</a>*@
+
+
+
+    <a class="balloon" href='@Url.Action("ManageUsers", "Account")' title="Manage Users"><img alt="Manage Users" src="@Url.Image("Users.png")"/></a>
+    @*<a href="@Url.Action("ManageUsers", "Account")">Manage Users</a>*@
+   
 

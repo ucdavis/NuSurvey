@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NuSurvey.Core.Domain;
+using UCDArch.Testing;
 
 namespace NuSurvey.Tests.Core.Helpers
 {
@@ -94,6 +95,15 @@ namespace NuSurvey.Tests.Core.Helpers
             rtValue.Score = counter.HasValue ? counter.Value : 0;
             rtValue.IsActive = true;
             rtValue.Question = new Question();
+
+            return rtValue;
+        }
+
+        public static CategoryTotalMaxScore CategoryTotalMaxScore(int count)
+        {
+            var rtValue = new CategoryTotalMaxScore();
+            rtValue.TotalMaxScore = 100;
+            rtValue.SetIdTo(count);
 
             return rtValue;
         }

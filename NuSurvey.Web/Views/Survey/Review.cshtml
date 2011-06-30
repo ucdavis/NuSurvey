@@ -1,0 +1,71 @@
+﻿@model IEnumerable<NuSurvey.Core.Domain.Survey>
+
+@{
+	ViewBag.Title = "Review";
+}
+
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({ "bJQueryUI": true });
+        });    
+    </script>
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Index", "Home")">Home</a> 
+        </li>
+        <li>
+            Surveys
+        </li>
+    </ul>
+}
+
+<table class="datatable">
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				Name
+			</th>
+			<th>
+				ShortName
+			</th>
+			<th>
+				IsActive
+			</th>
+            <th>
+                Answered
+            </th>
+		</tr>
+	</thead>
+	<tbody>
+@{ var odd = false; }
+@foreach (var item in Model) {
+		<tr class="@(odd ? "odd": "even")">
+			<td>
+                <a href='@Url.Action("YourDetails", "Survey", new { id = @item.Id })'><img alt="View the details of this Survey" src="@Url.Image("details.png")"/></a>                              
+			</td>
+			<td>
+				@item.Name
+			</td>
+			<td>
+				@item.ShortName
+			</td>
+			<td>
+				@item.IsActive
+			</td>
+            <td>
+                @item.SurveyResponses.Where(a => a.UserId == this.User.Identity.Name && !a.IsPending).Count()
+            </td>
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+
+

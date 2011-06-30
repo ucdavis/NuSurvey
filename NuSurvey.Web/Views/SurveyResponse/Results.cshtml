@@ -1,13 +1,17 @@
-﻿@model NuSurvey.Core.Domain.SurveyResponse
+﻿@model NuSurvey.Web.Controllers.ResultsViewModel
 
 
 @{
     ViewBag.Title = "Quiz Results";
 }
 
+@if (Model.ShowPdfPrint) {            
+    <div id="pdf_print">
+        <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id })' target="_blank"><img alt="Print this result" src="@Url.Image("big_print.png")"/></a>
+    </div>
+}
 
-
-@Html.Partial("_Results", @Model)
+@Html.Partial("_Results", @Model.SurveyResponse)
 
 
 <p>

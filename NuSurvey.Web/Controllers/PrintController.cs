@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
+using MvcContrib;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
-using UCDArch.Core.Utils;
-using MvcContrib;
-using UCDArch.Testing.Extensions;
-using UCDArch.Web.Helpers;
 
 
 namespace NuSurvey.Web.Controllers
@@ -17,7 +12,7 @@ namespace NuSurvey.Web.Controllers
     /// <summary>
     /// Controller for the Print class
     /// </summary>
-    [Authorize]
+    [User]
     public class PrintController : ApplicationController
     {
         private readonly IRepository<Survey> _surveyRepository;
@@ -32,13 +27,17 @@ namespace NuSurvey.Web.Controllers
             _printService = printService;
         }
 
+        /// <summary>
+        /// #1
+        /// </summary>
+        /// <param name="id">SurveyResponse Id</param>
+        /// <returns></returns>
         public ActionResult Result(int id)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
             if (surveyResponse == null)
             {
-                Message = "Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction<ErrorController>(a => a.FileNotFound());
             }
 
             if (!CurrentUser.IsInRole(RoleNames.Admin))
@@ -52,14 +51,20 @@ namespace NuSurvey.Web.Controllers
             return _printService.PrintSingle(id);
         }
 
+        /// <summary>
+        /// #2
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="beginDate">Filter for Begin Date</param>
+        /// <param name="endDate">Filter for End Date</param>
+        /// <returns></returns>
         [Admin]
         public ActionResult Results(int id, DateTime? beginDate, DateTime? endDate)
         {
             var survey = _surveyRepository.GetNullableById(id);
             if (survey == null)
             {
-                Message = "Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction<ErrorController>(a => a.FileNotFound());
             }
 
             if (beginDate == null)
@@ -71,14 +76,15 @@ namespace NuSurvey.Web.Controllers
                 endDate = DateTime.Now.AddYears(1);
             }
 
-            if (endDate.Value.Date <= beginDate.Value.Date)
+            if (endDate.Value.Date < beginDate.Value.Date)
             {
-                endDate = beginDate.Value.Date.AddDays(1);
+                endDate = beginDate.Value.Date;
             }
 
-            return _printService.PrintMultiple(id, beginDate, endDate);
+            beginDate = beginDate.Value.Date;
+            endDate = endDate.Value.Date.AddDays(1).AddMinutes(-1);
 
-            throw new NotImplementedException();
+            return _printService.PrintMultiple(id, beginDate, endDate);
         }
     }
 

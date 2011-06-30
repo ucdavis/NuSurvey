@@ -1,0 +1,140 @@
+﻿@model NuSurvey.Web.Controllers.SingleAnswerSurveyResponseViewModel
+
+
+@{
+    ViewBag.Title = "Next Question";
+
+}
+
+
+@section AdditionalScripts{
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.ui.timepicker.js")'></script>
+    
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var percent = (@Model.AnsweredQuestions / @Model.TotalActiveQuestions) * 100;
+            $("#progressbar").progressbar({ value: percent });
+            
+            $('.time').timepicker({
+                defaultTime: '1:00',
+                showLeadingZero: false,
+                showPeriodLabels: false,
+                hours: {
+                    starts: 1,                  // first displayed hour
+                    ends: 12                    // last displayed hour
+                },
+                minutes: {
+                    starts: 0,                  // first displayed minute
+                    ends: 55,                   // last displayed minute
+                    interval: 5                 // interval of displayed minutes
+                },
+                rows: 3
+            });
+
+            $('.timeRange').timepicker({
+                defaultTime: '1:00',
+                showLeadingZero: false,
+                showPeriod: true,
+                rows: 4
+            });
+        });
+    </script>
+}
+
+
+@Html.Partial("_SurveyResponseProgress")
+
+@using (Html.BeginForm())
+{        
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true)
+    @Html.HiddenFor(x => x.SurveyResponse.Id)
+
+    <fieldset>
+    @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
+    Example: Dinosaur 1  *@
+	    @*<legend>Survey Response</legend>*@
+	    @*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
+	    <p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
+	    <ul>
+		    <li>
+            <div class="editor-label required">
+                <label>@Model.CurrentQuestion.Order. @Html.HtmlEncode(Model.CurrentQuestion.Name) <span>*</span></label>
+            </div>
+            @{ 
+                var ans = string.Empty; 
+                var ansRange = string.Empty;
+            }
+            <div class="editor-field required">
+                <input id="QuestionId" type="hidden" value="@Model.CurrentQuestion.Id" name="Questions.QuestionId" />
+                @if (Model.CurrentQuestion.IsOpenEnded)
+                {
+                    if (Model.SurveyAnswer != null && Model.SurveyAnswer.Answer != null)
+                    {
+                        ans = Model.SurveyAnswer.Answer;
+                    }
+                    else
+                    {
+                        ans = string.Empty;
+                    }
+                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Time)
+                    {
+                        <input id="Questions" class="text-box single-line time" type="text" value="@ans" name="Questions.Answer"/>
+                    } 
+                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeAmPm)
+                    {
+                        <input id="Questions" class="text-box single-line timeRange" type="text" value="@ans" name="Questions.Answer"/>
+                    } 
+                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeRange)
+                    {
+                        if (Model.SurveyAnswer != null && Model.SurveyAnswer.AnswerRange != null)
+                        {
+                            ansRange = Model.SurveyAnswer.AnswerRange;
+                        }
+                        else 
+                        {
+                            ansRange = string.Empty;
+                        }
+                        <input id="Questions" class="text-box single-line timeRange" type="text" value="@ans" name="Questions.Answer"/>
+                        <input id="QuestionsRange" class="text-box single-line timeRange" type="text" value="@ansRange" name="Questions.AnswerRange"/>
+                    }
+                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.WholeNumber || Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Decimal)
+                    {
+                        <input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer"/>
+                    }
+                    @*<input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer"/>  *@                 
+                }
+                else
+                {
+                    foreach (var response in Model.CurrentQuestion.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
+                    {
+                        var isChecked = string.Empty;
+                        if (Model.SurveyAnswer != null)
+                        {
+                            if (response.Id == Model.SurveyAnswer.ResponseId)
+                            {
+                                isChecked = "checked=\"checked\"";
+                            }
+                        }
+                        <input id="Questions[@response.Order]" type="radio" value="@response.Id" @isChecked name="Questions.ResponseId" />                             
+                        <label for="Questions[@response.Order]">@response.Value</label> <br />
+                    }
+                }
+                @Html.ValidationMessage("Questions")
+            </div>
+		    </li>
+		    <li>
+			    @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+			    <label>&nbsp;</label>
+			    <input class="button" type="submit" value="Next" /> | @Html.ActionLink("Cancel", "Index")
+		    </li>
+	    </ul>
+    </fieldset>
+}
+
+
+

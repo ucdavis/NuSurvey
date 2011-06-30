@@ -5,6 +5,7 @@ using MvcContrib.TestHelper;
 using NuSurvey.Web;
 using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Helpers;
 using UCDArch.Testing;
 using UCDArch.Web.Attributes;
 
@@ -56,10 +57,10 @@ namespace NuSurvey.Tests.ControllerTests
         }
 
         /// <summary>
-        /// Tests the controller has only three attributes.
+        /// Tests the controller has four attributes.
         /// </summary>
         [TestMethod]
-        public void TestControllerHasOnlyThreeAttributes()
+        public void TestControllerHasFourAttributes()
         {
             #region Arrange
             var controllerClass = _controllerClass;
@@ -70,7 +71,7 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(3, result.Count());
+            Assert.AreEqual(4, result.Count());
             #endregion Assert
         }
 
@@ -128,6 +129,21 @@ namespace NuSurvey.Tests.ControllerTests
             #endregion Assert
         }
 
+        [TestMethod]
+        public void TestControllerHasLocServiceMessageAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<ServiceMessageAttribute>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "LocServiceMessageAttribute not found.");
+            #endregion Assert
+        }
         #endregion Controller Class Tests
 
         #region Controller Method Tests

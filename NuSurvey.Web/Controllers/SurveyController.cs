@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -7,13 +8,14 @@ using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
+using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
 {
     /// <summary>
     /// Controller for the Survey class
     /// </summary>
-    [Admin]
+    [Authorize]
     public class SurveyController : ApplicationController
     {
 	    private readonly IRepository<Survey> _surveyRepository;
@@ -23,8 +25,12 @@ namespace NuSurvey.Web.Controllers
             _surveyRepository = surveyRepository;
         }
     
-        //
-        // GET: /Survey/
+        /// <summary>
+        /// #1
+        /// GET: /Survey/
+        /// </summary>
+        /// <returns></returns>
+        [Admin]
         public ActionResult Index()
         {
             var surveyList = _surveyRepository.Queryable;
@@ -32,19 +38,57 @@ namespace NuSurvey.Web.Controllers
             return View(surveyList.ToList());
         }
 
-        //
-        // GET: /Survey/Details/5
-        public ActionResult Details(int id)
+        /// <summary>
+        /// #2
+        /// GET: /Survey/Details/5
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="filterBeginDate"></param>
+        /// <param name="filterEndDate"></param>
+        /// <returns></returns>
+        [Admin]
+        public ActionResult Details(int id, DateTime? filterBeginDate, DateTime? filterEndDate)
         {
             var survey = _surveyRepository.GetNullableById(id);
 
-            if (survey == null) return RedirectToAction("Index");          
+            if (survey == null)
+            {
+                return this.RedirectToAction(a => a.Index());
+                //return RedirectToAction("Index");
+            }
 
-            return View(survey);
+            var viewModel = SurveyResponseDetailViewModel.Create(Repository, survey, filterBeginDate, filterEndDate);
+
+            return View(viewModel);
         }
 
-        //
-        // GET: /Survey/Create
+        /// <summary>
+        /// #3
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <returns></returns>
+        [Admin]
+        public ActionResult PendingDetails(int id)
+        {
+            var survey = _surveyRepository.GetNullableById(id);
+
+            if (survey == null)
+            {
+                return this.RedirectToAction(a => a.Index());
+                //return RedirectToAction("Index");
+            }
+
+            var viewModel = SurveyPendingResponseDetailViewModel.Create(Repository, survey);
+
+            return View(viewModel);
+        }
+
+        /// <summary>
+        /// #4
+        /// GET: /Survey/Create
+        /// </summary>
+        /// <returns></returns>
+        [Admin]
         public ActionResult Create()
         {
 			var viewModel = SurveyViewModel.Create(Repository);
@@ -52,18 +96,22 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         } 
 
-        //
-        // POST: /Survey/Create
+        /// <summary>
+        /// #5
+        /// POST: /Survey/Create
+        /// </summary>
+        /// <param name="survey"></param>
+        /// <returns></returns>
+        [Admin]
         [HttpPost]
         public ActionResult Create(Survey survey)
         {
-            //var surveyToCreate = new Survey();
-
-            //TransferValues(survey, surveyToCreate);
+            //Not sure if this is really needed
+            //ModelState.Clear();
+            //survey.TransferValidationMessagesTo(ModelState); 
 
             if (ModelState.IsValid)
             {
-                //_surveyRepository.EnsurePersistent(surveyToCreate);
                 _surveyRepository.EnsurePersistent(survey);
 
                 Message = "Survey Created Successfully";
@@ -79,8 +127,13 @@ namespace NuSurvey.Web.Controllers
             }
         }
 
-        //
-        // GET: /Survey/Edit/5
+        /// <summary>
+        /// #6
+        /// GET: /Survey/Edit/5
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <returns></returns>
+        [Admin]
         public ActionResult Edit(int id)
         {
             var survey = _surveyRepository.GetNullableById(id);
@@ -93,8 +146,14 @@ namespace NuSurvey.Web.Controllers
 			return View(survey);
         }
         
-        //
-        // POST: /Survey/Edit/5
+        /// <summary>
+        /// #7
+        /// POST: /Survey/Edit/5
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="survey"></param>
+        /// <returns></returns>
+        [Admin]
         [HttpPost]
         public ActionResult Edit(int id, Survey survey)
         {
@@ -107,6 +166,9 @@ namespace NuSurvey.Web.Controllers
             }
 
             Mapper.Map(survey, surveyToEdit);
+
+            ModelState.Clear();
+            surveyToEdit.TransferValidationMessagesTo(ModelState);
 
 
             if (ModelState.IsValid)
@@ -122,35 +184,45 @@ namespace NuSurvey.Web.Controllers
                 return View(surveyToEdit);
             }
         }
+
+        /// <summary>
+        /// GET: /Survey/Review
+        /// </summary>
+        /// <returns></returns>
+        [User]
+        public ActionResult Review()
+        {
+            var surveyList = _surveyRepository.Queryable.Where(a => a.IsActive);
+
+            return View(surveyList.ToList());
+        }
+
+        /// <summary>
+        ///
+        /// GET: /Survey/YourDetails/5
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="filterBeginDate"></param>
+        /// <param name="filterEndDate"></param>
+        /// <returns></returns>
+        [User]
+        public ActionResult YourDetails(int id, DateTime? filterBeginDate, DateTime? filterEndDate)
+        {
+            var survey = _surveyRepository.GetNullableById(id);
+
+            if (survey == null)
+            {
+                return this.RedirectToAction(a => a.Review());
+            }
+
+            var viewModel = SurveyResponseDetailViewModel.Create(Repository, survey, filterBeginDate, filterEndDate);
+            viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.UserId == CurrentUser.Identity.Name);
+
+            return View(viewModel);
+        }
+
+
         
-        //
-        // GET: /Survey/Delete/5 
-        public ActionResult Delete(int id)
-        {
-			var survey = _surveyRepository.GetNullableById(id);
-
-            if (survey == null) return RedirectToAction("Index");
-
-            return View(survey);
-        }
-
-        //
-        // POST: /Survey/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, Survey survey)
-        {
-			var surveyToDelete = _surveyRepository.GetNullableById(id);
-
-            if (surveyToDelete == null) return RedirectToAction("Index");
-
-            _surveyRepository.Remove(surveyToDelete);
-
-            Message = "Survey Removed Successfully";
-
-            return RedirectToAction("Index");
-        }
-
-
     }
 
 	/// <summary>
@@ -169,4 +241,52 @@ namespace NuSurvey.Web.Controllers
 			return viewModel;
 		}
 	}
+
+    public class SurveyResponseDetailViewModel
+    {
+        public Survey Survey { get; set; }
+        public DateTime? FilterBeginDate { get; set; }
+        public DateTime? FilterEndDate { get; set; }
+        public IEnumerable<SurveyResponse> SurveyResponses { get; set; }
+        public bool HasPendingResponses { get; set; }
+
+        public static SurveyResponseDetailViewModel Create(IRepository repository, Survey survey, DateTime? beginDate, DateTime? endDate)
+        {
+            Check.Require(repository != null, "Repository must be supplied");
+            Check.Require(survey != null, "Survey must be supplied");
+
+            var viewModel = new SurveyResponseDetailViewModel { Survey = survey, FilterBeginDate = beginDate, FilterEndDate = endDate};
+            viewModel.SurveyResponses = viewModel.Survey.SurveyResponses.AsQueryable().Where(a => !a.IsPending);
+            viewModel.HasPendingResponses = viewModel.Survey.SurveyResponses.Where(a => a.IsPending).Any();
+            if (beginDate != null)
+            {
+                beginDate = beginDate.Value.Date;
+                viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.DateTaken >= beginDate);
+            }
+            if (endDate != null)
+            {
+                endDate = endDate.Value.Date.AddDays(1).AddMinutes(-1);
+                viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.DateTaken <= endDate);
+            }
+
+            return viewModel;
+        }
+    }
+
+    public class SurveyPendingResponseDetailViewModel
+    {
+        public Survey Survey { get; set; }
+        public IEnumerable<SurveyResponse> SurveyResponses { get; set; }
+
+        public static SurveyPendingResponseDetailViewModel Create(IRepository repository, Survey survey)
+        {
+            Check.Require(repository != null, "Repository must be supplied");
+            Check.Require(survey != null, "Survey must be supplied");
+
+            var viewModel = new SurveyPendingResponseDetailViewModel { Survey = survey };
+            viewModel.SurveyResponses = viewModel.Survey.SurveyResponses.AsQueryable().Where(a => a.IsPending);
+
+            return viewModel;
+        }
+    }
 }

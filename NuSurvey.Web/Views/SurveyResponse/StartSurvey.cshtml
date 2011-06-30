@@ -1,0 +1,88 @@
+﻿@model NuSurvey.Web.Controllers.SingleAnswerSurveyResponseViewModel
+
+
+@{
+    ViewBag.Title = "Start Survey";
+
+}
+
+@section AdditionalScripts{
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+  <script type="text/javascript">
+      $(document).ready(function () {
+          var percent = (@Model.AnsweredQuestions / @Model.TotalActiveQuestions) * 100;
+          $("#progressbar").progressbar({ value: percent });
+      });
+  </script>
+
+}
+
+@if (Model.CannotContinue)
+{ 
+    <fieldset class="display-form">
+        <ul>
+            <li>
+			    @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+			    <label>&nbsp;</label>
+                <a href="@Url.Action("DeletePending", "SurveyResponse", new { id = @Model.PendingSurveyResponse.Id, fromAdmin = false})">Delete Survey</a> 
+                | @Html.ActionLink("Cancel", "Index")
+            </li>
+        </ul>
+    </fieldset>
+}
+else if (Model.PendingSurveyResponseExists)
+{
+    @Html.Partial("_SurveyResponseProgress")
+    <fieldset class="display-form">
+        <ul>
+            <li>
+			    @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+			    <label>&nbsp;</label>
+                <a href="@Url.Action("AnswerNext", "SurveyResponse", new { id = @Model.PendingSurveyResponse.Id })">Continue</a>
+			    | <a href="@Url.Action("DeletePending", "SurveyResponse", new { id = @Model.PendingSurveyResponse.Id, fromAdmin = false})">Delete Survey</a> 
+                | @Html.ActionLink("Cancel", "Index")
+            </li>
+        </ul>
+    </fieldset>
+
+}
+else
+{ 
+    @Html.Partial("_SurveyResponseProgress")
+    
+    
+using (Html.BeginForm())
+{        
+	    @Html.AntiForgeryToken()
+	    @Html.ValidationSummary(true)
+        @Html.HiddenFor(x => x.Survey.Id)
+
+        <fieldset>
+        @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
+        Example: Dinosaur 1  *@
+	        @*<legend>Survey Response</legend>*@
+	        @*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
+	        <p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
+	        <ul>
+		        <li>
+			        <div class="editor-label required">
+                        @Html.LabelFor(a => a.SurveyResponse.StudentId)<span>*</span> 
+			        </div>
+			        <div class="editor-field">
+				        @Html.EditorFor(model => model.SurveyResponse.StudentId)
+				        @Html.ValidationMessageFor(model => model.SurveyResponse.StudentId)
+			        </div>
+		        </li>
+		        <li>
+			        @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+			        <label>&nbsp;</label>
+			        <input class="button" type="submit" value="Next" /> | @Html.ActionLink("Cancel", "Index")
+		        </li>
+	        </ul>
+        </fieldset>
+    }
+}
+
+

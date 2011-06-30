@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using AutoMapper;
+using MvcContrib;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
-using MvcContrib;
 using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
@@ -25,6 +23,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #1
         /// GET: /CategoryGoal/Details/5
         /// </summary>
         /// <param name="id"></param>
@@ -46,6 +45,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #2
         /// GET: /CategoryGoal/Create
         /// </summary>
         /// <param name="id">Category Id</param>
@@ -70,6 +70,7 @@ namespace NuSurvey.Web.Controllers
         } 
 
         /// <summary>
+        /// #3
         /// POST: /CategoryGoal/Create
         /// </summary>
         /// <param name="id">Category Id</param>
@@ -115,6 +116,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #4
         /// GET: /CategoryGoal/Edit/5
         /// </summary>
         /// <param name="id">CategoryGoal id</param>
@@ -140,8 +142,13 @@ namespace NuSurvey.Web.Controllers
 			return View(viewModel);
         }
         
-        //
-        // POST: /CategoryGoal/Edit/5
+        /// <summary>
+        /// #5
+        /// POST: /CategoryGoal/Edit/5
+        /// </summary>
+        /// <param name="id">CategoryGoal Id</param>
+        /// <param name="categoryGoal"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Edit(int id, CategoryGoal categoryGoal)
         {
@@ -178,34 +185,6 @@ namespace NuSurvey.Web.Controllers
                 return View(viewModel);
             }
         }
-        
-        ////
-        //// GET: /CategoryGoal/Delete/5 
-        //public ActionResult Delete(int id)
-        //{
-        //    var categoryGoal = _categoryGoalRepository.GetNullableById(id);
-
-        //    if (categoryGoal == null) return RedirectToAction("Index");
-
-        //    return View(categoryGoal);
-        //}
-
-        ////
-        //// POST: /CategoryGoal/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, CategoryGoal categoryGoal)
-        //{
-        //    var categoryGoalToDelete = _categoryGoalRepository.GetNullableById(id);
-
-        //    if (categoryGoalToDelete == null) return RedirectToAction("Index");
-
-        //    _categoryGoalRepository.Remove(categoryGoalToDelete);
-
-        //    Message = "CategoryGoal Removed Successfully";
-
-        //    return RedirectToAction("Index");
-        //}
-              
 
     }
 
@@ -227,7 +206,9 @@ namespace NuSurvey.Web.Controllers
 			                    {
 			                        CategoryGoal = new CategoryGoal(category), 
                                     Category = category, 
+// ReSharper disable PossibleNullReferenceException
                                     Survey = category.Survey
+// ReSharper restore PossibleNullReferenceException
 			                    };
  
 			return viewModel;

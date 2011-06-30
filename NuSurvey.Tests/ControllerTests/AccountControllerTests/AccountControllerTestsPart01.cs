@@ -246,7 +246,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             var result = Controller.Register(viewModel, new[] { "NSUser", "NSAdmin" })
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers());
+                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
             #endregion Act
 
             #region Assert
@@ -280,7 +280,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             var result = Controller.Register(viewModel, new string[0])
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers());
+                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
             #endregion Act
 
             #region Assert
@@ -299,7 +299,34 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         #region ManageUsers Tests
 
         [TestMethod]
-        public void TestManageUsersReturnsViewWithExpectedValues()
+        public void TestManageUsersReturnsViewWithExpectedValues1()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "NSAdmin" }, "me@ucdavis.edu");
+            var usersAndRoles = new List<UsersRoles>
+            {
+                new UsersRoles {Admin = true, User = false, UserName = "test1.test.com"},
+                new UsersRoles {Admin = false, User = false, UserName = "test2.test.com"},
+                new UsersRoles {Admin = true, User = true, UserName = "test3.test.com"}
+            };
+
+            MembershipService.Expect(a => a.GetUsersAndRoles("me@ucdavis.edu")).Return(usersAndRoles.AsQueryable());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.ManageUsers(false,false,false)
+                .AssertViewRendered()
+                .WithViewData<ManageUsersViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Users.Count());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestManageUsersReturnsViewWithExpectedValues2()
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "NSAdmin" }, "me@ucdavis.edu");
@@ -316,12 +343,12 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             var result = Controller.ManageUsers()
                 .AssertViewRendered()
-                .WithViewData<IQueryable<UsersRoles>>();
+                .WithViewData<ManageUsersViewModel>();
             #endregion Act
 
             #region Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Count());
+            Assert.AreEqual(2, result.Users.Count());
             #endregion Assert
         }
         #endregion ManageUsers Tests

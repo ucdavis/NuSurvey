@@ -8,6 +8,17 @@
     display: none;
 }
 
+#pdf_print
+{
+	display: none;
+}
+
+#system_wide_status
+{
+	display: none;
+}
+
+
 #footer
 {
 	display: none;

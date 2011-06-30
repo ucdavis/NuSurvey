@@ -146,6 +146,7 @@ namespace NuSurvey.Web.Controllers
 
         
         /// <summary>
+        /// #5
         /// GET: /Category/Edit/5
         /// </summary>
         /// <param name="id">Category Id</param>
@@ -173,7 +174,9 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #6
         /// POST: /Category/Edit/5
+        /// When the category is mapped to the categoryToEdit is very important with regards to the versioning of the old data
         /// </summary>
         /// <param name="id">Category Id</param>
         /// <param name="category"></param>

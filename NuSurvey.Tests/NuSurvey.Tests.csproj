@@ -110,7 +110,39 @@
     <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsMapping.cs" />
     <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsPart01.cs" />
     <Compile Include="ControllerTests\CategoryControllerTests\CategoryControllerTestsPart02.cs" />
+    <Compile Include="ControllerTests\CategoryGoalControllerTests\CategoryGoalControllerTestsInit.cs" />
+    <Compile Include="ControllerTests\CategoryGoalControllerTests\CategoryGoalControllerTestsMapping.cs" />
+    <Compile Include="ControllerTests\CategoryGoalControllerTests\CategoryGoalControllerTestsPart01.cs" />
+    <Compile Include="ControllerTests\CategoryGoalControllerTests\CategoryGoalControllerTestsReflection.cs" />
     <Compile Include="ControllerTests\ErrorControllerTests.cs" />
+    <Compile Include="ControllerTests\HomeControllerTests.cs" />
+    <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsInit.cs" />
+    <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsMapping.cs" />
+    <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsPart01.cs" />
+    <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsReflection.cs" />
+    <Compile Include="ControllerTests\QuestionControllerTests\QuestionControllerTestsInit.cs" />
+    <Compile Include="ControllerTests\QuestionControllerTests\QuestionControllerTestsMapping.cs" />
+    <Compile Include="ControllerTests\QuestionControllerTests\QuestionControllerTestsPart01.cs" />
+    <Compile Include="ControllerTests\QuestionControllerTests\QuestionControllerTestsPart02.cs" />
+    <Compile Include="ControllerTests\QuestionControllerTests\QuestionControllerTestsPart03.cs" />
+    <Compile Include="ControllerTests\QuestionControllerTests\QuestionControllerTestsPart04.cs" />
+    <Compile Include="ControllerTests\QuestionControllerTests\QuestionControllerTestsReflection.cs" />
+    <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsInit.cs" />
+    <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsMapping.cs" />
+    <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsPart01.cs" />
+    <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsPart02.cs" />
+    <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsPart03.cs" />
+    <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsReflection.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsInit.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsMapping.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart01.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart02.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart03.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart04.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart05.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart06.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsPart07.cs" />
+    <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsReflection.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\AssertExtensions.cs" />
     <Compile Include="Core\Extensions\RouteTestingExtensions.cs" />
@@ -122,8 +154,8 @@
     <Compile Include="Core\Helpers\RepositoryLoad.cs" />
     <Compile Include="Core\Helpers\SpecificGuid.cs" />
     <Compile Include="Core\ServiceLocatorInitializer.cs" />
+    <Compile Include="InterfaceTests\ScoreServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ControllerTests\HomeControllerTest.cs" />
     <Compile Include="RepositoryTests\AnswerRepositoryTests.cs" />
     <Compile Include="RepositoryTests\CategoryGoalRepositoryTests.cs" />
     <Compile Include="RepositoryTests\CategoryRepositoryTests.cs" />
@@ -145,6 +177,7 @@
       <Name>NuSurvey.Web</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

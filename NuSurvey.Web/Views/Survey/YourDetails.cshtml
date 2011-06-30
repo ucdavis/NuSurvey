@@ -1,0 +1,142 @@
+﻿@model NuSurvey.Web.Controllers.SurveyResponseDetailViewModel
+
+@{
+	ViewBag.Title = "Your Survey Responses";
+}
+
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#printButton").bt();
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({ "bJQueryUI": true });
+        });    
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#filter_container").accordion({ collapsible: true, autoHeight: false, active: false });
+        });
+    </script>
+ 
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#FilterBeginDate").datepicker();
+            $("#FilterEndDate").datepicker();
+        });
+    </script>
+}
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Index", "Home")">Home</a> 
+        </li>
+        <li>
+            <a href="@Url.Action("Review", "Survey")">Surveys</a> 
+        </li>
+        <li>
+            Responses
+        </li>
+    </ul>
+}
+
+<div id="filter_container">
+    <h3><a href="#">Filters</a></h3>
+    @using (Html.BeginForm("YourDetails", "Survey", FormMethod.Post)) {
+        @Html.AntiForgeryToken();
+
+            <ul>        
+                <li>
+                    <div class="editor-label">
+                        @Html.Label("Response On or After Date")
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(a => a.FilterBeginDate)
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-label">
+                        @Html.Label("Response On or Before Date")
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(a => a.FilterEndDate)
+                    </div>
+                </li>
+                <li>
+                    <label>&nbsp;</label>
+			        <input class="button" type="submit" value="Apply" />
+                </li>
+            </ul>
+
+    }
+</div>
+
+<table class="datatable">
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				Name
+			</th>
+			<th>
+				DateTaken
+			</th>
+            <th>
+                Positive Category
+            </th>
+            <th>
+                Negative Category
+            </th>
+            <th>
+                Negative Category
+            </th>
+		</tr>
+	</thead>
+	<tbody>
+@{ var odd = false; }
+@foreach (var item in Model.SurveyResponses) {
+		<tr class="@(odd ? "odd": "even")">
+			<td>
+                <a href='@Url.Action("Details", "SurveyResponse", new { id = @item.Id, fromYourDetails=true })'><img alt="Details of Survey Response" src="@Url.Image("details.png")"/></a>
+			</td>
+			<td>
+				@item.StudentId
+			</td>
+			<td>
+				@String.Format("{0:g}", item.DateTaken)
+			</td>
+            <td>
+                @if (item.PositiveCategory != null) { 
+                    @item.PositiveCategory.Name
+                }
+            </td>
+            <td>
+                @if (item.NegativeCategory1 != null) { 
+                    @item.NegativeCategory1.Name
+                }
+            </td>
+            <td>
+                @if (item.NegativeCategory2 != null) {
+                    @item.NegativeCategory2.Name
+                }
+            </td>
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+
+@*<div >
+<a id="printButton" title="To limit the pages printed, use the filter on the table above." href='@Url.Action("Results", "Print", new { id = @Model.Survey.Id, beginDate = @Model.FilterBeginDate, endDate = @Model.FilterEndDate })' target="_blank"><img alt="Print these results" src="@Url.Image("big_print.png")"/></a>
+</div>*@
+
+
+
