@@ -39,7 +39,74 @@ WHERE     (Surveys.id = @Id) AND (SurveyResponses.id IN
     </DataSet>
   </DataSets>
   <Body>
-    <Height>2.84208in</Height>
+    <ReportItems>
+      <Tablix Name="Tablix2">
+        <TablixBody>
+          <TablixColumns>
+            <TablixColumn>
+              <Width>3.28125in</Width>
+            </TablixColumn>
+          </TablixColumns>
+          <TablixRows>
+            <TablixRow>
+              <Height>3.2675in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Rectangle Name="Rectangle1">
+                      <ReportItems>
+                        <Subreport Name="Subreport2">
+                          <ReportName>Report_SurveyResponse</ReportName>
+                          <Parameters>
+                            <Parameter Name="SurveyResponseId">
+                              <Value>=Fields!SurveyId.Value</Value>
+                            </Parameter>
+                          </Parameters>
+                          <Height>3in</Height>
+                          <Width>3in</Width>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Subreport>
+                      </ReportItems>
+                      <KeepTogether>true</KeepTogether>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </Rectangle>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+          </TablixRows>
+        </TablixBody>
+        <TablixColumnHierarchy>
+          <TablixMembers>
+            <TablixMember />
+          </TablixMembers>
+        </TablixColumnHierarchy>
+        <TablixRowHierarchy>
+          <TablixMembers>
+            <TablixMember>
+              <Group Name="Details" />
+            </TablixMember>
+          </TablixMembers>
+        </TablixRowHierarchy>
+        <DataSetName>DataSet_PickList</DataSetName>
+        <Height>3.2675in</Height>
+        <Width>3.28125in</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Tablix>
+    </ReportItems>
+    <Height>6.36125in</Height>
     <Style />
   </Body>
   <ReportParameters>
@@ -52,12 +119,8 @@ WHERE     (Surveys.id = @Id) AND (SurveyResponses.id IN
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
-  <Width>6.14583in</Width>
+  <Width>6.93417in</Width>
   <Page>
-    <LeftMargin>1in</LeftMargin>
-    <RightMargin>1in</RightMargin>
-    <TopMargin>1in</TopMargin>
-    <BottomMargin>1in</BottomMargin>
     <Style />
   </Page>
   <Language>en-US</Language>
