@@ -86,6 +86,18 @@ namespace NuSurvey.Web.Controllers
 
             return _printService.PrintMultiple(id, beginDate, endDate);
         }
+
+        [Admin] //This will be user, but they have to have access to the surveyResponses chosen
+        public ActionResult PickResults(int id, string todo)
+        {
+            var survey = _surveyRepository.GetNullableById(id);
+            if (survey == null)
+            {
+                return this.RedirectToAction<ErrorController>(a => a.FileNotFound());
+            }
+
+            return _printService.PrintPickList(3, "1,2,3");
+        }
     }
 
 }

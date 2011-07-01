@@ -8,6 +8,7 @@ namespace NuSurvey.Web.Services
     {
         FileContentResult PrintSingle(int id);
         FileContentResult PrintMultiple(int id, DateTime? beginDate, DateTime? endDate);
+        FileContentResult PrintPickList(int id, string delimitedList);
     }
 
     public class PrintService : IPrintService
@@ -67,6 +68,37 @@ namespace NuSurvey.Web.Services
             paramList.Add(new Microsoft.Reporting.WebForms.ReportParameter("Id", id.ToString()));
             paramList.Add(new Microsoft.Reporting.WebForms.ReportParameter("BeginDate", beginDate.ToString()));
             paramList.Add(new Microsoft.Reporting.WebForms.ReportParameter("EndDate", endDate.ToString()));
+
+            rview.ServerReport.SetParameters(paramList);
+
+            string mimeType, encoding, extension;
+            string[] streamids;
+            Microsoft.Reporting.WebForms.Warning[] warnings;
+
+            string format = "PDF";
+
+            string deviceInfo = "<DeviceInfo>" +
+                                "<SimplePageHeaders>True</SimplePageHeaders>" +
+                                "<HumanReadablePDF>True</HumanReadablePDF>" +   // this line disables the compression done by SSRS 2008 so that it can be merged.
+                                "</DeviceInfo>";
+
+            byte[] bytes = rview.ServerReport.Render(format, deviceInfo, out mimeType, out encoding, out extension, out streamids, out warnings);
+
+            return new FileContentResult(bytes, "application/pdf");// File(bytes, "application/pdf");
+        }
+
+        public virtual FileContentResult PrintPickList(int id, string delimitedList)
+        {
+            var rview = new Microsoft.Reporting.WebForms.ReportViewer();
+            rview.ServerReport.ReportServerUrl = new Uri(System.Web.Configuration.WebConfigurationManager.AppSettings["ReportServer"]);
+
+            rview.ServerReport.ReportPath = @"/NuSurvey/Report_PickListSurveyResponse";
+
+            var paramList = new List<Microsoft.Reporting.WebForms.ReportParameter>();
+
+            paramList.Add(new Microsoft.Reporting.WebForms.ReportParameter("Id", id.ToString()));
+            paramList.Add(new Microsoft.Reporting.WebForms.ReportParameter("SurveyResponseIds", delimitedList));
+
 
             rview.ServerReport.SetParameters(paramList);
 
