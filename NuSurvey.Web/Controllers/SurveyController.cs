@@ -289,4 +289,10 @@ namespace NuSurvey.Web.Controllers
             return viewModel;
         }
     }
+
+    public class PickedParameter
+    {
+        public int PickedId { get; set; }
+        public bool IsPicked { get; set; }
+    }
 }

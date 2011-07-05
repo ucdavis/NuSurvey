@@ -33,6 +33,14 @@
             $("#FilterEndDate").datepicker();
         });
     </script>
+
+    <script type="text/javascript">
+        function getPickedIds() {
+            
+            var picked = Array();
+            debugger;
+        }
+    </script>
 }
 @section SubNav {
     <ul class="navigation">
@@ -79,64 +87,89 @@
     }
 </div>
 
-<table class="datatable">
-	<thead>
-		<tr>
-			<th></th>
-			<th>
-				Name
-			</th>
-			<th>
-				DateTaken
-			</th>
-            <th>
-                Positive Category
-            </th>
-            <th>
-                Negative Category
-            </th>
-            <th>
-                Negative Category
-            </th>
-		</tr>
-	</thead>
-	<tbody>
-@{ var odd = false; }
-@foreach (var item in Model.SurveyResponses) {
-		<tr class="@(odd ? "odd": "even")">
-			<td>
-                <a href='@Url.Action("Details", "SurveyResponse", new { id = @item.Id, fromYourDetails=true })'><img alt="Details of Survey Response" src="@Url.Image("details.png")"/></a>
-			</td>
-			<td>
-				@item.StudentId
-			</td>
-			<td>
-				@String.Format("{0:g}", item.DateTaken)
-			</td>
-            <td>
-                @if (item.PositiveCategory != null) { 
-                    @item.PositiveCategory.Name
-                }
-            </td>
-            <td>
-                @if (item.NegativeCategory1 != null) { 
-                    @item.NegativeCategory1.Name
-                }
-            </td>
-            <td>
-                @if (item.NegativeCategory2 != null) {
-                    @item.NegativeCategory2.Name
-                }
-            </td>
-		</tr>
-		odd = !odd;
+@using (Html.BeginForm("PickResults", "Print", FormMethod.Post)){
+    @Html.AntiForgeryToken();
+    @Html.Hidden("id", Model.Survey.Id);
+    
+    <table class="datatable">
+	    <thead>
+		    <tr>
+			    <th></th>
+			    <th>
+				    Name
+			    </th>
+			    <th>
+				    DateTaken
+			    </th>
+                <th>
+                    Positive Category
+                </th>
+                <th>
+                    Negative Category
+                </th>
+                <th>
+                    Negative Category
+                </th>
+		    </tr>
+	    </thead>
+	    <tbody>
+    @{ 
+        var odd = false;
+        var count = 0; 
+     }
+    @foreach (var item in Model.SurveyResponses) {
+		    <tr class="@(odd ? "odd": "even")">
+			    <td>
+                    <a href='@Url.Action("Details", "SurveyResponse", new { id = @item.Id, fromYourDetails=true })'><img alt="Details of Survey Response" src="@Url.Image("details.png")"/></a>
+                    @{var picked = "Picked" + count;}
+                    <input id="@picked" type="text" value="@item.Id" name="Picked[@count].PickedId" style="display:none"/>
+                    @{var checkId = "Picked" + count + "_IsPicked";}
+                    @{var nameId = "Picked[" + count + "].IsPicked";}
+                    @{var isChecked = "";}
+                    @*@if(resp.Remove){
+                        isChecked = "checked=\"checked\"";
+                    }*@
+                    <input id="@checkId" type="checkbox" name="@nameId" @isChecked value="true"/>
+                    <input type="hidden" value="false" name="@nameId">
+			    </td>
+			    <td>
+				    @item.StudentId
+			    </td>
+			    <td>
+				    @String.Format("{0:g}", item.DateTaken)
+			    </td>
+                <td>
+                    @if (item.PositiveCategory != null) { 
+                        @item.PositiveCategory.Name
+                    }
+                </td>
+                <td>
+                    @if (item.NegativeCategory1 != null) { 
+                        @item.NegativeCategory1.Name
+                    }
+                </td>
+                <td>
+                    @if (item.NegativeCategory2 != null) {
+                        @item.NegativeCategory2.Name
+                    }
+                </td>
+		    </tr>
+		    odd = !odd;
+            count = count + 1;
+    }
+	    </tbody>
+    </table>
+    <ul>
+    <li>
+        <label>&nbsp;</label>
+		<input class="button" type="submit" value="Print" />
+    </li>
+    </ul>
 }
-	</tbody>
-</table>
 
-@*<div >
+<div >
 <a id="printButton" title="To limit the pages printed, use the filter on the table above." href='@Url.Action("Results", "Print", new { id = @Model.Survey.Id, beginDate = @Model.FilterBeginDate, endDate = @Model.FilterEndDate })' target="_blank"><img alt="Print these results" src="@Url.Image("big_print.png")"/></a>
-</div>*@
+</div>
 
 
 

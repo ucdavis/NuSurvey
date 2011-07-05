@@ -88,7 +88,19 @@ namespace NuSurvey.Web.Controllers
         }
 
         [Admin] //This will be user, but they have to have access to the surveyResponses chosen
-        public ActionResult PickResults(int id, string todo)
+        public ActionResult PickResults(int id, PickedParameter[] picked)
+        {
+            var survey = _surveyRepository.GetNullableById(id);
+            if (survey == null)
+            {
+                return this.RedirectToAction<ErrorController>(a => a.FileNotFound());
+            }
+
+            return _printService.PrintPickList(3, "1,2,3");
+        }
+
+        [Admin] //This will be user, but they have to have access to the surveyResponses chosen
+        public ActionResult PickResults2(int id, int[] picked)
         {
             var survey = _surveyRepository.GetNullableById(id);
             if (survey == null)
