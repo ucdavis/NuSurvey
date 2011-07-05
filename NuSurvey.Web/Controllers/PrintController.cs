@@ -5,6 +5,7 @@ using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
+using UCDArch.Web.Attributes;
 
 
 namespace NuSurvey.Web.Controllers
@@ -100,6 +101,7 @@ namespace NuSurvey.Web.Controllers
         }
 
         [Admin] //This will be user, but they have to have access to the surveyResponses chosen
+        [BypassAntiForgeryToken]
         public ActionResult PickResults2(int id, int[] picked)
         {
             var survey = _surveyRepository.GetNullableById(id);

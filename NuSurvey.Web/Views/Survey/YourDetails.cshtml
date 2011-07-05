@@ -4,21 +4,20 @@
 	ViewBag.Title = "Your Survey Responses";
 }
 
+<link href="@Url.Css("TableTools.css")" rel="stylesheet" type="text/css" />
+
 @section AdditionalScripts{
     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
-    
+    <script type="text/javascript" src='@Url.Content("~/Scripts/TableTools.min.js")'></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $("#printButton").bt();
         });
     </script>
 
-    <script type="text/javascript">
-        $(function () {
-            $("table.datatable").dataTable({ "bJQueryUI": true });
-        });    
-    </script>
+
 
     <script type="text/javascript">
         $(function () {
@@ -31,15 +30,97 @@
         $(document).ready(function () {
             $("#FilterBeginDate").datepicker();
             $("#FilterEndDate").datepicker();
+
+            $('#yourDetails').dataTable({
+                "bJQueryUI": true,
+                "sDom": 'T<"clear">lfrtip',
+                "oTableTools": {
+                    "sRowSelect": "multi",
+                    "aButtons": ""
+                }
+            });
+
+            $("#printSelected").click(function () {
+                var oTT = TableTools.fnGetInstance('yourDetails');
+                var aSelectedTrs = oTT.fnGetSelected();
+                var picked = new Array();
+                for (i = 0; i < aSelectedTrs.length; i++) {
+                    picked[i] = $(aSelectedTrs[i]).data('multi-id');
+                }
+
+                var url = '@Url.Action("PickResults2", "Print")';
+                var id = '@Model.Survey.Id';
+                var postData = { id: id, picked: picked };
+
+                var xxx = $.ajax({
+                    type: "GET",
+                    url: url,
+                    data: postData,
+                    success: function (result) {
+                        if (result != true) {
+                            alert("There was a problem updating.");
+                        }
+                    },
+                    dataType: "ActionResult",
+                    traditional: true
+                });
+               
+                
+            });
+
+            //A hack to fix this being removed by the TableTools above
+            $(".dataTables_info").addClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix");
         });
     </script>
 
     <script type="text/javascript">
-        function getPickedIds() {
-            
-            var picked = Array();
-            debugger;
+//        function fnGetSelected(oTableLocal) {
+//            var aReturn = new Array();
+//            var aTrs = oTableLocal.fnGetNodes();
+
+//            for (var i = 0; i < aTrs.length; i++) {
+//                if ($(aTrs[i]).hasClass('row_selected')) {
+//                    aReturn.push(aTrs[i]);
+//                }
+//            }
+//            return aReturn;
+//        }
+
+        function getSelectedIds(){
+//            var oTT = TableTools.fnGetInstance('yourDetails');
+//            var aSelectedTrs = oTT.fnGetSelected();
+//            var picked = new Array();
+//            for (i = 0; i < aSelectedTrs.length; i++) {
+//                picked[i] = $(aSelectedTrs[i]).data('multi-id');
+//            }
+
+            //            return picked;
+
+            var oTT = TableTools.fnGetInstance('yourDetails');
+            var aSelectedTrs = oTT.fnGetSelected();
+            var picked = new Array();
+            for (i = 0; i < aSelectedTrs.length; i++) {
+                picked[i] = $(aSelectedTrs[i]).data('multi-id');
+            }
+
+            var url = '@Url.Action("PickResults2", "Print")';
+            var id = '@Model.Survey.Id';
+            var postData = { id: id, picked: picked };
+
+            var xxx = $.ajax({
+                type: "GET",
+                url: url,
+                data: postData,
+                success: function (result) {
+                    if (result != true) {
+                        alert("There was a problem updating.");
+                    }
+                },
+                dataType: "ActionResult",
+                traditional: true
+            });
         }
+
     </script>
 }
 @section SubNav {
@@ -87,11 +168,8 @@
     }
 </div>
 
-@using (Html.BeginForm("PickResults", "Print", FormMethod.Post)){
-    @Html.AntiForgeryToken();
-    @Html.Hidden("id", Model.Survey.Id);
     
-    <table class="datatable">
+    <table id="yourDetails" class="datatable">
 	    <thead>
 		    <tr>
 			    <th></th>
@@ -118,19 +196,9 @@
         var count = 0; 
      }
     @foreach (var item in Model.SurveyResponses) {
-		    <tr class="@(odd ? "odd": "even")">
+		    <tr class="@(odd ? "odd": "even")" data-multi-id="@item.Id">
 			    <td>
-                    <a href='@Url.Action("Details", "SurveyResponse", new { id = @item.Id, fromYourDetails=true })'><img alt="Details of Survey Response" src="@Url.Image("details.png")"/></a>
-                    @{var picked = "Picked" + count;}
-                    <input id="@picked" type="text" value="@item.Id" name="Picked[@count].PickedId" style="display:none"/>
-                    @{var checkId = "Picked" + count + "_IsPicked";}
-                    @{var nameId = "Picked[" + count + "].IsPicked";}
-                    @{var isChecked = "";}
-                    @*@if(resp.Remove){
-                        isChecked = "checked=\"checked\"";
-                    }*@
-                    <input id="@checkId" type="checkbox" name="@nameId" @isChecked value="true"/>
-                    <input type="hidden" value="false" name="@nameId">
+                    <a href='@Url.Action("Details", "SurveyResponse", new { id = @item.Id, fromYourDetails=true })'><img alt="Details of Survey Response" src="@Url.Image("details.png")"/></a>        
 			    </td>
 			    <td>
 				    @item.StudentId
@@ -157,19 +225,31 @@
 		    odd = !odd;
             count = count + 1;
     }
-	    </tbody>
+	    </tbody>        
     </table>
-    <ul>
-    <li>
-        <label>&nbsp;</label>
-		<input class="button" type="submit" value="Print" />
-    </li>
-    </ul>
-}
 
-<div >
-<a id="printButton" title="To limit the pages printed, use the filter on the table above." href='@Url.Action("Results", "Print", new { id = @Model.Survey.Id, beginDate = @Model.FilterBeginDate, endDate = @Model.FilterEndDate })' target="_blank"><img alt="Print these results" src="@Url.Image("big_print.png")"/></a>
-</div>
+    <div class="dataTables_wrapper fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix">&nbsp;</div>
+
+
+<div id="printSelected">Print Selected</div>
+
+
+@*<div >
+    <a id="printButton" title="To limit the pages printed, use the filter on the table above." href='@Url.Action("PickResults2", "Print", new { id = @Model.Survey.Id, picked = 'getSelectedIds()' })' target="_blank"><img alt="Print these results" src="@Url.Image("big_print.png")"/></a>
+</div>*@
+
+                  
+        
+            <ul>        
+                <li>
+                    <label>&nbsp;</label>
+			        <input class="button" type="button" value="Test Print" onclick="getSelectedIds()"/>
+                </li>
+            </ul>
+
+
+
+
 
 
 
