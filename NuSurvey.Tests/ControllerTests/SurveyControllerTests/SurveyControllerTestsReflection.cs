@@ -130,11 +130,11 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
             #endregion Arrange
 
             #region Act
-            var result = controllerClass.GetCustomAttributes(true).OfType<AdminAttribute>();
+            var result = controllerClass.GetCustomAttributes(true).OfType<AuthorizeAttribute>();
             #endregion Act
 
             #region Assert
-            Assert.IsTrue(result.Count() > 0, "AdminAttribute not found.");
+            Assert.IsTrue(result.Count() > 0, "AuthorizeAttribute not found.");
             #endregion Assert
         }
 
@@ -171,11 +171,13 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
             #endregion Arrange
 
             #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminAttribute>();
             var allAttributes = controllerMethod.GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(0, allAttributes.Count());
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
             #endregion Assert
         }
 
@@ -191,11 +193,13 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
             #endregion Arrange
 
             #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminAttribute>();
             var allAttributes = controllerMethod.GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(0, allAttributes.Count());
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
             #endregion Assert
         }
 
@@ -211,11 +215,13 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
             #endregion Arrange
 
             #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminAttribute>();
             var allAttributes = controllerMethod.GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(0, allAttributes.Count());
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
             #endregion Assert
         }
 
@@ -231,11 +237,13 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
             #endregion Arrange
 
             #region Act
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<AdminAttribute>();
             var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(0, allAttributes.Count());
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
             #endregion Assert
         }
 
@@ -243,7 +251,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
         /// #5
         /// </summary>
         [TestMethod]
-        public void TestControllerMethodCreatePostContainsExpectedAttributes()
+        public void TestControllerMethodCreatePostContainsExpectedAttributes1()
         {
             #region Arrange
             var controllerClass = _controllerClass;
@@ -257,7 +265,29 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #5
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodCreatePostContainsExpectedAttributes2()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AdminAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
 
@@ -273,11 +303,13 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
             #endregion Arrange
 
             #region Act
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<AdminAttribute>();
             var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(0, allAttributes.Count());
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
             #endregion Assert
         }
 
@@ -285,7 +317,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
         /// #7
         /// </summary>
         [TestMethod]
-        public void TestControllerMethodEditPostContainsExpectedAttributes()
+        public void TestControllerMethodEditPostContainsExpectedAttributes1()
         {
             #region Arrange
             var controllerClass = _controllerClass;
@@ -299,7 +331,29 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #7
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodEditPostContainsExpectedAttributes2()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Edit");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AdminAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
 
