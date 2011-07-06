@@ -1133,6 +1133,7 @@ namespace NuSurvey.Tests.RepositoryTests
             Assert.AreEqual(1, record.Order);
             Assert.IsNotNull(record.Responses);
             Assert.IsTrue(record.IsActive);
+            Assert.AreEqual(0, record.OpenEndedQuestionType);
             #endregion Assert		
         }
 
@@ -1154,9 +1155,63 @@ namespace NuSurvey.Tests.RepositoryTests
             Assert.AreEqual(6, record.Order);
             Assert.IsNotNull(record.Responses);
             Assert.IsTrue(record.IsActive);
+            Assert.AreEqual(0, record.OpenEndedQuestionType);
             #endregion Assert
         }
         #endregion Constructor Tests
+
+        #region OpenEndedQuestionType Tests
+
+        /// <summary>
+        /// Tests the OpenEndedQuestionType with max int value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOpenEndedQuestionTypeWithMaxIntValueSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.OpenEndedQuestionType = int.MaxValue;
+            #endregion Arrange
+
+            #region Act
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(int.MaxValue, record.OpenEndedQuestionType);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the OpenEndedQuestionType with min int value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOpenEndedQuestionTypeWithMinIntValueSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.OpenEndedQuestionType = int.MinValue;
+            #endregion Arrange
+
+            #region Act
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(record);
+            QuestionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(int.MinValue, record.OpenEndedQuestionType);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        #endregion OpenEndedQuestionType Tests
+        
 
 
         #region Reflection of Database.
@@ -1197,6 +1252,10 @@ namespace NuSurvey.Tests.RepositoryTests
                  "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)100)]",
                  "[System.ComponentModel.DisplayNameAttribute(\"Question\")]",
                  "[System.Web.Mvc.AllowHtmlAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("OpenEndedQuestionType", "System.Int32", new List<string>
+            {
+                 "[System.ComponentModel.DisplayNameAttribute(\"Question Type\")]"
             }));
             expectedFields.Add(new NameAndType("Order", "System.Int32", new List<string>()));
             expectedFields.Add(new NameAndType("Responses", "System.Collections.Generic.IList`1[NuSurvey.Core.Domain.Response]", new List<string>
