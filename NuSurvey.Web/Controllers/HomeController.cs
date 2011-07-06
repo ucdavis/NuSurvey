@@ -51,6 +51,10 @@ namespace NuSurvey.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// #5
+        /// </summary>
+        /// <returns></returns>
         [Admin]
         public ActionResult ResetCache()
         {

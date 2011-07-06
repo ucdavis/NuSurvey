@@ -8,6 +8,7 @@ using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Helpers;
 using UCDArch.Testing;
+using UCDArch.Testing.Fakes;
 using UCDArch.Web.Attributes;
 
 
@@ -83,10 +84,47 @@ namespace NuSurvey.Tests.ControllerTests
 
         #region Method Tests
         [TestMethod]
-        public void TestIndexReturnsView()
+        public void TestIndexReturnsView1()
         {
-            Controller.Index()
-                .AssertViewRendered();
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] {RoleNames.Admin});
+            var result = Controller.Index()
+                .AssertViewRendered()
+                .WithViewData<HomeController.HomeViewModel>();
+            Assert.IsTrue(result.Admin);
+            Assert.IsFalse(result.User);
+        }
+
+        [TestMethod]
+        public void TestIndexReturnsView2()
+        {
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            var result = Controller.Index()
+                .AssertViewRendered()
+                .WithViewData<HomeController.HomeViewModel>();
+            Assert.IsTrue(result.User);
+            Assert.IsFalse(result.Admin);
+        }
+
+        [TestMethod]
+        public void TestIndexReturnsView3()
+        {
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin, RoleNames.User });
+            var result = Controller.Index()
+                .AssertViewRendered()
+                .WithViewData<HomeController.HomeViewModel>();
+            Assert.IsTrue(result.Admin);
+            Assert.IsTrue(result.User);
+        }
+
+        [TestMethod]
+        public void TestIndexReturnsView4()
+        {
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { "" });
+            var result = Controller.Index()
+                .AssertViewRendered()
+                .WithViewData<HomeController.HomeViewModel>();
+            Assert.IsFalse(result.Admin);
+            Assert.IsFalse(result.User);
         }
 
         [TestMethod]
