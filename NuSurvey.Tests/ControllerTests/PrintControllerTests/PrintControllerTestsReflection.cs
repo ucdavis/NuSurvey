@@ -152,7 +152,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(2, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(3, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -198,6 +198,25 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             #endregion Assert
         }
 
+        /// <summary>
+        /// #3
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodPickResultsContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("PickResults");
+            #endregion Arrange
+
+            #region Act            
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, allAttributes.Count());
+            #endregion Assert
+        }
 
         #endregion Controller Method Tests
 

@@ -89,6 +89,12 @@ namespace NuSurvey.Web.Controllers
             return _printService.PrintMultiple(id, beginDate, endDate);
         }
 
+        /// <summary>
+        /// #3
+        /// </summary>
+        /// <param name="id">Survey Id</param>
+        /// <param name="picked">Arry of SurveyResponse Ids</param>
+        /// <returns></returns>
         public ActionResult PickResults(int id, int[] picked)
         {
             var survey = _surveyRepository.GetNullableById(id);

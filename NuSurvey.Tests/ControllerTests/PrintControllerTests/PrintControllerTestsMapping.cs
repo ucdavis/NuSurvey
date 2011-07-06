@@ -24,6 +24,15 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
         {
             "~/Print/Results/5".ShouldMapTo<PrintController>(a => a.Results(5, null, null));
         }
+
+        /// <summary>
+        /// #3
+        /// </summary>
+        [TestMethod]
+        public void TestPickResultsMapping()
+        {
+            "~/Print/PickResults/5".ShouldMapTo<PrintController>(a => a.PickResults(5, null));
+        }
         #endregion Mapping Tests
     }
 }

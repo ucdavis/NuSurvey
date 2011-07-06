@@ -33,6 +33,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             #region Assert
             PrintService.AssertWasNotCalled(a => a.PrintSingle(Arg<int>.Is.Anything));
             PrintService.AssertWasNotCalled(a => a.PrintMultiple(Arg<int>.Is.Anything, Arg<DateTime?>.Is.Anything, Arg<DateTime?>.Is.Anything));
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert		
         }
 
@@ -59,6 +60,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             #region Assert
             PrintService.AssertWasNotCalled(a => a.PrintSingle(Arg<int>.Is.Anything));
             PrintService.AssertWasNotCalled(a => a.PrintMultiple(Arg<int>.Is.Anything, Arg<DateTime?>.Is.Anything, Arg<DateTime?>.Is.Anything));
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert		
         }
 
@@ -87,6 +89,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual("pdf", result.ContentType);
             Assert.AreEqual("241", result.FileContents.ByteArrayToString());
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert
         }
 
@@ -115,6 +118,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual("pdf", result.ContentType);
             Assert.AreEqual("241", result.FileContents.ByteArrayToString());
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert
         }
         #endregion Result Tests (Single)
@@ -137,6 +141,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             #region Assert
             PrintService.AssertWasNotCalled(a => a.PrintSingle(Arg<int>.Is.Anything));
             PrintService.AssertWasNotCalled(a => a.PrintMultiple(Arg<int>.Is.Anything, Arg<DateTime?>.Is.Anything, Arg<DateTime?>.Is.Anything));
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert		
         }
 
@@ -156,6 +161,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             #region Assert
             PrintService.AssertWasNotCalled(a => a.PrintSingle(Arg<int>.Is.Anything));
             PrintService.AssertWasNotCalled(a => a.PrintMultiple(Arg<int>.Is.Anything, Arg<DateTime?>.Is.Anything, Arg<DateTime?>.Is.Anything));
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert
         }
 
@@ -175,6 +181,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             #region Assert
             PrintService.AssertWasNotCalled(a => a.PrintSingle(Arg<int>.Is.Anything));
             PrintService.AssertWasNotCalled(a => a.PrintMultiple(Arg<int>.Is.Anything, Arg<DateTime?>.Is.Anything, Arg<DateTime?>.Is.Anything));
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert
         }
 
@@ -194,6 +201,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             #region Assert
             PrintService.AssertWasNotCalled(a => a.PrintSingle(Arg<int>.Is.Anything));
             PrintService.AssertWasNotCalled(a => a.PrintMultiple(Arg<int>.Is.Anything, Arg<DateTime?>.Is.Anything, Arg<DateTime?>.Is.Anything));
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert
         }
 
@@ -223,6 +231,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             Assert.AreEqual(2, args[0]);
             Assert.AreEqual(new DateTime(2000,01,01), args[1]);
             Assert.AreEqual(DateTime.Now.Date.AddYears(1).AddDays(1).AddMinutes(-1), args[2]);
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert		
         }
 
@@ -251,6 +260,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             Assert.AreEqual(2, args[0]);
             Assert.AreEqual(new DateTime(2000, 01, 01), args[1]);
             Assert.AreEqual(new DateTime(2011,02,03).Date.AddDays(1).AddMinutes(-1), args[2]);
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert
         }
 
@@ -279,6 +289,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             Assert.AreEqual(2, args[0]);
             Assert.AreEqual(new DateTime(2000, 01, 01), args[1]);
             Assert.AreEqual(new DateTime(2011, 02, 03).Date.AddDays(1).AddMinutes(-1), args[2]);
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert
         }
 
@@ -307,6 +318,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             Assert.AreEqual(2, args[0]);
             Assert.AreEqual(new DateTime(2011, 02, 03), args[1]);
             Assert.AreEqual(DateTime.Now.Date.AddYears(1).AddDays(1).AddMinutes(-1), args[2]);
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert
         }
 
@@ -335,6 +347,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             Assert.AreEqual(2, args[0]);
             Assert.AreEqual(new DateTime(2011, 02, 03), args[1]);
             Assert.AreEqual(new DateTime(2011, 02, 03).AddDays(1).AddMinutes(-1), args[2]);
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert
         }
 
@@ -363,6 +376,7 @@ namespace NuSurvey.Tests.ControllerTests.PrintControllerTests
             Assert.AreEqual(2, args[0]);
             Assert.AreEqual(new DateTime(2011, 02, 03), args[1]);
             Assert.AreEqual(new DateTime(2011, 02, 03).AddDays(1).AddMinutes(-1), args[2]);
+            PrintService.AssertWasNotCalled(a => a.PrintPickList(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
             #endregion Assert
         }
         #endregion Results Tests (Multiple)

@@ -119,6 +119,7 @@
     <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsInit.cs" />
     <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsMapping.cs" />
     <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsPart01.cs" />
+    <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsPart02.cs" />
     <Compile Include="ControllerTests\PrintControllerTests\PrintControllerTestsReflection.cs" />
     <Compile Include="ControllerTests\QuestionControllerTests\QuestionControllerTestsInit.cs" />
     <Compile Include="ControllerTests\QuestionControllerTests\QuestionControllerTestsMapping.cs" />
