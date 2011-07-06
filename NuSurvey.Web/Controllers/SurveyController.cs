@@ -290,9 +290,4 @@ namespace NuSurvey.Web.Controllers
         }
     }
 
-    public class PickedParameter
-    {
-        public int PickedId { get; set; }
-        public bool IsPicked { get; set; }
-    }
 }

@@ -177,7 +177,7 @@
 
 
 
-@using (Html.BeginForm("PickResults2", "Print", FormMethod.Post, new { target = "_blank" }))
+@using (Html.BeginForm("PickResults", "Print", FormMethod.Post, new { target = "_blank" }))
 {
     @Html.AntiForgeryToken();
     @Html.Hidden("id", Model.Survey.Id);

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core;
+using NuSurvey.Tests.Core.Extensions;
 using NuSurvey.Tests.Core.Helpers;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
@@ -803,6 +804,164 @@ namespace NuSurvey.Tests.RepositoryTests
 
         #endregion BypassScore Tests
 
+        #region OpenEndedStringAnswer Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the OpenEndedStringAnswer with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestOpenEndedStringAnswerWithTooLongValueDoesNotSave()
+        {
+            Answer answer = null;
+            try
+            {
+                #region Arrange
+                answer = GetValid(9);
+                answer.OpenEndedStringAnswer = "x".RepeatTimes((50 + 1));
+                #endregion Arrange
+
+                #region Act
+                AnswerRepository.DbContext.BeginTransaction();
+                AnswerRepository.EnsurePersistent(answer);
+                AnswerRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(answer);
+                Assert.AreEqual(50 + 1, answer.OpenEndedStringAnswer.Length);
+                var results = answer.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("OpenEndedStringAnswer: The field OpenEndedStringAnswer must be a string with a maximum length of 50.");				
+                Assert.IsTrue(answer.IsTransient());
+                Assert.IsFalse(answer.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the OpenEndedStringAnswer with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOpenEndedStringAnswerWithNullValueSaves()
+        {
+            #region Arrange
+            var answer = GetValid(9);
+            answer.OpenEndedStringAnswer = null;
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(answer);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(answer.IsTransient());
+            Assert.IsTrue(answer.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the OpenEndedStringAnswer with empty string saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOpenEndedStringAnswerWithEmptyStringSaves()
+        {
+            #region Arrange
+            var answer = GetValid(9);
+            answer.OpenEndedStringAnswer = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(answer);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(answer.IsTransient());
+            Assert.IsTrue(answer.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the OpenEndedStringAnswer with one space saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOpenEndedStringAnswerWithOneSpaceSaves()
+        {
+            #region Arrange
+            var answer = GetValid(9);
+            answer.OpenEndedStringAnswer = " ";
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(answer);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(answer.IsTransient());
+            Assert.IsTrue(answer.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the OpenEndedStringAnswer with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOpenEndedStringAnswerWithOneCharacterSaves()
+        {
+            #region Arrange
+            var answer = GetValid(9);
+            answer.OpenEndedStringAnswer = "x";
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(answer);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(answer.IsTransient());
+            Assert.IsTrue(answer.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the OpenEndedStringAnswer with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOpenEndedStringAnswerWithLongValueSaves()
+        {
+            #region Arrange
+            var answer = GetValid(9);
+            answer.OpenEndedStringAnswer = "x".RepeatTimes(50);
+            #endregion Arrange
+
+            #region Act
+            AnswerRepository.DbContext.BeginTransaction();
+            AnswerRepository.EnsurePersistent(answer);
+            AnswerRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(50, answer.OpenEndedStringAnswer.Length);
+            Assert.IsFalse(answer.IsTransient());
+            Assert.IsTrue(answer.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion OpenEndedStringAnswer Tests
+
         
         #region Reflection of Database.
 
@@ -815,7 +974,10 @@ namespace NuSurvey.Tests.RepositoryTests
         {
             #region Arrange
             var expectedFields = new List<NameAndType>();
-            expectedFields.Add(new NameAndType("BypassScore", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("BypassScore", "System.Boolean", new List<string>
+            {
+                "[System.ComponentModel.DisplayNameAttribute(\"Bypass Score\")]"
+            }));
             expectedFields.Add(new NameAndType("Category", "NuSurvey.Core.Domain.Category", new List<string>
             {
                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
@@ -826,6 +988,10 @@ namespace NuSurvey.Tests.RepositoryTests
                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
             expectedFields.Add(new NameAndType("OpenEndedAnswer", "System.Nullable`1[System.Int32]", new List<string>()));
+            expectedFields.Add(new NameAndType("OpenEndedStringAnswer", "System.String", new List<string>
+            {
+                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)50)]"
+            }));
             expectedFields.Add(new NameAndType("Question", "NuSurvey.Core.Domain.Question", new List<string>
             {
                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
