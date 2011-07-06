@@ -40,85 +40,22 @@
                 }
             });
 
-            $("#printSelected").click(function () {
-                var oTT = TableTools.fnGetInstance('yourDetails');
-                var aSelectedTrs = oTT.fnGetSelected();
-                var picked = new Array();
-                for (i = 0; i < aSelectedTrs.length; i++) {
-                    picked[i] = $(aSelectedTrs[i]).data('multi-id');
-                }
-
-                var url = '@Url.Action("PickResults2", "Print")';
-                var id = '@Model.Survey.Id';
-                var postData = { id: id, picked: picked };
-
-                var xxx = $.ajax({
-                    type: "GET",
-                    url: url,
-                    data: postData,
-                    success: function (result) {
-                        if (result != true) {
-                            alert("There was a problem updating.");
-                        }
-                    },
-                    dataType: "ActionResult",
-                    traditional: true
-                });
-               
-                
-            });
-
             //A hack to fix this being removed by the TableTools above
             $(".dataTables_info").addClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix");
         });
     </script>
 
     <script type="text/javascript">
-//        function fnGetSelected(oTableLocal) {
-//            var aReturn = new Array();
-//            var aTrs = oTableLocal.fnGetNodes();
 
-//            for (var i = 0; i < aTrs.length; i++) {
-//                if ($(aTrs[i]).hasClass('row_selected')) {
-//                    aReturn.push(aTrs[i]);
-//                }
-//            }
-//            return aReturn;
-//        }
 
-        function getSelectedIds(){
-//            var oTT = TableTools.fnGetInstance('yourDetails');
-//            var aSelectedTrs = oTT.fnGetSelected();
-//            var picked = new Array();
-//            for (i = 0; i < aSelectedTrs.length; i++) {
-//                picked[i] = $(aSelectedTrs[i]).data('multi-id');
-//            }
-
-            //            return picked;
-
+        function PopulateContainer() {
             var oTT = TableTools.fnGetInstance('yourDetails');
             var aSelectedTrs = oTT.fnGetSelected();
-            var picked = new Array();
+            $(".tempPick").remove();
             for (i = 0; i < aSelectedTrs.length; i++) {
-                picked[i] = $(aSelectedTrs[i]).data('multi-id');
+                var tempId = $(aSelectedTrs[i]).data("multi-id");
+                $("#pickedContainer").after('<input id="pickedId' + i + '" class="tempPick" type="hidden" value="' + tempId + '" name="picked[' + i + ']" >');
             }
-
-            var url = '@Url.Action("PickResults2", "Print")';
-            var id = '@Model.Survey.Id';
-            var postData = { id: id, picked: picked };
-
-            var xxx = $.ajax({
-                type: "GET",
-                url: url,
-                data: postData,
-                success: function (result) {
-                    if (result != true) {
-                        alert("There was a problem updating.");
-                    }
-                },
-                dataType: "ActionResult",
-                traditional: true
-            });
         }
 
     </script>
@@ -231,21 +168,31 @@
     <div class="dataTables_wrapper fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix">&nbsp;</div>
 
 
-<div id="printSelected">Print Selected</div>
 
 
-@*<div >
-    <a id="printButton" title="To limit the pages printed, use the filter on the table above." href='@Url.Action("PickResults2", "Print", new { id = @Model.Survey.Id, picked = 'getSelectedIds()' })' target="_blank"><img alt="Print these results" src="@Url.Image("big_print.png")"/></a>
-</div>*@
+
+@using (Html.BeginForm("PickResults2", "Print", FormMethod.Post, new { target = "_blank" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.Hidden("id", Model.Survey.Id);
+    <div onclick="PopulateContainer()">
+     
+    <div id="pickedContainer">
+    </div>
+
+        <ul>        
+            <li>
+                <label>&nbsp;</label>
+			    <input class="button" type="submit" value="Print Selected" />
+            </li>
+        </ul>
+    </div>
+
+}
 
                   
         
-            <ul>        
-                <li>
-                    <label>&nbsp;</label>
-			        <input class="button" type="button" value="Test Print" onclick="getSelectedIds()"/>
-                </li>
-            </ul>
+
 
 
 

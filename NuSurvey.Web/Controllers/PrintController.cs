@@ -5,6 +5,7 @@ using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
+using UCDArch.Core.Utils;
 using UCDArch.Web.Attributes;
 
 
@@ -100,8 +101,6 @@ namespace NuSurvey.Web.Controllers
             return _printService.PrintPickList(3, "1,2,3");
         }
 
-        [Admin] //This will be user, but they have to have access to the surveyResponses chosen
-        [BypassAntiForgeryToken]
         public ActionResult PickResults2(int id, int[] picked)
         {
             var survey = _surveyRepository.GetNullableById(id);
@@ -110,7 +109,34 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.FileNotFound());
             }
 
-            return _printService.PrintPickList(3, "1,2,3");
+            if (picked == null || picked.Length == 0)
+            {
+                Message = "No Survey Responses selected. Click on the rows of the table to select/deselect them.";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            foreach (var i in picked)
+            {
+                var surveyResponse = Repository.OfType<SurveyResponse>().GetNullableById(i);
+                if (surveyResponse == null)
+                {
+                    Message = string.Format("Selected Survey Response Not Found.'{0}'", i);
+                    return this.RedirectToAction<ErrorController>(a => a.Index());
+                }
+                if (!CurrentUser.IsInRole(RoleNames.Admin))
+                {
+                    if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+                    {
+                        Message = string.Format("Selected Survey Response not yours.'{0}'", i);
+                        return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                    }
+                }
+                Check.Require(surveyResponse.Survey.Id == survey.Id, string.Format("SurveyResponse's survey id does not match {0} -- {1}", surveyResponse.Survey.Id, survey.Id));
+            }
+
+            var selectedAsString = string.Join(",", picked);
+            
+
+            return _printService.PrintPickList(3, selectedAsString);
         }
     }
 
