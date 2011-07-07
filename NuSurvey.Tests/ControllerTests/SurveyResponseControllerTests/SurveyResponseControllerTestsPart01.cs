@@ -149,6 +149,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         public void TestDetailsReturnsView1()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] {RoleNames.Admin});
             new FakeSurveyResponses(3, SurveyResponseRepository);
             #endregion Arrange
 
@@ -161,6 +162,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #region Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("UserId3", result.SurveyResponse.UserId);
+            Assert.IsFalse(result.FromYourDetails);
             #endregion Assert		
         }
 
@@ -168,7 +170,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         public void TestDetailsReturnsView2()
         {
             #region Arrange
-
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
             var survey = CreateValidEntities.Survey(9);
             var categories = new List<Category>();
             for (int i = 0; i < 5; i++)
@@ -232,6 +234,67 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             Assert.AreEqual(32, result.Scores[2].Percent);
             Assert.AreEqual(33, result.Scores[3].Percent);
             Assert.AreEqual("UserId1", result.SurveyResponse.UserId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestDetailsReturnsView3()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            new FakeSurveyResponses(3, SurveyResponseRepository);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Details(3, true)
+                .AssertViewRendered()
+                .WithViewData<SurveyReponseDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("UserId3", result.SurveyResponse.UserId);
+            Assert.IsTrue(result.FromYourDetails);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestDetailsReturnsView4()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { "" }, "UserId3");
+            new FakeSurveyResponses(3, SurveyResponseRepository);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Details(3, true)
+                .AssertViewRendered()
+                .WithViewData<SurveyReponseDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("UserId3", result.SurveyResponse.UserId);
+            Assert.IsTrue(result.FromYourDetails);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestDetailsRedirectsWhenNotAuthorized()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { "" }, "nomatch");
+            new FakeSurveyResponses(3, SurveyResponseRepository);
+            #endregion Arrange
+
+            #region Act
+            Controller.Details(3, true)
+                .AssertActionRedirect()
+                .ToAction<ErrorController>(a => a.NotAuthorized());
+            #endregion Act
+
+            #region Assert
+
             #endregion Assert
         }
         #endregion Details Tests

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
+using MvcContrib;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
-using MvcContrib;
 using UCDArch.Web.Helpers;
 
 namespace NuSurvey.Web.Controllers
@@ -610,7 +609,7 @@ namespace NuSurvey.Web.Controllers
 
                 Message = "SurveyResponse Created Successfully";
 
-                return this.RedirectToAction<SurveyResponseController>(a => a.Results(surveyResponseToCreate.Id));
+                return this.RedirectToAction(a => a.Results(surveyResponseToCreate.Id));
             }
             else
             {

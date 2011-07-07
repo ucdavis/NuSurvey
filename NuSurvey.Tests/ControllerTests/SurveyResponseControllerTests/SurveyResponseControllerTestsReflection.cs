@@ -202,12 +202,12 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminAttribute>();
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<UserAttribute>();
             var allAttributes = controllerMethod.GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AdminAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "UserAttribute not found");
             Assert.AreEqual(1, allAttributes.Count());
             #endregion Assert
         }
