@@ -461,7 +461,7 @@ namespace NuSurvey.Web.Controllers
                 Check.Require(question != null, string.Format("Question not found.\n SurveyId: {0}\n QuestionId: {1}\n Question #: {2}", id, questions[i].QuestionId, i));
                 Check.Require(question.Category.IsActive, string.Format("Related Category is not active for question Id {0}", questions[i].QuestionId));
                 Check.Require(question.Category.IsCurrentVersion, string.Format("Related Category is not current version for question Id {0}", questions[i].QuestionId));
-                Check.Require(question.Survey == survey, string.Format("Related Survey does not match question's survey {0}--{1}", question.Survey.Id, survey.Id));
+                Check.Require(question.Survey.Id == survey.Id, string.Format("Related Survey does not match passed survey {0}--{1}", question.Survey.Id, survey.Id));
 
                 Answer answer;
                 if (surveyResponseToCreate.Answers.Where(a => a.Question.Id == question.Id).Any())
@@ -473,7 +473,9 @@ namespace NuSurvey.Web.Controllers
                     answer = new Answer();
                 }
 
+                //Score question and specify any errors
                 questions[i] = _scoreService.ScoreQuestion(surveyResponseToCreate.Survey.Questions.AsQueryable(), questions[i]);
+
                 if (questions[i].Invalid && !questions[i].BypassQuestion)
                 {
                     ModelState.AddModelError(string.Format("Questions[{0}]", i), questions[i].Message);
