@@ -552,9 +552,10 @@ namespace NuSurvey.Web.Controllers
         }
 
         /// <summary>
+        /// #12
         /// Get: /SurveyResponse/Results
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">SurveyResponse ID</param>
         /// <returns></returns>
         public ActionResult Results(int id)
         {
@@ -583,100 +584,6 @@ namespace NuSurvey.Web.Controllers
         }
 
 
-
-
-        
-        ///// <summary>
-        ///// Transfer editable values from source to destination
-        ///// </summary>
-        //private static void TransferValues(SurveyResponse source, SurveyResponse destination, QuestionAnswerParameter[] questions)
-        //{
-        //    //Recommendation: Use AutoMapper
-        //    //Mapper.Map(source, destination)
-
-        //    destination.StudentId = source.StudentId;
-        //    var queryableQuestions = questions.AsQueryable();
-        //    foreach (var question in destination.Survey.Questions)
-        //    {
-        //        Question question1 = question;
-        //        var passedQuestion = queryableQuestions.Where(a => a.QuestionId == question1.Id).SingleOrDefault();
-        //        if (passedQuestion == null)
-        //        {
-        //            continue;
-        //        }
-        //        var answer = new Answer();
-        //        answer.Question = question;
-        //        answer.Category = question.Category;                
-        //        if (answer.Question.IsOpenEnded)
-        //        {
-        //            #region Open Ended Logic
-
-        //            int number;
-        //            if (Int32.TryParse(passedQuestion.Answer, out number))
-        //            {
-        //                answer.OpenEndedAnswer = number;
-        //                answer.Response = answer.Question.Responses.Where(a => a.Value == number.ToString()).FirstOrDefault();
-        //                if (answer.Response == null)
-        //                {
-        //                    var highResponse = answer.Question.Responses.Where(a => a.Value.Contains("+")).FirstOrDefault();
-        //                    if (highResponse != null)
-        //                    {
-        //                        int highValue;
-        //                        if (Int32.TryParse(highResponse.Value, out highValue))
-        //                        {
-        //                            if (number >= highValue)
-        //                            {
-        //                                answer.Response = highResponse;
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //                if (answer.Response == null)
-        //                {
-        //                    var lowResponse = answer.Question.Responses.Where(a => a.Value.Contains("-")).FirstOrDefault();
-        //                    if (lowResponse != null)
-        //                    {
-        //                        int lowValue;
-        //                        if (Int32.TryParse(lowResponse.Value, out lowValue))
-        //                        {
-        //                            if (number <= Math.Abs(lowValue))
-        //                            {
-        //                                answer.Response = lowResponse;
-        //                            }
-        //                        }
-        //                    }
-        //                }                        
-        //            }
-        //            else
-        //            {
-        //                continue;
-        //            }
-        //            #endregion Open Ended Logic
-        //        }
-        //        else
-        //        {
-        //            answer.Response = question1.Responses.Where(a => a.Id == passedQuestion.ResponseId).FirstOrDefault();
-        //        }
-        //        if (answer.Category.DoNotUseForCalculations && answer.Response == null && answer.OpenEndedAnswer != null)
-        //        {
-        //            answer.Score = 0;
-        //            destination.AddAnswers(answer);
-        //        }
-        //        if (answer.Response != null)
-        //        {
-        //            if (answer.Question.Category.DoNotUseForCalculations)
-        //            {
-        //                answer.Score = 0;
-        //            }
-        //            else
-        //            {
-        //                answer.Score = answer.Response.Score;
-        //            }
-        //            destination.AddAnswers(answer);
-        //        }
-                
-        //    }      
-        //}
     }
 
     public class ResultsViewModel

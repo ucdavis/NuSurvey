@@ -1,22 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using System.Web.Routing;
-using Castle.Windsor;
-using NuSurvey.Web;
-using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Core.Domain;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
-using NuSurvey.Web.Helpers;
-using Rhino.Mocks;
-using UCDArch.Core.PersistanceSupport;
-using UCDArch.Testing;
-using UCDArch.Web.Attributes;
+using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core.Extensions;
+using NuSurvey.Web.Controllers;
 
 namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 {
@@ -130,6 +116,15 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         public void TestCreatePostMapping()
         {
             "~/SurveyResponse/Create/5".ShouldMapTo<SurveyResponseController>(a => a.Create(5, new SurveyResponse(),new QuestionAnswerParameter[0] ), true);
+        }
+
+        /// <summary>
+        /// #12
+        /// </summary>
+        [TestMethod]
+        public void TestResultsMapping()
+        {
+            "~/SurveyResponse/Results/5".ShouldMapTo<SurveyResponseController>(a => a.Results(5));
         }
         #endregion Mapping Tests
     }
