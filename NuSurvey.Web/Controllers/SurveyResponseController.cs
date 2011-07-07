@@ -422,89 +422,6 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         } 
 
-        ///// <summary>
-        ///// #11
-        ///// POST: /SurveyResponse/Create
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <param name="surveyResponse"></param>
-        ///// <param name="questions"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //[User]
-        //public ActionResult CreateOld(int id, SurveyResponse surveyResponse, QuestionAnswerParameter[] questions)
-        //{
-        //    var survey = Repository.OfType<Survey>().GetNullableById(id);
-        //    if (survey == null || !survey.IsActive)
-        //    {
-        //        Message = "Survey not found or not active.";
-        //        return this.RedirectToAction<ErrorController>(a => a.Index());
-        //    }
-
-        //    var surveyResponseToCreate = new SurveyResponse(survey);
-        //    if (questions == null)
-        //    {
-        //        questions = new QuestionAnswerParameter[0];
-        //    }
-
-        //    TransferValues(surveyResponse, surveyResponseToCreate, questions);
-        //    surveyResponseToCreate.UserId = CurrentUser.Identity.Name;
-
-        //    if (survey.Questions.Where(a => a.IsActive && a.Category.IsActive && a.Category.IsCurrentVersion).Count() != questions.Count())
-        //    {
-        //        Message = "You must answer all survey questions.";
-        //    }
-        //    ModelState.Clear();
-        //    surveyResponseToCreate.TransferValidationMessagesTo(ModelState);
-
-        //    for (int i = 0; i < questions.Count(); i++)
-        //    {
-        //        var i1 = i;
-        //        if (!surveyResponseToCreate.Answers.Where(a => a.Question.Id == questions[i1].QuestionId).Any())
-        //        {
-        //            if (survey.Questions.Where(a => a.Id == questions[i1].QuestionId).Single().IsOpenEnded)
-        //            {
-        //                if (string.IsNullOrWhiteSpace(questions[i1].Answer))
-        //                {
-        //                    ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Numeric answer to Question is required"); 
-        //                }
-        //                else
-        //                {
-        //                    ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Answer must be a number");  
-        //                }                 
-        //            }
-        //            else
-        //            {
-        //                ModelState.AddModelError(string.Format("Questions[{0}]", i1), "Answer is required");
-        //            }
-        //        }
-        //    }
-
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        _scoreService.CalculateScores(Repository, surveyResponseToCreate);
-
-        //        _surveyResponseRepository.EnsurePersistent(surveyResponseToCreate);
-
-        //        Message = "SurveyResponse Created Successfully";
-
-        //        return this.RedirectToAction<SurveyResponseController>(a => a.Results(surveyResponseToCreate.Id));
-        //    }
-        //    else
-        //    {
-        //        //foreach (var modelState in ModelState.Values.Where(a => a.Errors.Count() > 0))
-        //        //{
-        //        //    var x = modelState;
-        //        //}
-        //        var viewModel = SurveyResponseViewModel.Create(Repository, survey);
-        //        viewModel.SurveyResponse = surveyResponse;
-        //        viewModel.SurveyAnswers = questions;
-
-        //        return View(viewModel);
-        //    }
-        //}
-
 
         /// <summary>
         /// #11
@@ -532,16 +449,19 @@ namespace NuSurvey.Web.Controllers
             }
 
             ModelState.Clear();            
-
+            //Set non-dynamic surveyResponse values
             surveyResponseToCreate.StudentId = surveyResponse.StudentId;
             surveyResponseToCreate.UserId = CurrentUser.Identity.Name;
+
+            //Check each question, create an answer for it if there isn't one.
             var length = questions.Length;
             for (int i = 0; i < length; i++)
             {
                 var question = Repository.OfType<Question>().GetNullableById(questions[i].QuestionId);
-                Check.Require(question != null, string.Format("Question not found./n SurveyId: {0}/n QuestionId: {1}/n Question #: {2}", id, questions[i].QuestionId, i));
+                Check.Require(question != null, string.Format("Question not found.\n SurveyId: {0}\n QuestionId: {1}\n Question #: {2}", id, questions[i].QuestionId, i));
                 Check.Require(question.Category.IsActive, string.Format("Related Category is not active for question Id {0}", questions[i].QuestionId));
                 Check.Require(question.Category.IsCurrentVersion, string.Format("Related Category is not current version for question Id {0}", questions[i].QuestionId));
+                Check.Require(question.Survey == survey, string.Format("Related Survey does not match question's survey {0}--{1}", question.Survey.Id, survey.Id));
 
                 Answer answer;
                 if (surveyResponseToCreate.Answers.Where(a => a.Question.Id == question.Id).Any())
