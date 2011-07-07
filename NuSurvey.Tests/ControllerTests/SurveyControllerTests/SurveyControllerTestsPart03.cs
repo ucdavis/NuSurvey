@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core.Extensions;
@@ -178,5 +180,32 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
         #endregion Edit Post Tests
         #endregion Edit Tests
 
+        #region Review Tests
+
+        [TestMethod]
+        public void TestReviewReturnsViewWithExpectedValues()
+        {
+            #region Arrange
+            var surveys = new List<Survey>();
+            for (int i = 0; i < 3; i++)
+            {
+                surveys.Add(CreateValidEntities.Survey(i+1));
+            }
+            surveys[1].IsActive = false;
+            new FakeSurveys(0, SurveyRepository, surveys);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Review()
+                .AssertViewRendered()
+                .WithViewData<IList<Survey>>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count());
+            #endregion Assert		
+        }
+        #endregion Review Tests
     }
 }

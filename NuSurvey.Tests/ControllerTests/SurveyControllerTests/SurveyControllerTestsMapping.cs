@@ -82,6 +82,24 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
         {
             "~/Survey/Edit/5".ShouldMapTo<SurveyController>(a => a.Edit(5, new Survey()), true);
         }
+
+        /// <summary>
+        /// #8
+        /// </summary>
+        [TestMethod]
+        public void TestReviewMapping()
+        {
+            "~/Survey/Review/5".ShouldMapTo<SurveyController>(a => a.Review());
+        }
+
+        /// <summary>
+        /// #9
+        /// </summary>
+        [TestMethod]
+        public void TestYourDetailsMapping()
+        {
+            "~/Survey/YourDetails/5".ShouldMapTo<SurveyController>(a => a.YourDetails(5, null, null));
+        }
         #endregion Mapping Tests
     }
 }

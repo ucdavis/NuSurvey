@@ -133,6 +133,7 @@
     <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsPart01.cs" />
     <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsPart02.cs" />
     <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsPart03.cs" />
+    <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsPart04.cs" />
     <Compile Include="ControllerTests\SurveyControllerTests\SurveyControllerTestsReflection.cs" />
     <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsInit.cs" />
     <Compile Include="ControllerTests\SurveyResponseControllerTests\SurveyResponseControllerTestsMapping.cs" />

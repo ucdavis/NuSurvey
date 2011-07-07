@@ -154,7 +154,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(7, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(9, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -357,6 +357,49 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
             #endregion Assert
         }
 
+        /// <summary>
+        /// #8
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodReviewContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("Review");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<UserAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "UserAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// #9
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodYourDetailsContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("YourDetails");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<UserAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "UserAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
         #endregion Controller Method Tests
 
         #endregion Reflection Tests

@@ -112,6 +112,67 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
            new FakeSurveys(0, SurveyRepository, surveys);
        }
 
+       protected void SetupData2()
+       {
+           var surveys = new List<Survey>();
+           for (int i = 0; i < 4; i++)
+           {
+               surveys.Add(CreateValidEntities.Survey(i + 1));
+
+           }
+
+           for (int i = 0; i < 5; i++)
+           {
+               surveys[0].SurveyResponses.Add(CreateValidEntities.SurveyResponse(i));
+               surveys[0].SurveyResponses[i].IsPending = false;
+               if (i % 2 == 0)
+               {
+                   surveys[0].SurveyResponses[i].DateTaken = new DateTime(2011, 01, i + 1).Date.AddMinutes(i);
+               }
+               else
+               {
+                   surveys[0].SurveyResponses[i].DateTaken = new DateTime(2011, 01, i + 2).Date.AddMinutes(-(i + 1));
+               }
+               surveys[0].SurveyResponses[i].UserId = "match@test.com";
+           }
+
+           for (int i = 0; i < 5; i++)
+           {
+               surveys[1].SurveyResponses.Add(CreateValidEntities.SurveyResponse(i));
+               surveys[1].SurveyResponses[i].IsPending = false;
+               if (i % 2 == 0)
+               {
+                   surveys[1].SurveyResponses[i].DateTaken = new DateTime(2011, 01, i + 1).Date.AddMinutes(i);
+                   surveys[1].SurveyResponses[i].IsPending = true;
+               }
+               else
+               {
+                   surveys[1].SurveyResponses[i].DateTaken = new DateTime(2011, 01, i + 2).Date.AddMinutes(-(i + 1));
+               }
+               surveys[1].SurveyResponses[i].UserId = "match@test.com";
+           }
+
+           for (int i = 0; i < 5; i++)
+           {
+               surveys[2].SurveyResponses.Add(CreateValidEntities.SurveyResponse(i));
+               surveys[2].SurveyResponses[i].IsPending = i % 2 != 0;
+               surveys[2].SurveyResponses[i].DateTaken = new DateTime(2011, 05, 1).Date.AddMinutes(30);
+               surveys[2].SurveyResponses[i].UserId = "match@test.com";
+           }
+
+           for (int i = 0; i < 5; i++)
+           {
+               surveys[3].SurveyResponses.Add(CreateValidEntities.SurveyResponse(i));
+               surveys[3].SurveyResponses[i].IsPending = false;
+               surveys[3].SurveyResponses[i].DateTaken = new DateTime(2011, 05, 1).Date.AddMinutes(30);
+               surveys[3].SurveyResponses[i].UserId = "match@test.com";
+           }
+           surveys[3].SurveyResponses[2].UserId = "noMatch@test.com";
+           surveys[3].SurveyResponses[3].UserId = "noMatch@test.com";
+
+           new FakeSurveys(0, SurveyRepository, surveys);
+       }
+
         
     }
 }
