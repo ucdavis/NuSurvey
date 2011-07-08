@@ -892,6 +892,75 @@ namespace NuSurvey.Tests.InterfaceTests
         }
 
         #endregion Open Ended Decimal Tests
+
+        #region Open Ended Time Tests
+        [TestMethod]
+        public void TestTimeValueRangeOfNumbers()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7 };
+
+            var dict = new Dictionary<string, int>(); //answer, expected score
+            dict.Add("1:00", 1);
+            dict.Add("1:15", 1);
+            dict.Add("1:30", 1);
+            dict.Add("1:37", 1);
+            dict.Add("1:38", 2);
+            dict.Add("1:45", 2);
+            dict.Add("1:52", 2);
+            dict.Add("01:53", 3);
+            dict.Add("2:00", 3);
+            dict.Add("2:29", 3);
+            dict.Add("2:30", 4);
+            dict.Add("03:00", 4);
+            dict.Add("3:59", 4);
+            dict.Add("4:00", 5);
+            dict.Add("4:59", 5);
+            dict.Add("5:00", 5);
+            dict.Add("6:29", 5);
+            dict.Add("6:30", 6);
+            dict.Add("8:00", 6);
+            dict.Add("9:00", 6);
+            dict.Add("10:00", 6);
+            dict.Add("10:14", 6);
+            dict.Add("10:15", 9);
+            dict.Add("12:30", 9);
+            dict.Add("12:31", 9);
+            dict.Add("12:59", 9);
+            #endregion Arrange
+
+            #region Act
+            foreach (var i in dict)
+            {
+                qAndA.Answer = i.Key;
+                var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+                Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
+                Assert.AreEqual(i.Value, result.Score, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected score for {0}", i.Key));
+                Assert.AreEqual(string.Empty, result.Message);
+                Assert.IsTrue(result.ResponseId > 0);
+            }
+            #endregion Act
+        }
+
+
+        [TestMethod]
+        public void TestContineTimeTests()
+        {
+            #region Arrange
+            Assert.Inconclusive("Contine time service scoring tests");
+            //Check null, empty, other non time values. Look at StringExtensions for values to check.
+            #endregion Arrange
+
+            #region Act
+            #endregion Act
+
+            #region Assert
+            #endregion Assert		
+        }
+        
+        #endregion Open Ended Time Tests
         #endregion Score Question Tests
 
 
@@ -915,7 +984,7 @@ namespace NuSurvey.Tests.InterfaceTests
         private void SetupQuestions()
         {
             var questions = new List<Question>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 12; i++)
             {
                 questions.Add(CreateValidEntities.Question(i + 1));
             }
@@ -986,6 +1055,16 @@ namespace NuSurvey.Tests.InterfaceTests
             questions[5].OpenEndedQuestionType = (int)QuestionType.Decimal;
             questions[5].Category.DoNotUseForCalculations = true;
             #endregion Question 6 (Open Ended Decimal No Scoring)
+
+            #region Question 7 (Open Ended Time)
+            questions[6].Name = "Whole Number";
+            foreach (var response in TimeResponses())
+            {
+                questions[6].AddResponse(response);
+            }
+            questions[6].IsOpenEnded = true;
+            questions[6].OpenEndedQuestionType = (int)QuestionType.Time;
+            #endregion Question 7 (Open Ended Time)
 
             new FakeQuestions(0, QuestionRepository, questions);
         }       
@@ -1060,6 +1139,42 @@ namespace NuSurvey.Tests.InterfaceTests
             scrambledResponses.Add(responses[4]);
             scrambledResponses.Add(responses[10]);
             scrambledResponses.Add(responses[9]);
+            return scrambledResponses;
+        }
+
+        private static IEnumerable<Response> TimeResponses()
+        {
+            var responses = new List<Response>();
+            for (int i = 0; i < 9; i++)
+            {
+                responses.Add(CreateValidEntities.Response(i + 1));
+                responses[i].Score = i + 1;
+                responses[i].SetIdTo(i + 1);
+            }
+
+            responses[0].Value = "1:30";
+            responses[1].Value = "1:45";
+            responses[2].Value = "2:00";
+            responses[3].Value = "3:00";
+            responses[4].Value = "5:00";
+            responses[5].Value = "8:00";
+            responses[6].Value = "NINE";
+            responses[6].Score = 99;
+            responses[7].Value = "10:00";
+            responses[7].IsActive = false;
+            responses[8].Value = "12:30";
+
+
+            var scrambledResponses = new List<Response>(); //Because the service sorts.
+            scrambledResponses.Add(responses[3]);
+            scrambledResponses.Add(responses[5]);
+            scrambledResponses.Add(responses[6]);
+            scrambledResponses.Add(responses[1]);
+            scrambledResponses.Add(responses[4]);
+            scrambledResponses.Add(responses[2]);
+            scrambledResponses.Add(responses[0]);
+            scrambledResponses.Add(responses[8]);
+            scrambledResponses.Add(responses[7]);
             return scrambledResponses;
         }
         #endregion Helper Methods
