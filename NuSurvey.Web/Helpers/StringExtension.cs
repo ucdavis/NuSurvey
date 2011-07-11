@@ -63,6 +63,10 @@ namespace NuSurvey.Web.Helpers
                 {
                     return false;
                 }
+                if (iHour < 1)
+                {
+                    return false;
+                }
                 var minute = source.Split(':').ElementAt(1);
                 int iMinute;
                 if (!int.TryParse(minute, out iMinute))
@@ -70,6 +74,10 @@ namespace NuSurvey.Web.Helpers
                     return false;
                 }
                 if (iMinute > 59)
+                {
+                    return false;
+                }
+                if (iMinute < 0)
                 {
                     return false;
                 }
