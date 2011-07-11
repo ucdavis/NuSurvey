@@ -570,7 +570,7 @@ namespace NuSurvey.Tests.InterfaceTests
                 var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
                 Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
                 Assert.AreEqual(i.Value, result.Score, string.Format("Unexpected score for {0}", i.Key));
-                Assert.IsFalse(result.Invalid, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected value for invalid for {0}", i.Key));
                 Assert.AreEqual(string.Empty, result.Message);
                 Assert.IsTrue(result.ResponseId > 0);
             }
@@ -757,7 +757,7 @@ namespace NuSurvey.Tests.InterfaceTests
                 var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
                 Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
                 Assert.AreEqual(0, result.Score, string.Format("Unexpected score for {0}", i.Key));
-                Assert.IsFalse(result.Invalid, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected value for invalid for {0}", i.Key));
                 Assert.AreEqual(string.Empty, result.Message);
                 Assert.IsTrue(result.ResponseId > 0);
             }
@@ -937,7 +937,7 @@ namespace NuSurvey.Tests.InterfaceTests
                 var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
                 Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
                 Assert.AreEqual(i.Value, result.Score, string.Format("Unexpected score for {0}", i.Key));
-                Assert.IsFalse(result.Invalid, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected value for invalid for {0}", i.Key));
                 Assert.AreEqual(string.Empty, result.Message);
                 Assert.IsTrue(result.ResponseId > 0);
             }
@@ -1285,7 +1285,7 @@ namespace NuSurvey.Tests.InterfaceTests
                 var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
                 Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
                 Assert.AreEqual(0, result.Score, string.Format("Unexpected score for {0}", i.Key));
-                Assert.IsFalse(result.Invalid, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected value for invalid for {0}", i.Key));
                 Assert.AreEqual(string.Empty, result.Message);
                 Assert.IsTrue(result.ResponseId > 0);
             }
@@ -1639,7 +1639,7 @@ namespace NuSurvey.Tests.InterfaceTests
                 var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
                 Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
                 Assert.AreEqual(i.Value, result.Score, string.Format("Unexpected score for {0}", i.Key));
-                Assert.IsFalse(result.Invalid, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected value for invalid for {0}", i.Key));
                 Assert.AreEqual(string.Empty, result.Message);
                 Assert.IsTrue(result.ResponseId > 0);
             }
@@ -1992,7 +1992,7 @@ namespace NuSurvey.Tests.InterfaceTests
                 var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
                 Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
                 Assert.AreEqual(0, result.Score, string.Format("Unexpected score for {0}", i.Key));
-                Assert.IsFalse(result.Invalid, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected value for invalid for {0}", i.Key));
                 Assert.AreEqual(string.Empty, result.Message);
                 Assert.IsTrue(result.ResponseId > 0);
             }
@@ -2294,6 +2294,109 @@ namespace NuSurvey.Tests.InterfaceTests
         }
 
         #endregion Open Ended Time (AM/PM) Tests Not Scored
+
+        #region Open Ended Time Range
+        [TestMethod]
+        public void TestTimeRangeValueRangeOfNumbers()
+        {
+            #region Arrange
+            var qAndA = new QuestionAnswerParameter { QuestionId = 11 };
+
+            var dict = new Dictionary<int, TestScoreParameters>(); //answer, expected score
+            #region Range of zero to .49 Hours
+            dict.Add(1, new TestScoreParameters { Score = 1, StartTime = "12:00 AM", EndTime = "12:00 AM" });
+            dict.Add(2, new TestScoreParameters { Score = 1, StartTime = "12:00 AM", EndTime = "12:01 AM" });
+            dict.Add(3, new TestScoreParameters { Score = 1, StartTime = "12:00 AM", EndTime = "12:29 AM" });
+            dict.Add(4, new TestScoreParameters { Score = 1, StartTime = "2:01 PM", EndTime = "2:30 PM" });
+            dict.Add(5, new TestScoreParameters { Score = 1, StartTime = "3:30 PM", EndTime = "3:59 PM" });
+            dict.Add(6, new TestScoreParameters { Score = 1, StartTime = "1:25 PM", EndTime = "1:30 PM" });
+            dict.Add(7, new TestScoreParameters { Score = 1, StartTime = "11:59 PM", EndTime = "12:28 AM" });
+            dict.Add(8, new TestScoreParameters { Score = 1, StartTime = "11:31 PM", EndTime = "12:00 AM" });
+            #endregion Range of zero to .49 Hours
+
+            #region Range of 0.5 to 1.24 Hours (:30 to 1:14)
+            dict.Add(9, new TestScoreParameters { Score = 2, StartTime = "12:00 AM", EndTime = "12:30 AM" });
+            dict.Add(10, new TestScoreParameters { Score = 2, StartTime = "12:00 AM", EndTime = "1:14 AM" });
+            dict.Add(11, new TestScoreParameters { Score = 2, StartTime = "8:16 AM", EndTime = "8:46 AM" });
+            dict.Add(12, new TestScoreParameters { Score = 2, StartTime = "11:59 PM", EndTime = "1:13 AM" });
+            #endregion Range of 0.5 to 1.24 Hours
+
+            #region Range of 1.25 to 1.74
+            dict.Add(13, new TestScoreParameters { Score = 3, StartTime = "12:00 AM", EndTime = "1:15 AM" });
+            dict.Add(14, new TestScoreParameters { Score = 3, StartTime = "12:00 AM", EndTime = "1:44 AM" });
+            dict.Add(15, new TestScoreParameters { Score = 3, StartTime = "11:59 PM", EndTime = "1:43 AM" });
+            #endregion Range of 1.25 to 1.74
+
+            #region Range of 1.75 to 2.49
+            dict.Add(16, new TestScoreParameters { Score = 4, StartTime = "12:00 AM", EndTime = "1:45 AM" });
+            dict.Add(17, new TestScoreParameters { Score = 4, StartTime = "12:00 AM", EndTime = "2:29 AM" });
+            dict.Add(18, new TestScoreParameters { Score = 4, StartTime = "11:59 PM", EndTime = "2:28 AM" });
+            #endregion Range of 1.75 to 2.49
+
+            #region Range of 3.50 to 3.99
+            dict.Add(19, new TestScoreParameters { Score = 5, StartTime = "12:00 AM", EndTime = "2:30 AM" });
+            dict.Add(20, new TestScoreParameters { Score = 5, StartTime = "12:00 AM", EndTime = "3:59 AM" });
+            dict.Add(21, new TestScoreParameters { Score = 5, StartTime = "11:59 PM", EndTime = "2:29 AM" });
+            dict.Add(22, new TestScoreParameters { Score = 5, StartTime = "11:59 PM", EndTime = "3:58 AM" });
+            #endregion Range of 3.50 to 3.99
+
+            #region Range of 4 to 5 to 8.49
+            dict.Add(23, new TestScoreParameters { Score = 7, StartTime = "12:00 AM", EndTime = "4:00 AM" });
+            dict.Add(24, new TestScoreParameters { Score = 7, StartTime = "12:00 AM", EndTime = "5:00 AM" });
+            dict.Add(25, new TestScoreParameters { Score = 7, StartTime = "12:00 AM", EndTime = "8:29 AM" });
+            dict.Add(26, new TestScoreParameters { Score = 7, StartTime = "11:59 PM", EndTime = "3:59 AM" });
+            dict.Add(27, new TestScoreParameters { Score = 7, StartTime = "11:59 PM", EndTime = "8:28 AM" });
+            #endregion Range of 4 to 8.49
+
+            #region Range of 8.5 to 14.99
+            dict.Add(28, new TestScoreParameters { Score = 8, StartTime = "12:00 AM", EndTime = "8:30 AM" });
+            dict.Add(29, new TestScoreParameters { Score = 8, StartTime = "12:00 AM", EndTime = "2:59 PM" });
+            dict.Add(30, new TestScoreParameters { Score = 8, StartTime = "12:00 AM", EndTime = "12:00 PM" });
+            dict.Add(31, new TestScoreParameters { Score = 8, StartTime = "12:00 PM", EndTime = "1:00 AM" });
+            dict.Add(32, new TestScoreParameters { Score = 8, StartTime = "11:59 PM", EndTime = "8:29 AM" });
+            dict.Add(33, new TestScoreParameters { Score = 8, StartTime = "11:59 PM", EndTime = "2:58 PM" });
+            #endregion Range of 8.5 to 14.99
+
+            #region Range of 14.5 to 19.99
+            dict.Add(34, new TestScoreParameters { Score = 9, StartTime = "12:00 AM", EndTime = "3:00 PM" });
+            dict.Add(35, new TestScoreParameters { Score = 9, StartTime = "12:00 AM", EndTime = "7:59 PM" });
+            dict.Add(36, new TestScoreParameters { Score = 9, StartTime = "12:00 PM", EndTime = "7:59 AM" });
+            dict.Add(38, new TestScoreParameters { Score = 9, StartTime = "11:59 PM", EndTime = "2:59 PM" });
+            dict.Add(39, new TestScoreParameters { Score = 9, StartTime = "11:59 PM", EndTime = "7:58 PM" });
+            #endregion Range of 14.5 to 19.99
+
+            #region Range of 20 to 22.99
+            dict.Add(40, new TestScoreParameters { Score = 10, StartTime = "12:00 AM", EndTime = "8:00 PM" });
+            dict.Add(41, new TestScoreParameters { Score = 10, StartTime = "12:00 AM", EndTime = "10:59 PM" });
+            dict.Add(42, new TestScoreParameters { Score = 10, StartTime = "12:00 PM", EndTime = "10:59 AM" });
+            dict.Add(43, new TestScoreParameters { Score = 10, StartTime = "11:59 PM", EndTime = "7:59 PM" });
+            #endregion Range of 20 to 22.99
+
+            #region Range of 22.99 to 23.99
+            dict.Add(44, new TestScoreParameters { Score = 12, StartTime = "12:00 AM", EndTime = "11:00 PM" });
+            dict.Add(45, new TestScoreParameters { Score = 12, StartTime = "12:00 AM", EndTime = "11:58 PM" });
+            dict.Add(46, new TestScoreParameters { Score = 12, StartTime = "12:00 AM", EndTime = "11:59 PM" });
+            dict.Add(47, new TestScoreParameters { Score = 12, StartTime = "12:00 PM", EndTime = "11:59 AM" });
+            #endregion Range of 22.99 to 23.99
+
+            #endregion Arrange
+
+            #region Act
+            foreach (var i in dict)
+            {
+                qAndA.Answer = i.Value.StartTime;
+                qAndA.AnswerRange = i.Value.EndTime;
+                var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+                Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
+                Assert.AreEqual(i.Value.Score, result.Score, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected value for invalid for {0}", i.Key));
+                Assert.AreEqual(string.Empty, result.Message);
+                Assert.IsTrue(result.ResponseId > 0);
+            }
+            #endregion Act
+        }
+        
+        #endregion Open Ended Time Range
         #endregion Score Question Tests
 
 
@@ -2369,7 +2472,7 @@ namespace NuSurvey.Tests.InterfaceTests
             #endregion Question 4 (Open Ended Whole Number No Scoreing)
 
             #region Question 5 (Open Ended Decimal)
-            questions[4].Name = "Whole Number";
+            questions[4].Name = "Decimal";
             foreach (var response in DecimalResponses())
             {
                 questions[4].AddResponse(response);
@@ -2379,7 +2482,7 @@ namespace NuSurvey.Tests.InterfaceTests
             #endregion Question 5 (Open Ended Decimal)
 
             #region Question 6 (Open Ended Decimal No Scoring)
-            questions[5].Name = "Whole Number";
+            questions[5].Name = "Decimal";
             foreach (var response in DecimalResponses())
             {
                 questions[5].AddResponse(response);
@@ -2390,7 +2493,7 @@ namespace NuSurvey.Tests.InterfaceTests
             #endregion Question 6 (Open Ended Decimal No Scoring)
 
             #region Question 7 (Open Ended Time)
-            questions[6].Name = "Whole Number";
+            questions[6].Name = "Time";
             foreach (var response in TimeResponses())
             {
                 questions[6].AddResponse(response);
@@ -2400,7 +2503,7 @@ namespace NuSurvey.Tests.InterfaceTests
             #endregion Question 7 (Open Ended Time)
 
             #region Question 8 (Open Ended Time No Scoring)
-            questions[7].Name = "Whole Number";
+            questions[7].Name = "Time";
             foreach (var response in TimeResponses())
             {
                 questions[7].AddResponse(response);
@@ -2411,7 +2514,7 @@ namespace NuSurvey.Tests.InterfaceTests
             #endregion Question 8 (Open Ended Time No Scoring)
 
             #region Question 9 (Open Ended Time (AM/PM))
-            questions[8].Name = "Whole Number";
+            questions[8].Name = "Time AM/PM";
             foreach (var response in TimeResponsesAmPm())
             {
                 questions[8].AddResponse(response);
@@ -2421,7 +2524,7 @@ namespace NuSurvey.Tests.InterfaceTests
             #endregion Question 9 (Open Ended Time (AM/PM))
 
             #region Question 10 (Open Ended Time (AM/PM) No Scoreing)
-            questions[9].Name = "Whole Number";
+            questions[9].Name = "Time AM/PM";
             foreach (var response in TimeResponsesAmPm())
             {
                 questions[9].AddResponse(response);
@@ -2432,7 +2535,7 @@ namespace NuSurvey.Tests.InterfaceTests
             #endregion Question 10 (Open Ended Time (AM/PM) No Scoring)
 
             #region Question 11 (Open Ended Time Range)
-            questions[10].Name = "Whole Number";
+            questions[10].Name = "Time Range";
             foreach (var response in TimeRangeResponses())
             {
                 questions[10].AddResponse(response);
@@ -2598,7 +2701,7 @@ namespace NuSurvey.Tests.InterfaceTests
         private static IEnumerable<Response> TimeRangeResponses()
         {
             var responses = new List<Response>();
-            for (int i = 0; i < 13; i++)
+            for (int i = 0; i < 17; i++)
             {
                 responses.Add(CreateValidEntities.Response(i + 1));
                 responses[i].Score = i + 1;
@@ -2619,27 +2722,44 @@ namespace NuSurvey.Tests.InterfaceTests
             responses[10].Value = "TEN";
             responses[10].Score = 99;
             responses[11].Value = "23.99";
-            responses[12].Value = "24";
+            responses[12].Value = "24"; //Can't hit this one either because the fraction is closer to 23.99
+            responses[13].Value = "36"; //None of these higher values should be reachable.
+            responses[14].Value = "47";
+            responses[15].Value = "47.90";
+            responses[16].Value = "48";
 
             var scrambledResponses = new List<Response>(); //Because the service sorts.
             scrambledResponses.Add(responses[3]);
             scrambledResponses.Add(responses[12]);
             scrambledResponses.Add(responses[5]);
+            scrambledResponses.Add(responses[13]);
             scrambledResponses.Add(responses[7]);
             scrambledResponses.Add(responses[2]);
             scrambledResponses.Add(responses[1]);
+            scrambledResponses.Add(responses[15]);
             scrambledResponses.Add(responses[6]);
             scrambledResponses.Add(responses[9]);
+            scrambledResponses.Add(responses[14]);
             scrambledResponses.Add(responses[8]);
+            scrambledResponses.Add(responses[16]);
             scrambledResponses.Add(responses[0]);
             scrambledResponses.Add(responses[11]);
             scrambledResponses.Add(responses[4]);
             scrambledResponses.Add(responses[10]);
+
+            
+            
             return scrambledResponses;
         }
         #endregion Helper Methods
 
-
+        public class TestScoreParameters
+        {
+            public int Score;
+            public string StartTime;
+            public string EndTime;
+        }
 
     }
+    
 }
