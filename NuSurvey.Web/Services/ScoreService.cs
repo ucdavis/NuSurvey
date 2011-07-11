@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Helpers;
@@ -690,12 +688,14 @@ namespace NuSurvey.Web.Services
                     continue;
                 }
                 score.MaxScore = totalMax.TotalMaxScore;
-                foreach (var bypassedAnswer in bypassedAnswers.Where(a => a.Category == category))
+                Category category1 = category;
+                foreach (var bypassedAnswer in bypassedAnswers.Where(a => a.Category == category1))
                 {
                     score.MaxScore = score.MaxScore - bypassedAnswer.Question.Responses.Where(a => a.IsActive).Max(a => a.Score);
                 }
+                Category category2 = category;
                 score.TotalScore =
-                    surveyResponse.Answers.Where(a => a.Category == category).Sum(b => b.Score);
+                    surveyResponse.Answers.Where(a => a.Category == category2).Sum(b => b.Score);
                 if (score.MaxScore == 0)
                 {
                     //?Don't score it?
