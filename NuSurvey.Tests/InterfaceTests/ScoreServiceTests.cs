@@ -944,23 +944,1356 @@ namespace NuSurvey.Tests.InterfaceTests
             #endregion Act
         }
 
-
         [TestMethod]
-        public void TestContineTimeTests()
+        public void TestAnswerNotTime1()
         {
             #region Arrange
-            Assert.Inconclusive("Contine time service scoring tests");
-            //Check null, empty, other non time values. Look at StringExtensions for values to check.
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = null };
             #endregion Arrange
 
             #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
             #endregion Act
 
             #region Assert
-            #endregion Assert		
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
         }
+
+        [TestMethod]
+        public void TestAnswerNotTime2()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = string.Empty };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime3()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = " " };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime4()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = "ten" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime5()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = "3.45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime6()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = "3 45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime7()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = "3:4" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime8()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = ":456" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime9()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = "1.2:45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestAnswerNotTime10()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = "0:45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime11()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = "-1.2:45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime12()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = "13:45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime13()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = "12:60" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime14()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 7, Answer = "12:61" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+
         
         #endregion Open Ended Time Tests
+
+        #region Open Ended Time Tests Not Scored
+        [TestMethod]
+        public void TestTimeValueRangeOfNumbersNotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8 };
+
+            var dict = new Dictionary<string, int>(); //answer, expected score
+            dict.Add("1:00", 1);
+            dict.Add("1:15", 1);
+            dict.Add("1:30", 1);
+            dict.Add("1:37", 1);
+            dict.Add("1:38", 2);
+            dict.Add("1:45", 2);
+            dict.Add("1:52", 2);
+            dict.Add("01:53", 3);
+            dict.Add("2:00", 3);
+            dict.Add("2:29", 3);
+            dict.Add("2:30", 4);
+            dict.Add("03:00", 4);
+            dict.Add("3:59", 4);
+            dict.Add("4:00", 5);
+            dict.Add("4:59", 5);
+            dict.Add("5:00", 5);
+            dict.Add("6:29", 5);
+            dict.Add("6:30", 6);
+            dict.Add("8:00", 6);
+            dict.Add("9:00", 6);
+            dict.Add("10:00", 6);
+            dict.Add("10:14", 6);
+            dict.Add("10:15", 9);
+            dict.Add("12:30", 9);
+            dict.Add("12:31", 9);
+            dict.Add("12:59", 9);
+            #endregion Arrange
+
+            #region Act
+            foreach (var i in dict)
+            {
+                qAndA.Answer = i.Key;
+                var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+                Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
+                Assert.AreEqual(0, result.Score, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected score for {0}", i.Key));
+                Assert.AreEqual(string.Empty, result.Message);
+                Assert.IsTrue(result.ResponseId > 0);
+            }
+            #endregion Act
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime1NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = null };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime2NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = string.Empty };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime3NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = " " };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime4NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = "ten" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime5NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = "3.45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime6NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = "3 45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime7NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = "3:4" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime8NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = ":456" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime9NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = "1.2:45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestAnswerNotTime10NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = "0:45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime11NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = "-1.2:45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime12NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = "13:45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime13NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = "12:60" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTime14NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 8, Answer = "12:61" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+
+
+        #endregion Open Ended Time Tests
+
+        #region Open Ended Time (AM/PM) Tests
+        [TestMethod]
+        public void TestTimeAmPmValueRangeOfNumbers()
+        {
+            #region Arrange
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9 };
+
+            var dict = new Dictionary<string, int>(); //answer, expected score
+            dict.Add("12:00 AM", 9);
+            dict.Add("12:44 AM", 9);
+            dict.Add("12:45 AM", 9);
+            dict.Add("12:46 AM", 1);
+            dict.Add("1:30 AM", 1);
+            dict.Add("1:37 AM", 1);
+            dict.Add("1:38 AM", 2);
+            dict.Add("1:45 AM", 2);
+            dict.Add("1:52 AM", 2);
+            dict.Add("01:53 AM", 3);
+            dict.Add("2:00 AM", 3);
+            dict.Add("2:29 AM", 3);
+            dict.Add("2:30 AM", 4);
+            dict.Add("03:00 AM", 4);
+            dict.Add("3:59 AM", 4);
+            dict.Add("4:00 AM", 5);
+            dict.Add("4:59 AM", 5);
+            dict.Add("5:00 AM", 5);
+            dict.Add("6:29 AM", 5);
+            dict.Add("6:30 AM", 6);
+            dict.Add("8:00 AM", 6);
+            dict.Add("9:00 AM", 6);
+            dict.Add("9:59 AM", 6);
+            dict.Add("10:00 AM", 7);
+            dict.Add("11:59 AM", 7);
+            dict.Add("12:00 PM", 7);
+            dict.Add("03:14 PM", 7);
+            dict.Add("3:15 PM", 8);
+            dict.Add("6:30 PM", 8);
+            dict.Add("9:14 PM", 8);
+            dict.Add("9:15 PM", 12);
+            dict.Add("10:00 PM", 12);
+            dict.Add("11:59 PM", 12);
+            #endregion Arrange
+
+            #region Act
+            foreach (var i in dict)
+            {
+                qAndA.Answer = i.Key;
+                var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+                Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
+                Assert.AreEqual(i.Value, result.Score, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected score for {0}", i.Key));
+                Assert.AreEqual(string.Empty, result.Message);
+                Assert.IsTrue(result.ResponseId > 0);
+            }
+            #endregion Act
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm1()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = null };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm2()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = string.Empty };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm3()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = " " };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm4()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "3000" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm5()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "three AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm6()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "03:00 XX" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm7()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "14:45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm8()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "03.00 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm9()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "03::0 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm10()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "00:00 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm11()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "-1:00 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm12()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "01:60 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm13()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "1:-1 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm14()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 9, Answer = "13:00 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        #endregion Open Ended Time (AM/PM) Tests
+
+        #region Open Ended Time (AM/PM) Tests Not Scored
+        [TestMethod]
+        public void TestTimeAmPmValueRangeOfNumbersNotScored()
+        {
+            #region Arrange
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10 };
+
+            var dict = new Dictionary<string, int>(); //answer, expected score
+            dict.Add("12:00 AM", 9);
+            dict.Add("12:44 AM", 9);
+            dict.Add("12:45 AM", 9);
+            dict.Add("12:46 AM", 1);
+            dict.Add("1:30 AM", 1);
+            dict.Add("1:37 AM", 1);
+            dict.Add("1:38 AM", 2);
+            dict.Add("1:45 AM", 2);
+            dict.Add("1:52 AM", 2);
+            dict.Add("01:53 AM", 3);
+            dict.Add("2:00 AM", 3);
+            dict.Add("2:29 AM", 3);
+            dict.Add("2:30 AM", 4);
+            dict.Add("03:00 AM", 4);
+            dict.Add("3:59 AM", 4);
+            dict.Add("4:00 AM", 5);
+            dict.Add("4:59 AM", 5);
+            dict.Add("5:00 AM", 5);
+            dict.Add("6:29 AM", 5);
+            dict.Add("6:30 AM", 6);
+            dict.Add("8:00 AM", 6);
+            dict.Add("9:00 AM", 6);
+            dict.Add("9:59 AM", 6);
+            dict.Add("10:00 AM", 7);
+            dict.Add("11:59 AM", 7);
+            dict.Add("12:00 PM", 7);
+            dict.Add("03:14 PM", 7);
+            dict.Add("3:15 PM", 8);
+            dict.Add("6:30 PM", 8);
+            dict.Add("9:14 PM", 8);
+            dict.Add("9:15 PM", 12);
+            dict.Add("10:00 PM", 12);
+            dict.Add("11:59 PM", 12);
+            #endregion Arrange
+
+            #region Act
+            foreach (var i in dict)
+            {
+                qAndA.Answer = i.Key;
+                var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+                Assert.IsNotNull(result, string.Format("Unexpected value for {0}", i.Key));
+                Assert.AreEqual(0, result.Score, string.Format("Unexpected score for {0}", i.Key));
+                Assert.IsFalse(result.Invalid, string.Format("Unexpected score for {0}", i.Key));
+                Assert.AreEqual(string.Empty, result.Message);
+                Assert.IsTrue(result.ResponseId > 0);
+            }
+            #endregion Act
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm1NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = null };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm2NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = string.Empty };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm3NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = " " };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer is required", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm4NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "3000" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm5NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "three AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm6NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "03:00 XX" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm7NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "14:45" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm8NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "03.00 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm9NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "03::0 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm10NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "00:00 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm11NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "-1:00 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm12NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "01:60 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm13NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "1:-1 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestAnswerNotTimeAmPm14NotScored()
+        {
+            #region Arrange
+            //SetupQuestions();
+            var qAndA = new QuestionAnswerParameter { QuestionId = 10, Answer = "13:00 AM" };
+            #endregion Arrange
+
+            #region Act
+            var result = ScoreService.ScoreQuestion(QuestionRepository.Queryable, qAndA);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Invalid);
+            Assert.AreEqual("Answer must be a Time (hh:mm AM/PM)", result.Message);
+            Assert.AreEqual(0, result.Score);
+            Assert.AreEqual(0, result.ResponseId);
+            #endregion Assert
+        }
+
+        #endregion Open Ended Time (AM/PM) Tests Not Scored
         #endregion Score Question Tests
 
 
@@ -1065,6 +2398,48 @@ namespace NuSurvey.Tests.InterfaceTests
             questions[6].IsOpenEnded = true;
             questions[6].OpenEndedQuestionType = (int)QuestionType.Time;
             #endregion Question 7 (Open Ended Time)
+
+            #region Question 8 (Open Ended Time No Scoring)
+            questions[7].Name = "Whole Number";
+            foreach (var response in TimeResponses())
+            {
+                questions[7].AddResponse(response);
+            }
+            questions[7].IsOpenEnded = true;
+            questions[7].OpenEndedQuestionType = (int)QuestionType.Time;
+            questions[7].Category.DoNotUseForCalculations = true;
+            #endregion Question 8 (Open Ended Time No Scoring)
+
+            #region Question 9 (Open Ended Time (AM/PM))
+            questions[8].Name = "Whole Number";
+            foreach (var response in TimeResponsesAmPm())
+            {
+                questions[8].AddResponse(response);
+            }
+            questions[8].IsOpenEnded = true;
+            questions[8].OpenEndedQuestionType = (int)QuestionType.TimeAmPm;
+            #endregion Question 9 (Open Ended Time (AM/PM))
+
+            #region Question 10 (Open Ended Time (AM/PM) No Scoreing)
+            questions[9].Name = "Whole Number";
+            foreach (var response in TimeResponsesAmPm())
+            {
+                questions[9].AddResponse(response);
+            }
+            questions[9].IsOpenEnded = true;
+            questions[9].OpenEndedQuestionType = (int)QuestionType.TimeAmPm;
+            questions[9].Category.DoNotUseForCalculations = true;
+            #endregion Question 10 (Open Ended Time (AM/PM) No Scoring)
+
+            #region Question 11 (Open Ended Time Range)
+            questions[10].Name = "Whole Number";
+            foreach (var response in TimeRangeResponses())
+            {
+                questions[10].AddResponse(response);
+            }
+            questions[10].IsOpenEnded = true;
+            questions[10].OpenEndedQuestionType = (int)QuestionType.TimeRange;
+            #endregion Question 11 (Open Ended Time Range)
 
             new FakeQuestions(0, QuestionRepository, questions);
         }       
@@ -1175,6 +2550,91 @@ namespace NuSurvey.Tests.InterfaceTests
             scrambledResponses.Add(responses[0]);
             scrambledResponses.Add(responses[8]);
             scrambledResponses.Add(responses[7]);
+            return scrambledResponses;
+        }
+
+        private static IEnumerable<Response> TimeResponsesAmPm()
+        {
+            var responses = new List<Response>();
+            for (int i = 0; i < 12; i++)
+            {
+                responses.Add(CreateValidEntities.Response(i + 1));
+                responses[i].Score = i + 1;
+                responses[i].SetIdTo(i + 1);
+            }
+
+            responses[0].Value = "1:30 AM";
+            responses[1].Value = "1:45 AM";
+            responses[2].Value = "2:00 AM";
+            responses[3].Value = "3:00 AM";
+            responses[4].Value = "5:00 AM";
+            responses[5].Value = "8:00 AM";
+            responses[6].Value = "12:00 PM";
+            responses[7].Value = "6:30 PM";
+            responses[8].Value = "12:00 AM"; //Note, this will have a different sort             
+            responses[9].Value = "NINE";
+            responses[9].Score = 99;
+            responses[10].Value = "10:00 PM";
+            responses[10].IsActive = false;
+            responses[11].Value = "11:59 PM";
+
+
+            var scrambledResponses = new List<Response>(); //Because the service sorts.
+            scrambledResponses.Add(responses[11]);
+            scrambledResponses.Add(responses[4]);
+            scrambledResponses.Add(responses[1]);
+            scrambledResponses.Add(responses[10]);
+            scrambledResponses.Add(responses[3]);
+            scrambledResponses.Add(responses[5]);
+            scrambledResponses.Add(responses[0]);
+            scrambledResponses.Add(responses[8]);
+            scrambledResponses.Add(responses[2]);
+            scrambledResponses.Add(responses[6]);
+            scrambledResponses.Add(responses[7]);
+            scrambledResponses.Add(responses[9]);
+            return scrambledResponses;
+        }
+
+        private static IEnumerable<Response> TimeRangeResponses()
+        {
+            var responses = new List<Response>();
+            for (int i = 0; i < 13; i++)
+            {
+                responses.Add(CreateValidEntities.Response(i + 1));
+                responses[i].Score = i + 1;
+                responses[i].SetIdTo(i + 1);
+            }
+
+            responses[0].Value = "0";
+            responses[1].Value = "1";
+            responses[2].Value = "1.5";
+            responses[3].Value = "2";
+            responses[4].Value = "3";
+            responses[5].Value = "4";
+            responses[5].IsActive = false;
+            responses[6].Value = "5";
+            responses[7].Value = "12";          
+            responses[8].Value = "18";
+            responses[9].Value = "22";
+            responses[10].Value = "TEN";
+            responses[10].Score = 99;
+            responses[11].Value = "23.99";
+            responses[12].Value = "24";
+
+            var scrambledResponses = new List<Response>(); //Because the service sorts.
+            scrambledResponses.Add(responses[3]);
+            scrambledResponses.Add(responses[12]);
+            scrambledResponses.Add(responses[5]);
+            scrambledResponses.Add(responses[7]);
+            scrambledResponses.Add(responses[2]);
+            scrambledResponses.Add(responses[1]);
+            scrambledResponses.Add(responses[6]);
+            scrambledResponses.Add(responses[9]);
+            scrambledResponses.Add(responses[8]);
+            scrambledResponses.Add(responses[0]);
+            scrambledResponses.Add(responses[11]);
+            scrambledResponses.Add(responses[4]);
+            scrambledResponses.Add(responses[10]);
             return scrambledResponses;
         }
         #endregion Helper Methods
