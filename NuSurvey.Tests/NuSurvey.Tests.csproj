@@ -156,7 +156,14 @@
     <Compile Include="Core\Helpers\RepositoryLoad.cs" />
     <Compile Include="Core\Helpers\SpecificGuid.cs" />
     <Compile Include="Core\ServiceLocatorInitializer.cs" />
-    <Compile Include="InterfaceTests\ScoreServiceTests.cs" />
+    <Compile Include="InterfaceTests\ScoreServiceTests\ScoreServiceCalculateScoresTests\ScoreServiceCalculateScoresTestsInit.cs" />
+    <Compile Include="InterfaceTests\ScoreServiceTests\ScoreServiceQuestionTests\ScoreServiceScoreQuestionTestsInit.cs" />
+    <Compile Include="InterfaceTests\ScoreServiceTests\ScoreServiceQuestionTests\ScoreServiceScoreQuestionTestsPart01.cs" />
+    <Compile Include="InterfaceTests\ScoreServiceTests\ScoreServiceQuestionTests\ScoreServiceScoreQuestionTestsPart02.cs" />
+    <Compile Include="InterfaceTests\ScoreServiceTests\ScoreServiceQuestionTests\ScoreServiceScoreQuestionTestsPart03.cs" />
+    <Compile Include="InterfaceTests\ScoreServiceTests\ScoreServiceQuestionTests\ScoreServiceScoreQuestionTestsPart04.cs" />
+    <Compile Include="InterfaceTests\ScoreServiceTests\ScoreServiceQuestionTests\ScoreServiceScoreQuestionTestsPart05.cs" />
+    <Compile Include="InterfaceTests\ScoreServiceTests\ScoreServiceQuestionTests\ScoreServiceScoreQuestionTestsPart06.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryTests\AnswerRepositoryTests.cs" />
     <Compile Include="RepositoryTests\CategoryGoalRepositoryTests.cs" />
