@@ -3,11 +3,9 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NuSurvey.Core.Domain;
 using NuSurvey.Tests.Core.Helpers;
-using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Services;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
-using UCDArch.Data.NHibernate;
 using UCDArch.Testing;
 
 namespace NuSurvey.Tests.InterfaceTests.ScoreServiceTests.ScoreServiceCalculateScoresTests
@@ -226,20 +224,6 @@ namespace NuSurvey.Tests.InterfaceTests.ScoreServiceTests.ScoreServiceCalculateS
             #endregion Assert
         }
 
-        [TestMethod]
-        public void TestDescription()
-        {
-            #region Arrange
-            Assert.Inconclusive("Do ScoreService Tests");
-
-            #endregion Arrange
-
-            #region Act
-            #endregion Act
-
-            #region Assert
-            #endregion Assert
-        }
 
         #region Helper Methods
         public void SetupTotalMaxScores()
