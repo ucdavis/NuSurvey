@@ -18,6 +18,14 @@ namespace NuSurvey.Web.Services
         /// <param name="updatedCategory">the current category with updated values</param>
         /// <returns>the new category with updated values</returns>
         Category ArchiveCategory(IRepository repository, int id, Category updatedCategory);
+        /// <summary>
+        /// This archives the old Category, it saves and returns a new version of the category *without* the question being edited. This question must be added by the 
+        /// calling method (controller)
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="id">Category Id</param>
+        /// <param name="questionToEdit">Question being edited.</param>
+        /// <returns></returns>
         Category ArchiveCategory(IRepository repository, int id, Question questionToEdit);
     }
 
