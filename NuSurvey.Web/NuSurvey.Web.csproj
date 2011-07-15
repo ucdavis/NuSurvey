@@ -14,6 +14,7 @@
     <AssemblyName>NuSurvey.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -181,6 +182,7 @@
     <Content Include="Css\TableTools_JUI.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\404.jpg" />
     <Content Include="Images\Admin.png" />
     <Content Include="Images\AnswerSurvey.png" />
     <Content Include="Images\background.png" />
