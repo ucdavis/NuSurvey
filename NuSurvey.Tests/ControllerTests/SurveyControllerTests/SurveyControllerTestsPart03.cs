@@ -95,7 +95,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
             Assert.IsNotNull(result);
             Assert.IsNull(result.Name);
             Assert.AreEqual("upd", result.ShortName);
-            Controller.ModelState.AssertErrorsAre("Name: The Name field is required.");
+            Controller.ModelState.AssertErrorsAre("The Name field is required.");
             SurveyRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Survey>.Is.Anything));
             #endregion Assert		
         }
@@ -129,7 +129,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyControllerTests
             Assert.AreEqual(0, result.Questions.Count);
             Assert.AreEqual(0, result.SurveyResponses.Count);
             Assert.AreEqual(0, result.Categories.Count);
-            Controller.ModelState.AssertErrorsAre("Name: The Name field is required.");
+            Controller.ModelState.AssertErrorsAre("The Name field is required.");
             SurveyRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Survey>.Is.Anything));
             #endregion Assert
         }

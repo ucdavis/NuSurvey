@@ -131,7 +131,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryControllerTests
             #region Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(false, result.Data);
-            Controller.ModelState.AssertErrorsAre("QuizType: The Quiz Type field is required.");
+            Controller.ModelState.AssertErrorsAre("The Quiz Type field is required.");
             #endregion Assert		
         }
 

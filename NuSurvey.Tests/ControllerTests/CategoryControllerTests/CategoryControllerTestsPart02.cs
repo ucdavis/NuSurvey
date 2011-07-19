@@ -132,7 +132,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryControllerTests
 
             #region Assert
             Assert.IsNotNull(result);
-            Controller.ModelState.AssertErrorsAre("Encouragement: The Encouragement field is required.");
+            Controller.ModelState.AssertErrorsAre("The Encouragement field is required.");
             Assert.AreEqual(DateTime.Now.Date, result.Category.CreateDate.Date); 
             Assert.AreEqual(DateTime.Now.Date, result.Category.LastUpdate.Date);
             Assert.AreEqual(3, result.Category.Survey.Id);

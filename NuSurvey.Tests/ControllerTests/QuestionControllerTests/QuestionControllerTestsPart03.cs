@@ -412,7 +412,7 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             #endregion Act
 
             #region Assert
-            Controller.ModelState.AssertErrorsAre("Name: The Question field is required.", "Active Responses are required.");
+            Controller.ModelState.AssertErrorsAre("The Question field is required.", "Active Responses are required.");
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.Responses.Count);
             Assert.IsTrue(result.Responses[0].Remove);
@@ -448,7 +448,7 @@ namespace NuSurvey.Tests.ControllerTests.QuestionControllerTests
             #endregion Act
 
             #region Assert
-            Controller.ModelState.AssertErrorsAre("Name: The Question field is required.");
+            Controller.ModelState.AssertErrorsAre("The Question field is required.");
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.Responses.Count); //Reversed
             Assert.AreEqual(0, result.Responses[0].ResponseId); //Added

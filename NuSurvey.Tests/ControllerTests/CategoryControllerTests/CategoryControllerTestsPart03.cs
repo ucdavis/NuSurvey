@@ -220,7 +220,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryControllerTests
             #region Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("Unable to Edit Category", Controller.Message);
-            Controller.ModelState.AssertErrorsAre("Name: The Name field is required.");
+            Controller.ModelState.AssertErrorsAre("The Name field is required.");
             Assert.AreEqual(string.Empty, result.Category.Name);
             Assert.IsFalse(result.HasRelatedAnswers);
             #endregion Assert		

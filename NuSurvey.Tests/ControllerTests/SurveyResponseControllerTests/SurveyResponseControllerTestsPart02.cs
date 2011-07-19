@@ -366,7 +366,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
             #region Assert
             Assert.IsNotNull(result);
-            Controller.ModelState.AssertErrorsAre("StudentId: The Name field is required."); //TODO: Try to get this to match the screen when javaScript is enabled.
+            Controller.ModelState.AssertErrorsAre("The Name field is required."); 
             Assert.AreEqual("Please correct errors to continue", Controller.Message);
             #endregion Assert		
         }
