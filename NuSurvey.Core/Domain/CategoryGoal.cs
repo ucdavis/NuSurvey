@@ -28,11 +28,11 @@ namespace NuSurvey.Core.Domain
 
         [Required]
         [StringLength(200)]
-        [DisplayName("Goal")]
+        [Display(Name = "Goal")]
         [DataType(DataType.MultilineText)]
         public virtual string Name { get; set; }
 
-        [DisplayName("Active")]
+        [Display(Name = "Active")]
         public virtual bool IsActive { get; set; }
 
         [Required]

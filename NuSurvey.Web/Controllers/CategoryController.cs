@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -259,7 +260,7 @@ namespace NuSurvey.Web.Controllers
 	{
         public Survey Survey { get; set; }
 		public Category Category { get; set; }
-        [DisplayName("Has Related Answers")]
+        [Display(Name = "Has Related Answers")]
         public bool HasRelatedAnswers { get; set; }
  
 		public static CategoryViewModel Create(IRepository repository, Survey survey)

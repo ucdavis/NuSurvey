@@ -28,10 +28,10 @@ namespace NuSurvey.Core.Domain
         public virtual string Name { get; set; }
 
         [StringLength(10)]
-        [DisplayName("Short Name")]
+        [Display(Name = "Short Name")]
         public virtual string ShortName { get; set; }
 
-        [DisplayName("Active")]
+        [Display(Name = "Active")]
         public virtual bool IsActive { get; set; }
 
         [Required]
@@ -43,7 +43,7 @@ namespace NuSurvey.Core.Domain
 
         [Required]
         [StringLength(100)]
-        [DisplayName("Quiz Type")]
+        [Display(Name = "Quiz Type")]
         public virtual string QuizType { get; set; }
     }
 

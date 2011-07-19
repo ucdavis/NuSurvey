@@ -184,7 +184,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual("Name3", result.Category.Name);
             Assert.AreEqual("Name3", result.Survey.Name);
-            Controller.ModelState.AssertErrorsAre("Name: The Name field is required.");
+            Controller.ModelState.AssertErrorsAre("Name: The Goal field is required.");
             CategoryGoalRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<CategoryGoal>.Is.Anything));
             #endregion Assert		
         }
@@ -336,7 +336,7 @@ namespace NuSurvey.Tests.ControllerTests.CategoryGoalControllerTests
             Assert.AreEqual(string.Empty, result.CategoryGoal.Name);
             Assert.AreEqual("Name3", result.Category.Name);
             Assert.AreEqual("Name3", result.Survey.Name);
-            Controller.ModelState.AssertErrorsAre("Name: The Name field is required.");
+            Controller.ModelState.AssertErrorsAre("Name: The Goal field is required.");
             CategoryGoalRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<CategoryGoal>.Is.Anything));
             #endregion Assert		
         }

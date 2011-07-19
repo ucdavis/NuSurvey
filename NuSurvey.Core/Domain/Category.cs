@@ -62,10 +62,10 @@ namespace NuSurvey.Core.Domain
         [DataType(DataType.MultilineText)]
         public virtual string Encouragement { get; set; }
 
-        [DisplayName("Active")]
+        [Display(Name = "Active")]
         public virtual bool IsActive { get; set; }
 
-        [DisplayName("Do Not Use For Calculations")]
+        [Display(Name = "Do Not Use For Calculations")]
         public virtual bool DoNotUseForCalculations { get; set; }
 
         public virtual bool IsCurrentVersion { get; set; }
@@ -73,7 +73,7 @@ namespace NuSurvey.Core.Domain
         /// <summary>
         /// This should be updated for every save
         /// </summary>
-        [DisplayName("Last Updated On")] 
+        [Display(Name = "Last Updated On")] 
         public virtual DateTime LastUpdate { get; set; }
 
         public virtual DateTime CreateDate { get; set; }

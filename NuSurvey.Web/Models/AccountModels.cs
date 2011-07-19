@@ -24,7 +24,7 @@ namespace NuSurvey.Web.Models
         [Required]
         [Email]
         [DataType(DataType.EmailAddress)]
-        [DisplayName("Email")]
+        [Display(Name = "Email")]
         public string UserName { get; set; }
     }
 

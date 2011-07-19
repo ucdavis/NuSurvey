@@ -976,7 +976,7 @@ namespace NuSurvey.Tests.RepositoryTests
             var expectedFields = new List<NameAndType>();
             expectedFields.Add(new NameAndType("BypassScore", "System.Boolean", new List<string>
             {
-                "[System.ComponentModel.DisplayNameAttribute(\"Bypass Score\")]"
+                "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Bypass Score\")]"
             }));
             expectedFields.Add(new NameAndType("Category", "NuSurvey.Core.Domain.Category", new List<string>
             {

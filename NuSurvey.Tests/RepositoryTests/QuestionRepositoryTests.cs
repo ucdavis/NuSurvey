@@ -138,7 +138,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(question);
                 var results = question.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Name"));
+                results.AssertErrorsAre(string.Format("{0}: The Question field is required.", "Name"));
                 Assert.IsTrue(question.IsTransient());
                 Assert.IsFalse(question.IsValid());
                 throw;
@@ -170,7 +170,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(question);
                 var results = question.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Name"));
+                results.AssertErrorsAre(string.Format("{0}: The Question field is required.", "Name"));
                 Assert.IsTrue(question.IsTransient());
                 Assert.IsFalse(question.IsValid());
                 throw;
@@ -202,7 +202,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(question);
                 var results = question.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Name"));
+                results.AssertErrorsAre(string.Format("{0}: The Question field is required.", "Name"));
                 Assert.IsTrue(question.IsTransient());
                 Assert.IsFalse(question.IsValid());
                 throw;
@@ -235,7 +235,7 @@ namespace NuSurvey.Tests.RepositoryTests
                 Assert.IsNotNull(question);
                 Assert.AreEqual(100 + 1, question.Name.Length);
                 var results = question.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The field {0} must be a string with a maximum length of {1}.", "Name", "100"));
+                results.AssertErrorsAre(string.Format("{0}: The field Question must be a string with a maximum length of {1}.", "Name", "100"));
                 Assert.IsTrue(question.IsTransient());
                 Assert.IsFalse(question.IsValid());
                 throw;
@@ -1231,7 +1231,7 @@ namespace NuSurvey.Tests.RepositoryTests
             }));
             expectedFields.Add(new NameAndType("CreateDate", "System.DateTime", new List<string>
             {
-                 "[System.ComponentModel.DisplayNameAttribute(\"Date Created\")]"
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Date Created\")]"
             }));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
@@ -1240,22 +1240,22 @@ namespace NuSurvey.Tests.RepositoryTests
             }));
             expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>
             {
-                 "[System.ComponentModel.DisplayNameAttribute(\"Active\")]"
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Active\")]"
             }));
             expectedFields.Add(new NameAndType("IsOpenEnded", "System.Boolean", new List<string>
             {
-                 "[System.ComponentModel.DisplayNameAttribute(\"Open Ended\")]"
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Open Ended\")]"
             }));
             expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
             {
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Question\")]",
                  "[System.ComponentModel.DataAnnotations.RequiredAttribute()]", 
-                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)100)]",
-                 "[System.ComponentModel.DisplayNameAttribute(\"Question\")]",
+                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)100)]",                 
                  "[System.Web.Mvc.AllowHtmlAttribute()]"
             }));
             expectedFields.Add(new NameAndType("OpenEndedQuestionType", "System.Int32", new List<string>
             {
-                 "[System.ComponentModel.DisplayNameAttribute(\"Question Type\")]"
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Question Type\")]"
             }));
             expectedFields.Add(new NameAndType("Order", "System.Int32", new List<string>()));
             expectedFields.Add(new NameAndType("Responses", "System.Collections.Generic.IList`1[NuSurvey.Core.Domain.Response]", new List<string>

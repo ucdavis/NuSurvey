@@ -139,7 +139,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(surveyResponse);
                 var results = surveyResponse.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "StudentId"));
+                results.AssertErrorsAre(string.Format("{0}: The Name field is required.", "StudentId"));
                 Assert.IsTrue(surveyResponse.IsTransient());
                 Assert.IsFalse(surveyResponse.IsValid());
                 throw;
@@ -171,7 +171,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(surveyResponse);
                 var results = surveyResponse.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "StudentId"));
+                results.AssertErrorsAre(string.Format("{0}: The Name field is required.", "StudentId"));
                 Assert.IsTrue(surveyResponse.IsTransient());
                 Assert.IsFalse(surveyResponse.IsValid());
                 throw;
@@ -203,7 +203,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(surveyResponse);
                 var results = surveyResponse.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "StudentId"));
+                results.AssertErrorsAre(string.Format("{0}: The Name field is required.", "StudentId"));
                 Assert.IsTrue(surveyResponse.IsTransient());
                 Assert.IsFalse(surveyResponse.IsValid());
                 throw;
@@ -236,7 +236,7 @@ namespace NuSurvey.Tests.RepositoryTests
                 Assert.IsNotNull(surveyResponse);
                 Assert.AreEqual(10 + 1, surveyResponse.StudentId.Length);
                 var results = surveyResponse.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The field {0} must be a string with a maximum length of {1}.", "StudentId", "10"));
+                results.AssertErrorsAre(string.Format("{0}: The field Name must be a string with a maximum length of {1}.", "StudentId", "10"));
                 Assert.IsTrue(surveyResponse.IsTransient());
                 Assert.IsFalse(surveyResponse.IsValid());
                 throw;
@@ -402,7 +402,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(surveyResponse);
                 var results = surveyResponse.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "UserId"));
+                results.AssertErrorsAre(string.Format("{0}: The User Id field is required.", "UserId"));
                 Assert.IsTrue(surveyResponse.IsTransient());
                 Assert.IsFalse(surveyResponse.IsValid());
                 throw;
@@ -434,7 +434,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(surveyResponse);
                 var results = surveyResponse.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "UserId"));
+                results.AssertErrorsAre(string.Format("{0}: The User Id field is required.", "UserId"));
                 Assert.IsTrue(surveyResponse.IsTransient());
                 Assert.IsFalse(surveyResponse.IsValid());
                 throw;
@@ -466,7 +466,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(surveyResponse);
                 var results = surveyResponse.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "UserId"));
+                results.AssertErrorsAre(string.Format("{0}: The User Id field is required.", "UserId"));
                 Assert.IsTrue(surveyResponse.IsTransient());
                 Assert.IsFalse(surveyResponse.IsValid());
                 throw;
@@ -1361,7 +1361,7 @@ namespace NuSurvey.Tests.RepositoryTests
             }));
             expectedFields.Add(new NameAndType("DateTaken", "System.DateTime", new List<string>
             {
-                "[System.ComponentModel.DisplayNameAttribute(\"Date Taken\")]"
+                "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Date Taken\")]"
             }));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
@@ -1374,9 +1374,9 @@ namespace NuSurvey.Tests.RepositoryTests
             expectedFields.Add(new NameAndType("PositiveCategory", "NuSurvey.Core.Domain.Category", new List<string>()));
             expectedFields.Add(new NameAndType("StudentId", "System.String", new List<string>
             {
+                "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Name\")]",
                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]",
-                "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)10)]",
-                "[System.ComponentModel.DisplayNameAttribute(\"Name\")]"
+                "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)10)]"                
             }));
             expectedFields.Add(new NameAndType("Survey", "NuSurvey.Core.Domain.Survey", new List<string>
             {
@@ -1384,8 +1384,8 @@ namespace NuSurvey.Tests.RepositoryTests
             }));
             expectedFields.Add(new NameAndType("UserId", "System.String", new List<string>
             {
-                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]",
-                 "[System.ComponentModel.DisplayNameAttribute(\"User Id\")]"
+                "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"User Id\")]", 
+                "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
             }));
             #endregion Arrange
 

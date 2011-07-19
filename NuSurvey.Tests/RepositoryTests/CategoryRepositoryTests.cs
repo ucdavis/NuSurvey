@@ -1846,7 +1846,7 @@ namespace NuSurvey.Tests.RepositoryTests
             expectedFields.Add(new NameAndType("CreateDate", "System.DateTime", new List<string>()));
             expectedFields.Add(new NameAndType("DoNotUseForCalculations", "System.Boolean", new List<string>
             {
-                 "[System.ComponentModel.DisplayNameAttribute(\"Do Not Use For Calculations\")]"
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Do Not Use For Calculations\")]"
             }));
             expectedFields.Add(new NameAndType("Encouragement", "System.String", new List<string>
             {
@@ -1860,12 +1860,12 @@ namespace NuSurvey.Tests.RepositoryTests
             }));
             expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>
             {
-                 "[System.ComponentModel.DisplayNameAttribute(\"Active\")]"
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Active\")]"
             }));
             expectedFields.Add(new NameAndType("IsCurrentVersion", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("LastUpdate", "System.DateTime", new List<string>
             {
-                 "[System.ComponentModel.DisplayNameAttribute(\"Last Updated On\")]"
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Last Updated On\")]"
             }));
             expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
             {                  

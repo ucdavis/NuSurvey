@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 using MvcContrib;
@@ -621,9 +622,9 @@ namespace NuSurvey.Web.Controllers
     {
         public Survey Survey { get; set; }
         public SurveyResponse PendingSurveyResponse { get; set; }
-        [DisplayName("Total Questions")]
+        [Display(Name = "Total Questions")]
         public int TotalActiveQuestions { get; set; }
-        [DisplayName("Answered")]
+        [Display(Name = "Answered")]
         public int AnsweredQuestions { get; set; }
         public IList<Question> Questions { get; set; }
         public Question CurrentQuestion { get; set; }

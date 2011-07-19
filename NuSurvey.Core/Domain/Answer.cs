@@ -23,7 +23,7 @@ namespace NuSurvey.Core.Domain
         /// </summary>
         public virtual Response Response { get; set; }
 
-        [DisplayName("Bypass Score")]
+        [Display(Name = "Bypass Score")]
         public virtual bool BypassScore { get; set; }
         [StringLength(50)]
         public virtual string OpenEndedStringAnswer { get; set; }

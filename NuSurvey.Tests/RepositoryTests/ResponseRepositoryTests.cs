@@ -137,7 +137,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(response);
                 var results = response.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Value"));
+                results.AssertErrorsAre(string.Format("{0}: The Choice field is required.", "Value"));
                 Assert.IsTrue(response.IsTransient());
                 Assert.IsFalse(response.IsValid());
                 throw;
@@ -169,7 +169,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(response);
                 var results = response.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Value"));
+                results.AssertErrorsAre(string.Format("{0}: The Choice field is required.", "Value"));
                 Assert.IsTrue(response.IsTransient());
                 Assert.IsFalse(response.IsValid());
                 throw;
@@ -201,7 +201,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(response);
                 var results = response.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Value"));
+                results.AssertErrorsAre(string.Format("{0}: The Choice field is required.", "Value"));
                 Assert.IsTrue(response.IsTransient());
                 Assert.IsFalse(response.IsValid());
                 throw;
@@ -587,8 +587,9 @@ namespace NuSurvey.Tests.RepositoryTests
             expectedFields.Add(new NameAndType("Score", "System.Int32", new List<string>()));
             expectedFields.Add(new NameAndType("Value", "System.String", new List<string>
             {                  
-                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]",
-                 "[System.ComponentModel.DisplayNameAttribute(\"Choice\")]"
+                "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Choice\")]", 
+                "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
+                 
             }));
             
             #endregion Arrange

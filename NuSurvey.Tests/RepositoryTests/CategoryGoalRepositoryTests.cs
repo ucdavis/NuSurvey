@@ -144,7 +144,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(categoryGoal);
                 var results = categoryGoal.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Name"));
+                results.AssertErrorsAre(string.Format("{0}: The Goal field is required.", "Name"));
                 Assert.IsTrue(categoryGoal.IsTransient());
                 Assert.IsFalse(categoryGoal.IsValid());
                 throw;
@@ -176,7 +176,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(categoryGoal);
                 var results = categoryGoal.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Name"));
+                results.AssertErrorsAre(string.Format("{0}: The Goal field is required.", "Name"));
                 Assert.IsTrue(categoryGoal.IsTransient());
                 Assert.IsFalse(categoryGoal.IsValid());
                 throw;
@@ -208,7 +208,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(categoryGoal);
                 var results = categoryGoal.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The {0} field is required.", "Name"));
+                results.AssertErrorsAre(string.Format("{0}: The Goal field is required.", "Name"));
                 Assert.IsTrue(categoryGoal.IsTransient());
                 Assert.IsFalse(categoryGoal.IsValid());
                 throw;
@@ -241,7 +241,7 @@ namespace NuSurvey.Tests.RepositoryTests
                 Assert.IsNotNull(categoryGoal);
                 Assert.AreEqual(200 + 1, categoryGoal.Name.Length);
                 var results = categoryGoal.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(string.Format("{0}: The field {0} must be a string with a maximum length of {1}.", "Name", "200"));
+                results.AssertErrorsAre(string.Format("{0}: The field Goal must be a string with a maximum length of {1}.", "Name", "200"));
                 Assert.IsTrue(categoryGoal.IsTransient());
                 Assert.IsFalse(categoryGoal.IsValid());
                 throw;
@@ -519,14 +519,14 @@ namespace NuSurvey.Tests.RepositoryTests
             }));
             expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>
             { 
-                 "[System.ComponentModel.DisplayNameAttribute(\"Active\")]"
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Active\")]"
             }));
             expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
             {
                  "[System.ComponentModel.DataAnnotations.DataTypeAttribute((System.ComponentModel.DataAnnotations.DataType)9)]", 
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Goal\")]",
                  "[System.ComponentModel.DataAnnotations.RequiredAttribute()]",
-                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)200)]", 
-                 "[System.ComponentModel.DisplayNameAttribute(\"Goal\")]"
+                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)200)]"                 
             }));
             #endregion Arrange
 

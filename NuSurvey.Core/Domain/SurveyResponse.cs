@@ -31,10 +31,10 @@ namespace NuSurvey.Core.Domain
 
         [Required]
         [StringLength(10)]
-        [DisplayName("Name")]
+        [Display(Name = "Name")]
         public virtual string StudentId { get; set; }
 
-        [DisplayName("Date Taken")]
+        [Display(Name = "Date Taken")]
         public virtual DateTime DateTaken { get; set; }
 
         public virtual Category PositiveCategory { get; set; }
@@ -45,7 +45,7 @@ namespace NuSurvey.Core.Domain
         public virtual Survey Survey { get; set; }
 
         [Required]
-        [DisplayName("User Id")]
+        [Display(Name = "User Id")]
         public virtual string UserId { get; set; }
 
         public virtual bool IsPending { get; set; }  //TODO: If a category is versioned and there are any pending Survey Responses for that survey, they should be deleted.

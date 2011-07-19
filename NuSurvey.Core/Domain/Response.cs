@@ -8,7 +8,7 @@ namespace NuSurvey.Core.Domain
     public class Response : DomainObject
     {
         [Required]
-        [DisplayName("Choice")]
+        [Display(Name = "Choice")]
         public virtual string Value { get; set; }
 
         public virtual int Score { get; set; }

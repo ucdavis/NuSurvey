@@ -315,7 +315,7 @@ namespace NuSurvey.Tests.RepositoryTests
                 Assert.IsNotNull(survey);
                 Assert.AreEqual(10 + 1, survey.ShortName.Length);
                 var results = survey.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("ShortName: The field ShortName must be a string with a maximum length of 10.");
+                results.AssertErrorsAre("ShortName: The field Short Name must be a string with a maximum length of 10.");
                 Assert.IsTrue(survey.IsTransient());
                 Assert.IsFalse(survey.IsValid());
                 throw;
@@ -472,7 +472,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(survey);
                 var results = survey.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuizType: The QuizType field is required.");
+                results.AssertErrorsAre("QuizType: The Quiz Type field is required.");
                 Assert.IsTrue(survey.IsTransient());
                 Assert.IsFalse(survey.IsValid());
                 throw;
@@ -504,7 +504,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(survey);
                 var results = survey.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuizType: The QuizType field is required.");
+                results.AssertErrorsAre("QuizType: The Quiz Type field is required.");
                 Assert.IsTrue(survey.IsTransient());
                 Assert.IsFalse(survey.IsValid());
                 throw;
@@ -536,7 +536,7 @@ namespace NuSurvey.Tests.RepositoryTests
             {
                 Assert.IsNotNull(survey);
                 var results = survey.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuizType: The QuizType field is required.");
+                results.AssertErrorsAre("QuizType: The Quiz Type field is required.");
                 Assert.IsTrue(survey.IsTransient());
                 Assert.IsFalse(survey.IsValid());
                 throw;
@@ -569,7 +569,7 @@ namespace NuSurvey.Tests.RepositoryTests
                 Assert.IsNotNull(survey);
                 Assert.AreEqual(100 + 1, survey.QuizType.Length);
                 var results = survey.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuizType: The field QuizType must be a string with a maximum length of 100.");
+                results.AssertErrorsAre("QuizType: The field Quiz Type must be a string with a maximum length of 100.");
                 Assert.IsTrue(survey.IsTransient());
                 Assert.IsFalse(survey.IsValid());
                 throw;
@@ -1283,7 +1283,7 @@ namespace NuSurvey.Tests.RepositoryTests
             }));
             expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>
             {
-                "[System.ComponentModel.DisplayNameAttribute(\"Active\")]"
+                "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Active\")]"
             }));
             expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
             {
@@ -1296,14 +1296,14 @@ namespace NuSurvey.Tests.RepositoryTests
             }));
             expectedFields.Add(new NameAndType("QuizType", "System.String", new List<string>
             {
-                 "[System.ComponentModel.DataAnnotations.RequiredAttribute()]",
-                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)100)]",              
-                 "[System.ComponentModel.DisplayNameAttribute(\"Quiz Type\")]"
+                "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Quiz Type\")]", 
+                "[System.ComponentModel.DataAnnotations.RequiredAttribute()]",
+                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)100)]"                 
             }));
             expectedFields.Add(new NameAndType("ShortName", "System.String", new List<string>
             {
-                 "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)10)]",
-                 "[System.ComponentModel.DisplayNameAttribute(\"Short Name\")]"
+                "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Short Name\")]", 
+                "[System.ComponentModel.DataAnnotations.StringLengthAttribute((Int32)10)]"                 
             }));
             expectedFields.Add(new NameAndType("SurveyResponses", "System.Collections.Generic.IList`1[NuSurvey.Core.Domain.SurveyResponse]", new List<string>
             {

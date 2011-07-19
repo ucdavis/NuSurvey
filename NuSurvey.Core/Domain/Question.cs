@@ -51,19 +51,19 @@ namespace NuSurvey.Core.Domain
 
         [Required]
         [StringLength(100)]
-        [DisplayName("Question")]
+        [Display(Name = "Question")]
         [AllowHtml]
         public virtual string Name { get; set; }
 
-        [DisplayName("Active")]
+        [Display(Name = "Active")]
         public virtual bool IsActive { get; set; }
 
         public virtual int Order { get; set; }
 
-        [DisplayName("Open Ended")]
+        [Display(Name = "Open Ended")]
         public virtual bool IsOpenEnded { get; set; }
 
-        [DisplayName("Date Created")]
+        [Display(Name = "Date Created")]
         public virtual DateTime CreateDate { get; set; }
 
         [Required]
@@ -74,7 +74,7 @@ namespace NuSurvey.Core.Domain
         [Required]
         public virtual IList<Response> Responses { get; set; }
 
-        [DisplayName("Question Type")]
+        [Display(Name = "Question Type")]
         public virtual int OpenEndedQuestionType { get; set; }
 
         #region Methods
