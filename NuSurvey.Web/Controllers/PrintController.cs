@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Web.Mvc;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using MvcContrib;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
@@ -131,6 +134,32 @@ namespace NuSurvey.Web.Controllers
             
 
             return _printService.PrintPickList(survey.Id, selectedAsString);
+        }
+
+        [Admin]
+        public ActionResult TestPdf()
+        {
+            var doc1 = new Document();
+            var ms = new MemoryStream();
+            var writer = PdfWriter.GetInstance(doc1, ms);
+            Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 14, Font.NORMAL, BaseColor.ORANGE);
+
+            
+
+
+            
+
+            doc1.Open();
+            PdfContentByte cb = writer.DirectContent;
+            cb.Rectangle(10f, 500f, 10f, 10f);
+            cb.Stroke();
+            doc1.Add(new Paragraph("My PDF Paragraph", arial));
+            doc1.Add(new Paragraph("Your PDF Paragraph", arial));
+            doc1.Close();
+            var bytes = ms.ToArray();
+            
+
+            return new FileContentResult(bytes, "application/pdf");
         }
     }
 
