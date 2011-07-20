@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Web;
 using System.Web.Mvc;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -139,27 +140,56 @@ namespace NuSurvey.Web.Controllers
         [Admin]
         public ActionResult TestPdf()
         {
+            var blah = GetAbsoluteUrl(Request, Url, "~/Images/pdfCheckbox.png");
+
+            Image checkBoxImage = Image.GetInstance(blah);
             var doc1 = new Document();
             var ms = new MemoryStream();
             var writer = PdfWriter.GetInstance(doc1, ms);
-            Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 14, Font.NORMAL, BaseColor.ORANGE);
+            Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
+            Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
 
+
+            var table = new PdfPTable(2);
+            //actual width of table in points
+            table.TotalWidth = 350f;
+            //fix the absolute width of the table
+            table.LockedWidth = true;
+            table.DefaultCell.Border = 0;
+
+            //relative col widths in proportions - 1/3 and 2/3
+
+            var widths = new[] { 1f, 20f };
+            table.SetWidths(widths);
+            table.HorizontalAlignment = 0;
+            //leave a gap before and after the table
+            table.SpacingBefore = 20f;
+            table.SpacingAfter = 30f;
+
+
+
+            table.AddCell(checkBoxImage);
+            table.AddCell(new Paragraph("My PDF Paragraph", arialBold));
+            table.AddCell(checkBoxImage);
+            table.AddCell(new Paragraph("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.", arial));
             
-
-
-            
-
             doc1.Open();
-            PdfContentByte cb = writer.DirectContent;
-            cb.Rectangle(10f, 500f, 10f, 10f);
-            cb.Stroke();
-            doc1.Add(new Paragraph("My PDF Paragraph", arial));
-            doc1.Add(new Paragraph("Your PDF Paragraph", arial));
+            //PdfContentByte cb = writer.DirectContent;
+            //cb.Rectangle(10f, 500f, 10f, 10f);
+            //cb.Stroke();
+            //doc1.Add(new Paragraph("My PDF Paragraph", arial));
+            //doc1.Add(new Paragraph("Your PDF Paragraph", arial));
+            doc1.Add(table);
             doc1.Close();
             var bytes = ms.ToArray();
             
 
             return new FileContentResult(bytes, "application/pdf");
+        }
+
+        private string GetAbsoluteUrl(HttpRequestBase request, UrlHelper url, string relative)
+        {
+            return string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, url.Content(relative));
         }
     }
 

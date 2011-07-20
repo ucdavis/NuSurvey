@@ -204,6 +204,7 @@
     <Content Include="Images\logo-caes-long-cap.png" />
     <Content Include="Images\logo-ucdavis.png" />
     <Content Include="Images\pdf.png" />
+    <Content Include="Images\pdfCheckbox.png" />
     <Content Include="Images\pdf_hover.png" />
     <Content Include="Images\plus.png" />
     <Content Include="Images\print.png" />
