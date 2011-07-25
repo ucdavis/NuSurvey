@@ -54,7 +54,7 @@ namespace NuSurvey.Web.Controllers
                 }
             }
 
-            return _printService.PrintSingle(id);
+            return _printService.PrintSingle(id, Repository, Request, Url);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace NuSurvey.Web.Controllers
             beginDate = beginDate.Value.Date;
             endDate = endDate.Value.Date.AddDays(1).AddMinutes(-1);
 
-            return _printService.PrintMultiple(id, beginDate, endDate);
+            return _printService.PrintMultiple(id, Repository, Request, Url, beginDate, endDate);
         }
 
         /// <summary>
@@ -131,10 +131,10 @@ namespace NuSurvey.Web.Controllers
                 Check.Require(surveyResponse.Survey.Id == survey.Id, string.Format("SurveyResponse's survey id does not match {0} -- {1}", surveyResponse.Survey.Id, survey.Id));
             }
 
-            var selectedAsString = string.Join(",", picked);
+            
             
 
-            return _printService.PrintPickList(survey.Id, selectedAsString);
+            return _printService.PrintPickList(survey.Id, Repository, Request, Url, picked);
         }
 
         [Admin]
@@ -157,7 +157,7 @@ namespace NuSurvey.Web.Controllers
             //fix the absolute width of the table
             table.LockedWidth = true;
             
-            table.DefaultCell.Border = 0;
+            //table.DefaultCell.Border = 0;
             table.DefaultCell.PaddingTop = 10f;
            
 
@@ -185,7 +185,7 @@ namespace NuSurvey.Web.Controllers
             
             //3
             table.AddCell(string.Empty);
-            table.AddCell(new Paragraph("Great job!  You are not using food as a reward.", arialBold));
+            table.AddCell(new Paragraph("\nGreat job!  You are not using food as a reward.", arialBold));
             
             //4
             table.AddCell(string.Empty);
@@ -239,7 +239,7 @@ namespace NuSurvey.Web.Controllers
             table.GetRow(0).MaxHeights = 70f;
             table.GetRow(1).MaxHeights = 65f;
             table.GetRow(2).MaxHeights = 6f;
-            table.GetRow(3).MaxHeights = 50f;
+            table.GetRow(3).MaxHeights = 50f;            
             table.GetRow(4).MaxHeights = 77f;
             table.GetRow(5).MaxHeights = 48f;
             table.GetRow(6).MaxHeights = 32f;
