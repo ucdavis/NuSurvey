@@ -143,19 +143,23 @@ namespace NuSurvey.Web.Controllers
             var blah = GetAbsoluteUrl(Request, Url, "~/Images/pdfCheckbox.png");
 
             Image checkBoxImage = Image.GetInstance(blah);
-            var doc1 = new Document();
+            var doc1 = new Document(PageSize.LETTER, 36 /* left */, 36 /* right */, 62 /* top */, 52 /* bottom */);
             var ms = new MemoryStream();
             var writer = PdfWriter.GetInstance(doc1, ms);
             Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
             Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
+            
 
 
             var table = new PdfPTable(2);
             //actual width of table in points
-            table.TotalWidth = 350f;
+            table.TotalWidth = 454f;
             //fix the absolute width of the table
             table.LockedWidth = true;
-            table.DefaultCell.Border = 0;
+            
+            //table.DefaultCell.Border = 0;
+            table.DefaultCell.PaddingTop = 10f;
+           
 
             //relative col widths in proportions - 1/3 and 2/3
 
@@ -164,21 +168,47 @@ namespace NuSurvey.Web.Controllers
             table.HorizontalAlignment = 0;
             //leave a gap before and after the table
             table.SpacingBefore = 20f;
-            table.SpacingAfter = 30f;
+            table.SpacingAfter = 0f;
 
+            //0
+            table.AddCell(string.Empty);
+            table.AddCell(string.Empty);
 
-
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph("My PDF Paragraph", arialBold));
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph("There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.", arial));
+            //1
+            table.AddCell(string.Empty);
+            table.AddCell(new Paragraph("Thank you Danielle for taking the time to complete the My Child at Meal Time quiz. We hope this feedback will help you and your family make healthy feeding choices.", arial));
             
+            //2
+            table.AddCell(string.Empty);
+            table.AddCell(string.Empty);
+            
+            //3
+            table.AddCell(string.Empty);
+            table.AddCell(new Paragraph("Great job!  You are not using food as a reward.", arialBold));
+            
+            //4
+            table.AddCell(string.Empty);
+            table.AddCell(string.Empty);
+
+            //5
+            table.AddCell(checkBoxImage);
+            table.AddCell(new Paragraph("You may want to make food more child friendly.", arialBold));
+
+            //6
+            table.AddCell(string.Empty);
+            table.AddCell(string.Empty);
+
+            table.GetRow(0).MaxHeights = 70f;
+            table.GetRow(1).MaxHeights = 65f;
+            table.GetRow(2).MaxHeights = 6f;
+            table.GetRow(3).MaxHeights = 50f;
+            table.GetRow(4).MaxHeights = 77f;
+            table.GetRow(5).MaxHeights = 48f;
+            table.GetRow(6).MaxHeights = 32f;
+
             doc1.Open();
-            //PdfContentByte cb = writer.DirectContent;
-            //cb.Rectangle(10f, 500f, 10f, 10f);
-            //cb.Stroke();
-            //doc1.Add(new Paragraph("My PDF Paragraph", arial));
-            //doc1.Add(new Paragraph("Your PDF Paragraph", arial));
+            doc1.Add(table);
+            doc1.NewPage();
             doc1.Add(table);
             doc1.Close();
             var bytes = ms.ToArray();
