@@ -344,15 +344,15 @@ namespace NuSurvey.Web.Services
             table.GetRow(4).MaxHeights = 77f;
             table.GetRow(5).MaxHeights = 48f;
             table.GetRow(6).MaxHeights = 32f;
-            table.GetRow(7).MaxHeights = 40;
-            table.GetRow(8).MaxHeights = 40;
-            table.GetRow(9).MaxHeights = 40;
-            table.GetRow(10).MaxHeights = 31;
+            table.GetRow(7).MaxHeights = 40f;
+            table.GetRow(8).MaxHeights = 40f;
+            table.GetRow(9).MaxHeights = 40f;
+            table.GetRow(10).MaxHeights = 31f;
             table.GetRow(11).MaxHeights = 44f;
             table.GetRow(12).MaxHeights = 38f;
-            table.GetRow(13).MaxHeights = 40;
-            table.GetRow(14).MaxHeights = 40;
-            table.GetRow(15).MaxHeights = 40;
+            table.GetRow(13).MaxHeights = 40f;
+            table.GetRow(14).MaxHeights = 40f;
+            table.GetRow(15).MaxHeights = 40f;
             return table;
         }
 

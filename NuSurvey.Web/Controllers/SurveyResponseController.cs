@@ -61,7 +61,7 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.Index());
                 //return RedirectToAction("Index");
             }
-            if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId != CurrentUser.Identity.Name)
+            if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
             {
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
             }
@@ -99,7 +99,7 @@ namespace NuSurvey.Web.Controllers
             var cannotContinue = false;
 
             var pendingExists = _surveyResponseRepository.Queryable
-                .Where(a => a.Survey.Id == id && a.IsPending && a.UserId == CurrentUser.Identity.Name).FirstOrDefault();
+                .Where(a => a.Survey.Id == id && a.IsPending && a.UserId == CurrentUser.Identity.Name.ToLower()).FirstOrDefault();
             if (pendingExists != null)
             {
                 foreach (var answer in pendingExists.Answers)
@@ -164,7 +164,7 @@ namespace NuSurvey.Web.Controllers
 
             surveyResponse.IsPending = true;
             surveyResponse.Survey = survey;
-            surveyResponse.UserId = CurrentUser.Identity.Name;
+            surveyResponse.UserId = CurrentUser.Identity.Name.ToLower();
 
             ModelState.Clear();
             surveyResponse.TransferValidationMessagesTo(ModelState);
@@ -199,7 +199,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Pending survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            if (surveyResponse.UserId != CurrentUser.Identity.Name)
+            if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Not your survey";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
@@ -228,7 +228,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Pending survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            if (surveyResponse.UserId != CurrentUser.Identity.Name)
+            if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Not your survey";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
@@ -303,7 +303,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Pending survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            if (surveyResponse.UserId != CurrentUser.Identity.Name)
+            if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Not your survey";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
@@ -339,7 +339,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Pending survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId != CurrentUser.Identity.Name)
+            if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Not your survey";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
@@ -367,7 +367,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Pending survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId != CurrentUser.Identity.Name)
+            if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Not your survey";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
@@ -452,7 +452,7 @@ namespace NuSurvey.Web.Controllers
             ModelState.Clear();            
             //Set non-dynamic surveyResponse values
             surveyResponseToCreate.StudentId = surveyResponse.StudentId;
-            surveyResponseToCreate.UserId = CurrentUser.Identity.Name;
+            surveyResponseToCreate.UserId = CurrentUser.Identity.Name.ToLower();
 
             //Check each question, create an answer for it if there isn't one.
             var length = questions.Length;

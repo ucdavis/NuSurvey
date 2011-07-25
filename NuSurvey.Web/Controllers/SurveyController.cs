@@ -217,7 +217,7 @@ namespace NuSurvey.Web.Controllers
             }
 
             var viewModel = SurveyResponseDetailViewModel.Create(Repository, survey, filterBeginDate, filterEndDate);
-            viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.UserId == CurrentUser.Identity.Name);
+            viewModel.SurveyResponses = viewModel.SurveyResponses.Where(a => a.UserId == CurrentUser.Identity.Name.ToLower());
 
             return View(viewModel);
         }

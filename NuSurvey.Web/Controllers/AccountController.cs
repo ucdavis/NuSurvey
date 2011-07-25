@@ -167,7 +167,7 @@ namespace NuSurvey.Web.Controllers
         [Admin]
         public ActionResult ManageUsers(bool hideAdmin = false, bool hideUser= false, bool hidePublic = true)
         {
-            var viewModel = ManageUsersViewModel.Create(MembershipService.GetUsersAndRoles(CurrentUser.Identity.Name), hideAdmin, hideUser, hidePublic);
+            var viewModel = ManageUsersViewModel.Create(MembershipService.GetUsersAndRoles(CurrentUser.Identity.Name.ToLower()), hideAdmin, hideUser, hidePublic);
 
             return View(viewModel);
         }
@@ -180,7 +180,7 @@ namespace NuSurvey.Web.Controllers
         [Admin]
         public ActionResult Edit(string id)
         {
-            if (id.Trim().ToLower() == CurrentUser.Identity.Name)
+            if (id.Trim().ToLower() == CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Can't change yourself";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
@@ -206,7 +206,7 @@ namespace NuSurvey.Web.Controllers
         [HttpPost]
         public ActionResult Edit(EditUserViewModel editUserViewModel)
         {
-            if (editUserViewModel.Email.Trim().ToLower() == CurrentUser.Identity.Name)
+            if (editUserViewModel.Email.Trim().ToLower() == CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Can't change yourself";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
@@ -247,7 +247,7 @@ namespace NuSurvey.Web.Controllers
         [Admin]
         public ActionResult Delete(string id)
         {
-            if (id.Trim().ToLower() == CurrentUser.Identity.Name)
+            if (id.Trim().ToLower() == CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Can't delete yourself";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
@@ -274,7 +274,7 @@ namespace NuSurvey.Web.Controllers
         [HttpPost]
         public ActionResult Delete(string id, bool confirm)
         {
-            if (id.Trim().ToLower() == CurrentUser.Identity.Name)
+            if (id.Trim().ToLower() == CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Can't delete yourself";
                 return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
