@@ -137,138 +137,138 @@ namespace NuSurvey.Web.Controllers
             return _printService.PrintPickList(survey.Id, Repository, Request, Url, picked);
         }
 
-        [Admin]
-        public ActionResult TestPdf()
-        {
-            var blah = GetAbsoluteUrl(Request, Url, "~/Images/pdfCheckbox.png");
+        //[Admin]
+        //public ActionResult TestPdf()
+        //{
+        //    var blah = GetAbsoluteUrl(Request, Url, "~/Images/pdfCheckbox.png");
 
-            Image checkBoxImage = Image.GetInstance(blah);
-            var doc1 = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
-            var ms = new MemoryStream();
-            var writer = PdfWriter.GetInstance(doc1, ms);
-            Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
-            Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
+        //    Image checkBoxImage = Image.GetInstance(blah);
+        //    var doc1 = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
+        //    var ms = new MemoryStream();
+        //    var writer = PdfWriter.GetInstance(doc1, ms);
+        //    Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
+        //    Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
             
 
 
-            var table = new PdfPTable(2);
-            //actual width of table in points
-            table.TotalWidth = 454f;
-            //fix the absolute width of the table
-            table.LockedWidth = true;
+        //    var table = new PdfPTable(2);
+        //    //actual width of table in points
+        //    table.TotalWidth = 454f;
+        //    //fix the absolute width of the table
+        //    table.LockedWidth = true;
             
-            //table.DefaultCell.Border = 0;
-            table.DefaultCell.PaddingTop = 10f;
+        //    //table.DefaultCell.Border = 0;
+        //    table.DefaultCell.PaddingTop = 10f;
            
 
-            //relative col widths in proportions - 1/3 and 2/3
+        //    //relative col widths in proportions - 1/3 and 2/3
 
-            var widths = new[] { 1f, 20f };
-            table.SetWidths(widths);
-            table.HorizontalAlignment = 0;
-            //leave a gap before and after the table
-            table.SpacingBefore = 20f;
-            table.SpacingAfter = 0f;
+        //    var widths = new[] { 1f, 20f };
+        //    table.SetWidths(widths);
+        //    table.HorizontalAlignment = 0;
+        //    //leave a gap before and after the table
+        //    table.SpacingBefore = 20f;
+        //    table.SpacingAfter = 0f;
             
 
-            //0
-            table.AddCell(string.Empty);
-            table.AddCell(string.Empty);
+        //    //0
+        //    table.AddCell(string.Empty);
+        //    table.AddCell(string.Empty);
 
-            //1
-            table.AddCell(string.Empty);
-            table.AddCell(new Paragraph("Thank you Danielle for taking the time to complete the My Child at Meal Time quiz. We hope this feedback will help you and your family make healthy feeding choices.", arial));
+        //    //1
+        //    table.AddCell(string.Empty);
+        //    table.AddCell(new Paragraph("Thank you Danielle for taking the time to complete the My Child at Meal Time quiz. We hope this feedback will help you and your family make healthy feeding choices.", arial));
             
-            //2
-            table.AddCell(string.Empty);
-            table.AddCell(string.Empty);
+        //    //2
+        //    table.AddCell(string.Empty);
+        //    table.AddCell(string.Empty);
             
-            //3
-            table.AddCell(string.Empty);
-            table.AddCell(new Paragraph("\nGreat job!  You are not using food as a reward.", arialBold));
+        //    //3
+        //    table.AddCell(string.Empty);
+        //    table.AddCell(new Paragraph("\nGreat job!  You are not using food as a reward.", arialBold));
             
-            //4
-            table.AddCell(string.Empty);
-            table.AddCell(string.Empty);
+        //    //4
+        //    table.AddCell(string.Empty);
+        //    table.AddCell(string.Empty);
 
-            //5
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph("You may want to make food more child friendly.", arialBold));
+        //    //5
+        //    table.AddCell(checkBoxImage);
+        //    table.AddCell(new Paragraph("You may want to make food more child friendly.", arialBold));
 
-            //6
-            table.AddCell(string.Empty);
-            table.AddCell(string.Empty);
+        //    //6
+        //    table.AddCell(string.Empty);
+        //    table.AddCell(string.Empty);
 
-            //7
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph("Let your child pick the foods she wants to eat from foods already prepared 3 times this week.", arial));
+        //    //7
+        //    table.AddCell(checkBoxImage);
+        //    table.AddCell(new Paragraph("Let your child pick the foods she wants to eat from foods already prepared 3 times this week.", arial));
 
-            //8
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph("Let your child help prepare 2 meals this week.", arial));
+        //    //8
+        //    table.AddCell(checkBoxImage);
+        //    table.AddCell(new Paragraph("Let your child help prepare 2 meals this week.", arial));
 
-            //9
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph("Make food fun for your child 2 times this week.  Try cutting sandwiches into shapes.  Try making faces with food.", arial));
+        //    //9
+        //    table.AddCell(checkBoxImage);
+        //    table.AddCell(new Paragraph("Make food fun for your child 2 times this week.  Try cutting sandwiches into shapes.  Try making faces with food.", arial));
 
-            //10
-            table.AddCell(string.Empty);
-            table.AddCell(string.Empty);
+        //    //10
+        //    table.AddCell(string.Empty);
+        //    table.AddCell(string.Empty);
 
-            //11
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph("You may want to talk with your child about food during mealtime.", arialBold));
+        //    //11
+        //    table.AddCell(checkBoxImage);
+        //    table.AddCell(new Paragraph("You may want to talk with your child about food during mealtime.", arialBold));
 
-            //12
-            table.AddCell(string.Empty);
-            table.AddCell(string.Empty);
+        //    //12
+        //    table.AddCell(string.Empty);
+        //    table.AddCell(string.Empty);
 
-            //13
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph("Ask your child a question about the food he is eating at each meal this week.", arial));
+        //    //13
+        //    table.AddCell(checkBoxImage);
+        //    table.AddCell(new Paragraph("Ask your child a question about the food he is eating at each meal this week.", arial));
 
-            //14
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph("Tell your child that a healthy food he is eating is good for him 2 times this week.  Try, “I love that you are drinking milk. It will make you strong!”", arial));
+        //    //14
+        //    table.AddCell(checkBoxImage);
+        //    table.AddCell(new Paragraph("Tell your child that a healthy food he is eating is good for him 2 times this week.  Try, “I love that you are drinking milk. It will make you strong!”", arial));
 
-            //15
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph("Praise your child for trying a new food 2 times this week. ", arial));
-
-
-            table.GetRow(0).MaxHeights = 70f;
-            table.GetRow(1).MaxHeights = 65f;
-            table.GetRow(2).MaxHeights = 6f;
-            table.GetRow(3).MaxHeights = 50f;            
-            table.GetRow(4).MaxHeights = 77f;
-            table.GetRow(5).MaxHeights = 48f;
-            table.GetRow(6).MaxHeights = 32f;
-            table.GetRow(7).MaxHeights = 40;
-            table.GetRow(8).MaxHeights = 40;
-            table.GetRow(9).MaxHeights = 40;
-            table.GetRow(10).MaxHeights = 31;
-            table.GetRow(11).MaxHeights = 44f;
-            table.GetRow(12).MaxHeights = 38f;
-            table.GetRow(13).MaxHeights = 40;
-            table.GetRow(14).MaxHeights = 40;
-            table.GetRow(15).MaxHeights = 40;
+        //    //15
+        //    table.AddCell(checkBoxImage);
+        //    table.AddCell(new Paragraph("Praise your child for trying a new food 2 times this week. ", arial));
 
 
-            doc1.Open();
-            doc1.Add(table);
-            doc1.NewPage();
-            doc1.Add(table);
-            doc1.Close();
-            var bytes = ms.ToArray();
+        //    table.GetRow(0).MaxHeights = 70f;
+        //    table.GetRow(1).MaxHeights = 65f;
+        //    table.GetRow(2).MaxHeights = 6f;
+        //    table.GetRow(3).MaxHeights = 50f;            
+        //    table.GetRow(4).MaxHeights = 77f;
+        //    table.GetRow(5).MaxHeights = 48f;
+        //    table.GetRow(6).MaxHeights = 32f;
+        //    table.GetRow(7).MaxHeights = 40;
+        //    table.GetRow(8).MaxHeights = 40;
+        //    table.GetRow(9).MaxHeights = 40;
+        //    table.GetRow(10).MaxHeights = 31;
+        //    table.GetRow(11).MaxHeights = 44f;
+        //    table.GetRow(12).MaxHeights = 38f;
+        //    table.GetRow(13).MaxHeights = 40;
+        //    table.GetRow(14).MaxHeights = 40;
+        //    table.GetRow(15).MaxHeights = 40;
+
+
+        //    doc1.Open();
+        //    doc1.Add(table);
+        //    doc1.NewPage();
+        //    doc1.Add(table);
+        //    doc1.Close();
+        //    var bytes = ms.ToArray();
             
 
-            return new FileContentResult(bytes, "application/pdf");
-        }
+        //    return new FileContentResult(bytes, "application/pdf");
+        //}
 
-        private string GetAbsoluteUrl(HttpRequestBase request, UrlHelper url, string relative)
-        {
-            return string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, url.Content(relative));
-        }
+        //private string GetAbsoluteUrl(HttpRequestBase request, UrlHelper url, string relative)
+        //{
+        //    return string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, url.Content(relative));
+        //}
     }
 
 }
