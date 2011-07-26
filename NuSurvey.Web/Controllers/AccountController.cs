@@ -60,7 +60,7 @@ namespace NuSurvey.Web.Controllers
             {
                 if (MembershipService.ValidateUser(model.UserName.ToLower(), model.Password))
                 {
-                    FormsService.SignIn(model.UserName, model.RememberMe);
+                    FormsService.SignIn(model.UserName.ToLower(), model.RememberMe);
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
