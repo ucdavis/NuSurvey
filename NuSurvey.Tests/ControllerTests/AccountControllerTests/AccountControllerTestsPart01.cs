@@ -89,7 +89,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             var model = new LogOnModel {UserName = "UserName@test.com", Password = "Password"};
             MembershipService.Expect(a => a.ValidateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
                 .Return(true).Repeat.Any();
-            FormService.Expect(a => a.SignIn("UserName@test.com", false));
+            FormService.Expect(a => a.SignIn("username@test.com", false));
             #endregion Arrange
 
             #region Act
@@ -100,8 +100,8 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
 
             #region Assert
             Assert.IsNotNull(result);
-            MembershipService.AssertWasCalled(a => a.ValidateUser("UserName@test.com".ToLower(), "Password"));
-            FormService.AssertWasCalled(a => a.SignIn("UserName@test.com", false));
+            MembershipService.AssertWasCalled(a => a.ValidateUser("username@test.com".ToLower(), "Password"));
+            FormService.AssertWasCalled(a => a.SignIn("username@test.com", false));
             #endregion Assert
         }
 
@@ -112,7 +112,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             var model = new LogOnModel {UserName = "UserName@test.com", Password = "Password"};
             MembershipService.Expect(a => a.ValidateUser(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
                 .Return(true).Repeat.Any();
-            FormService.Expect(a => a.SignIn("UserName@test.com", false));
+            FormService.Expect(a => a.SignIn("username@test.com", false));
 
             #endregion Arrange
 
@@ -124,8 +124,8 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("~/Survey", result.Url);
-            MembershipService.AssertWasCalled(a => a.ValidateUser("UserName@test.com".ToLower(), "Password"));
-            FormService.AssertWasCalled(a => a.SignIn("UserName@test.com", false));
+            MembershipService.AssertWasCalled(a => a.ValidateUser("username@test.com".ToLower(), "Password"));
+            FormService.AssertWasCalled(a => a.SignIn("username@test.com", false));
             #endregion Assert
         }
 
