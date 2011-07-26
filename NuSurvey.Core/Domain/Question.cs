@@ -31,6 +31,7 @@ namespace NuSurvey.Core.Domain
             IsActive = true;
             Responses = new List<Response>();
             OpenEndedQuestionType = 0;
+            AllowBypass = true;
         }
 
         private void SetPostDefaults()
@@ -77,6 +78,9 @@ namespace NuSurvey.Core.Domain
         [Display(Name = "Question Type")]
         public virtual int OpenEndedQuestionType { get; set; }
 
+        [Display(Name = "Allow Bypass")]
+        public virtual bool AllowBypass { get; set; }
+
         #region Methods
         public virtual void AddResponse(Response response)
         {
@@ -96,6 +100,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.IsOpenEnded);
             Map(x => x.CreateDate);
             Map(x => x.OpenEndedQuestionType);
+            Map(x => x.AllowBypass);
 
             References(x => x.Category);
             References(x => x.Survey);

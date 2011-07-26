@@ -251,7 +251,7 @@ namespace NuSurvey.Web.Controllers
                 answer = new Answer(); 
             }
 
-            if (!string.IsNullOrEmpty(byPassAnswer)) //&& question.AllowBypass //TODO:Create field to allow public bypass.
+            if (!string.IsNullOrEmpty(byPassAnswer) && question.AllowBypass)
             {
                 answer.OpenEndedAnswer = null;
                 answer.Response = null;
@@ -299,8 +299,10 @@ namespace NuSurvey.Web.Controllers
             }
 
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
-            //if(question.AllowBypass)
-            viewModel.DisplayBypass = true;
+            if(question.AllowBypass)
+            {
+                viewModel.DisplayBypass = true;
+            }
             return View(viewModel);
             
 

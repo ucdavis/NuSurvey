@@ -31,6 +31,15 @@
 				@Html.ValidationMessageFor(model => model.Question.IsActive)
 			</div>
 		</li>
+        <li>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Question.AllowBypass) 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.Question.AllowBypass)
+				@Html.ValidationMessageFor(model => model.Question.AllowBypass)
+			</div>
+		</li>
 @*		<li>
 			<div class="editor-label">
 				@Html.LabelFor(model => model.Question.Order) 
