@@ -240,8 +240,7 @@ namespace NuSurvey.Web.Controllers
             {
                 Message = "Question survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
-            }
-
+            }                           
             Answer answer;
             if (surveyResponse.Answers.Where(a => a.Question.Id == question.Id).Any())
             {
@@ -252,7 +251,23 @@ namespace NuSurvey.Web.Controllers
                 answer = new Answer(); 
             }
 
-            questions = _scoreService.ScoreQuestion(surveyResponse.Survey.Questions.AsQueryable(), questions);
+            if (!string.IsNullOrEmpty(byPassAnswer)) //&& question.AllowBypass //TODO:Create field to allow public bypass.
+            {
+                answer.OpenEndedAnswer = null;
+                answer.Response = null;
+                answer.Score = 0;
+                answer.BypassScore = true;
+                answer.OpenEndedStringAnswer = byPassAnswer;
+                answer.Question = question;
+                answer.Category = question.Category;
+                surveyResponse.AddAnswers(answer);
+                _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id));
+            }
+            else
+            {
+                questions = _scoreService.ScoreQuestion(surveyResponse.Survey.Questions.AsQueryable(), questions);
+            }
             if (questions.Invalid)
             {
                 ModelState.AddModelError("Questions", questions.Message);
@@ -284,7 +299,8 @@ namespace NuSurvey.Web.Controllers
             }
 
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
-            //viewModel.DisplayBypass = true;
+            //if(question.AllowBypass)
+            viewModel.DisplayBypass = true;
             return View(viewModel);
             
 
@@ -634,7 +650,7 @@ namespace NuSurvey.Web.Controllers
         public SurveyResponse SurveyResponse { get; set; }
         public QuestionAnswerParameter SurveyAnswer { get; set; }
         public bool FromAdmin { get; set; }
-        //public bool DisplayBypass { get; set; }
+        public bool DisplayBypass { get; set; }
 
         public static SingleAnswerSurveyResponseViewModel Create(IRepository repository, Survey survey, SurveyResponse pendingSurveyResponse)
         {
@@ -663,7 +679,7 @@ namespace NuSurvey.Web.Controllers
                 viewModel.CurrentQuestion = viewModel.Questions.FirstOrDefault();
             }
 
-            //viewModel.DisplayBypass = false;
+            viewModel.DisplayBypass = false;
 
             return viewModel;
         }

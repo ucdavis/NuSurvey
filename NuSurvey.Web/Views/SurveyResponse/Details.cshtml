@@ -165,7 +165,13 @@
             <td>
                 @if (ans.BypassScore)
                 {
-                   @Html.Encode("*****")
+                    if (!string.IsNullOrWhiteSpace(ans.OpenEndedStringAnswer))
+                    {
+                        @ans.OpenEndedStringAnswer
+                    }
+                    else { 
+                        @Html.Encode("*****")
+                    }
                 }
                 else
                 {
@@ -183,7 +189,7 @@
                 @ans.Score
             </td>
 		</tr>
-           odd = !odd;
+                odd = !odd;
 }
 	</tbody>
 </table>
