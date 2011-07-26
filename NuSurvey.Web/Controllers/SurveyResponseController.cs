@@ -218,9 +218,10 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>
         /// <param name="questions"></param>
+        /// <param name="byPassAnswer"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult AnswerNext(int id, QuestionAnswerParameter questions)
+        public ActionResult AnswerNext(int id, QuestionAnswerParameter questions, string byPassAnswer)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
             if (surveyResponse == null || !surveyResponse.IsPending)
@@ -283,7 +284,7 @@ namespace NuSurvey.Web.Controllers
             }
 
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
-
+            //viewModel.DisplayBypass = true;
             return View(viewModel);
             
 
@@ -633,6 +634,7 @@ namespace NuSurvey.Web.Controllers
         public SurveyResponse SurveyResponse { get; set; }
         public QuestionAnswerParameter SurveyAnswer { get; set; }
         public bool FromAdmin { get; set; }
+        //public bool DisplayBypass { get; set; }
 
         public static SingleAnswerSurveyResponseViewModel Create(IRepository repository, Survey survey, SurveyResponse pendingSurveyResponse)
         {
@@ -660,6 +662,8 @@ namespace NuSurvey.Web.Controllers
                 viewModel.AnsweredQuestions = 0;
                 viewModel.CurrentQuestion = viewModel.Questions.FirstOrDefault();
             }
+
+            //viewModel.DisplayBypass = false;
 
             return viewModel;
         }

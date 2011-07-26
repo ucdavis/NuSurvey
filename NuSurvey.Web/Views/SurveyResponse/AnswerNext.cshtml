@@ -41,6 +41,29 @@
                 showPeriod: true,
                 rows: 4
             });
+
+            if('@ViewData.ModelState.IsValid' == 'False'){
+                $("#opendialog").dialog({ modal: true, width: '50%',  });
+            }
+            $("#backToQuestion").click(function (e) {
+		        e.preventDefault();
+                $("#byPassAnswer").val("");
+		        $("#opendialog").dialog("close");
+	        });
+            $("#doNotKnow").click(function (e) {
+		        e.preventDefault();
+                $("#byPassAnswer").val("doNotKnow");
+		        $("#opendialog").dialog("close");
+                $("form").submit();
+                
+	        });
+            $("#doNotWantToAnswer").click(function (e) {
+		        e.preventDefault();
+                $("#byPassAnswer").val("doNotWantToAnswer");
+		        $("#opendialog").dialog("close");
+                $("form").submit();
+	        });
+
         });
     </script>
 }
@@ -53,6 +76,7 @@
 	@Html.AntiForgeryToken()
 	@Html.ValidationSummary(true)
     @Html.HiddenFor(x => x.SurveyResponse.Id)
+    <input id="byPassAnswer" name="byPassAnswer" type="hidden" />
 
     <fieldset>
     @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
@@ -135,6 +159,23 @@
 	    </ul>
     </fieldset>
 }
+
+
+    <div id="opendialog" title="There were errors but you can do the following:" style="display: none;">
+        
+        <p>
+            <input id="backToQuestion" class="button" type="button" value="Back To Question" />
+        </p>
+        <br />
+        <p>
+            <input id="doNotKnow" class="button" type="button" value="I do not know the answer" />
+        </p>
+        <br />
+        <p>
+            <input id="doNotWantToAnswer" class="button" type="button" value="I do not want to answer the question" />
+        </p>
+    </div>
+
 
 
 
