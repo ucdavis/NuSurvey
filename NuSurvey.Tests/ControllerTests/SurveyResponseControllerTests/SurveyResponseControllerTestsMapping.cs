@@ -70,7 +70,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         [TestMethod]
         public void TestAnswerNextPostMapping()
         {
-            "~/SurveyResponse/AnswerNext/5".ShouldMapTo<SurveyResponseController>(a => a.AnswerNext(5, new QuestionAnswerParameter()), true);
+            "~/SurveyResponse/AnswerNext/5".ShouldMapTo<SurveyResponseController>(a => a.AnswerNext(5, new QuestionAnswerParameter(), string.Empty), true);
         }
 
         /// <summary>

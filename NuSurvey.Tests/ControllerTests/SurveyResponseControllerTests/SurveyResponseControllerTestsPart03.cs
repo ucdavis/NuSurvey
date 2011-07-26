@@ -182,7 +182,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.AnswerNext(3, new QuestionAnswerParameter())
+            Controller.AnswerNext(3, new QuestionAnswerParameter(), string.Empty)
                 .AssertActionRedirect()
                 .ToAction<ErrorController>(a => a.Index());
             #endregion Act
@@ -207,7 +207,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.AnswerNext(4, new QuestionAnswerParameter())
+            Controller.AnswerNext(4, new QuestionAnswerParameter(), string.Empty)
                 .AssertActionRedirect()
                 .ToAction<ErrorController>(a => a.Index());
             #endregion Act
@@ -237,7 +237,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.AnswerNext(1, new QuestionAnswerParameter())
+            Controller.AnswerNext(1, new QuestionAnswerParameter(), string.Empty)
                 .AssertActionRedirect()
                 .ToAction<ErrorController>(a => a.NotAuthorized());
             #endregion Act
@@ -271,7 +271,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.AnswerNext(1, questionAnswer)
+            Controller.AnswerNext(1, questionAnswer, string.Empty)
                 .AssertActionRedirect()
                 .ToAction<ErrorController>(a => a.Index());
             #endregion Act
@@ -315,7 +315,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.AnswerNext(1, questionAnswer)
+            var result = Controller.AnswerNext(1, questionAnswer, string.Empty)
                 .AssertViewRendered()
                 .WithViewData<SingleAnswerSurveyResponseViewModel>();
             #endregion Act
@@ -377,7 +377,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.AnswerNext(1, questionAnswer)
+            var result = Controller.AnswerNext(1, questionAnswer, string.Empty)
                 .AssertActionRedirect()
                 .ToAction<SurveyResponseController>(a => a.AnswerNext(1));
             #endregion Act
@@ -448,7 +448,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.AnswerNext(1, questionAnswer)
+            var result = Controller.AnswerNext(1, questionAnswer, string.Empty)
                 .AssertActionRedirect()
                 .ToAction<SurveyResponseController>(a => a.AnswerNext(1));
             #endregion Act
