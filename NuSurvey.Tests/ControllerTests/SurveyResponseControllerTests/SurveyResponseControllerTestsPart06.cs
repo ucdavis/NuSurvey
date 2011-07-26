@@ -473,7 +473,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             SurveyResponseRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
             var args = (SurveyResponse) SurveyResponseRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything))[0][0];
             Assert.AreEqual("SID1", args.StudentId);
-            Assert.AreEqual("UserName", args.UserId);
+            Assert.AreEqual("username", args.UserId);
             Assert.AreEqual(1, args.Answers.Count);
 
             Assert.AreEqual(null, args.Answers[0].OpenEndedAnswer);
@@ -541,7 +541,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             SurveyResponseRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
             var args = (SurveyResponse)SurveyResponseRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything))[0][0];
             Assert.AreEqual("SID1", args.StudentId);
-            Assert.AreEqual("UserName", args.UserId);
+            Assert.AreEqual("username", args.UserId);
             Assert.AreEqual(1, args.Answers.Count);
 
             Assert.AreEqual(null, args.Answers[0].OpenEndedAnswer);
@@ -610,7 +610,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             SurveyResponseRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
             var args = (SurveyResponse)SurveyResponseRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything))[0][0];
             Assert.AreEqual("SID1", args.StudentId);
-            Assert.AreEqual("UserName", args.UserId);
+            Assert.AreEqual("username", args.UserId);
             Assert.AreEqual(1, args.Answers.Count);
 
             Assert.AreEqual(null, args.Answers[0].OpenEndedAnswer);
@@ -682,7 +682,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             SurveyResponseRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
             var args = (SurveyResponse)SurveyResponseRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything))[0][0];
             Assert.AreEqual("SID1", args.StudentId);
-            Assert.AreEqual("UserName", args.UserId);
+            Assert.AreEqual("username", args.UserId);
             Assert.AreEqual(1, args.Answers.Count);
 
             Assert.AreEqual(null, args.Answers[0].OpenEndedAnswer);

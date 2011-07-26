@@ -395,7 +395,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             var args = (SurveyResponse) SurveyResponseRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything))[0][0]; 
             Assert.IsNotNull(args);
             Assert.AreEqual("Name1", args.Survey.Name);
-            Assert.AreEqual("Me@test.com", args.UserId);
+            Assert.AreEqual("me@test.com", args.UserId);
             Assert.IsTrue(args.IsPending);
             Assert.AreEqual(0, args.Answers.Count);
             Assert.AreEqual("SID99", args.StudentId);
