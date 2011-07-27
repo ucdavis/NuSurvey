@@ -43,17 +43,25 @@
             });
 
             if('@Model.DisplayBypass' == 'True'){
-                $("#opendialog").dialog({ modal: true, width: '50%',  });
+                $("#opendialog").dialog({ modal: true, width: '40%',  });
             }
 
             $(".bypassOption").click(function (e) {
                 e.preventDefault();
                 var byPassAnswer = $(this).data("bypass");
-                
-                $("#byPassAnswer").val(byPassAnswer);
-                $("#opendialog").dialog("close");
                 if(!byPassAnswer == ""){
-                    $("form").submit();
+                    var reason = $(".bypassreason:checked").val();
+                    if(reason == undefined){
+                        alert("You must select a reason to skip the question, or go back to the question");
+                    }
+                    else{
+                         $("#byPassAnswer").val(reason); 
+                         $("#opendialog").dialog("close");  
+                         $("form").submit();
+                    }
+                }
+                else{
+                    $("#opendialog").dialog("close");
                 }
             });
 
@@ -157,19 +165,38 @@
     <div class="display-form" id="opendialog" title="There were errors but you can do the following:" style="display: none;">
         <ul>
             <li>
+                <span class="field-validation-error">
                 @Html.ValidationSummary("Errors:")
+                </span>
             </li>
             <li>
                 <input class="bypassOption button" type="button" value="Back To Question" data-bypass="" />
             </li>
-
             <li>
+                <div style="display:inline-block; vertical-align: middle">
+                    <input class="bypassOption button" type="button" value="Continue To Next Question" data-bypass="skip" style="margin-right: 10px;" /> 
+                </div>
+                <div style="display:inline-block; vertical-align: middle">
+                    <div class="editor-field">
+                        <label>Reason for skipping question:</label>
+                    </div>
+                    <div class="editor-field">
+                        <input class="bypassreason" id="BypassReason1" type="radio" name="BypassReason" value="*Not known*" />
+                        <label>I do no know the answer.</label>
+                        <br>
+                        <input class="bypassreason" id="BypassReason2" type="radio" name="BypassReason" value="*Not Answered*" />
+                        <label>I do not want to answer.</label>                            
+                    </div>
+                </div>
+            </li>
+
+@*            <li>
                 <input class="bypassOption button" type="button" value="I do not know the answer" data-bypass="doNotKnow" />
             </li>
 
             <li>
                 <input class="bypassOption button" type="button" value="I do not want to answer the question" data-bypass="doNotWant" />
-            </li>
+            </li>*@
         </ul>
     </div>
 
