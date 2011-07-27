@@ -168,6 +168,22 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         }
         #endregion AnswerNext Get Tests
         #region AnswerNext Post Tests
+
+
+        [TestMethod]
+        public void TestCheckBypassLogic()
+        {
+            #region Arrange
+            Assert.Inconclusive("Do these tests if they want these changes");
+            #endregion Arrange
+
+            #region Act
+            #endregion Act
+
+            #region Assert
+            #endregion Assert		
+        }
+
         [TestMethod]
         public void TestAnswerNextPostRedirectsIfPendingSurveyNotFound1()
         {
