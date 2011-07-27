@@ -1211,6 +1211,59 @@ namespace NuSurvey.Tests.RepositoryTests
         }
 
         #endregion OpenEndedQuestionType Tests
+
+        #region AllowBypass Tests
+
+        /// <summary>
+        /// Tests the AllowBypass is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestAllowBypassIsFalseSaves()
+        {
+            #region Arrange
+            Question question = GetValid(9);
+            question.AllowBypass = false;
+            #endregion Arrange
+
+            #region Act
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(question);
+            QuestionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(question.AllowBypass);
+            Assert.IsFalse(question.IsTransient());
+            Assert.IsTrue(question.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the AllowBypass is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestAllowBypassIsTrueSaves()
+        {
+            #region Arrange
+            var question = GetValid(9);
+            question.AllowBypass = true;
+            #endregion Arrange
+
+            #region Act
+            QuestionRepository.DbContext.BeginTransaction();
+            QuestionRepository.EnsurePersistent(question);
+            QuestionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(question.AllowBypass);
+            Assert.IsFalse(question.IsTransient());
+            Assert.IsTrue(question.IsValid());
+            #endregion Assert
+        }
+
+        #endregion AllowBypass Tests
+
         
 
 
@@ -1225,6 +1278,10 @@ namespace NuSurvey.Tests.RepositoryTests
         {
             #region Arrange
             var expectedFields = new List<NameAndType>();
+            expectedFields.Add(new NameAndType("AllowBypass", "System.Boolean", new List<string>
+            {
+                 "[System.ComponentModel.DataAnnotations.DisplayAttribute(Name = \"Allow Bypass\")]"
+            }));
             expectedFields.Add(new NameAndType("Category", "NuSurvey.Core.Domain.Category", new List<string>
             {
                  "[System.ComponentModel.DataAnnotations.RequiredAttribute()]"
