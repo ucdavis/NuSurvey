@@ -171,17 +171,120 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
 
 
         [TestMethod]
-        public void TestCheckBypassLogic()
+        public void TestBypassDoesNotHappenIfQuestionPreventsIt()
         {
             #region Arrange
-            Assert.Inconclusive("Do these tests if they want these changes");
+            Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
+            SetupDataForSingleAnswer();
+
+            var answer = CreateValidEntities.Answer(1);
+            answer.Question = QuestionRepository.GetNullableById(4);
+
+            var surveyResponses = new List<SurveyResponse>();
+            surveyResponses.Add(CreateValidEntities.SurveyResponse(1));
+            surveyResponses[0].UserId = "test@testy.com";
+            surveyResponses[0].IsPending = true;
+            surveyResponses[0].Answers.Add(answer);
+            surveyResponses[0].Survey = SurveyRepository.GetNullableById(1);
+            new FakeSurveyResponses(0, SurveyResponseRepository, surveyResponses);
+
+            var questionAnswer = new QuestionAnswerParameter();
+            questionAnswer.QuestionId = QuestionRepository.GetNullableById(5).Id;
+
+            var scoredQuestionAnswer = new QuestionAnswerParameter();
+            scoredQuestionAnswer.QuestionId = questionAnswer.QuestionId;
+            scoredQuestionAnswer.Invalid = true;
+            scoredQuestionAnswer.Message = "You Made a Mistake";
+
+            ScoreService
+                .Expect(a => a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything))
+                .Return(scoredQuestionAnswer).Repeat.Any();
             #endregion Arrange
 
             #region Act
+            var result = Controller.AnswerNext(1, questionAnswer, "Passed bypass")
+                .AssertViewRendered()
+                .WithViewData<SingleAnswerSurveyResponseViewModel>();
             #endregion Act
 
             #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.PendingSurveyResponseExists);
+            Assert.AreEqual(1, result.AnsweredQuestions);
+            Assert.AreEqual(5, result.CurrentQuestion.Id);
+            Assert.AreEqual(6, result.TotalActiveQuestions);
+
+            ScoreService.AssertWasCalled(a => a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything));
+            var args =
+                ScoreService.GetArgumentsForCallsMadeOn(
+                    a =>
+                    a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything))[0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(15, (args[0] as IQueryable<Question>).Count());
+            Assert.AreEqual(5, ((QuestionAnswerParameter)args[1]).QuestionId);
+            Controller.ModelState.AssertErrorsAre("You Made a Mistake");
+            SurveyResponseRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
             #endregion Assert		
+        }
+
+
+        [TestMethod]
+        public void TestBypassHappensIfQuestionAllowsIt()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(0, new[] { "" }, "test@testy.com");
+            SetupDataForSingleAnswer();
+
+            var answer = CreateValidEntities.Answer(1);
+            answer.Question = QuestionRepository.GetNullableById(4);
+
+            var surveyResponses = new List<SurveyResponse>();
+            surveyResponses.Add(CreateValidEntities.SurveyResponse(1));
+            surveyResponses[0].UserId = "test@testy.com";
+            surveyResponses[0].IsPending = true;
+            surveyResponses[0].Answers.Add(answer);
+            surveyResponses[0].Survey = SurveyRepository.GetNullableById(1);
+            new FakeSurveyResponses(0, SurveyResponseRepository, surveyResponses);
+
+            var questionAnswer = new QuestionAnswerParameter();
+            questionAnswer.QuestionId = QuestionRepository.GetNullableById(1).Id;
+
+            var scoredQuestionAnswer = new QuestionAnswerParameter();
+            scoredQuestionAnswer.QuestionId = questionAnswer.QuestionId;
+            scoredQuestionAnswer.Invalid = true;
+            scoredQuestionAnswer.Message = "You Made a Mistake";
+
+            ScoreService
+                .Expect(a => a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything))
+                .Return(scoredQuestionAnswer).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.AnswerNext(1, questionAnswer, "Passed bypass")
+                .AssertActionRedirect()
+                .ToAction<SurveyResponseController>(a => a.AnswerNext(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.RouteValues["id"]);
+
+            ScoreService.AssertWasNotCalled(a => a.ScoreQuestion(Arg<IQueryable<Question>>.Is.Anything, Arg<QuestionAnswerParameter>.Is.Anything));
+
+            SurveyResponseRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything));
+            var surveyResponseArgs = (SurveyResponse)SurveyResponseRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<SurveyResponse>.Is.Anything))[0][0];
+            Assert.IsNotNull(surveyResponseArgs);
+            Assert.AreEqual(1, surveyResponseArgs.Id);
+            Assert.IsTrue(surveyResponseArgs.IsPending);
+            Assert.AreEqual(2, surveyResponseArgs.Answers.Count);
+            Assert.AreEqual(0, surveyResponseArgs.Answers[1].Score);
+            Assert.AreEqual(null, surveyResponseArgs.Answers[1].Response);
+            Assert.AreEqual(null, surveyResponseArgs.Answers[1].OpenEndedAnswer);
+            Assert.AreEqual("Passed bypass", surveyResponseArgs.Answers[1].OpenEndedStringAnswer);
+            Assert.IsTrue(surveyResponseArgs.Answers[1].BypassScore);
+            Assert.AreEqual(1, surveyResponseArgs.Answers[1].Question.Id);
+            Assert.AreEqual(1, surveyResponseArgs.Answers[1].Category.Id);
+            #endregion Assert
         }
 
         [TestMethod]
@@ -422,6 +525,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             Assert.AreEqual(null, surveyResponseArgs.Answers[1].OpenEndedAnswer);
             Assert.AreEqual(5, surveyResponseArgs.Answers[1].Question.Id);
             Assert.AreEqual(5, surveyResponseArgs.Answers[1].Category.Id);
+            Assert.IsFalse(surveyResponseArgs.Answers[1].BypassScore);
             #endregion Assert		
         }
 
@@ -493,6 +597,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             Assert.AreEqual(33, surveyResponseArgs.Answers[1].OpenEndedAnswer);
             Assert.AreEqual(5, surveyResponseArgs.Answers[1].Question.Id);
             Assert.AreEqual(5, surveyResponseArgs.Answers[1].Category.Id);
+            Assert.IsFalse(surveyResponseArgs.Answers[1].BypassScore);
             #endregion Assert
         }
 

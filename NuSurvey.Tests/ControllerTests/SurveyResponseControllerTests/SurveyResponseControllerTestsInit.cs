@@ -113,12 +113,15 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
                     count++;
                     questions.Add(CreateValidEntities.Question(count));
                     questions[count - 1].Category = category;
+                    questions[count - 1].AllowBypass = false;
                     if (count % 3 == 0)
                     {
                         questions[count - 1].IsActive = false;                        
                     }
                 }
             }
+
+            questions[0].AllowBypass = true;
 
             new FakeQuestions(0, QuestionRepository, questions);
 
