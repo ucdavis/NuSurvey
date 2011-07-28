@@ -256,7 +256,7 @@ namespace NuSurvey.Web.Services
             table.DefaultCell.PaddingTop = 10f;
 
 
-            //relative col widths in proportions - 1/3 and 2/3
+            
 
             var widths = new[] { 1f, 20f };
             table.SetWidths(widths);
@@ -271,24 +271,36 @@ namespace NuSurvey.Web.Services
             table.AddCell(string.Empty);
 
             //1
-            table.AddCell(string.Empty);
-            table.AddCell(new Paragraph(string.Format("Thank you {0} for taking the time to complete the {1} quiz. We hope this feedback will help you and your family make healthy feeding choices.", surveyResponse.StudentId, surveyResponse.Survey.Name), arial));
+            var thankYou = new PdfPCell(new Paragraph(string.Format("Thank you {0} for taking the time to complete the {1} quiz. We hope this feedback will help you and your family make healthy feeding choices.", surveyResponse.StudentId, surveyResponse.Survey.Name), arial));
+            thankYou.Colspan = 2;
+            thankYou.Border = 0;
+            thankYou.PaddingTop = 10f;
+            table.AddCell(thankYou);
+            //table.AddCell(new Paragraph(string.Format("Thank you {0} for taking the time to complete the {1} quiz. We hope this feedback will help you and your family make healthy feeding choices.", surveyResponse.StudentId, surveyResponse.Survey.Name), arial));
 
             //2
             table.AddCell(string.Empty);
             table.AddCell(string.Empty);
 
             //3
-            table.AddCell(string.Empty);
-            table.AddCell(new Paragraph(string.Format("{0}{1}", "\n", surveyResponse.PositiveCategory.Affirmation), arialBold));
+            var positiveAffirm = new PdfPCell(new Paragraph(string.Format("{0}{1}", "\n", surveyResponse.PositiveCategory.Affirmation), arialBold));
+            positiveAffirm.Colspan = 2;
+            positiveAffirm.Border = 0;
+            positiveAffirm.PaddingTop = 10f;
+            table.AddCell(positiveAffirm);
+            //table.AddCell(new Paragraph(string.Format("{0}{1}", "\n", surveyResponse.PositiveCategory.Affirmation), arialBold));
 
             //4
             table.AddCell(string.Empty);
             table.AddCell(string.Empty);
 
             //5
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph(surveyResponse.NegativeCategory1.Encouragement, arialBold));
+            var encourage1 = new PdfPCell(new Paragraph(surveyResponse.NegativeCategory1.Encouragement, arialBold));
+            encourage1.Colspan = 2;
+            encourage1.Border = 0;
+            encourage1.PaddingTop = 10f;
+            table.AddCell(encourage1);
+            //table.AddCell(new Paragraph(surveyResponse.NegativeCategory1.Encouragement, arialBold));
 
             //6
             table.AddCell(string.Empty);
@@ -314,8 +326,12 @@ namespace NuSurvey.Web.Services
             table.AddCell(string.Empty);
 
             //11
-            table.AddCell(checkBoxImage);
-            table.AddCell(new Paragraph(surveyResponse.NegativeCategory2.Encouragement, arialBold));
+            var encourage2 = new PdfPCell(new Paragraph(surveyResponse.NegativeCategory2.Encouragement, arialBold));
+            encourage2.Colspan = 2;
+            encourage2.Border = 0;
+            encourage2.PaddingTop = 10f;
+            table.AddCell(encourage2);
+            //table.AddCell(new Paragraph(surveyResponse.NegativeCategory2.Encouragement, arialBold));
 
             //12
             table.AddCell(string.Empty);
