@@ -295,12 +295,8 @@ namespace NuSurvey.Web.Services
             table.AddCell(string.Empty);
 
             //5
-            var encourage1 = new PdfPCell(new Paragraph(surveyResponse.NegativeCategory1.Encouragement, arialBold));
-            encourage1.Colspan = 2;
-            encourage1.Border = 0;
-            encourage1.PaddingTop = 10f;
-            table.AddCell(encourage1);
-            //table.AddCell(new Paragraph(surveyResponse.NegativeCategory1.Encouragement, arialBold));
+            table.AddCell(checkBoxImage);
+            table.AddCell(new Paragraph(surveyResponse.NegativeCategory1.Encouragement, arialBold));
 
             //6
             table.AddCell(string.Empty);
@@ -326,12 +322,8 @@ namespace NuSurvey.Web.Services
             table.AddCell(string.Empty);
 
             //11
-            var encourage2 = new PdfPCell(new Paragraph(surveyResponse.NegativeCategory2.Encouragement, arialBold));
-            encourage2.Colspan = 2;
-            encourage2.Border = 0;
-            encourage2.PaddingTop = 10f;
-            table.AddCell(encourage2);
-            //table.AddCell(new Paragraph(surveyResponse.NegativeCategory2.Encouragement, arialBold));
+            table.AddCell(checkBoxImage);
+            table.AddCell(new Paragraph(surveyResponse.NegativeCategory2.Encouragement, arialBold));
 
             //12
             table.AddCell(string.Empty);
