@@ -145,6 +145,18 @@ namespace NuSurvey.Web.Services
             Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
             Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
 
+            //Example to print a background image
+            //var goalPath = GetAbsoluteUrl(request, url, "~/Images/HKGoal.jpg");
+
+            //Image goalImg = Image.GetInstance(goalPath);
+            //goalImg.ScaleToFit(doc1.PageSize.Width, doc1.PageSize.Height);
+            //goalImg.SetAbsolutePosition(0, 0);
+            //goalImg.Alignment = Image.UNDERLYING;
+
+
+
+            //doc1.Open();
+            //doc1.Add(goalImg);
 
             doc1.Open();
             var table = BuildTable(surveyResponse, arial, arialBold, checkBoxImage);      

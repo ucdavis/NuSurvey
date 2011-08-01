@@ -496,11 +496,16 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Arrange
             var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "ChangePassword");
+            var getIndex = 0;
+            if (controllerMethod.ElementAt(0).GetCustomAttributes(true).Count() == 2)
+            {
+                getIndex = 1;
+            }
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<AuthorizeAttribute>();
-            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            var expectedAttribute = controllerMethod.ElementAt(getIndex).GetCustomAttributes(true).OfType<AuthorizeAttribute>();
+            var allAttributes = controllerMethod.ElementAt(getIndex).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
@@ -519,11 +524,16 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Arrange
             var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "ChangePassword");
+            var postIndex = 1;
+            if (controllerMethod.ElementAt(0).GetCustomAttributes(true).Count() == 2)
+            {
+                postIndex = 0;
+            }
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
-            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            var expectedAttribute = controllerMethod.ElementAt(postIndex).GetCustomAttributes(true).OfType<HttpPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(postIndex).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
