@@ -75,6 +75,10 @@
     <Compile Include="Domain\Category.cs" />
     <Compile Include="Domain\CategoryGoal.cs" />
     <Compile Include="Domain\CategoryTotalMaxScore.cs" />
+    <Compile Include="Domain\Photo.cs" />
+    <Compile Include="Domain\PhotoTag.cs" />
+    <Compile Include="Domain\PrintedSurvey.cs" />
+    <Compile Include="Domain\PrintedSurveyQuestion.cs" />
     <Compile Include="Domain\Question.cs" />
     <Compile Include="Domain\Response.cs" />
     <Compile Include="Domain\Survey.cs" />

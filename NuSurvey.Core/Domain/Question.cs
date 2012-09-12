@@ -32,6 +32,8 @@ namespace NuSurvey.Core.Domain
             Responses = new List<Response>();
             OpenEndedQuestionType = 0;
             AllowBypass = true;
+
+            Photos = new List<Photo>();
         }
 
         private void SetPostDefaults()
@@ -81,6 +83,8 @@ namespace NuSurvey.Core.Domain
         [Display(Name = "Allow Bypass")]
         public virtual bool AllowBypass { get; set; }
 
+        public virtual IList<Photo> Photos { get; set; }
+
         #region Methods
         public virtual void AddResponse(Response response)
         {
@@ -105,6 +109,8 @@ namespace NuSurvey.Core.Domain
             References(x => x.Category);
             References(x => x.Survey);
             HasMany(x => x.Responses).Cascade.AllDeleteOrphan();
+
+            HasManyToMany(x => x.Photos).ParentKeyColumn("QuestionId").ChildKeyColumn("PhotoId").Table("QuestionsxPhotos");
         }
     }
 
