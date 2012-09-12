@@ -1,4 +1,3 @@
-
 #ignore thumbnails created by windows
 Thumbs.db
 #Ignore files build by Visual Studio
@@ -34,3 +33,5 @@ AppDebugSettings.config
 AppTestSettings.config
 AppReleaseSettings.config
 AppSettings.config
+
+NuSurvey.Db/Sandbox/*
