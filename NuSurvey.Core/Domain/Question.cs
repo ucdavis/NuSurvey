@@ -110,7 +110,7 @@ namespace NuSurvey.Core.Domain
             References(x => x.Survey);
             HasMany(x => x.Responses).Cascade.AllDeleteOrphan();
 
-            HasManyToMany(x => x.Photos).ParentKeyColumn("QuestionId").ChildKeyColumn("PhotoId").Table("QuestionsxPhotos");
+            HasManyToMany(x => x.Photos).ParentKeyColumn("QuestionId").ChildKeyColumn("PhotoId").Table("QuestionsXPhotos");
         }
     }
 
