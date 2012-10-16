@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="NuSurvey">
+</Property><Property Name="Solution File" Value="C:\Users\Sylvestre\Dropbox\My Documents\Visual Studio 2010\Projects\NuSurvey\NuSurvey.sln">
+</Property><Property Name="Date" Value="Tuesday, October 16, 2012">
+</Property><Property Name="Time" Value="8:35 AM">
+</Property></Properties><Event ErrorLevel="0" Project="NuSurvey.Web" Source="NuSurvey.Web\NuSurvey.Web.csproj" Description="The project file does not require conversion.">
+</Event><Event ErrorLevel="3" Project="NuSurvey.Web" Source="NuSurvey.Web\NuSurvey.Web.csproj" Description="No Conversion Required">
+</Event><Event ErrorLevel="0" Project="NuSurvey.Tests" Source="NuSurvey.Tests\NuSurvey.Tests.csproj" Description="The project file does not require conversion.">
+</Event><Event ErrorLevel="3" Project="NuSurvey.Tests" Source="NuSurvey.Tests\NuSurvey.Tests.csproj" Description="No Conversion Required">
+</Event><Event ErrorLevel="0" Project="NuSurvey.Core" Source="NuSurvey.Core\NuSurvey.Core.csproj" Description="The project file does not require conversion.">
+</Event><Event ErrorLevel="3" Project="NuSurvey.Core" Source="NuSurvey.Core\NuSurvey.Core.csproj" Description="No Conversion Required">
+</Event><Event ErrorLevel="0" Project="C:\Users\Sylvestre\Dropbox\My Documents\Visual Studio 2010\Projects\NuSurvey\NuSurvey.Db\NuSurvey.Db.sqlproj" Source="NuSurvey.Db\NuSurvey.Db.sqlproj" Description="Beginning Upgrade">
+</Event><Event ErrorLevel="3" Project="C:\Users\Sylvestre\Dropbox\My Documents\Visual Studio 2010\Projects\NuSurvey\NuSurvey.Db\NuSurvey.Db.sqlproj" Source="NuSurvey.Db\NuSurvey.Db.sqlproj" Description="Converted">
+</Event><Event ErrorLevel="3" Project="C:\Users\Sylvestre\Dropbox\My Documents\Visual Studio 2010\Projects\NuSurvey\NuSurvey.Db\NuSurvey.Db.sqlproj" Source="NuSurvey.Db\NuSurvey.Db.sqlproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="NuSurvey.sln" Description="The solution file does not require conversion.">
+</Event><Event ErrorLevel="3" Project="" Source="NuSurvey.sln" Description="No Conversion Required">
+</Event></UpgradeLog>
