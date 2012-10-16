@@ -35,3 +35,5 @@ AppReleaseSettings.config
 AppSettings.config
 
 NuSurvey.Db/Sandbox/*
+NuSurvey.Web/bin/*
+NuSurvey.Web/bin/NuSurvey.Core.dll
