@@ -186,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\sqlexpress.scmp" />
+    <None Include="SchemaCompare\ProjectToTerry.scmp" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="NuSurvey.Db.refactorlog" />
