@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
 
@@ -14,7 +15,8 @@ namespace NuSurvey.Core.Domain
             PhotoTags = new List<PhotoTag>();
             Questions = new List<Question>();
         }
-
+        [Required]
+        [StringLength(100)]
         public virtual string Name { get; set; }
         public virtual string FileName { get; set; }
         public virtual string ContentType { get; set; }
@@ -24,6 +26,14 @@ namespace NuSurvey.Core.Domain
 
         public virtual IList<PhotoTag> PhotoTags { get; set; }
         public virtual IList<Question> Questions { get; set; }
+
+        public virtual void AddTag(string tagText)
+        {
+            var tag = new PhotoTag();
+            tag.Name = tagText;
+            tag.Photo = this;
+            PhotoTags.Add(tag);
+        }
     }
 
     public class PhotoMap : ClassMap<Photo>
