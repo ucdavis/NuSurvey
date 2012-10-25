@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[PrintedSurveyQuestions]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
+	[Id] INT IDENTITY (1, 1) NOT NULL PRIMARY KEY, 
     [PrintedSurveyId] INT NOT NULL, 
     [QuestionId] INT NOT NULL, 
     [PhotoId] INT NOT NULL, 

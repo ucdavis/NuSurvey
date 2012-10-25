@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[PrintedSurveys]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
+	[Id] INT IDENTITY (1, 1) NOT NULL PRIMARY KEY, 
     [UserId] VARCHAR(50) NOT NULL, 
     [DateCreated] DATETIME NOT NULL DEFAULT getdate(), 
     [SurveyId] INT NOT NULL, 
