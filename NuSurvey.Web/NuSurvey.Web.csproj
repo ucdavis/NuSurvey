@@ -145,6 +145,7 @@
     <Compile Include="Controllers\Filters\RoleFilter.cs" />
     <Compile Include="Controllers\Filters\LocVersionAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PhotoController.cs" />
     <Compile Include="Controllers\PrintController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="RouteConfigurator.asax.cs" />
     <Compile Include="Services\ArchiveService.cs" />
     <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\PictureService.cs" />
     <Compile Include="Services\PrintService.cs" />
     <Compile Include="Services\ScoreService.cs" />
   </ItemGroup>
@@ -333,6 +335,8 @@
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Survey\Review.cshtml" />
     <Content Include="Views\Survey\YourDetails.cshtml" />
+    <Content Include="Views\Photo\Index.cshtml" />
+    <Content Include="Views\Photo\Upload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">

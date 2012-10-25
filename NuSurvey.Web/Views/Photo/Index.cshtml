@@ -1,0 +1,72 @@
+﻿@model IEnumerable<NuSurvey.Core.Domain.Photo>
+
+
+@{
+    ViewBag.Title = "Index";
+
+}
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({ "bJQueryUI": true });
+        });    
+    </script>
+}
+
+<p>
+	@Html.ActionLink("Upload Photo", "Upload")
+</p>
+<table class='datatable'>
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				Photo
+			</th>
+			<th>
+				Name
+			</th>
+			<th>
+				Tags
+			</th>
+
+			<th></th>
+
+		</tr>
+	</thead>
+	<tbody>
+@{ var odd = false; }
+@foreach (var item in Model) {
+		<tr class="@(odd ? "odd": "even")">
+			<td>
+@*				<a href='@Url.Action("AddressDetails", new {id=item.Workgroup.Id, addressid= item.Id})' class="ui-icon ui-icon-document">
+				</a>
+				<a href='@Url.Action("EditAddress", new { id = item.Workgroup.Id, addressid = item.Id })' class="ui-icon ui-icon-pencil">
+				</a>*@
+			</td>
+			<td>
+                <img src='@Url.Action("GetThumbnail", new { id = item.Id })' />
+			</td>
+			<td>
+				@item.Name
+			</td>
+			<td>
+				@foreach (var tag in item.PhotoTags)
+                { @Html.Encode(tag.Name + " ") }
+			</td>
+			
+            <td>
+@*                <a href='@Url.Action("DeleteAddress", new { id = item.Workgroup.Id, addressid = item.Id })' class="ui-icon ui-icon-trash">
+                </a>*@
+            </td>
+		
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+
+
+
