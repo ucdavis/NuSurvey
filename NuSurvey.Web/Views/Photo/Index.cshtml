@@ -28,9 +28,12 @@
 			<th>
 				Name
 			</th>
-			<th>
-				Tags
-			</th>
+            <th>
+                Tags
+            </th>
+            <th>
+                Uploaded
+            </th>
 
 			<th></th>
 
@@ -41,13 +44,14 @@
 @foreach (var item in Model) {
 		<tr class="@(odd ? "odd": "even")">
 			<td>
-@*				<a href='@Url.Action("AddressDetails", new {id=item.Workgroup.Id, addressid= item.Id})' class="ui-icon ui-icon-document">
-				</a>
-				<a href='@Url.Action("EditAddress", new { id = item.Workgroup.Id, addressid = item.Id })' class="ui-icon ui-icon-pencil">
-				</a>*@
+                <a href='@Url.Action("Details", new {id=item.Id})'> <img alt="Photo Details" src="@Url.Image("details.png")"/></a>
+				<a href='@Url.Action("Edit", new { id = item.Id })'><img alt="Photo Details" src="@Url.Image("edit.png")"/></a>
+				
 			</td>
 			<td>
+                <a href='@Url.Action("Details", new {id=item.Id})' >
                 <img src='@Url.Action("GetThumbnail", new { id = item.Id })' />
+                </a>
 			</td>
 			<td>
 				@item.Name
@@ -56,10 +60,11 @@
 				@foreach (var tag in item.PhotoTags)
                 { @Html.Encode(tag.Name + " ") }
 			</td>
-			
             <td>
-@*                <a href='@Url.Action("DeleteAddress", new { id = item.Workgroup.Id, addressid = item.Id })' class="ui-icon ui-icon-trash">
-                </a>*@
+                @item.DateCreated
+            </td>
+            <td>
+                <a href='@Url.Action("Delete", new { id = item.Id })'> <img alt="Delete Photo" src="@Url.Image("delete.png")"/></a>
             </td>
 		
 		</tr>

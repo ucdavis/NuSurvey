@@ -1,0 +1,57 @@
+﻿@model NuSurvey.Core.Domain.Photo
+
+
+@{
+    ViewBag.Title = "Details";
+
+}
+
+@section SubNav
+{
+	<ul class="navigation">
+		
+			<li>@Html.ActionLink("Edit", "Edit", new { id=Model.Id }) </li>
+			<li>@Html.ActionLink("Back to List", "Index")</li>
+		
+	</ul>
+}
+
+<fieldset class="display-form">
+    <legend>Photo</legend>
+	<ul>
+
+        <li>
+            <div class="display-label">Name</div>
+            <div class="display-details">@Model.Name</div>
+        </li>
+        
+        <li>
+            <div class="display-label">Tags</div>
+            <div class="display-details">
+                @foreach (var tag in Model.PhotoTags)
+                {
+                    @Html.Encode(tag.Name + " ")
+                }
+            </div>
+        </li>
+
+        <li>
+			<div class="display-label">FileName</div>
+			<div class="display-details">@Model.FileName</div>
+		</li>
+
+        <li>
+            <div class="display-label">DateCreated</div>
+            <div class="display-details">@String.Format("{0:g}", Model.DateCreated)</div>
+        </li>
+
+		<li>
+			<div class="display-label">Photo</div>
+			<div class="display-details"><img src='@Url.Action("GetPhoto", new { id = Model.Id })' /></div>
+		</li>
+
+	</ul>
+</fieldset>
+
+
+

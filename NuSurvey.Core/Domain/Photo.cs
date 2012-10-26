@@ -14,6 +14,7 @@ namespace NuSurvey.Core.Domain
 
             PhotoTags = new List<PhotoTag>();
             Questions = new List<Question>();
+            IsActive = true;
         }
         [Required]
         [StringLength(100)]
@@ -23,6 +24,7 @@ namespace NuSurvey.Core.Domain
         public virtual byte[] FileContents { get; set; } 
         public virtual DateTime DateCreated { get; set; }
         public virtual byte[] ThumbNail { get; set; }
+        public virtual bool IsActive { get; set; }
 
         public virtual IList<PhotoTag> PhotoTags { get; set; }
         public virtual IList<Question> Questions { get; set; }
@@ -48,6 +50,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.FileContents).CustomType("BinaryBlob");
             Map(x => x.DateCreated);
             Map(x => x.ThumbNail);
+            Map(x => x.IsActive);
 
             HasMany(x => x.PhotoTags).Inverse();
 

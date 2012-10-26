@@ -6,5 +6,6 @@
     [ContentType] VARCHAR(50) NOT NULL, 
     [FileContents] VARBINARY(MAX) NOT NULL, 
     [DateCreated] DATETIME NOT NULL DEFAULT getdate(), 
-    [ThumbNail] VARBINARY(MAX) NOT NULL
+    [ThumbNail] VARBINARY(MAX) NOT NULL, 
+    [IsActive] BIT NOT NULL DEFAULT 1
 )

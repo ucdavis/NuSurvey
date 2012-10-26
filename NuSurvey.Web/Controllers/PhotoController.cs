@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -33,7 +34,7 @@ namespace NuSurvey.Web.Controllers
         {
             var photoList = _photoRepository.Queryable;
 
-            return View(photoList.ToList());
+            return View(photoList.Where(a => a.IsActive).ToList());
         }
 
 
@@ -85,6 +86,145 @@ namespace NuSurvey.Web.Controllers
             return this.RedirectToAction(a => a.Index());
         }
 
+        public ActionResult Edit(int id, PhotoEditModel photoEditModel)
+        {
+            var photo = _photoRepository.GetNullableById(id);
+            if (photo == null)
+            {
+                Message = "Photo not found";
+                return this.RedirectToAction(a => a.Index());
+            }
+
+            var viewModel = PhotoEditModel.Create(null);
+            viewModel.Photo = photo;
+
+            var tags = new List<string>();
+            foreach (var photoTag in photo.PhotoTags)
+            {
+                tags.Add(photoTag.Name);
+            }
+
+            viewModel.Tags = string.Join(",", tags.ToArray());
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int id, PhotoEditModel photoEditModel, HttpPostedFileBase uploadedPhoto)
+        {
+            var photo = _photoRepository.GetNullableById(id);
+            if (photo == null)
+            {
+                Message = "Photo not found";
+                return this.RedirectToAction(a => a.Index());
+            }
+            if (uploadedPhoto != null)
+            {
+                // read the file and set the original picture
+                var reader = new BinaryReader(uploadedPhoto.InputStream);
+                photo.FileContents = reader.ReadBytes(uploadedPhoto.ContentLength);
+                photo.ContentType = uploadedPhoto.ContentType;
+                photo.FileName = uploadedPhoto.FileName;
+                photo.DateCreated = DateTime.Now;
+
+                photo.ThumbNail = _pictureService.MakeThumbnail(photo.FileContents);
+            }
+            photo.Name = photoEditModel.Photo.Name;
+
+            //TODO: Test tags...
+            var photoTags = new List<PhotoAction>();
+            if (!string.IsNullOrWhiteSpace(photoEditModel.Tags))
+            {
+                foreach (var tag in photoEditModel.Tags.Split(','))
+                {
+                    var photoAction = new PhotoAction();
+                    var pTag = photo.PhotoTags.FirstOrDefault(a => a.Name == tag);
+                    if (pTag == null)
+                    {
+                        pTag = new PhotoTag();
+                        pTag.Name = tag;
+                        pTag.Photo = photo;
+                        photoAction.Action = "Add";
+                    }
+                    else
+                    {
+                        photoAction.Action = "Keep";
+                    }
+                    photoAction.PhotoTag = pTag;
+                    photoTags.Add(photoAction);
+                }
+            }
+            foreach (var existingTags in photo.PhotoTags)
+            {
+                if (!photoTags.Any(a => a.PhotoTag.Id == existingTags.Id))
+                {
+                    var pTag = new PhotoAction();
+                    pTag.PhotoTag = existingTags;
+                    pTag.Action = "Remove";
+                    photoTags.Add(pTag);
+                }
+            }
+            foreach (var photoAction in photoTags)
+            {
+                if (photoAction.Action == "Remove")
+                {
+                    Repository.OfType<PhotoTag>().Remove(photoAction.PhotoTag);
+                }
+                else if(photoAction.Action == "Add")
+                {
+                    Repository.OfType<PhotoTag>().EnsurePersistent(photoAction.PhotoTag);
+                }
+            }
+
+            Message = "Photo Updated";
+
+            _photoRepository.EnsurePersistent(photo);
+            return this.RedirectToAction(a => a.Index());
+        }
+
+
+        public ActionResult Details(int id)
+        {
+            var photo = _photoRepository.GetNullableById(id);
+            if (photo == null)
+            {
+                Message = "Photo not found";
+                return this.RedirectToAction(a => a.Index());
+            }
+
+            return View(photo);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var photo = _photoRepository.GetNullableById(id);
+            if (photo == null)
+            {
+                Message = "Photo not found";
+                return this.RedirectToAction(a => a.Index());
+            }
+
+            return View(photo);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(Photo photo)
+        {
+            var photoToDelete = _photoRepository.GetNullableById(photo.Id);
+            if (photoToDelete == null)
+            {
+                Message = "Photo not found";
+            }
+            else
+            {
+
+                photoToDelete.IsActive = false;
+                _photoRepository.EnsurePersistent(photoToDelete);
+            }
+
+            return this.RedirectToAction(a => a.Index());
+        }
+
         public ActionResult GetThumbnail(int id)
         {
             var photo = _photoRepository.GetById(id);
@@ -97,6 +237,25 @@ namespace NuSurvey.Web.Controllers
             if (photo.ThumbNail != null)
             {
                 return File( photo.ThumbNail, "image/jpg");
+            }
+            else
+            {
+                return File(new byte[0], "image/jpg");
+            }
+        }
+
+        public ActionResult GetPhoto(int id)
+        {
+            var photo = _photoRepository.GetById(id);
+
+            if (photo == null)
+            {
+                return File(new byte[0], "image/jpg");
+            }
+
+            if (photo.ThumbNail != null)
+            {
+                return File(photo.FileContents, "image/jpg");
             }
             else
             {
@@ -122,5 +281,11 @@ namespace NuSurvey.Web.Controllers
  
 			return viewModel;
 		}
+
 	}
+    public class PhotoAction
+    {
+        public PhotoTag PhotoTag { get; set; }
+        public string Action { get; set; }
+    }
 }
