@@ -20,11 +20,13 @@ namespace NuSurvey.Web.Controllers
     public class PhotoController : ApplicationController
     {
 	    private readonly IRepository<Photo> _photoRepository;
+        private readonly IRepository<PhotoTag> _photoTagRepository;
         private readonly IPictureService _pictureService;
 
-        public PhotoController(IRepository<Photo> photoRepository, IPictureService pictureService)
+        public PhotoController(IRepository<Photo> photoRepository, IRepository<PhotoTag> photoTagRepository  ,IPictureService pictureService)
         {
             _photoRepository = photoRepository;
+            _photoTagRepository = photoTagRepository;
             _pictureService = pictureService;
         }
 
@@ -225,6 +227,21 @@ namespace NuSurvey.Web.Controllers
             return this.RedirectToAction(a => a.Index());
         }
 
+        public ActionResult Search(string tag, int? questionId)
+        {
+            if (string.IsNullOrWhiteSpace(tag))
+            {
+                Message = "Tag not entered";
+                return this.RedirectToAction<ErrorController>(a => a.Index());
+            }
+            var viewModel = PhotoSearchModel.Create();
+            viewModel.PhotoTags = _photoTagRepository.Queryable.Where(a => a.Name.ToLower() == tag.ToLower()).ToList();
+            viewModel.QuestionId = questionId;
+
+            return View(viewModel);
+        }
+
+
         public ActionResult GetThumbnail(int id)
         {
             var photo = _photoRepository.GetById(id);
@@ -287,5 +304,18 @@ namespace NuSurvey.Web.Controllers
     {
         public PhotoTag PhotoTag { get; set; }
         public string Action { get; set; }
+    }
+
+    public class PhotoSearchModel
+    {
+        public IEnumerable<PhotoTag> PhotoTags { get; set; }
+        public int? QuestionId { get; set; }
+
+        public static PhotoSearchModel Create()
+        {
+            var viewModel = new PhotoSearchModel();            
+            return viewModel;
+        }
+
     }
 }

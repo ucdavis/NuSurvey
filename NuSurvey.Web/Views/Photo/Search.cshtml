@@ -1,0 +1,39 @@
+﻿@using NuSurvey.Core.Domain
+@model NuSurvey.Web.Controllers.PhotoSearchModel
+
+
+@{
+    ViewBag.Title = "Search Results";
+}
+
+
+
+@section SubNav
+{
+
+}
+
+@helper PhotoContainer(PhotoTag photoTag)
+{
+    <div style="display: inline-block">
+        <div style="word-wrap: break-word; width: 100px;">@photoTag.Photo.Name</div>
+        <div><img src='@Url.Action("GetThumbnail", new { id = photoTag.Photo.Id })' /></div>
+        <div>
+            @foreach(var tag in photoTag.Photo.PhotoTags)
+            {
+                <a href="@Url.Action("Search", "Photo", new{tag = tag.Name, questionId = Model.QuestionId})">@tag.Name</a>
+            }
+        </div>
+    </div>
+}
+
+<fieldset class="display-form">
+    <legend>Matching Photos</legend>
+	@foreach (var item in Model.PhotoTags)
+    {
+        @PhotoContainer(item);
+    }
+</fieldset>
+
+
+
