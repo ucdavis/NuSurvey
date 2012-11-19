@@ -17,7 +17,7 @@
 {
     <div style="display: inline-block">
         <div style="word-wrap: break-word; width: 100px;">@photoTag.Photo.Name</div>
-        <div><img src='@Url.Action("GetThumbnail", new { id = photoTag.Photo.Id })' /></div>
+        <div><a href="@Url.Action("Details", "Photo", new { id = photoTag.Photo.Id, questionId = Model.QuestionId })"><img src='@Url.Action("GetThumbnail", new { id = photoTag.Photo.Id })' /></a></div>
         <div>
             @foreach(var tag in photoTag.Photo.PhotoTags)
             {
@@ -28,8 +28,8 @@
 }
 
 <fieldset class="display-form">
-    <legend>Matching Photos</legend>
-	@foreach (var item in Model.PhotoTags)
+    <legend>Matching Photos for tag @Model.SearchTag</legend>
+    @foreach (var item in Model.PhotoTags)
     {
         @PhotoContainer(item);
     }

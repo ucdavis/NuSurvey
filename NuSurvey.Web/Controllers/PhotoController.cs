@@ -65,7 +65,7 @@ namespace NuSurvey.Web.Controllers
             {
                 foreach (var tag in photoEditModel.Tags.Split(','))
                 {
-                    photo.AddTag(tag);
+                    photo.AddTag(tag.Trim());
                 }
             }
 
@@ -144,7 +144,7 @@ namespace NuSurvey.Web.Controllers
                     if (pTag == null)
                     {
                         pTag = new PhotoTag();
-                        pTag.Name = tag;
+                        pTag.Name = tag.Trim();
                         pTag.Photo = photo;
                         photoAction.Action = "Add";
                     }
@@ -240,6 +240,7 @@ namespace NuSurvey.Web.Controllers
             var viewModel = PhotoSearchModel.Create();
             viewModel.PhotoTags = _photoTagRepository.Queryable.Where(a => a.Name.ToLower() == tag.ToLower()).ToList();
             viewModel.QuestionId = questionId;
+            viewModel.SearchTag = tag;
 
             return View(viewModel);
         }
@@ -313,6 +314,7 @@ namespace NuSurvey.Web.Controllers
     {
         public IEnumerable<PhotoTag> PhotoTags { get; set; }
         public int? QuestionId { get; set; }
+        public string SearchTag { get; set; }
 
         public static PhotoSearchModel Create()
         {
