@@ -58,7 +58,9 @@
 			</td>
 			<td>
 				@foreach (var tag in item.PhotoTags)
-                { @Html.Encode(tag.Name + " ") }
+                {
+                    <a href="@Url.Action("Search", "Photo", new { tag = tag.Name })">@tag.Name</a>            
+                }
 			</td>
             <td>
                 @item.DateCreated

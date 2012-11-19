@@ -1,4 +1,4 @@
-﻿@model NuSurvey.Core.Domain.Photo
+﻿@model NuSurvey.Web.Controllers.PhotoEditModel
 
 
 @{
@@ -10,7 +10,7 @@
 {
 	<ul class="navigation">
 		
-			<li>@Html.ActionLink("Edit", "Edit", new { id=Model.Id }) </li>
+			<li>@Html.ActionLink("Edit", "Edit", new { id=Model.Photo.Id }) </li>
 			<li>@Html.ActionLink("Back to List", "Index")</li>
 		
 	</ul>
@@ -22,32 +22,32 @@
 
         <li>
             <div class="display-label">Name</div>
-            <div class="display-details">@Model.Name</div>
+            <div class="display-details">@Model.Photo.Name</div>
         </li>
         
         <li>
             <div class="display-label">Tags</div>
             <div class="display-details">
-                @foreach (var tag in Model.PhotoTags)
+                @foreach (var tag in Model.Photo.PhotoTags)
                 {
-                    @Html.Encode(tag.Name + " ")
+                    <a href="@Url.Action("Search", "Photo", new { tag = tag.Name, questionId = Model.QuestionId })">@tag.Name</a>
                 }
             </div>
         </li>
 
         <li>
 			<div class="display-label">FileName</div>
-			<div class="display-details">@Model.FileName</div>
+			<div class="display-details">@Model.Photo.FileName</div>
 		</li>
 
         <li>
             <div class="display-label">DateCreated</div>
-            <div class="display-details">@String.Format("{0:g}", Model.DateCreated)</div>
+            <div class="display-details">@String.Format("{0:g}", Model.Photo.DateCreated)</div>
         </li>
 
 		<li>
 			<div class="display-label">Photo</div>
-			<div class="display-details"><img src='@Url.Action("GetPhoto", new { id = Model.Id })' /></div>
+			<div class="display-details"><img src='@Url.Action("GetPhoto", new { id = Model.Photo.Id })' /></div>
 		</li>
 
 	</ul>

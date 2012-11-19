@@ -185,7 +185,7 @@ namespace NuSurvey.Web.Controllers
         }
 
 
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, int? questionId)
         {
             var photo = _photoRepository.GetNullableById(id);
             if (photo == null)
@@ -194,7 +194,10 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction(a => a.Index());
             }
 
-            return View(photo);
+            var viewModel = PhotoEditModel.Create(questionId);
+            viewModel.Photo = photo;
+
+            return View(viewModel);
         }
 
         public ActionResult Delete(int id)
