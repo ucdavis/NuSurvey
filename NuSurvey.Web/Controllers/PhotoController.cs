@@ -230,16 +230,15 @@ namespace NuSurvey.Web.Controllers
             return this.RedirectToAction(a => a.Index());
         }
 
-        public ActionResult Search(string tag, int? questionId)
+        public ActionResult Search(string tag, int? questionId, int? surveyId, int? categoryId, string editDetail)
         {
             if (string.IsNullOrWhiteSpace(tag))
             {
                 Message = "Tag not entered";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            var viewModel = PhotoSearchModel.Create();
+            var viewModel = PhotoSearchModel.Create(questionId, surveyId, categoryId, editDetail);
             viewModel.PhotoTags = _photoTagRepository.Queryable.Where(a => a.Name.ToLower() == tag.ToLower()).ToList();
-            viewModel.QuestionId = questionId;
             viewModel.SearchTag = tag;
 
             return View(viewModel);
@@ -314,11 +313,14 @@ namespace NuSurvey.Web.Controllers
     {
         public IEnumerable<PhotoTag> PhotoTags { get; set; }
         public int? QuestionId { get; set; }
+        public int? SurveyId { get; set; }
+        public int? CategoryId { get; set; }
         public string SearchTag { get; set; }
+        public string EditDetail { get; set; }
 
-        public static PhotoSearchModel Create()
+        public static PhotoSearchModel Create(int? questionId, int? surveyId, int? categoryId, string editDetail)
         {
-            var viewModel = new PhotoSearchModel();            
+            var viewModel = new PhotoSearchModel{QuestionId = questionId, SurveyId = surveyId, CategoryId = categoryId, EditDetail = editDetail};                        
             return viewModel;
         }
 
