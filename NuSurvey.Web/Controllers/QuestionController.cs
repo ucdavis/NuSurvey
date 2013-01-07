@@ -53,6 +53,8 @@ namespace NuSurvey.Web.Controllers
                 viewModel.Category = question.Category;
             }
 
+            viewModel.UniqueTags = Repository.OfType<PhotoTag>().Queryable.OrderBy(b => b.Name).Select(a => a.Name).Distinct().ToList();
+
             return View(viewModel);
         }
 
@@ -284,6 +286,8 @@ namespace NuSurvey.Web.Controllers
             {
                 viewModel.Responses.Add(resp);
             }
+
+            viewModel.UniqueTags = Repository.OfType<PhotoTag>().Queryable.OrderBy(b => b.Name).Select(a => a.Name).Distinct().ToList();
 
 			return View(viewModel);
         }
@@ -761,6 +765,7 @@ namespace NuSurvey.Web.Controllers
             }
             else
             {
+                viewModel.UniqueTags = Repository.OfType<PhotoTag>().Queryable.OrderBy(b => b.Name).Select(a => a.Name).Distinct().ToList();
                 return View(viewModel);
             }
         }
@@ -833,6 +838,7 @@ namespace NuSurvey.Web.Controllers
         public IEnumerable<SelectListItem> CategoryPick { get; set; }
         public string SortOrder { get; set; }
         public IList<ResponsesParameter> Responses { get; set; }
+        public IList<string> UniqueTags { get; set; } 
  
 		public static QuestionViewModel Create(IRepository repository, Survey survey)
 		{
@@ -842,6 +848,7 @@ namespace NuSurvey.Web.Controllers
 			var viewModel = new QuestionViewModel {Question = new Question(), Survey = survey};
 		    viewModel.Categories = viewModel.Survey.Categories.Where(a => a.IsCurrentVersion).OrderBy(a => a.Rank);
             viewModel.Responses = new List<ResponsesParameter>();
+            viewModel.UniqueTags = new List<string>();
  
 			return viewModel;
 		}
@@ -851,6 +858,7 @@ namespace NuSurvey.Web.Controllers
     {
         public Question Question { get; set; }
         public Category Category { get; set; }
+        public IList<string> UniqueTags { get; set; } 
 
         public static QuestionDetailViewModel Create(IRepository repository, Question question)
         {
@@ -858,6 +866,7 @@ namespace NuSurvey.Web.Controllers
             Check.Require(question != null);
 
             var viewModel = new QuestionDetailViewModel {Question = question};
+            viewModel.UniqueTags = new List<string>();
 
             return viewModel;
         }

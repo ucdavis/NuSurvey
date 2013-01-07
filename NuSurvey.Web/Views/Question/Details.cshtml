@@ -92,6 +92,25 @@
     
     <fieldset>
         <legend>Related Photos</legend>
+        <fieldset>
+            <legend>Click on a tag to find related photos to add</legend>
+            <div style="display: inline-block">
+                @if (Model.Category != null)
+                {
+                    foreach (var tag in Model.UniqueTags)
+                    {
+                        <a href="@Url.Action("Search", "Photo", new { tag = tag, questionId = Model.Question.Id, categoryId = Model.Category.Id, editDetail = "D" })">@tag</a>
+                    }
+                }
+                else
+                {
+                    foreach (var tag in Model.UniqueTags)
+                    {
+                        <a href="@Url.Action("Search", "Photo", new { tag = tag, questionId = Model.Question.Id, editDetail = "D" })">@tag</a>
+                    }
+                }
+            </div>
+        </fieldset>
         @foreach (var item in Model.Question.Photos)
         {
             @PhotoContainer(item)        

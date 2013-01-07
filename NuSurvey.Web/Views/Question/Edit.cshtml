@@ -114,6 +114,7 @@
     </div>
 }
 
+
 @*<h2>Edit</h2>*@
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
@@ -138,7 +139,26 @@ Example: Dinosaur 1  *@
     
     
         <fieldset>
-        <legend>Related Photos</legend>
+            <legend>Related Photos</legend>
+            <fieldset>
+                <legend>Click on a tag to find related photos to add</legend>
+                <div style="display: inline-block">
+                    @if (Model.Category != null)
+                    {
+                        foreach (var tag in Model.UniqueTags)
+                        {
+                            <a href="@Url.Action("Search", "Photo", new { tag = tag, questionId = Model.Question.Id, surveyId = Model.Survey.Id, categoryId = Model.Category.Id, editDetail = "E" })">@tag</a>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var tag in Model.UniqueTags)
+                        {
+                            <a href="@Url.Action("Search", "Photo", new { tag = tag, questionId = Model.Question.Id, surveyId = Model.Survey.Id, editDetail = "E" })">@tag</a>
+                        }
+                    }
+                </div>
+            </fieldset>
         @foreach (var item in Model.Question.Photos)
         {
             @PhotoContainer(item)        
