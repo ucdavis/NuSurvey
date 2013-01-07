@@ -308,6 +308,8 @@ namespace NuSurvey.Web.Controllers
             var viewModel = PhotoSearchModel.Create(questionId, surveyId, categoryId, editDetail);
             viewModel.PhotoTags = _photoTagRepository.Queryable.Where(a => a.Name.ToLower() == tag.ToLower()).ToList();
             viewModel.SearchTag = tag;
+            viewModel.UniqueTags =
+                _photoTagRepository.Queryable.OrderBy(a => a.Name).Select(b => b.Name).Distinct().ToList();
 
             return View(viewModel);
         }
@@ -389,10 +391,12 @@ namespace NuSurvey.Web.Controllers
         public int? CategoryId { get; set; }
         public string SearchTag { get; set; }
         public string EditDetail { get; set; }
+        public IList<string> UniqueTags { get; set; } 
 
         public static PhotoSearchModel Create(int? questionId, int? surveyId, int? categoryId, string editDetail)
         {
             var viewModel = new PhotoSearchModel{QuestionId = questionId, SurveyId = surveyId, CategoryId = categoryId, EditDetail = editDetail};                        
+            viewModel.UniqueTags = new List<string>();
             return viewModel;
         }
 

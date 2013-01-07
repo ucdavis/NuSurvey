@@ -52,6 +52,15 @@
     <input type="submit" class="button searchbutton" value="Go!"/>
 }
 
+<fieldset>
+    <legend>Searchable Tags</legend>
+    <div style="display: inline-block">
+        @foreach (var tag in Model.UniqueTags)
+        {
+            <a href="@Url.Action("Search", "Photo", new {tag = tag, questionId = Model.QuestionId, surveyId = Model.SurveyId, categoryId = Model.CategoryId, editDetail = Model.EditDetail})">@tag</a>
+        }        
+    </div>
+</fieldset>
 <fieldset class="display-form">
     <legend>Matching Photos for tag @Model.SearchTag</legend>
     @foreach (var item in Model.PhotoTags)
