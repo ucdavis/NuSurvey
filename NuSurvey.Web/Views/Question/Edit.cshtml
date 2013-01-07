@@ -103,7 +103,7 @@
         }
         else
         {
-                        <div><a href="@Url.Action("Details", "Photo", new { id = photo.Id, questionId = Model.Question.Id, surveyId = Model.Survey.Id, editDetail = "E" })"><img src='@Url.Action("GetThumbnail", "Photo", new { id = photo.Id })' /></a></div>
+            <div><a href="@Url.Action("Details", "Photo", new { id = photo.Id, questionId = Model.Question.Id, surveyId = Model.Survey.Id, editDetail = "E" })"><img src='@Url.Action("GetThumbnail", "Photo", new { id = photo.Id })' /></a></div>
             <div>
                 @foreach (var tag in photo.PhotoTags)
                 {

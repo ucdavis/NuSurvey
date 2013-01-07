@@ -32,13 +32,26 @@
 {
     <div style="display: inline-block">
         <div style="word-wrap: break-word; width: 100px;">@photo.Name</div>
-        <div><a href="@Url.Action("Details", "Photo", new { id = photo.Id, questionId = Model.Question.Id })"><img src='@Url.Action("GetThumbnail", "Photo", new { id = photo.Id })' /></a></div>
-        <div>
-            @foreach(var tag in photo.PhotoTags)
-            {
-                <a href="@Url.Action("Search", "Photo", new{tag = tag.Name, questionId = Model.Question.Id})">@tag.Name</a>
-            }
-        </div>
+        @if (Model.Category != null)
+        {
+            <div><a href="@Url.Action("Details", "Photo", new { id = photo.Id, questionId = Model.Question.Id, categoryId = Model.Category.Id, editDetail = "D" })"><img src='@Url.Action("GetThumbnail", "Photo", new { id = photo.Id })' /></a></div>
+            <div>
+                @foreach (var tag in photo.PhotoTags)
+                {
+                    <a href="@Url.Action("Search", "Photo", new { tag = tag.Name, questionId = Model.Question.Id, categoryId = Model.Category.Id, editDetail = "D" })">@tag.Name</a>
+                }
+            </div>
+        }
+        else
+        {
+            <div><a href="@Url.Action("Details", "Photo", new { id = photo.Id, questionId = Model.Question.Id, editDetail = "D" })"><img src='@Url.Action("GetThumbnail", "Photo", new { id = photo.Id })' /></a></div>
+            <div>
+                @foreach (var tag in photo.PhotoTags)
+                {
+                    <a href="@Url.Action("Search", "Photo", new { tag = tag.Name, questionId = Model.Question.Id, editDetail = "D" })">@tag.Name</a>
+                }
+            </div>
+        }
     </div>
 }
 

@@ -10,6 +10,7 @@ using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
+using UCDArch.Web.ActionResults;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -22,12 +23,14 @@ namespace NuSurvey.Web.Controllers
 	    private readonly IRepository<Photo> _photoRepository;
         private readonly IRepository<PhotoTag> _photoTagRepository;
         private readonly IPictureService _pictureService;
+        private readonly IRepository<Question> _questionRepository;
 
-        public PhotoController(IRepository<Photo> photoRepository, IRepository<PhotoTag> photoTagRepository  ,IPictureService pictureService)
+        public PhotoController(IRepository<Photo> photoRepository, IRepository<PhotoTag> photoTagRepository  ,IPictureService pictureService, IRepository<Question> questionRepository)
         {
             _photoRepository = photoRepository;
             _photoTagRepository = photoTagRepository;
             _pictureService = pictureService;
+            _questionRepository = questionRepository;
         }
 
         //
@@ -42,7 +45,7 @@ namespace NuSurvey.Web.Controllers
 
         public ActionResult Upload(int? questionId)
         {
-            var viewModel = PhotoEditModel.Create(questionId);
+            var viewModel = PhotoEditModel.Create(questionId, null, null, "E");
 
             return View(viewModel);
         }
@@ -97,7 +100,7 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction(a => a.Index());
             }
 
-            var viewModel = PhotoEditModel.Create(null);
+            var viewModel = PhotoEditModel.Create(null, null, null, "E");
             viewModel.Photo = photo;
 
             var tags = new List<string>();
@@ -185,7 +188,7 @@ namespace NuSurvey.Web.Controllers
         }
 
 
-        public ActionResult Details(int id, int? questionId)
+        public ActionResult Details(int id, int? questionId, int? surveyId, int? categoryId, string editDetail)
         {
             var photo = _photoRepository.GetNullableById(id);
             if (photo == null)
@@ -194,11 +197,76 @@ namespace NuSurvey.Web.Controllers
                 return this.RedirectToAction(a => a.Index());
             }
 
-            var viewModel = PhotoEditModel.Create(questionId);
+            var viewModel = PhotoEditModel.Create(questionId, surveyId, categoryId, "D");
             viewModel.Photo = photo;
+            viewModel.EditDetail = editDetail;
+            if (questionId.HasValue)
+            {
+                var question = _questionRepository.GetNullableById(questionId.Value);
+                if (question != null && question.Photos.Contains(photo))
+                {
+                    viewModel.PhotoIsRelatedToQuestion = true;
+                }
+            }
 
             return View(viewModel);
         }
+
+        public JsonNetResult AddRemovePhotoFromQuestion(int id, int questionId, string action)
+        {
+            var success = false;
+            var message = string.Empty;
+            try
+            {
+                var photo = _photoRepository.Queryable.Single(a => a.Id == id);
+                var question = _questionRepository.Queryable.Single(a => a.Id == questionId);
+                switch (action)
+                {
+                    case "Add":
+                        if (question.Photos.Contains(photo))
+                        {
+                            success = false;
+                            message = "Photo was already added to question";
+                        }
+                        else
+                        {
+                            question.Photos.Add(photo);
+                            _questionRepository.EnsurePersistent(question);
+                            success = true;
+                            message = "Photo added to question";
+                        }
+                        break;
+                    case "Remove":
+                        if (question.Photos.Contains(photo))
+                        {
+                            question.Photos.Remove(photo);
+                            _questionRepository.EnsurePersistent(question);
+                            success = true;
+                            message = "Photo removed from question";
+                        }
+                        else
+                        {
+                            success = false;
+                            message = "Photo not found attached to question";
+                        }
+                        break;
+                    default:
+                        throw new Exception("Action not found");
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                message = "An error prevented this action.";
+                return new JsonNetResult(new { success, message });
+
+            }
+
+            return new JsonNetResult(new { success, message });
+
+        }
+
+
 
         public ActionResult Delete(int id)
         {
@@ -293,12 +361,16 @@ namespace NuSurvey.Web.Controllers
 		public Photo Photo { get; set; }
         public string Tags { get; set; }
         public int? QuestionId { get; set; }
+        public int? SurveyId { get; set; }
+        public int? CategoryId { get; set; }
+        public string EditDetail { get; set; }
+        public bool PhotoIsRelatedToQuestion { get; set; }
  
-		public static PhotoEditModel Create(int? questionId)
+		public static PhotoEditModel Create(int? questionId, int? surveyId, int? categoryId, string editDetail)
 		{
 			
-			var viewModel = new PhotoEditModel {Photo = new Photo(), QuestionId = questionId};
- 
+			var viewModel = new PhotoEditModel {Photo = new Photo(), QuestionId = questionId, SurveyId = surveyId, CategoryId = categoryId, EditDetail = editDetail};
+		    viewModel.PhotoIsRelatedToQuestion = false;
 			return viewModel;
 		}
 
