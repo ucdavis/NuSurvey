@@ -63,6 +63,11 @@ namespace NuSurvey.Web.Services
                         Mapper.Map(response, newResponse);
                         questionToDuplicate.AddResponse(newResponse);
                     }
+                    foreach (var photo in question.Photos) //This should work, but it needs to be tested.
+                    {
+                        var newPhoto = repository.OfType<Photo>().Queryable.Single(a => a.Id == photo.Id);
+                        questionToDuplicate.Photos.Add(newPhoto);
+                    }
                     Mapper.Map(question, questionToDuplicate);
                     newVersion.AddQuestions(questionToDuplicate);
                 }

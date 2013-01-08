@@ -574,6 +574,11 @@ namespace NuSurvey.Web.Controllers
 
                             newQuestion.AddResponse(responseToAdd);
                         }
+                        foreach (var photo in questionToEdit.Photos) //This should work, but it needs to be tested.
+                        {
+                            var newPhoto = Repository.OfType<Photo>().Queryable.Single(a => a.Id == photo.Id);
+                            newQuestion.Photos.Add(newPhoto);
+                        }
 
                         question = newQuestion;
                         extraMessage1 = "Related Category Versioned";
@@ -614,6 +619,11 @@ namespace NuSurvey.Web.Controllers
 
                                 newQuestion.AddResponse(responseToAdd);
                             }
+                            foreach (var photo in questionToEdit.Photos) //This should work, but it needs to be tested.
+                            {
+                                var newPhoto = Repository.OfType<Photo>().Queryable.Single(a => a.Id == photo.Id);
+                                newQuestion.Photos.Add(newPhoto);
+                            }
 
                             question = newQuestion;
                             extraMessage1 = "Previously Related Category Versioned";
@@ -649,6 +659,11 @@ namespace NuSurvey.Web.Controllers
                                 };
 
                                 newQuestion.AddResponse(responseToAdd);
+                            }
+                            foreach (var photo in questionToEdit.Photos) //This should work, but it needs to be tested.
+                            {
+                                var newPhoto = Repository.OfType<Photo>().Queryable.Single(a => a.Id == photo.Id);
+                                newQuestion.Photos.Add(newPhoto);
                             }
 
                             question = newQuestion;
@@ -698,6 +713,11 @@ namespace NuSurvey.Web.Controllers
                         };
 
                         newQuestion.AddResponse(responseToAdd);
+                    }
+                    foreach (var photo in questionToEdit.Photos) //This should work, but it needs to be tested.
+                    {
+                        var newPhoto = Repository.OfType<Photo>().Queryable.Single(a => a.Id == photo.Id);
+                        newQuestion.Photos.Add(newPhoto);
                     }
 
                     question = newQuestion;
