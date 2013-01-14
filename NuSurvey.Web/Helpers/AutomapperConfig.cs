@@ -30,6 +30,7 @@ namespace NuSurvey.Web.Helpers
                 .ForMember(x => x.Order, x => x.Ignore())
                 .ForMember(x => x.Responses, x=> x.Ignore())
                 .ForMember(x => x.Photos, x=> x.Ignore())
+                .ForMember(x => x.PrimaryPhoto, x=> x.Ignore())
                 .ForMember(x => x.Survey, x => x.Ignore());                 
 
             CreateMap<Survey, Survey>()

@@ -57,6 +57,7 @@ namespace NuSurvey.Web.Services
                 {
                     var questionToDuplicate = new Question(oldVersion.Survey);
                     questionToDuplicate.Order = question.Order;
+                    questionToDuplicate.PrimaryPhoto = question.PrimaryPhoto;
                     foreach (var response in question.Responses)
                     {
                         var newResponse = new Response(); //If I don't do this, the old responses are *moved* here, not copied
@@ -123,6 +124,7 @@ namespace NuSurvey.Web.Services
             {
                 var questionToDuplicate = new Question(oldVersion.Survey);
                 questionToDuplicate.Order = question.Order;
+                questionToDuplicate.PrimaryPhoto = question.PrimaryPhoto;
                 foreach (var response in question.Responses)
                 {
                     var newResponse = new Response(); //If I don't do this, the old responses are *moved* here, not copied

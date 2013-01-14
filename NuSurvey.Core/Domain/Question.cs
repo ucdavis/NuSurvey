@@ -85,6 +85,8 @@ namespace NuSurvey.Core.Domain
 
         public virtual IList<Photo> Photos { get; set; }
 
+        public virtual Photo PrimaryPhoto { get; set; }
+
         #region Methods
         public virtual void AddResponse(Response response)
         {
@@ -110,6 +112,7 @@ namespace NuSurvey.Core.Domain
             References(x => x.Survey);
             HasMany(x => x.Responses).Cascade.AllDeleteOrphan();
 
+            References(x => x.PrimaryPhoto);
             HasManyToMany(x => x.Photos).ParentKeyColumn("QuestionId").ChildKeyColumn("PhotoId").Table("QuestionsXPhotos");
         }
     }

@@ -561,6 +561,7 @@ namespace NuSurvey.Web.Controllers
                         newQuestion.IsOpenEnded = question.IsOpenEnded;
                         newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                         newQuestion.Name = question.Name;
+                        newQuestion.PrimaryPhoto = question.PrimaryPhoto;
                         newQuestion.Order = questionToEdit.Order;
                         foreach (var responsesParameter in viewModel.Responses)
                         {
@@ -579,6 +580,7 @@ namespace NuSurvey.Web.Controllers
                             var newPhoto = Repository.OfType<Photo>().Queryable.Single(a => a.Id == photo.Id);
                             newQuestion.Photos.Add(newPhoto);
                         }
+
 
                         question = newQuestion;
                         extraMessage1 = "Related Category Versioned";
@@ -606,6 +608,7 @@ namespace NuSurvey.Web.Controllers
                             newQuestion.IsOpenEnded = question.IsOpenEnded;
                             newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                             newQuestion.Name = question.Name;
+                            newQuestion.PrimaryPhoto = question.PrimaryPhoto;
                             newQuestion.Order = questionToEdit.Order;
                             foreach (var responsesParameter in viewModel.Responses)
                             {
@@ -647,6 +650,7 @@ namespace NuSurvey.Web.Controllers
                             newQuestion.IsOpenEnded = question.IsOpenEnded;
                             newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                             newQuestion.Name = question.Name;
+                            newQuestion.PrimaryPhoto = question.PrimaryPhoto;
                             newQuestion.Order = questionToEdit.Order;
                             foreach (var responsesParameter in viewModel.Responses)
                             {
@@ -701,6 +705,7 @@ namespace NuSurvey.Web.Controllers
                     newQuestion.IsOpenEnded = question.IsOpenEnded;
                     newQuestion.OpenEndedQuestionType = question.OpenEndedQuestionType;
                     newQuestion.Name = question.Name;
+                    newQuestion.PrimaryPhoto = question.PrimaryPhoto;
                     newQuestion.Order = questionToEdit.Order;
                     foreach (var responsesParameter in viewModel.Responses)
                     {
