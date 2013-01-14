@@ -231,6 +231,10 @@ namespace NuSurvey.Web.Controllers
                         else
                         {
                             question.Photos.Add(photo);
+                            if (question.PrimaryPhoto == null)
+                            {
+                                question.PrimaryPhoto = photo;
+                            }
                             _questionRepository.EnsurePersistent(question);
                             success = true;
                             message = "Photo added to question";
@@ -240,6 +244,10 @@ namespace NuSurvey.Web.Controllers
                         if (question.Photos.Contains(photo))
                         {
                             question.Photos.Remove(photo);
+                            if (question.PrimaryPhoto == photo)
+                            {
+                                question.PrimaryPhoto = question.Photos.FirstOrDefault(); //Removing it, so set it to the first one in the list , if any.
+                            }
                             _questionRepository.EnsurePersistent(question);
                             success = true;
                             message = "Photo removed from question";
