@@ -146,4 +146,9 @@
     width: 800px;
 }
 
+.green_border {
+    border-style: solid; 
+    border-width:medium; 
+    border-color:green
+}
 	

@@ -274,7 +274,39 @@ namespace NuSurvey.Web.Controllers
 
         }
 
-
+        /// <summary>
+        /// This will be for Admins as well as another role.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="questionId"></param>
+        /// <returns></returns>
+        public JsonNetResult MakePrimaryPhoto(int id, int questionId)
+        {
+            var success = false;
+            var message = string.Empty;
+            try
+            {
+                var photo = _photoRepository.Queryable.Single(a => a.Id == id);
+                var question = _questionRepository.Queryable.Single(a => a.Id == questionId);
+                if (question.Photos.Contains(photo))
+                {
+                    question.PrimaryPhoto = photo;
+                    _questionRepository.EnsurePersistent(question);
+                    success = true;
+                    message = "Question updated";
+                }
+                else
+                {
+                    message = "Photo not found";
+                }
+            }
+            catch (Exception)
+            {
+                message = "An error prevented this action.";
+                return new JsonNetResult(new { success, message });
+            }
+            return new JsonNetResult(new { success, message });
+        }
 
         public ActionResult Delete(int id)
         {

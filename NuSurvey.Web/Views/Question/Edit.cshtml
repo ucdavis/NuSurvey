@@ -89,7 +89,8 @@
 
 @helper PhotoContainer(Photo photo)
     {
-    <div style="display: inline-block">
+    var showBorder = Model.Question.PrimaryPhoto != null && Model.Question.PrimaryPhoto.Id == photo.Id ? "green_border" : string.Empty;
+    <div style="display: inline-block; padding-left: 10px;" class="@showBorder">
         <div style="word-wrap: break-word; width: 100px;">@photo.Name</div>
         @if (Model.Category != null)
         {
