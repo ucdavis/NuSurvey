@@ -83,6 +83,27 @@
             });
         }
 
+        $(function () {
+            $(".makePrime").click(function () {
+                var photoId = $(this).data("id");
+                var divId = "#photo" + photoId;
+                var url = '@Url.Action("MakePrimaryPhoto", "Photo", new { questionId = Model.Question.Id})';
+                var antiforgery = $("input[name='__RequestVerificationToken']").val();
+                $.post(url, { id: photoId, __RequestVerificationToken: antiforgery }, function (result) {
+                    if (result) {
+                        if (result.success === true) {
+                            $(".green_border").removeClass("green_border");
+                            $(divId).addClass("green_border");
+                        } else {
+                            alert("There was a problem making this photo the one to display with the question.");
+                        }
+                    } else {
+                        alert("There was a problem making this photo the one to display with the question.");
+                    }
+                });
+            });
+        });
+
     </script>
 
 }
@@ -90,7 +111,8 @@
 @helper PhotoContainer(Photo photo)
     {
     var showBorder = Model.Question.PrimaryPhoto != null && Model.Question.PrimaryPhoto.Id == photo.Id ? "green_border" : string.Empty;
-    <div style="display: inline-block; padding-left: 10px;" class="@showBorder">
+    var divId = string.Format("photo{0}", photo.Id);
+    <div id = "@divId" style="display: inline-block; padding-left: 10px;" class="@showBorder">
         <div style="word-wrap: break-word; width: 100px;">@photo.Name</div>
         @if (Model.Category != null)
         {
@@ -112,6 +134,10 @@
                 }
             </div>
         }
+        <div>@if(showBorder == string.Empty)
+             {
+                 <a class="button makePrime" data-id="@photo.Id" href="#">Use This Photo</a> 
+             }</div>
     </div>
 }
 
