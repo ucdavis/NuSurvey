@@ -52,7 +52,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
         [TestMethod]
         public void TestStartSurveyPostMapping()
         {
-            "~/SurveyResponse/StartSurvey/5".ShouldMapTo<SurveyResponseController>(a => a.StartSurvey(5, new SurveyResponse()), true);
+            "~/SurveyResponse/StartSurvey/5".ShouldMapTo<SurveyResponseController>(a => a.StartSurvey(5, new SurveyResponse(), null), true);
         }
 
         /// <summary>

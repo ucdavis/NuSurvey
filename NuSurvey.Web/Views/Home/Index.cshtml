@@ -1,4 +1,4 @@
-﻿@model NuSurvey.Web.Controllers.HomeController+HomeViewModel
+﻿@model NuSurvey.Web.Controllers.HomeController.HomeViewModel
            
 @{
     ViewBag.Title = "Home Page";
@@ -15,12 +15,28 @@
     </script>
 }
 
+<h3>
+    Parents
+</h3>
+<a class="balloon" href='@Url.Action("PublicSurveys", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
 
-<a class="balloon" href='@Url.Action("Index", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
+@*@if (Model.Admin || Model.User)*@
+    <h3>
+        Educators
+    </h3>
+    <a class="balloon" href='@Url.Action("Index", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
 
-@if (Model.Admin || Model.User) { 
     <a class="balloon" href='@Url.Action("Review", "Survey")' title="Review Your Surveys"><img alt="Review Your Surveys" src="@Url.Image("review.png")"/></a>
-}
+
+
+    <h3>
+        Program Director
+    </h3>
+
+<h3>
+    Manage Account
+</h3>
+
 
 @*<h1>
     <a href="@Url.Action("Index", "SurveyResponse")">Answer Surveys</a> 

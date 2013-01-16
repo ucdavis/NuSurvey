@@ -313,7 +313,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.StartSurvey(3, new SurveyResponse())
+            Controller.StartSurvey(3, new SurveyResponse(), null)
                 .AssertActionRedirect()
                 .ToAction<ErrorController>(a => a.Index());
             #endregion Act
@@ -337,7 +337,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.StartSurvey(4, new SurveyResponse())
+            Controller.StartSurvey(4, new SurveyResponse(), null)
                 .AssertActionRedirect()
                 .ToAction<ErrorController>(a => a.Index());
             #endregion Act
@@ -359,7 +359,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.StartSurvey(2, surveyResponse)
+            var result = Controller.StartSurvey(2, surveyResponse, null)
                 .AssertViewRendered()
                 .WithViewData<SingleAnswerSurveyResponseViewModel>();
             #endregion Act
@@ -383,7 +383,7 @@ namespace NuSurvey.Tests.ControllerTests.SurveyResponseControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.StartSurvey(1, surveyResponse)
+            var result = Controller.StartSurvey(1, surveyResponse, null)
                 .AssertActionRedirect()
                 .ToAction<SurveyResponseController>(a => a.AnswerNext(1));
             #endregion Act

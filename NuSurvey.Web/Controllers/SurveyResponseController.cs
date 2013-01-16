@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,8 +16,7 @@ namespace NuSurvey.Web.Controllers
 {
     /// <summary>
     /// Controller for the SurveyResponse class
-    /// </summary>
-    [Authorize]
+    /// </summary>   
     public class SurveyResponseController : ApplicationController
     {
 	    private readonly IRepository<SurveyResponse> _surveyResponseRepository;
@@ -33,10 +33,19 @@ namespace NuSurvey.Web.Controllers
         /// GET: /SurveyResponse/
         /// </summary>
         /// <returns></returns>
+        [Authorize]
         public ActionResult Index()
         {
             var isPublic = !(CurrentUser.IsInRole(RoleNames.User) || CurrentUser.IsInRole(RoleNames.Admin));
             var viewModel = ActiveSurveyViewModel.Create(Repository, isPublic);
+
+            return View(viewModel);
+        }
+
+        public ActionResult PublicSurveys()
+        {
+            var viewModel = ActiveSurveyViewModel.Create(Repository, true);
+            
 
             return View(viewModel);
         }
@@ -51,6 +60,7 @@ namespace NuSurvey.Web.Controllers
         /// <param name="fromYourDetails">if set to <c>true</c> [from your details].</param>
         /// <returns></returns>
         [User]
+        [Authorize]
         public ActionResult Details(int id, bool fromYourDetails = false)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
@@ -81,6 +91,17 @@ namespace NuSurvey.Web.Controllers
         /// <returns></returns>
         public ActionResult StartSurvey(int id)
         {
+            var userId = string.Empty;
+            var guid = Guid.NewGuid();
+            if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+            {
+                userId = CurrentUser.Identity.Name.ToLower();
+            }
+            else
+            {
+                userId = guid.ToString();
+            }
+
             var survey = Repository.OfType<Survey>().GetNullableById(id);
             if (survey == null || !survey.IsActive)
             {
@@ -99,7 +120,7 @@ namespace NuSurvey.Web.Controllers
             var cannotContinue = false;
 
             var pendingExists = _surveyResponseRepository.Queryable
-                .Where(a => a.Survey.Id == id && a.IsPending && a.UserId == CurrentUser.Identity.Name.ToLower()).FirstOrDefault();
+                .Where(a => a.Survey.Id == id && a.IsPending && a.UserId == userId).FirstOrDefault();
             if (pendingExists != null)
             {
                 foreach (var answer in pendingExists.Answers)
@@ -120,6 +141,14 @@ namespace NuSurvey.Web.Controllers
 
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, survey, pendingExists);
             viewModel.CannotContinue = cannotContinue;
+            if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+            {
+                viewModel.PublicGuid = null;
+            }
+            else
+            {
+                viewModel.PublicGuid = guid;
+            }
 
             return View(viewModel);
 
@@ -151,9 +180,10 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <param name="id">Survey Id</param>
         /// <param name="surveyResponse"></param>
+        /// <param name="publicGuid"> </param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult StartSurvey(int id, SurveyResponse surveyResponse)
+        public ActionResult StartSurvey(int id, SurveyResponse surveyResponse, Guid? publicGuid)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
             if (survey == null || !survey.IsActive)
@@ -164,7 +194,7 @@ namespace NuSurvey.Web.Controllers
 
             surveyResponse.IsPending = true;
             surveyResponse.Survey = survey;
-            surveyResponse.UserId = CurrentUser.Identity.Name.ToLower();
+            surveyResponse.UserId = !string.IsNullOrWhiteSpace(CurrentUser.Identity.Name) ? CurrentUser.Identity.Name.ToLower() : publicGuid.ToString();
 
             ModelState.Clear();
             surveyResponse.TransferValidationMessagesTo(ModelState);
@@ -173,13 +203,14 @@ namespace NuSurvey.Web.Controllers
             {
                 _surveyResponseRepository.EnsurePersistent(surveyResponse);
 
-                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id));
+                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id, publicGuid));
             }
 
             Message = "Please correct errors to continue";
 
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, survey, null);
             viewModel.SurveyResponse = surveyResponse;
+            viewModel.PublicGuid = publicGuid;
 
             return View(viewModel);
         }
@@ -191,7 +222,7 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>
         /// <returns></returns>
-        public ActionResult AnswerNext(int id)
+        public ActionResult AnswerNext(int id, Guid? publicGuid)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
             if (surveyResponse == null || !surveyResponse.IsPending)
@@ -199,15 +230,27 @@ namespace NuSurvey.Web.Controllers
                 Message = "Pending survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+            if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
             {
-                Message = "Not your survey";
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+                {
+                    Message = "Not your survey";
+                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                }
+            }
+            else
+            {
+                if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
+                {
+                    Message = "Not your survey";
+                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                }
             }
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
+            viewModel.PublicGuid = publicGuid;
             if (viewModel.CurrentQuestion == null)
             {
-                return this.RedirectToAction(a => a.FinalizePending(surveyResponse.Id));
+                return this.RedirectToAction(a => a.FinalizePending(surveyResponse.Id, publicGuid));
             }
             return View(viewModel);
         }
@@ -221,7 +264,7 @@ namespace NuSurvey.Web.Controllers
         /// <param name="byPassAnswer"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult AnswerNext(int id, QuestionAnswerParameter questions, string byPassAnswer)
+        public ActionResult AnswerNext(int id, QuestionAnswerParameter questions, string byPassAnswer, Guid? publicGuid)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
             if (surveyResponse == null || !surveyResponse.IsPending)
@@ -229,10 +272,21 @@ namespace NuSurvey.Web.Controllers
                 Message = "Pending survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+            if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
             {
-                Message = "Not your survey";
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+                {
+                    Message = "Not your survey";
+                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                }
+            }
+            else
+            {
+                if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
+                {
+                    Message = "Not your survey";
+                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                }
             }
 
             var question = Repository.OfType<Question>().GetNullableById(questions.QuestionId);
@@ -262,7 +316,7 @@ namespace NuSurvey.Web.Controllers
                 answer.Category = question.Category;
                 surveyResponse.AddAnswers(answer);
                 _surveyResponseRepository.EnsurePersistent(surveyResponse);
-                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id));
+                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id, publicGuid));
             }
             else
             {
@@ -295,10 +349,11 @@ namespace NuSurvey.Web.Controllers
             if (ModelState.IsValid)
             {
                 _surveyResponseRepository.EnsurePersistent(surveyResponse);
-                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id));
+                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id, publicGuid));
             }
 
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
+            viewModel.PublicGuid = publicGuid;
             if(question.AllowBypass)
             {
                 viewModel.DisplayBypass = true;
@@ -313,8 +368,9 @@ namespace NuSurvey.Web.Controllers
         /// Calculate the positive and two negative categories and set the pending flag to false
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>
+        /// <param name="publicGuid"> </param>
         /// <returns></returns>
-        public ActionResult FinalizePending(int id)
+        public ActionResult FinalizePending(int id, Guid? publicGuid)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
             if (surveyResponse == null || !surveyResponse.IsPending)
@@ -322,18 +378,30 @@ namespace NuSurvey.Web.Controllers
                 Message = "Pending survey not found";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
-            if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+            if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
             {
-                Message = "Not your survey";
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+                {
+                    Message = "Not your survey";
+                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                }
+            }
+            else
+            {
+                if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
+                {
+                    Message = "Not your survey";
+                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                }
             }
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
+            viewModel.PublicGuid = publicGuid;
             if (viewModel.CurrentQuestion == null)
             {
                 _scoreService.CalculateScores(Repository, surveyResponse);
                 surveyResponse.IsPending = false;
                 _surveyResponseRepository.EnsurePersistent(surveyResponse);
-                return this.RedirectToAction(a => a.Results(surveyResponse.Id));
+                return this.RedirectToAction(a => a.Results(surveyResponse.Id, publicGuid));
             }
             else
             {
@@ -420,6 +488,7 @@ namespace NuSurvey.Web.Controllers
         /// <param name="id">Survey Id</param>
         /// <returns></returns>
         [User]
+        [Authorize]
         public ActionResult Create(int id)
         {
             var survey = Repository.OfType<Survey>().GetNullableById(id);
@@ -551,7 +620,7 @@ namespace NuSurvey.Web.Controllers
 
                 Message = "SurveyResponse Created Successfully";
 
-                return this.RedirectToAction(a => a.Results(surveyResponseToCreate.Id));
+                return this.RedirectToAction(a => a.Results(surveyResponseToCreate.Id, null));
             }
             else
             {
@@ -577,7 +646,7 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <param name="id">SurveyResponse ID</param>
         /// <returns></returns>
-        public ActionResult Results(int id)
+        public ActionResult Results(int id, Guid? publicGuid)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
             if (surveyResponse == null)
@@ -588,13 +657,26 @@ namespace NuSurvey.Web.Controllers
 
             if (!CurrentUser.IsInRole(RoleNames.Admin))
             {
-                if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+                if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
                 {
-                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                    if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+                    {
+                        Message = "Not your survey";
+                        return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                    }
+                }
+                else
+                {
+                    if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
+                    {
+                        Message = "Not your survey";
+                        return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                    }
                 }
             }
 
             var viewModel = ResultsViewModel.Create(surveyResponse, false);
+            viewModel.PublicGuid = publicGuid;
             if (CurrentUser.IsInRole(RoleNames.Admin) || CurrentUser.IsInRole(RoleNames.User))
             {
                 viewModel.ShowPdfPrint = true;
@@ -610,12 +692,13 @@ namespace NuSurvey.Web.Controllers
     {
         public SurveyResponse SurveyResponse { get; set; }
         public bool ShowPdfPrint { get; set; }
+        public Guid? PublicGuid { get; set; }
 
         public static ResultsViewModel Create(SurveyResponse surveyResponse, bool showPdfPrint)
         {
             Check.Require(surveyResponse != null);
             var viewModel = new ResultsViewModel {SurveyResponse = surveyResponse, ShowPdfPrint = showPdfPrint};
-
+            viewModel.PublicGuid = null;
             return viewModel;
         }
         
@@ -653,6 +736,7 @@ namespace NuSurvey.Web.Controllers
         public QuestionAnswerParameter SurveyAnswer { get; set; }
         public bool FromAdmin { get; set; }
         public bool DisplayBypass { get; set; }
+        public Guid? PublicGuid { get; set; }
 
         public static SingleAnswerSurveyResponseViewModel Create(IRepository repository, Survey survey, SurveyResponse pendingSurveyResponse)
         {

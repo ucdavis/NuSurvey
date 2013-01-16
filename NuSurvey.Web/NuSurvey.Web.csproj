@@ -341,6 +341,7 @@
     <Content Include="Views\Photo\Delete.cshtml" />
     <Content Include="Views\Photo\Edit.cshtml" />
     <Content Include="Views\Photo\Search.cshtml" />
+    <Content Include="Views\SurveyResponse\PublicSurveys.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">

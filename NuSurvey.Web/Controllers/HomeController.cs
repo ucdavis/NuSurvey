@@ -9,7 +9,6 @@ using MvcContrib;
 namespace NuSurvey.Web.Controllers
 {
     [HandleTransactionsManually]
-    [Authorize]
     public class HomeController : ApplicationController
     {
         /// <summary>
@@ -18,7 +17,7 @@ namespace NuSurvey.Web.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var viewModel = HomeViewModel.Create(CurrentUser.IsInRole(RoleNames.Admin), CurrentUser.IsInRole(RoleNames.User));
+            var viewModel = HomeViewModel.Create(CurrentUser.IsInRole(RoleNames.Admin), CurrentUser.IsInRole(RoleNames.User), CurrentUser.IsInRole(RoleNames.ProgramDirector));
             return View(viewModel);
         }
 
@@ -74,11 +73,12 @@ namespace NuSurvey.Web.Controllers
         {
 
             public bool Admin { get; set; }
+            public bool ProgramDirector { get; set; }
             public bool User { get; set; }
 
-            public static HomeViewModel Create(bool isAdmin, bool isUser)
+            public static HomeViewModel Create(bool isAdmin, bool isUser, bool isProgramDirector)
             {
-                var viewModel = new HomeViewModel { Admin = isAdmin, User = isUser};
+                var viewModel = new HomeViewModel { Admin = isAdmin, User = isUser, ProgramDirector = isProgramDirector};
 
                 return viewModel;
             }

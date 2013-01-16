@@ -15,7 +15,9 @@
 
 
 <p>
-    @Html.ActionLink("Back to Survey List", "Index")
+    @if (Model.PublicGuid == null)
+                                                                 {  @Html.ActionLink("Back to Survey List", "Index")}
+                                                                 else { @Html.ActionLink("Back to Survey List", "PublicSurveys")}
 </p>
 
 

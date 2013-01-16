@@ -77,6 +77,7 @@
 	@Html.AntiForgeryToken()
 	@Html.ValidationSummary(true)
     @Html.HiddenFor(x => x.SurveyResponse.Id)
+    @Html.HiddenFor(x => x.PublicGuid);
     <input id="byPassAnswer" name="byPassAnswer" type="hidden" />
 
     <fieldset>
@@ -155,7 +156,9 @@
 		    <li>
 			    @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
 			    <label>&nbsp;</label>
-			    <input class="button" type="submit" value="Next" /> | @Html.ActionLink("Cancel", "Index")
+			    <input class="button" type="submit" value="Next" /> | @if (Model.PublicGuid == null)
+                                                                 {  @Html.ActionLink("Cancel", "Index")}
+                                                                 else { @Html.ActionLink("Cancel", "PublicSurveys")}
 		    </li>
 	    </ul>
     </fieldset>
