@@ -60,7 +60,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
         [TestMethod]
         public void TestManageUsersMapping()
         {
-            "~/Account/ManageUsers/".ShouldMapTo<AccountController>(a => a.ManageUsers(false, false, false), true);
+            "~/Account/ManageUsers/".ShouldMapTo<AccountController>(a => a.ManageUsers(false, false, false, false), true);
         }
 
         /// <summary>

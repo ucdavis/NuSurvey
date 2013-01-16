@@ -89,6 +89,7 @@ namespace NuSurvey.Web.Models
         public string Email { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsUser { get; set; }
+        public bool IsProgramDirector { get; set; }
         public bool Confirm { get; set; }
         public MembershipUser User { get; set; }
 
@@ -101,6 +102,7 @@ namespace NuSurvey.Web.Models
             //viewModel.IsUser = Roles.IsUserInRole(viewModel.Email, RoleNames.User);
             viewModel.IsAdmin = membershipService.IsUserInRole(viewModel.Email, RoleNames.Admin);
             viewModel.IsUser = membershipService.IsUserInRole(viewModel.Email, RoleNames.User);
+            viewModel.IsProgramDirector = membershipService.IsUserInRole(viewModel.Email, RoleNames.ProgramDirector);
 
             viewModel.Confirm = false;
 
@@ -160,6 +162,7 @@ namespace NuSurvey.Web.Models
                 userRole.UserName = email;
                 userRole.User = Roles.IsUserInRole(email, RoleNames.User);
                 userRole.Admin = Roles.IsUserInRole(email, RoleNames.Admin);
+                userRole.ProgramDirector = Roles.IsUserInRole(email, RoleNames.ProgramDirector);
                 usersRoles.Add(userRole);
             }
 

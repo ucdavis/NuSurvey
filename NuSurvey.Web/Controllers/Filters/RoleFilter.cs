@@ -51,5 +51,6 @@ namespace NuSurvey.Web.Controllers.Filters
     {
         public static readonly string User = "NSUser";
         public static readonly string Admin = "NSAdmin";
+        public static readonly string ProgramDirector = "NSProgramDirector";
     }
 }

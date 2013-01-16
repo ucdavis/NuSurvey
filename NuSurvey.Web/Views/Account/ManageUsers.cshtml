@@ -57,7 +57,15 @@
                         
                     </div>
                     <div class="editor-field">
-                        @Html.CheckBoxFor(x => x.HideUser) @Html.Label("Hide User Users")
+                        @Html.CheckBoxFor(x => x.HideProgramDirector) @Html.Label("Hide Program Director Users")
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-label">
+                        
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(x => x.HideUser) @Html.Label("Hide Educator Users")
                     </div>
                 </li>
                 <li>
@@ -85,11 +93,14 @@
 			<th>
 				User Name/Email
 			</th>
+            <th>
+                Admin
+            </th>
+            <th>
+                Program Director
+            </th>
 			<th>
-				Admin
-			</th>
-			<th>
-				User
+				Educator
 			</th>
             <th></th>
 		</tr>
@@ -107,16 +118,22 @@
 			<td>
 				@item.UserName
 			</td>
-			<td>
-				@if (item.Admin)
+            <td>
+                @if (item.Admin)
+                { 
+                    @Html.Encode("Admin");
+                }
+            </td>
+            			<td>
+				@if (item.ProgramDirector)
     { 
-                 @Html.Encode("Admin");
+                 @Html.Encode("Program Director");
     }
 			</td>
 			<td>
 				@if (item.User)
     { 
-                 @Html.Encode("User");
+                 @Html.Encode("Educator");
     }
 			</td>
             <td>

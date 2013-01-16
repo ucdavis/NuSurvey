@@ -33,7 +33,7 @@ namespace NuSurvey.Web.Controllers
         [Admin]
         public ActionResult Index()
         {
-            var surveyList = _surveyRepository.Queryable;
+            var surveyList = _surveyRepository.Queryable.Where(a => a.OwnerId == null);
 
             return View(surveyList.ToList());
         }

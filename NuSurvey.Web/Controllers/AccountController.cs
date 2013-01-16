@@ -103,6 +103,7 @@ namespace NuSurvey.Web.Controllers
             ViewBag.PasswordLength = MembershipService.MinPasswordLength;
             ViewBag.UserRole = RoleNames.User;
             ViewBag.AdminRole = RoleNames.Admin;
+            ViewBag.ProgramDirectorRole = RoleNames.ProgramDirector;
 
             var viewModel = new RegisterModel();
 
@@ -121,6 +122,7 @@ namespace NuSurvey.Web.Controllers
         {
             ViewBag.UserRole = RoleNames.User;
             ViewBag.AdminRole = RoleNames.Admin;
+            ViewBag.ProgramDirectorRole = RoleNames.ProgramDirector;
 
             model.Email = model.Email.ToLower();
 
@@ -146,7 +148,7 @@ namespace NuSurvey.Web.Controllers
 
                     Message = string.Format("{0} {1}", Message, "User emailed");
 
-                    return this.RedirectToAction(a => a.ManageUsers(false, false, false));
+                    return this.RedirectToAction(a => a.ManageUsers(false, false, false, false));
                 }
                 else
                 {
@@ -165,9 +167,9 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [Admin]
-        public ActionResult ManageUsers(bool hideAdmin = false, bool hideUser= false, bool hidePublic = true)
+        public ActionResult ManageUsers(bool hideAdmin = false, bool hideUser= false, bool hidePublic = true, bool hideProgramDirector = false)
         {
-            var viewModel = ManageUsersViewModel.Create(MembershipService.GetUsersAndRoles(CurrentUser.Identity.Name.ToLower()), hideAdmin, hideUser, hidePublic);
+            var viewModel = ManageUsersViewModel.Create(MembershipService.GetUsersAndRoles(CurrentUser.Identity.Name.ToLower()), hideAdmin, hideUser, hidePublic, hideProgramDirector);
 
             return View(viewModel);
         }
@@ -188,7 +190,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             }
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
@@ -214,10 +216,10 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(editUserViewModel.Email) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             }
 
-            var roles = new string[]{"", ""};
+            var roles = new string[]{"", "", ""};
             
             if (editUserViewModel.IsAdmin)
             {
@@ -226,6 +228,10 @@ namespace NuSurvey.Web.Controllers
             if (editUserViewModel.IsUser)
             {
                 roles[1] = RoleNames.User;
+            }
+            if (editUserViewModel.IsProgramDirector)
+            {
+                roles[2] = RoleNames.ProgramDirector;
             }
             if(MembershipService.ManageRoles(editUserViewModel.Email, roles) == true)
             {
@@ -236,7 +242,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Problem with Updating Roles";
             }
 
-            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
+            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
         }
 
         /// <summary>
@@ -255,7 +261,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             }
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
@@ -282,7 +288,7 @@ namespace NuSurvey.Web.Controllers
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             }
             if (confirm)
             {
@@ -296,7 +302,7 @@ namespace NuSurvey.Web.Controllers
                 }
             }
 
-            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false));
+            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
         }
 
         /// <summary>
@@ -402,26 +408,27 @@ namespace NuSurvey.Web.Controllers
         public string UserName { get; set; }
         public bool Admin { get; set; }
         public bool User { get; set; }
+        public bool ProgramDirector { get; set; }
     }
 
     public class ManageUsersViewModel
     {
         public bool HideAdmin { get; set; }
         public bool HideUser { get; set; }
+        public bool HideProgramDirector { get; set; }
         public bool HidePublic { get; set; }
         public IQueryable<UsersRoles> Users { get; set; }
 
-        public static ManageUsersViewModel Create(IQueryable<UsersRoles> users, bool hideAdmin, bool hideUser, bool hidePublic)
+        public static ManageUsersViewModel Create(IQueryable<UsersRoles> users, bool hideAdmin, bool hideUser, bool hidePublic, bool hideProgramDirector)
         {
             var viewModel = new ManageUsersViewModel
-                                {HideAdmin = hideAdmin, HidePublic = hidePublic, HideUser = hideUser, Users = users};
+                                {HideAdmin = hideAdmin, HidePublic = hidePublic, HideUser = hideUser, Users = users, HideProgramDirector = hideProgramDirector};
 
             if (viewModel.HidePublic)
             {
-                viewModel.Users = viewModel.Users.Where(a => a.Admin || a.User);
+                viewModel.Users = viewModel.Users.Where(a => a.Admin || a.User || a.ProgramDirector);
             }
-            else
-            {
+
                 if (viewModel.HideAdmin)
                 {
                     viewModel.Users = viewModel.Users.Where(a => !a.Admin);
@@ -430,7 +437,11 @@ namespace NuSurvey.Web.Controllers
                 {
                     viewModel.Users = viewModel.Users.Where(a => !a.User);
                 }
-            }
+                if (viewModel.HideProgramDirector)
+                {
+                    viewModel.Users = viewModel.Users.Where(a => !a.ProgramDirector);
+                }
+  
 
             return viewModel;
 

@@ -43,7 +43,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Edit("test@ucdavis.edu")
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
+                .ToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             #endregion Act
 
             #region Assert
@@ -113,7 +113,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Edit(viewModel)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
+                .ToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             #endregion Act
 
             #region Assert
@@ -138,7 +138,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Edit(viewModel)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
+                .ToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             #endregion Act
 
             #region Assert
@@ -163,7 +163,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Edit(viewModel)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
+                .ToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             #endregion Act
 
             #region Assert
@@ -188,7 +188,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Edit(viewModel)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
+                .ToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             #endregion Act
 
             #region Assert
@@ -212,7 +212,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Edit(viewModel)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
+                .ToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             #endregion Act
 
             #region Assert
@@ -237,7 +237,7 @@ namespace NuSurvey.Tests.ControllerTests.AccountControllerTests
             #region Act
             Controller.Edit(viewModel)
                 .AssertActionRedirect()
-                .ToAction<AccountController>(a => a.ManageUsers(false,false,false));
+                .ToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
             #endregion Act
 
             #region Assert
