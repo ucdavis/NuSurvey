@@ -201,7 +201,14 @@ namespace NuSurvey.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+                {
+                    _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                }
+                else
+                {
+                    Session[publicGuid.ToString()] = surveyResponse;
+                }
 
                 return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id, publicGuid));
             }
@@ -225,6 +232,11 @@ namespace NuSurvey.Web.Controllers
         public ActionResult AnswerNext(int id, Guid? publicGuid)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+            {
+                surveyResponse = (SurveyResponse)Session[publicGuid.ToString()];
+            }
+
             if (surveyResponse == null || !surveyResponse.IsPending)
             {
                 Message = "Pending survey not found";
@@ -267,6 +279,10 @@ namespace NuSurvey.Web.Controllers
         public ActionResult AnswerNext(int id, QuestionAnswerParameter questions, string byPassAnswer, Guid? publicGuid)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+            {
+                surveyResponse = (SurveyResponse)Session[publicGuid.ToString()];
+            }
             if (surveyResponse == null || !surveyResponse.IsPending)
             {
                 Message = "Pending survey not found";
@@ -315,7 +331,15 @@ namespace NuSurvey.Web.Controllers
                 answer.Question = question;
                 answer.Category = question.Category;
                 surveyResponse.AddAnswers(answer);
-                _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+                {
+                    _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                }
+                else
+                {
+                    Session[publicGuid.ToString()] = surveyResponse;
+                }
+
                 return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id, publicGuid));
             }
             else
@@ -348,7 +372,14 @@ namespace NuSurvey.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+                {
+                    _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                }
+                else
+                {
+                    Session[publicGuid.ToString()] = surveyResponse;
+                }
                 return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id, publicGuid));
             }
 
@@ -373,6 +404,10 @@ namespace NuSurvey.Web.Controllers
         public ActionResult FinalizePending(int id, Guid? publicGuid)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+            {
+                surveyResponse = (SurveyResponse)Session[publicGuid.ToString()];
+            }
             if (surveyResponse == null || !surveyResponse.IsPending)
             {
                 Message = "Pending survey not found";
@@ -400,7 +435,14 @@ namespace NuSurvey.Web.Controllers
             {
                 _scoreService.CalculateScores(Repository, surveyResponse);
                 surveyResponse.IsPending = false;
-                _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+                {
+                    _surveyResponseRepository.EnsurePersistent(surveyResponse);
+                }
+                else
+                {
+                    Session[publicGuid.ToString()] = surveyResponse;
+                }
                 return this.RedirectToAction(a => a.Results(surveyResponse.Id, publicGuid));
             }
             else
@@ -645,10 +687,15 @@ namespace NuSurvey.Web.Controllers
         /// Get: /SurveyResponse/Results
         /// </summary>
         /// <param name="id">SurveyResponse ID</param>
+        /// <param name="publicGuid"> </param>
         /// <returns></returns>
         public ActionResult Results(int id, Guid? publicGuid)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+            {
+                surveyResponse = (SurveyResponse)Session[publicGuid.ToString()];
+            }
             if (surveyResponse == null)
             {
                 Message = "Not Found";
