@@ -10,6 +10,7 @@ namespace NuSurvey.Core.Domain
         public PrintedSurvey()
         {
             PrintedSurveyQuestions = new List<PrintedSurveyQuestion>();
+            DateCreated = DateTime.Now;
         }
 
         public virtual string UserId { get; set; }
@@ -30,7 +31,7 @@ namespace NuSurvey.Core.Domain
 
             References(x => x.Survey);
 
-            HasMany(x => x.PrintedSurveyQuestions).Inverse();
+            HasMany(x => x.PrintedSurveyQuestions).Inverse().Cascade.AllDeleteOrphan();
         }
     }
 }

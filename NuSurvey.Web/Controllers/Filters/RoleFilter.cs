@@ -47,6 +47,29 @@ namespace NuSurvey.Web.Controllers.Filters
             base.OnAuthorization(filterContext);
         }
     }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class ProgramDirectorAttribute : AuthorizeAttribute
+    {
+        public ProgramDirectorAttribute()
+        {
+            Roles = RoleNames.ProgramDirector;    //Set the roles prop to a comma delimited string of allowed roles
+        }
+        public override void OnAuthorization(AuthorizationContext filterContext)
+        {
+            if (!filterContext.HttpContext.User.Identity.Name.Contains("@"))
+            {
+                filterContext.HttpContext.Response.Redirect("~/Error");
+            }
+            if (filterContext.HttpContext.User != null && !filterContext.HttpContext.User.IsInRole(RoleNames.ProgramDirector))
+            {
+                filterContext.HttpContext.Response.Redirect("~/Error/NotAuthorized");
+            }
+            base.OnAuthorization(filterContext);
+        }
+    }
+
+
     public class RoleNames
     {
         public static readonly string User = "NSUser";

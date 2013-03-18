@@ -23,8 +23,8 @@ namespace NuSurvey.Core.Domain
             Id(x => x.Id);
 
             References(x => x.PrintedSurvey);
-            References(x => x.Question);
-            References(x => x.Photo);
+            References(x => x.Question).Cascade.None();
+            References(x => x.Photo).Cascade.None();
 
             Map(x => x.Order).Column("`Order`");
         }

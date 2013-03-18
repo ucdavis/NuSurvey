@@ -147,6 +147,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
     <Compile Include="Controllers\PrintController.cs" />
+    <Compile Include="Controllers\ProgramDirectorController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\SurveyResponseController.cs" />
@@ -342,6 +343,8 @@
     <Content Include="Views\Photo\Edit.cshtml" />
     <Content Include="Views\Photo\Search.cshtml" />
     <Content Include="Views\SurveyResponse\PublicSurveys.cshtml" />
+    <Content Include="Views\ProgramDirector\Index.cshtml" />
+    <Content Include="Views\ProgramDirector\SelectPhotos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">
