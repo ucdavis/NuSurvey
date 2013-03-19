@@ -43,7 +43,18 @@
         }
     </script>
 }
- @Html.AntiForgeryToken()
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Index", "ProgramDirector")">Back to list</a> 
+        </li>
+    </ul>
+}
+
+
+
+@Html.AntiForgeryToken()
 
 
     @foreach (var psq in Model.PrintedSurveyQuestions.OrderBy(a => a.Order))

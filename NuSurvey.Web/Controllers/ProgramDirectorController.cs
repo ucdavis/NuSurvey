@@ -128,6 +128,15 @@ namespace NuSurvey.Web.Controllers
             return new JsonNetResult(new { success, message });
         }
 
+        [ProgramDirector]
+        public ActionResult Print(int id)
+        {
+            var userId = CurrentUser.Identity.Name;
+            var printedSurvey = _printedSurveyRepository.Queryable.Single(a => a.Id == id && a.UserId == userId);
+
+            return View(printedSurvey);
+        }
+
     }
 
 	/// <summary>

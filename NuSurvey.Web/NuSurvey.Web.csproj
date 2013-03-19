@@ -346,6 +346,7 @@
     <Content Include="Views\ProgramDirector\Index.cshtml" />
     <Content Include="Views\ProgramDirector\SelectPhotos.cshtml" />
     <Content Include="Views\Account\OpenRegister.cshtml" />
+    <Content Include="Views\ProgramDirector\Print.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">
