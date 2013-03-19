@@ -1,0 +1,116 @@
+﻿@model NuSurvey.Web.Models.OpenRegisterModel
+@using NuSurvey.Core.Resources
+@using NuSurvey.Web.Controllers.Filters
+@{
+	ViewBag.Title = "Register";
+}
+
+
+@section AdditionalScripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Email").blur(function(event){
+                if($(this).hasClass("warning")){
+                    $(this).removeClass("warning");
+                    $(".field-warning").hide();
+                }
+                if($(this).hasClass("input-validation-error")){
+                    //Do nothing
+                }
+                else{
+                    var emailVal = $(this).val().toLowerCase();                                   
+                    if(emailVal != null && emailVal != "" && emailVal.match(@StaticValues.EmailWarningRegEx) == null){
+                        $(this).addClass("warning");
+                        $(this).next().text("This may be invalid");   
+                        $(".field-warning").show();                     
+                    }
+                }
+                 
+            });            
+        });
+    </script>    
+}
+
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true)
+
+    <fieldset>
+        @{var isChecked = "";}
+        <p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
+
+        <p><strong>Note!</strong> To answer surveys anonymously,  you don't have to register. Just click the image on the home page to answer surveys for Parents.</p>
+        <ul>
+            <li>
+                <div class="editor-label required">
+                    @Html.LabelFor(model => model.Email)<span>*</span> 
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.Email)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.Label("Roles")
+                </div>
+                <div class="editor-field">
+                    <ul class="checkbox_container">
+                        <li>
+                            @{
+                                isChecked = Model.Roles != null && Model.Roles.Contains(RoleNames.User) ? "checked=\"checked\"" : "";
+                            }
+                            <input class="checkbox" type="checkbox" value="@ViewBag.UserRole" @isChecked name="Roles" /> Educator
+                        </li>
+                        <li>
+                            @{
+                                isChecked = Model.Roles != null && Model.Roles.Contains(RoleNames.ProgramDirector) ? "checked=\"checked\"" : "";
+                            }                            
+                            <input class="checkbox" type="checkbox" value="@ViewBag.ProgramDirectorRole" @isChecked name="Roles" /> Program Director
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <div class="editor-label required">
+                    @Html.Label("Terms and Conditions")<span>*</span> 
+                </div>
+                <div class="editor-field">
+                    <ul class="checkbox_container">
+                        <li>
+                            @{
+                                isChecked = Model.Agree == "agreed" ? "checked=\"checked\"" : "";
+                            } 
+                            <input class="checkbox" type="checkbox" value="agreed" @isChecked name="Agree" /> I Agree
+                            @Html.ValidationMessage("Agree")
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        
+            <li>
+                <div class="editor-field">        
+                    @Html.GenerateCaptcha()
+                    @Html.ValidationMessage("Captcha")
+                </div>
+            </li>        
+
+            <li>
+                @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+                <label>&nbsp;</label>
+                <input class="button" type="submit" value="Create" /> | @Html.ActionLink("Cancel", "Index", "Home")
+            </li>
+        </ul>
+    </fieldset>
+}
+
+
+
+

@@ -84,6 +84,20 @@ namespace NuSurvey.Web.Models
 
     }
 
+    public class OpenRegisterModel
+    {
+        [Required]
+        [Email]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Email address")]
+        public string Email { get; set; }
+
+        public string Agree { get; set; }
+
+        public string[] Roles { get; set; }
+
+    }
+
     public class EditUserViewModel
     {
         public string Email { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using MvcContrib;
@@ -92,6 +93,75 @@ namespace NuSurvey.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        public ActionResult OpenRegister()
+        {
+            ViewBag.PasswordLength = MembershipService.MinPasswordLength;
+            ViewBag.UserRole = RoleNames.User;
+            ViewBag.ProgramDirectorRole = RoleNames.ProgramDirector;
+
+            var viewModel = new OpenRegisterModel();
+
+            return View(viewModel);
+        }
+
+        [CaptchaValidator]
+        [HttpPost]
+        public ActionResult OpenRegister(OpenRegisterModel model, bool captchaValid)
+        {
+            ViewBag.UserRole = RoleNames.User;
+            ViewBag.ProgramDirectorRole = RoleNames.ProgramDirector;
+
+            if (!captchaValid)
+            {
+                ModelState.AddModelError("Captcha", "Recaptcha value not valid");
+            }
+            if (model.Agree != "agreed")
+            {
+                ModelState.AddModelError("Agree", "You must agree to the terms to register");
+            }           
+
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            model.Email = model.Email.ToLower();
+
+            MembershipCreateStatus createStatus = MembershipService.CreateUser(model.Email, "BTDF4hd7ehd6@!", model.Email);
+            if (createStatus == MembershipCreateStatus.Success)
+            {
+                //FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
+                if (MembershipService.ManageRoles(model.Email, model.Roles))
+                {
+                    Message = "Registered and roles created.";
+                }
+                else
+                {
+                    Message = "User created, but problem with roles.";
+                }
+                var tempPass = MembershipService.ResetPassword(model.Email.ToLower());
+                _emailService.SendNewUser(Request, Url, model.Email.ToLower(), tempPass);
+
+                Message = string.Format("{0} {1}", Message, "You will received an email with instructions");
+
+                return this.RedirectToAction(a => a.LogOn());
+
+            }
+            else if(createStatus == MembershipCreateStatus.DuplicateUserName || createStatus == MembershipCreateStatus.DuplicateEmail)
+            {
+                Message = "You have already registered";
+            }
+            else
+            {
+                Message = "There was an error registering you.";
+            }
+
+            return View(model);
+
+
+        }
+
         /// <summary>
         /// #4
         /// URL: /Account/Register
@@ -101,9 +171,9 @@ namespace NuSurvey.Web.Controllers
         public ActionResult Register()
         {
             ViewBag.PasswordLength = MembershipService.MinPasswordLength;
-            ViewBag.UserRole = RoleNames.User;
+            ViewBag.UserRole = RoleNames.User; //Educator
             ViewBag.AdminRole = RoleNames.Admin;
-            ViewBag.ProgramDirectorRole = RoleNames.ProgramDirector;
+            ViewBag.ProgramDirectorRole = RoleNames.ProgramDirector;            
 
             var viewModel = new RegisterModel();
 
