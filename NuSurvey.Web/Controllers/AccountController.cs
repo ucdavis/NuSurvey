@@ -8,6 +8,7 @@ using NuSurvey.Web.Models;
 using NuSurvey.Web.Services;
 using System.Linq.Expressions;
 using System.Linq;
+using UCDArch.Core.Utils;
 
 namespace NuSurvey.Web.Controllers
 {
@@ -467,6 +468,59 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <returns></returns>
         public ActionResult ChangePasswordSuccess()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult ChangeRoles()
+        {
+            var id = CurrentUser.Identity.Name.ToLower();
+            var viewModel = EditUserViewModel.Create(id, MembershipService);
+            viewModel.User = MembershipService.GetUser(id);
+
+            return View(viewModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult ChangeRoles(EditUserViewModel model)
+        {
+            Check.Require(model.Email.ToLower() == CurrentUser.Identity.Name.ToLower());
+            if (model.Confirm == false)
+            {
+                ModelState.AddModelError("Confirm", "You must agree to the Terms and Conditions before making any changes.");
+            }
+
+
+            var roles = new string[] { "", "", "" };
+
+            if (MembershipService.IsUserInRole(model.Email, RoleNames.Admin)) //Don't allow admin role to be changed.
+            {
+                roles[0] = RoleNames.Admin;
+            }
+            if (model.IsUser)
+            {
+                roles[1] = RoleNames.User;
+            }
+            if (model.IsProgramDirector)
+            {
+                roles[2] = RoleNames.ProgramDirector;
+            }
+            if (MembershipService.ManageRoles(model.Email, roles) == true)
+            {
+                Message = "Roles Updated";
+            }
+            else
+            {
+                Message = "Problem with Updating Roles";
+            }
+
+
+            return this.RedirectToAction(a => a.ChangeRoles());
+        }
+
+        public ActionResult ManageAccount()
         {
             return View();
         }

@@ -347,6 +347,8 @@
     <Content Include="Views\ProgramDirector\SelectPhotos.cshtml" />
     <Content Include="Views\Account\OpenRegister.cshtml" />
     <Content Include="Views\ProgramDirector\Print.cshtml" />
+    <Content Include="Views\Account\ChangeRoles.cshtml" />
+    <Content Include="Views\Account\ManageAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">
