@@ -183,6 +183,7 @@
     <Content Include="Css\images\ui-icons_fffff_256x240.png" />
     <Content Include="Css\jquery-ui-1.8.11.custom.css" />
     <Content Include="Css\jquery-ui-timepicker.css" />
+    <Content Include="Css\main-new.css" />
     <Content Include="Css\main.css" />
     <Content Include="Css\print.css" />
     <Content Include="Css\TableTools.css" />
@@ -349,6 +350,7 @@
     <Content Include="Views\ProgramDirector\Print.cshtml" />
     <Content Include="Views\Account\ChangeRoles.cshtml" />
     <Content Include="Views\Account\ManageAccount.cshtml" />
+    <Content Include="Views\Shared\_LayoutNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">
