@@ -128,7 +128,7 @@ namespace NuSurvey.Web.Controllers
                     if (!answer.Category.IsCurrentVersion)
                     {
                         Message =
-                            "The unfinished survey's questions have been modifed. Unable to continue. Delete survey and start again.";
+                            "The unfinished survey's questions have been modified. Unable to continue. Delete survey and start again.";
                         cannotContinue = true;
                         break;
                     }
@@ -138,6 +138,8 @@ namespace NuSurvey.Web.Controllers
                     Message = "Unfinished survey found.";
                 }
             }
+
+            ViewBag.surveyimage = string.Format("{0}-survey", survey.ShortName.ToLower().Trim());
 
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, survey, pendingExists);
             viewModel.CannotContinue = cannotContinue;
@@ -191,6 +193,7 @@ namespace NuSurvey.Web.Controllers
                 Message = "Survey not found or not active.";
                 return this.RedirectToAction<ErrorController>(a => a.Index());
             }
+            ViewBag.surveyimage = string.Format("{0}-survey", survey.ShortName.ToLower().Trim());
 
             surveyResponse.IsPending = true;
             surveyResponse.Survey = survey;
@@ -210,6 +213,7 @@ namespace NuSurvey.Web.Controllers
                     Session[publicGuid.ToString()] = surveyResponse;
                 }
 
+                
                 return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id, publicGuid));
             }
 
@@ -260,10 +264,13 @@ namespace NuSurvey.Web.Controllers
             }
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
             viewModel.PublicGuid = publicGuid;
+            
             if (viewModel.CurrentQuestion == null)
             {
                 return this.RedirectToAction(a => a.FinalizePending(surveyResponse.Id, publicGuid));
             }
+
+            ViewBag.surveyimage = string.Format("{0}-survey", surveyResponse.Survey.ShortName.ToLower().Trim());
             return View(viewModel);
         }
 
@@ -304,6 +311,8 @@ namespace NuSurvey.Web.Controllers
                     return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
                 }
             }
+
+            ViewBag.surveyimage = string.Format("{0}-survey", surveyResponse.Survey.ShortName.ToLower().Trim());
 
             var question = Repository.OfType<Question>().GetNullableById(questions.QuestionId);
             if (question == null)
