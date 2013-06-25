@@ -209,6 +209,7 @@
     <Content Include="Images\logo-caes-long-cap.png" />
     <Content Include="Images\logo-ucdavis.png" />
     <Content Include="Images\managePhotos.png" />
+    <Content Include="Images\mcmt-header.jpg" />
     <Content Include="Images\pdf.png" />
     <Content Include="Images\pdfCheckbox.png" />
     <Content Include="Images\pdf_hover.png" />
@@ -296,6 +297,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Fonts\" />
     <Folder Include="Controllers\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
@@ -351,6 +353,9 @@
     <Content Include="Views\Account\ChangeRoles.cshtml" />
     <Content Include="Views\Account\ManageAccount.cshtml" />
     <Content Include="Views\Shared\_LayoutNew.cshtml" />
+    <None Include="Properties\PublishProfiles\Profile.pubxml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
+    <None Include="Properties\PublishProfiles\TestOnlyReplace.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">

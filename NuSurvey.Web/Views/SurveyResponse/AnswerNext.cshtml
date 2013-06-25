@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Next Question";
     Layout = "~/Views/Shared/_LayoutNew.cshtml";
-
+    ViewBag.surveyimage = "mcmt-survey";
 }
 
 
@@ -71,7 +71,7 @@
 }
 
 
-@Html.Partial("_SurveyResponseProgress")
+
 
 @using (Html.BeginForm())
 {        
@@ -81,7 +81,7 @@
     @Html.HiddenFor(x => x.PublicGuid);
     <input id="byPassAnswer" name="byPassAnswer" type="hidden" />
 
-    <fieldset>
+    <fieldset class="display-mcmt-question">
     @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
     Example: Dinosaur 1  *@
 	    @*<legend>Survey Response</legend>*@
@@ -165,8 +165,10 @@
     </fieldset>
 }
 
+@Html.Partial("_SurveyResponseProgress")
 
-    <div class="display-form" id="opendialog" title="There were errors but you can do the following:" style="display: none;">
+
+<div class="display-form" id="opendialog" title="There were errors but you can do the following:" style="display: none;">
         <ul>
             <li>
                 <span class="field-validation-error">

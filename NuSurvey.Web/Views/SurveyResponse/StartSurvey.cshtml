@@ -3,7 +3,8 @@
 
 @{
     ViewBag.Title = "Start Survey";
-
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    ViewBag.surveyimage = "mcmt-survey";
 }
 
 @section AdditionalScripts{
@@ -50,7 +51,7 @@ else if (Model.PendingSurveyResponseExists)
 }
 else
 { 
-    @Html.Partial("_SurveyResponseProgress")
+    
     
     
 using (Html.BeginForm())
@@ -60,7 +61,7 @@ using (Html.BeginForm())
         @Html.HiddenFor(x => x.Survey.Id)
         @Html.HiddenFor(x => x.PublicGuid)
 
-        <fieldset>
+        <fieldset class="display-mcmt-question">
         @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
         Example: Dinosaur 1  *@
 	        @*<legend>Survey Response</legend>*@
@@ -86,6 +87,8 @@ using (Html.BeginForm())
 	        </ul>
         </fieldset>
     }
+    
+    @Html.Partial("_SurveyResponseProgress")
 }
 
 
