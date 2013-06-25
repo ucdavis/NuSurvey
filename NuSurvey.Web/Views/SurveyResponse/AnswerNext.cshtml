@@ -77,10 +77,13 @@
 	@Html.AntiForgeryToken()
 	@Html.ValidationSummary(true)
     @Html.HiddenFor(x => x.SurveyResponse.Id)
-    @Html.HiddenFor(x => x.PublicGuid);
+    @Html.HiddenFor(x => x.PublicGuid)
+    var questionClass = string.Format("display-{0}-question", Model.Survey.ShortName.ToLower().Trim());
+    
+    
     <input id="byPassAnswer" name="byPassAnswer" type="hidden" />
 
-    <fieldset class="display-mcmt-question">
+    <fieldset class="@questionClass">
     @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
     Example: Dinosaur 1  *@
 	    @*<legend>Survey Response</legend>*@
