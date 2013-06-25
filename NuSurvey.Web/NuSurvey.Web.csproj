@@ -167,6 +167,8 @@
     <Compile Include="Services\ScoreService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Fonts\SourceSansPro-Bold-webfont.svg" />
+    <Content Include="Content\Fonts\SourceSansPro-Semibold-webfont.svg" />
     <Content Include="Css\custom.css" />
     <Content Include="Css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Css\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -297,7 +299,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Fonts\" />
     <Folder Include="Controllers\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
@@ -326,6 +327,12 @@
     <None Include="CodeTemplates\AddView\CSHTML\List.tt" />
     <None Include="CodeTemplates\AddView\CSHTML\ListDatatables.tt" />
     <None Include="CodeTemplates\AddView\CSHTML\ListTelerik.tt" />
+    <None Include="Content\Fonts\SourceSansPro-Bold-webfont.eot" />
+    <None Include="Content\Fonts\SourceSansPro-Bold-webfont.ttf" />
+    <None Include="Content\Fonts\SourceSansPro-Bold-webfont.woff" />
+    <None Include="Content\Fonts\SourceSansPro-Semibold-webfont.eot" />
+    <None Include="Content\Fonts\SourceSansPro-Semibold-webfont.ttf" />
+    <None Include="Content\Fonts\SourceSansPro-Semibold-webfont.woff" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
