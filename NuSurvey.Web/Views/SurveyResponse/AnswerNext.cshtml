@@ -140,7 +140,7 @@
                 {
                     if (Model.CurrentQuestion.PrimaryPhoto != null)
                     {
-                        <img src='@Url.Action("GetPhoto", "Photo", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' style="width: 460px; height: 290px; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                        <img src='@Url.Action("GetPhoto", "SurveyResponse", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' style="width: 460px; height: 290px; float: left; margin-right: 1em; background: green; display: inline-block;"/>
                     }
                     else
                     {

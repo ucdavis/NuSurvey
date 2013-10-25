@@ -21,11 +21,13 @@ namespace NuSurvey.Web.Controllers
     {
 	    private readonly IRepository<SurveyResponse> _surveyResponseRepository;
         private readonly IScoreService _scoreService;
+        private readonly IRepository<Photo> _photoRepository;
 
-        public SurveyResponseController(IRepository<SurveyResponse> surveyResponseRepository, IScoreService scoreService)
+        public SurveyResponseController(IRepository<SurveyResponse> surveyResponseRepository, IScoreService scoreService, IRepository<Photo> photoRepository)
         {
             _surveyResponseRepository = surveyResponseRepository;
             _scoreService = scoreService;
+            _photoRepository = photoRepository;
         }
 
         /// <summary>
@@ -224,6 +226,25 @@ namespace NuSurvey.Web.Controllers
             viewModel.PublicGuid = publicGuid;
 
             return View(viewModel);
+        }
+
+        public ActionResult GetPhoto(int id)
+        {
+            var photo = _photoRepository.GetById(id);
+
+            if (photo == null)
+            {
+                return File(new byte[0], "image/jpg");
+            }
+
+            if (photo.ThumbNail != null)
+            {
+                return File(photo.FileContents, "image/jpg");
+            }
+            else
+            {
+                return File(new byte[0], "image/jpg");
+            }
         }
 
         /// <summary>
