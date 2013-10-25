@@ -138,7 +138,14 @@
                 }
                 else
                 {
-                    <img style="width: 460px; height: 290px; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                    if (Model.CurrentQuestion.PrimaryPhoto != null)
+                    {
+                        <img src='@Url.Action("GetPhoto", "Photo", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' style="width: 460px; height: 290px; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                    }
+                    else
+                    {
+                        <img style="width: 460px; height: 290px; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                    }
                     @Html.HtmlEncode(Model.CurrentQuestion.Name) <br />
                     foreach (var response in Model.CurrentQuestion.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
                     {
