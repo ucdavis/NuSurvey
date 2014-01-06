@@ -1,7 +1,8 @@
 ﻿@model NuSurvey.Web.Controllers.HomeController.HomeViewModel
            
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Healthy Kids - Home Page";
+
 }
 
 @section AdditionalScripts{
@@ -13,14 +14,408 @@
             $('.balloon').bt({ positions: 'bottom' });
         });
     </script>
+    
+    <style type="text/css">
+* {
+  margin: 0;
+  padding: 0;
 }
 
-<h3>
+
+/* ------- FONTS ------ */
+
+
+.SpecialFont {
+    font-family: 'SourceSansProBold';
+    font-weight: normal;
+    font-style: normal;
+    
+}
+
+
+
+
+
+#branding {
+  background: #ede6de; /* Old browsers */
+
+    background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: -moz-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: -o-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: -ms-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: linear-gradient(top, #EDE6DE #E7DED4);
+     
+  /*   -webkit-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    
+   -webkit-box-shadow: 0 3px 0 #1b383b;
+    -moz-box-shadow: 0 3px 0 #1b383b;
+    box-shadow: 0 3px 0 #1b383b;
+    */ 
+
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+
+#branding h1 {
+    font-size: 3em;
+    line-height: 1em;
+    padding-bottom: 0.2em;
+    text-align: left;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+
+}
+
+
+#branding span.header, .main {
+    display: block;
+    margin: 0 auto;
+    padding: 2em 0 0.2em;
+}
+
+#branding span.header, #personalbar, .main, #footertext, #system_wide_status_text {
+    width: 1020px;
+}
+
+.mcmt-survey {
+  background: url("http://www.mistyreed.com/afri/mcmt-header.jpg") no-repeat scroll  #FFFFFF;
+  
+}
+
+#branding, #footer {
+    color: #603813;
+}
+
+.col1 {
+    margin-right: 10px;
+}
+.col1, .col2 {
+    display: inline-block;
+    width: 500px;
+}
+
+.navigation {
+    text-align: right;
+}
+
+.navigation li {
+    display: inline-block;
+    list-style-type: none;
+    padding: 0 0 0 1em;
+}
+
+#branding a, #footer a {
+    color: #603813;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#personalbar {
+    margin: 5px auto;
+}
+#branding span.header, #personalbar, .main, #footertext, #system_wide_status_text {
+    width: 1020px;
+}
+
+.display-mcmt-question {
+    background: #D6EFFF; /* Old browsers */
+
+    background: -webkit-linear-gradient(top, #ECF7FD, #CFEDFF);
+    background: -moz-linear-gradient(top, #ECF7FD, #CFEDFF);
+    background: -o-linear-gradient(top, #ECF7FD, #CFEDFF);
+    background: -ms-linear-gradient(top, #ECF7FD, #CFEDFF);
+    background: linear-gradient(top, #ECF7FD #CFEDFF); 
+  
+    border: solid 1px #CBCBCB;
+  
+    -webkit-box-shadow: 3px 3px 5px #626262;
+    -moz-box-shadow: 3px 3px 5px #626262;
+    box-shadow: 3px 3px 5px #626262;
+  
+    -webkit-border-radius: 14px;
+    -khtml-border-radius: 14px;
+    -moz-border-radius: 14px;
+    border-radius: 14px;
+  
+    margin: 408px 0 0 0;
+    color: #03205B;
+    font: 16px/25px 'SourceSansProSemibold', Arial, sans-serif;  
+}
+
+form {
+    text-align: left;
+}
+form fieldset {
+    padding: 10px;
+}
+
+form fieldset ul {
+    padding: 10px 50px 10px 100px;
+}
+
+form ul li {
+    list-style-type: none;
+    margin: 10px 0;
+}
+
+
+
+input.button {
+    font-size: 1.2em;
+    padding: 3px 15px 3px;
+    background: #ede6de; /* Old browsers */
+
+    background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: -moz-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: -o-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: -ms-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: linear-gradient(top, #EDE6DE #E7DED4);
+     
+     -webkit-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+  
+  color: #603813;
+}
+
+
+body {
+    font: 11.5px/16px Verdana,Arial,sans-serif;
+    min-width: 1200px;
+}
+
+
+.display-form ul {
+  text-align: left;
+  margin: 0;
+}
+.display-form ul li {
+    list-style-type: none;
+    margin: 0;
+}
+
+.ui-progressbar {
+    height: 2em;
+    width: 47%;
+    text-align: left;
+}
+.ui-widget-content {
+    background: #EDE6DE;
+    border: 1px solid #C7B299;
+    -webkit-border-radius: 8px;
+    -khtml-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.ui-progressbar .ui-progressbar-value {
+    height: 100%;
+    margin: -1px;
+}
+.ui-widget-header {
+    background: /* url("images/ui-bg_highlight-soft_0_014a81_1x100.png") repeat-x scroll 50% 50% */ #8CC63F;
+    border: 1px solid #8CC63F;
+    color: #FFFFFF;
+    font-weight: bold;
+    -webkit-border-radius: 8px;
+    -khtml-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
+fieldset {
+  border: none;
+}
+
+/* ----- FOOTER  -----*/
+#footer {
+  background: #ede6de; /* Old browsers */
+
+    background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: -moz-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: -o-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: -ms-linear-gradient(top, #EDE6DE, #E7DED4);
+    background: linear-gradient(top, #EDE6DE #E7DED4);    margin-top: 5em;
+    padding: 1em 0;
+}
+#footertext {
+    /*color: #FFFFFF;*/
+    font-size: 0.9em;
+    margin: 0 auto;
+}
+#footertext a {
+    text-decoration: none;
+}
+#footertext a:hover {
+    color: #EDE6DE;
+}
+#footertext ul li {
+    display: inline-block;
+    list-style-type: none;
+    text-align: left;
+}
+#footertext .col2 ul li {
+    display: block;
+    list-style-type: none;
+    text-align: left;
+}
+#footer .col1 .navigation li a {
+    border-bottom: 1px solid #603813;
+    display: block;
+    padding-left: 10px;
+    width: 200px;
+}
+#footer .col1 .navigation li a:hover {
+    background-color: #603813;
+}
+#footer .col2 {
+    font-style: italic;
+    vertical-align: top;
+}
+#footer .col1 {
+    border-right: 2px solid #603813;
+}
+#footer .navigation {
+    text-align: left;
+}
+
+/* ------ HOME PAGE ------- */
+
+#parents-left, #parents-right, #parents-right img, #staff-left, #staff-right {
+	float: left;
+}
+
+#parents {
+	background: url('diagonal_waves_blue1.png') repeat;
+}
+
+#staff {
+	background: url('wavegrid_tan1.png') repeat;
+}
+
+#parents-left {
+	width: 40%;
+	padding: 0 4%;
+	color: #03205B;
+}
+
+#parents-left h2 {
+	font-size: 3.2em;
+}
+
+#parents-left p {
+	line-height: 1.5em;
+	font-size: 1.4em;
+	margin: 20px 0;
+}
+
+#parents-left img {
+	float: right;
+}
+
+nav {
+	height: 40px;
+	background: #4A94B4;
+}
+
+#staff-left, #staff-right {
+	width: 41%;
+	padding: 0 4% 4% 4%;
+	color: #42210B;
+}
+
+#staff-left h3, #staff-right h3 {
+	font-size: 2.0em;
+	margin: 0 0 10px 0;
+}
+
+#staff-left p, #staff-right p {
+	line-height: 1.5em;
+	font-size: 1.1em;
+}
+
+#staff-left {
+	border-right: solid 1px #A17C52;
+}
+
+.login-button {
+	width: 105px;
+	height: 19px;
+	border: solid 2px #03205B;
+	float: right;
+	color: #fff;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.2em;
+	background: linear-gradient(#4A94B4 , #03205B 40%);
+	padding: 8px 0px;
+	border-radius: 8px;
+}        
+    </style>
+}
+
+<span class="SpecialFont">
+    <nav> <!--- This div is a place holder for an area that we might be adding navigation to.
+              We are still working out the functionality of this section but I wanted to leave room
+              and have it shown in the design spacing.  MLR 121313 --->
+        <p></p>
+    </nav>
+
+    <div id="parents">
+        <div class="main">
+            <div id="parents-left">
+                <h2>PARENTS</h2>
+                <p>Introduction text goes here with instructions for selecting questionaire to the right. Curabitur dapibus accumsan lobortis. Proin ut lectus orci. Vivamus dignissim dignissim dui ut tempor. Morbi pulvinar ultricies risus eget tempus. Vestibulum non euismod mi, id commodo risus. Nunc ut ligula vel metus porttitor ornare.</p>
+                <img src="@Url.Image("arrow.png")" alt="Select a Survey" />
+            </div>
+	
+            <div id="parents-right">
+                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "HK"})'><img src="@Url.Image("hk-thumb.png")" alt="Healthy Kids Survey"  /></a> 
+                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "MCMT" })'><img src="@Url.Image("mcmt-thumb.png")" alt="My Child At Mealtime Survey" /></a> 
+            
+            </div>
+            <br style="clear:both">
+        </div> <!--- END main MLR 121313 --->
+
+    </div>
+
+    <div id="staff">
+        <div class="main">
+            <div id="staff-left">
+                <h3>Educators</h3>
+                <p>Introduction text goes here with instructions for educators. Vivamus viverra porttitor metus. Donec posuere faucibus nulla ac pulvinar. Cras nec leo varius, pharetra dui id, gravida enim. In eget purus vel lorem faucibus rhoncus in eu odio. Nunc vestibulum adipiscing orci elementum auctor.</p>
+                <a href='@Url.Action("Index", "Educator")'>
+                    <div class="login-button">
+                        <p>Login Here</p>
+                    </div>
+                </a>
+            </div>
+	
+            <div id="staff-right">
+                <h3>Directors</h3>
+                <p>Introduction text goes here with instructions for directors. Praesent ultricies, dolor eu elementum luctus, sem nibh rhoncus augue, ac blandit leo dui venenatis sem. Donec vitae pharetra nunc, vitae vehicula ligula. Sed sit amet luctus nulla. Integer non turpis eu urna blandit laoreet. Sed in consequat diam, vitae porta dolor.</p>
+                <a href='@Url.Action("Index", "ProgramDirector")'>
+                    <div class="login-button">
+                        <p>Login Here</p>
+                    </div>
+                </a>
+            </div>
+            <br style="clear:both">
+        </div> <!--- END main MLR 121313 --->
+
+    </div>
+</span>
+@*<h3>
     Parents
 </h3>
 <a class="balloon" href='@Url.Action("PublicSurveys", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
 
-@*@if (Model.Admin || Model.User)*@
+@if (Model.Admin || Model.User) {}
     <h3>
         Educators
     </h3>
@@ -37,7 +432,7 @@
 <h3>
     Manage Account
 </h3>
-
+*@
 
 @*<h1>
     <a href="@Url.Action("Index", "SurveyResponse")">Answer Surveys</a> 

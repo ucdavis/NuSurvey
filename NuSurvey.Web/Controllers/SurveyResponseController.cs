@@ -84,6 +84,12 @@ namespace NuSurvey.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult FindAndStartSurvey(string shortName)
+        {
+            var survey = Repository.OfType<Survey>().Queryable.Single(a => a.ShortName == shortName);
+            return this.RedirectToAction(a => a.StartSurvey(survey.Id));
+        }
+
         /// <summary>
         /// #3
         /// Start or continue a survey with one question at a time

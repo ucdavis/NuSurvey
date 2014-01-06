@@ -140,6 +140,7 @@
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\CategoryGoalController.cs" />
+    <Compile Include="Controllers\EducatorController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Filters\Recaptcha.cs" />
     <Compile Include="Controllers\Filters\RoleFilter.cs" />
@@ -195,6 +196,7 @@
     <Content Include="Images\404.jpg" />
     <Content Include="Images\Admin.png" />
     <Content Include="Images\AnswerSurvey.png" />
+    <Content Include="Images\arrow.png" />
     <Content Include="Images\background.png" />
     <Content Include="Images\big_print.png" />
     <Content Include="Images\collection.png" />
@@ -208,10 +210,12 @@
     <Content Include="Images\details.png" />
     <Content Include="Images\edit.png" />
     <Content Include="Images\email.png" />
+    <Content Include="Images\hk-thumb.png" />
     <Content Include="Images\logo-caes-long-cap.png" />
     <Content Include="Images\logo-ucdavis.png" />
     <Content Include="Images\managePhotos.png" />
     <Content Include="Images\mcmt-header.jpg" />
+    <Content Include="Images\mcmt-thumb.png" />
     <Content Include="Images\pdf.png" />
     <Content Include="Images\pdfCheckbox.png" />
     <Content Include="Images\pdf_hover.png" />
@@ -363,6 +367,7 @@
     <None Include="Properties\PublishProfiles\Profile.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Properties\PublishProfiles\TestOnlyReplace.pubxml" />
+    <Content Include="Views\Educator\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">

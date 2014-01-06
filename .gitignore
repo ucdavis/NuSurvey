@@ -38,3 +38,4 @@ NuSurvey.Db/Sandbox/*
 NuSurvey.Web/bin/*
 NuSurvey.Web/bin/NuSurvey.Core.dll
 NuSurvey.Db/NuSurvey.Db.dbmdl
+NuSurvey.Core/bin/Test/*dll
