@@ -282,3 +282,76 @@ fieldset {
 #footer .navigation {
     text-align: left;
 }
+
+/* ------ HOME PAGE ------- */
+
+#parents-left, #parents-right, #parents-right img, #staff-left, #staff-right {
+	float: left;
+}
+
+#parents {
+	background: url(../images/diagonal_waves_blue1.png) repeat;
+}
+
+#staff {
+	background: url('../images/wavegrid_tan1.png') repeat;
+}
+
+#parents-left {
+	width: 40%;
+	padding: 0 4%;
+	color: #03205B;
+}
+
+#parents-left h2 {
+	font-size: 3.2em;
+}
+
+#parents-left p {
+	line-height: 1.5em;
+	font-size: 1.4em;
+	margin: 20px 0;
+}
+
+#parents-left img {
+	float: right;
+}
+
+nav {
+	height: 40px;
+	background: #4A94B4;
+}
+
+#staff-left, #staff-right {
+	width: 41%;
+	padding: 0 4% 4% 4%;
+	color: #42210B;
+}
+
+#staff-left h3, #staff-right h3 {
+	font-size: 2.0em;
+	margin: 0 0 10px 0;
+}
+
+#staff-left p, #staff-right p {
+	line-height: 1.5em;
+	font-size: 1.1em;
+}
+
+#staff-left {
+	border-right: solid 1px #A17C52;
+}
+
+.login-button {
+	width: 105px;
+	height: 19px;
+	border: solid 2px #03205B;
+	float: right;
+	color: #fff;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.2em;
+	background: linear-gradient(#4A94B4 , #03205B 40%);
+	padding: 8px 0px;
+	border-radius: 8px;
+}        

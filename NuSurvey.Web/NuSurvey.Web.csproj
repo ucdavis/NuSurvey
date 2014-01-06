@@ -208,6 +208,7 @@
     <Content Include="Images\csv_hover.png" />
     <Content Include="Images\delete.png" />
     <Content Include="Images\details.png" />
+    <Content Include="Images\diagonal_waves_blue1.png" />
     <Content Include="Images\edit.png" />
     <Content Include="Images\email.png" />
     <Content Include="Images\hk-thumb.png" />
@@ -228,6 +229,7 @@
     <Content Include="Images\top_blue_bar.jpg" />
     <Content Include="Images\updown.png" />
     <Content Include="Images\Users.png" />
+    <Content Include="Images\wavegrid_tan1.png" />
     <Content Include="Images\xls.png" />
     <Content Include="Images\xls_hover.png" />
     <Content Include="robots.txt" />
