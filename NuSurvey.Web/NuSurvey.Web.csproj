@@ -308,9 +308,6 @@
     <Folder Include="Controllers\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AppDebugSettings.config" />
-    <Content Include="AppTestSettings.config" />
-    <Content Include="AppReleaseSettings.config" />
     <None Include="CodeTemplates\AddController\Controller.tt" />
     <None Include="CodeTemplates\AddView\AspxCSharp\Create.tt" />
     <None Include="CodeTemplates\AddView\AspxCSharp\CreateViewModel.tt" />
