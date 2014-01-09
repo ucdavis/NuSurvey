@@ -24,6 +24,7 @@ namespace NuSurvey.Web
             container.Register(Component.For<IPrintService>().ImplementedBy<PrintService>().Named("printService"));
             container.Register(Component.For<IScoreService>().ImplementedBy<ScoreService>().Named("scoreService"));
             container.Register(Component.For<IPictureService>().ImplementedBy<PictureService>().Named("pictureService"));
+            container.Register(Component.For<IBlobStoargeService>().ImplementedBy<BlobStoargeService>().Named("blobStoargeService"));
         }
 
         private static void AddGenericRepositoriesTo(IWindsorContainer container)

@@ -21,9 +21,9 @@ namespace NuSurvey.Core.Domain
         public virtual string Name { get; set; }
         public virtual string FileName { get; set; }
         public virtual string ContentType { get; set; }
-        public virtual byte[] FileContents { get; set; } 
+        //public virtual byte[] FileContents { get; set; } 
         public virtual DateTime DateCreated { get; set; }
-        public virtual byte[] ThumbNail { get; set; }
+        //public virtual byte[] ThumbNail { get; set; }
         public virtual bool IsActive { get; set; }
 
         public virtual IList<PhotoTag> PhotoTags { get; set; }
@@ -47,9 +47,9 @@ namespace NuSurvey.Core.Domain
             Map(x => x.Name);
             Map(x => x.FileName);
             Map(x => x.ContentType);
-            Map(x => x.FileContents).CustomType("BinaryBlob");
+            //Map(x => x.FileContents).CustomType("BinaryBlob");
             Map(x => x.DateCreated);
-            Map(x => x.ThumbNail);
+            //Map(x => x.ThumbNail);
             Map(x => x.IsActive);
 
             HasMany(x => x.PhotoTags).Inverse();

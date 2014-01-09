@@ -12,6 +12,9 @@ namespace NuSurvey.Web.Services
         byte[] Resize(byte[] img, int width);
 
         byte[] MakeThumbnail(byte[] img);
+
+        //460x290
+        byte[] MakeDisplayImage(byte[] img);
     }
 
     public class PictureService : IPictureService
@@ -71,6 +74,16 @@ namespace NuSurvey.Web.Services
         public byte[] MakeThumbnail(byte[] img)
         {
             return Resize(img, 80);
+        }
+
+        /// <summary>
+        /// 460 by 
+        /// </summary>
+        /// <param name="img"></param>
+        /// <returns></returns>
+        public byte[] MakeDisplayImage(byte[] img)
+        {
+            return Resize(img, 460, 290);
         }
     }
 }

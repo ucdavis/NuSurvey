@@ -24,13 +24,15 @@ namespace NuSurvey.Web.Controllers
         private readonly IRepository<PhotoTag> _photoTagRepository;
         private readonly IPictureService _pictureService;
         private readonly IRepository<Question> _questionRepository;
+        private readonly IBlobStoargeService _blobStoargeService;
 
-        public PhotoController(IRepository<Photo> photoRepository, IRepository<PhotoTag> photoTagRepository  ,IPictureService pictureService, IRepository<Question> questionRepository)
+        public PhotoController(IRepository<Photo> photoRepository, IRepository<PhotoTag> photoTagRepository  ,IPictureService pictureService, IRepository<Question> questionRepository, IBlobStoargeService blobStoargeService)
         {
             _photoRepository = photoRepository;
             _photoTagRepository = photoTagRepository;
             _pictureService = pictureService;
             _questionRepository = questionRepository;
+            _blobStoargeService = blobStoargeService;
         }
 
         //
@@ -58,12 +60,12 @@ namespace NuSurvey.Web.Controllers
 
             // read the file and set the original picture
             var reader = new BinaryReader(uploadedPhoto.InputStream);
-            photo.FileContents = reader.ReadBytes(uploadedPhoto.ContentLength);
+            var img = reader.ReadBytes(uploadedPhoto.ContentLength);
             photo.ContentType = uploadedPhoto.ContentType;
             photo.Name = photoEditModel.Photo.Name;
             photo.FileName = uploadedPhoto.FileName;
 
-            photo.ThumbNail = _pictureService.MakeThumbnail(photo.FileContents);
+            //photo.ThumbNail = _pictureService.MakeThumbnail(photo.FileContents);
             if (!string.IsNullOrWhiteSpace(photoEditModel.Tags))
             {
                 foreach (var tag in photoEditModel.Tags.Split(','))
@@ -87,6 +89,8 @@ namespace NuSurvey.Web.Controllers
             {
                 Repository.OfType<PhotoTag>().EnsurePersistent(tag);
             }
+
+            _blobStoargeService.UploadPhoto(photo.Id, img);
 
             return this.RedirectToAction(a => a.Index());
         }
@@ -127,12 +131,13 @@ namespace NuSurvey.Web.Controllers
             {
                 // read the file and set the original picture
                 var reader = new BinaryReader(uploadedPhoto.InputStream);
-                photo.FileContents = reader.ReadBytes(uploadedPhoto.ContentLength);
+                var img = reader.ReadBytes(uploadedPhoto.ContentLength);
                 photo.ContentType = uploadedPhoto.ContentType;
                 photo.FileName = uploadedPhoto.FileName;
                 photo.DateCreated = DateTime.Now;
 
-                photo.ThumbNail = _pictureService.MakeThumbnail(photo.FileContents);
+                //photo.ThumbNail = _pictureService.MakeThumbnail(photo.FileContents);
+                _blobStoargeService.UploadPhoto(photo.Id, img);
             }
             photo.Name = photoEditModel.Photo.Name;
 
@@ -364,14 +369,8 @@ namespace NuSurvey.Web.Controllers
                 return File(new byte[0], "image/jpg");
             }
 
-            if (photo.ThumbNail != null)
-            {
-                return File( photo.ThumbNail, "image/jpg");
-            }
-            else
-            {
-                return File(new byte[0], "image/jpg");
-            }
+            return File( _blobStoargeService.GetPhoto(photo.Id, "Thumb"), "image/jpg");
+
         }
 
         public ActionResult GetPhoto(int id)
@@ -383,14 +382,8 @@ namespace NuSurvey.Web.Controllers
                 return File(new byte[0], "image/jpg");
             }
 
-            if (photo.ThumbNail != null)
-            {
-                return File(photo.FileContents, "image/jpg");
-            }
-            else
-            {
-                return File(new byte[0], "image/jpg");
-            }
+            return File(_blobStoargeService.GetPhoto(photo.Id, "Water"), "image/jpg");
+            
         }
 
     }
