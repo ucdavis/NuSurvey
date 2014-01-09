@@ -3,10 +3,7 @@
     @if(User.IsInRole("NSAdmin")){
         <li>@Html.ActionLink("Admin", "Administration", "Home")</li>
     }
-    else if (!Request.IsAuthenticated)
-    {
-        <li>@Html.ActionLink("Register", "OpenRegister", "Account")</li>
-    }
+
     @*<li>@Html.ActionLink("About", "About", "Home")</li>*@
     <li>
         <a href="https://secure.caes.ucdavis.edu/help/ticket/SubmitRedirect?appName=NuSurvey" target=_blank>Help</a>
