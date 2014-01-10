@@ -2,24 +2,26 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using Microsoft.WindowsAzure;
 
 namespace NuSurvey.Web.Services
 {
     public interface IPictureService
     {
         //byte[] Crop(byte[] img, int x, int y, int width, int height);
-        byte[] Resize(byte[] img, int width, int height);
-        byte[] Resize(byte[] img, int width);
+        byte[] Resize(byte[] img, int width, int height, bool watermark = false);
+        byte[] Resize(byte[] img, int width, bool watermark = false);
 
         byte[] MakeThumbnail(byte[] img);
 
         //460x290
-        byte[] MakeDisplayImage(byte[] img);
+        byte[] MakeDisplayImage(byte[] img, bool watermark = false);
+
     }
 
     public class PictureService : IPictureService
     {
-        public byte[] Resize(byte[] img, int width, int height)
+        public byte[] Resize(byte[] img, int width, int height, bool watermark = false)
         {
             var s = new MemoryStream(img);
             var origImg = Image.FromStream(s);
@@ -32,7 +34,25 @@ namespace NuSurvey.Web.Services
             graphic.CompositingQuality = CompositingQuality.HighQuality;
             graphic.SmoothingMode = SmoothingMode.HighQuality;
             graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+
+            
             graphic.DrawImage(origImg, rectangle);
+
+            if (watermark)
+            {
+                // Create font and brush.
+                Font drawFont = new Font("Arial", 16, FontStyle.Bold);
+                int opacity = 128; // 50% opaque (0 = invisible, 255 = fully opaque)
+
+                SolidBrush drawBrush = new SolidBrush(Color.FromArgb(opacity, Color.Black));
+
+                // Create point for upper-left corner of drawing.
+                PointF drawPoint = new PointF(0, height - 30);
+
+                graphic.DrawString(CloudConfigurationManager.GetSetting("WatermarkText"), drawFont, drawBrush, drawPoint);
+            }
+
 
             var ms = new MemoryStream();
             newImg.Save(ms, origImg.RawFormat);
@@ -44,7 +64,7 @@ namespace NuSurvey.Web.Services
             return ms.GetBuffer();
         }
 
-        public byte[] Resize(byte[] img, int width)
+        public byte[] Resize(byte[] img, int width, bool watermark = false)
         {
             var s = new MemoryStream(img);
             var origImg = Image.FromStream(s);
@@ -60,6 +80,20 @@ namespace NuSurvey.Web.Services
             graphic.SmoothingMode = SmoothingMode.HighQuality;
             graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
             graphic.DrawImage(origImg, rectangle);
+
+            if (watermark)
+            {
+                // Create font and brush.
+                Font drawFont = new Font("Arial", 16, FontStyle.Bold);
+                int opacity = 128; // 50% opaque (0 = invisible, 255 = fully opaque)
+
+                SolidBrush drawBrush = new SolidBrush(Color.FromArgb(opacity, Color.Black));
+
+                // Create point for upper-left corner of drawing.
+                PointF drawPoint = new PointF(0, height - 30);
+
+                graphic.DrawString(CloudConfigurationManager.GetSetting("WatermarkText"), drawFont, drawBrush, drawPoint);
+            }
 
             var ms = new MemoryStream();
             newImg.Save(ms, origImg.RawFormat);
@@ -80,10 +114,11 @@ namespace NuSurvey.Web.Services
         /// 460 by 
         /// </summary>
         /// <param name="img"></param>
+        /// <param name="watermark"> </param>
         /// <returns></returns>
-        public byte[] MakeDisplayImage(byte[] img)
+        public byte[] MakeDisplayImage(byte[] img, bool watermark = false)
         {
-            return Resize(img, 460, 290);
+            return Resize(img, 460, 290, watermark);
         }
     }
 }

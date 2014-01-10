@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -37,32 +38,44 @@ namespace NuSurvey.Web.Services
         public void UploadPhoto(int id, byte[] img)
         {
             var thumb = _pictureService.MakeThumbnail(img);
-            var displayWithWater = _pictureService.MakeDisplayImage(img);
+            var displayWithWater = _pictureService.MakeDisplayImage(img, true);
+            var displayNoWater = _pictureService.MakeDisplayImage(img);
 
-            var blobOriginal = _container.GetBlockBlobReference(string.Format("{0}_Original", id));
+            var blobOriginal = _container.GetBlockBlobReference(string.Format("{0}_Original.jpg", id));
             blobOriginal.UploadFromByteArray(img, 0, img.Length);
 
-            var blobThumb = _container.GetBlockBlobReference(string.Format("{0}_Thumb", id));
+            var blobThumb = _container.GetBlockBlobReference(string.Format("{0}_Thumb.jpg", id));
             blobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
 
-            var blobWater = _container.GetBlockBlobReference(string.Format("{0}_Water", id));
+            var blobWater = _container.GetBlockBlobReference(string.Format("{0}_Water.jpg", id));
             blobWater.UploadFromByteArray(displayWithWater, 0, displayWithWater.Length);
+
+            var blobNoWater = _container.GetBlockBlobReference(string.Format("{0}_PDF.jpg", id));
+            blobNoWater.UploadFromByteArray(displayNoWater, 0, displayNoWater.Length);
         }
 
         public byte[] GetPhoto(int id, string type)
         {
             byte[] contents = null;
-            //Get file from blob storage and populate the contents
-            var blob = _container.GetBlockBlobReference(string.Format("{0}_{1}", id, type));
-            using (var stream = new MemoryStream())
+            try
             {
-                blob.DownloadToStream(stream);
-                using (var reader = new BinaryReader(stream))
+                //Get file from blob storage and populate the contents
+                var blob = _container.GetBlockBlobReference(string.Format("{0}_{1}.jpg", id, type));
+                using (var stream = new MemoryStream())
                 {
-                    stream.Position = 0;
-                    contents = reader.ReadBytes((int)stream.Length);
+                    blob.DownloadToStream(stream);
+                    using (var reader = new BinaryReader(stream))
+                    {
+                        stream.Position = 0;
+                        contents = reader.ReadBytes((int)stream.Length);
+                    }
                 }
             }
+            catch (Exception)
+            {
+                return contents;
+            }
+
 
             return contents;
         }
