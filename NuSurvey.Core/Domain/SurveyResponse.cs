@@ -30,7 +30,7 @@ namespace NuSurvey.Core.Domain
         #endregion Constructor
 
         [Required]
-        [StringLength(10)]
+        [StringLength(50)]
         [Display(Name = "Name")]
         public virtual string StudentId { get; set; }
 
