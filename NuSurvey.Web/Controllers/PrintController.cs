@@ -100,7 +100,7 @@ namespace NuSurvey.Web.Controllers
         /// <param name="id">Survey Id</param>
         /// <param name="picked">Arry of SurveyResponse Ids</param>
         /// <returns></returns>
-        public ActionResult PickResults(int id, int[] picked)
+        public ActionResult PickResults(int id, int[] picked, bool withBackground = false)
         {
             var survey = _surveyRepository.GetNullableById(id);
             if (survey == null)
@@ -131,11 +131,9 @@ namespace NuSurvey.Web.Controllers
                 }
                 Check.Require(surveyResponse.Survey.Id == survey.Id, string.Format("SurveyResponse's survey id does not match {0} -- {1}", surveyResponse.Survey.Id, survey.Id));
             }
+                      
 
-            
-            
-
-            return _printService.PrintPickList(survey.Id, Repository, Request, Url, picked);
+            return _printService.PrintPickList(survey.Id, Repository, Request, Url, picked, withBackground);
         }
 
         //[Admin]

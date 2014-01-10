@@ -14,6 +14,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#printButton").bt();
+            $("#printButtonWithImage").bt();
         });
     </script>
 
@@ -186,10 +187,13 @@
     <div id="pickedContainer">
     </div>
 
-        <ul>        
+        <ul>
+            <li>
+                @Html.CheckBox("withBackground") With Background Image
+            </li>        
             <li>
                 <label>&nbsp;</label>
-                <button id="printButton" name="button" title="Select rows in the table above to print those results" style="background-color:transparent; border:none;" ><img src="@Url.Image("big_print.png")" /></button>
+                <button id="printButton" name="button" title="Select rows in the table above to print those results" style="background-color:transparent; border:none;" ><img src="@Url.Image("big_print.png")" /></button>                
             </li>
         </ul>
     </div>

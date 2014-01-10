@@ -17,7 +17,7 @@ namespace NuSurvey.Web.Services
     {
         FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url, bool useBackgroundImage = false);
         FileContentResult PrintMultiple(int id, IRepository repository, HttpRequestBase request, UrlHelper url, DateTime? beginDate, DateTime? endDate);
-        FileContentResult PrintPickList(int id, IRepository repository, HttpRequestBase request, UrlHelper url, int[] surveyResponseIds);
+        FileContentResult PrintPickList(int id, IRepository repository, HttpRequestBase request, UrlHelper url, int[] surveyResponseIds, bool useBackgroundImage = false);
     }
 
     public class PrintService : IPrintService
@@ -207,7 +207,10 @@ namespace NuSurvey.Web.Services
             Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
 
 
+
+
             doc1.Open();
+            
             var firstTime = true;
             foreach (var surveyResponse in surveyResponses)
             {
@@ -215,6 +218,7 @@ namespace NuSurvey.Web.Services
                 {
                     doc1.NewPage();
                 }
+                
                 var table = BuildTable(surveyResponse, arial, arialBold, checkBoxImage);
                 doc1.Add(table);
                 firstTime = false;
@@ -225,7 +229,7 @@ namespace NuSurvey.Web.Services
             return new FileContentResult(bytes, "application/pdf");
         }
 
-        public virtual FileContentResult PrintPickList(int id, IRepository repository, HttpRequestBase request, UrlHelper url, int[] delimitedList)
+        public virtual FileContentResult PrintPickList(int id, IRepository repository, HttpRequestBase request, UrlHelper url, int[] delimitedList, bool useBackgroundImage = false)
         {
             var survey = repository.OfType<Survey>().GetNullableById(id);
             Check.Require(survey != null);
@@ -241,8 +245,29 @@ namespace NuSurvey.Web.Services
             Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
             Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
 
+            Image goalImg = null;
+            if (useBackgroundImage)
+            {
+                try
+                {
+                    //Example to print a background image
+                    var goalPath = GetAbsoluteUrl(request, url, string.Format("~/Images/{0}_pdf.jpg", survey.ShortName.Trim().ToUpper()));
+
+                    goalImg = Image.GetInstance(goalPath);
+                    goalImg.ScaleToFit(doc1.PageSize.Width, doc1.PageSize.Height);
+                    goalImg.SetAbsolutePosition(0, 0);
+                    goalImg.Alignment = Image.UNDERLYING;
+
+                }
+                catch (Exception)
+                {
+                    //nothing
+                }
+            }
 
             doc1.Open();
+            
+
             var firstTime = true;
             foreach (var surveyResponseId in delimitedList)
             {
@@ -254,6 +279,10 @@ namespace NuSurvey.Web.Services
                 if (!firstTime)
                 {
                     doc1.NewPage();
+                }
+                if(goalImg != null)
+                {
+                    doc1.Add(goalImg);
                 }
                 var table = BuildTable(surveyResponse, arial, arialBold, checkBoxImage);
                 doc1.Add(table);
