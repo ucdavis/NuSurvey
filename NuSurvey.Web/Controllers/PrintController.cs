@@ -38,13 +38,23 @@ namespace NuSurvey.Web.Controllers
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>
         /// <param name="withBackground"> </param>
+        /// <param name="publicGuid"> </param>
         /// <returns></returns>
-        public ActionResult Result(int id, bool withBackground = false)
+        public ActionResult Result(int id, bool withBackground = false, Guid? publicGuid = null)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+            {
+                surveyResponse = (SurveyResponse)Session[publicGuid.ToString()];
+            }
             if (surveyResponse == null)
             {
                 return this.RedirectToAction<ErrorController>(a => a.FileNotFound());
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+            {
+                return _printService.PrintSingle(id, Repository, Request, Url, true, surveyResponse);
             }
 
             if (!CurrentUser.IsInRole(RoleNames.Admin))

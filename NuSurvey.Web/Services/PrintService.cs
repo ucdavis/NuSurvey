@@ -15,7 +15,7 @@ namespace NuSurvey.Web.Services
 {
     public interface IPrintService
     {
-        FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url, bool useBackgroundImage = false);
+        FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url, bool useBackgroundImage = false, SurveyResponse publicSurveyResponse = null);
         FileContentResult PrintMultiple(int id, IRepository repository, HttpRequestBase request, UrlHelper url, DateTime? beginDate, DateTime? endDate);
         FileContentResult PrintPickList(int id, IRepository repository, HttpRequestBase request, UrlHelper url, int[] surveyResponseIds, bool useBackgroundImage = false);
     }
@@ -132,9 +132,15 @@ namespace NuSurvey.Web.Services
         /// <param name="url"></param>
         /// <param name="useBackgroundImage"> </param>
         /// <returns></returns>
-        public virtual FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url, bool useBackgroundImage = false)
+        public virtual FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url, bool useBackgroundImage = false, SurveyResponse publicSurveyResponse = null)
         {
             var surveyResponse = repository.OfType<SurveyResponse>().GetNullableById(id);
+
+            if (publicSurveyResponse != null)
+            {
+                surveyResponse = publicSurveyResponse;
+            }
+
             Check.Require(surveyResponse != null);
 
             var checkboxPath = GetAbsoluteUrl(request, url, "~/Images/pdfCheckbox.png");

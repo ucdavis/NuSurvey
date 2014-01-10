@@ -755,10 +755,10 @@ namespace NuSurvey.Web.Controllers
 
             var viewModel = ResultsViewModel.Create(surveyResponse, false);
             viewModel.PublicGuid = publicGuid;
-            if (CurrentUser.IsInRole(RoleNames.Admin) || CurrentUser.IsInRole(RoleNames.User))
-            {
+            //if (CurrentUser.IsInRole(RoleNames.Admin) || CurrentUser.IsInRole(RoleNames.User))
+            //{
                 viewModel.ShowPdfPrint = true;
-            }
+            //}
 
             return View(viewModel);
         }
