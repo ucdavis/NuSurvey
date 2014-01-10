@@ -15,7 +15,7 @@ namespace NuSurvey.Web.Services
 {
     public interface IPrintService
     {
-        FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url);
+        FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url, bool useBackgroundImage = false);
         FileContentResult PrintMultiple(int id, IRepository repository, HttpRequestBase request, UrlHelper url, DateTime? beginDate, DateTime? endDate);
         FileContentResult PrintPickList(int id, IRepository repository, HttpRequestBase request, UrlHelper url, int[] surveyResponseIds);
     }
@@ -130,8 +130,9 @@ namespace NuSurvey.Web.Services
         /// <param name="repository"></param>
         /// <param name="request"></param>
         /// <param name="url"></param>
+        /// <param name="useBackgroundImage"> </param>
         /// <returns></returns>
-        public virtual FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url)
+        public virtual FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url, bool useBackgroundImage = false)
         {
             var surveyResponse = repository.OfType<SurveyResponse>().GetNullableById(id);
             Check.Require(surveyResponse != null);
@@ -145,20 +146,29 @@ namespace NuSurvey.Web.Services
             Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
             Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
 
-            //Example to print a background image
-            //var goalPath = GetAbsoluteUrl(request, url, "~/Images/HKGoal.jpg");
-
-            //Image goalImg = Image.GetInstance(goalPath);
-            //goalImg.ScaleToFit(doc1.PageSize.Width, doc1.PageSize.Height);
-            //goalImg.SetAbsolutePosition(0, 0);
-            //goalImg.Alignment = Image.UNDERLYING;
-
-
-
-            //doc1.Open();
-            //doc1.Add(goalImg);
 
             doc1.Open();
+            if (useBackgroundImage)
+            {
+                try
+                {
+                    //Example to print a background image
+                    var goalPath = GetAbsoluteUrl(request, url, string.Format("~/Images/{0}_pdf.jpg", surveyResponse.Survey.ShortName.Trim().ToUpper()));
+
+                    Image goalImg = Image.GetInstance(goalPath);
+                    goalImg.ScaleToFit(doc1.PageSize.Width, doc1.PageSize.Height);
+                    goalImg.SetAbsolutePosition(0, 0);
+                    goalImg.Alignment = Image.UNDERLYING;
+
+                    doc1.Add(goalImg);
+                }
+                catch (Exception)
+                {
+                    //nothing
+                }
+            }
+
+
             var table = BuildTable(surveyResponse, arial, arialBold, checkBoxImage);      
             doc1.Add(table);
             doc1.Close();

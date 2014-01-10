@@ -37,8 +37,9 @@ namespace NuSurvey.Web.Controllers
         /// #1
         /// </summary>
         /// <param name="id">SurveyResponse Id</param>
+        /// <param name="withBackground"> </param>
         /// <returns></returns>
-        public ActionResult Result(int id)
+        public ActionResult Result(int id, bool withBackground = false)
         {
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
             if (surveyResponse == null)
@@ -54,7 +55,7 @@ namespace NuSurvey.Web.Controllers
                 }
             }
 
-            return _printService.PrintSingle(id, Repository, Request, Url);
+            return _printService.PrintSingle(id, Repository, Request, Url, withBackground);
         }
 
         /// <summary>

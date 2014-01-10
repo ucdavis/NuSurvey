@@ -193,3 +193,18 @@ div.dataTables_wrapper table{margin: 0;clear:both;}
 	margin:-2px 0 0 5px; 
 	vertical-align:top;
 }
+
+
+.print-button {
+	width: 125px;
+	height: 29px;
+	border: solid 2px #03205B;
+	float: right;
+	color: #fff;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.2em;
+	background: linear-gradient(gray , yellow 40%);
+	padding: 8px 0px;
+	border-radius: 8px;
+}   

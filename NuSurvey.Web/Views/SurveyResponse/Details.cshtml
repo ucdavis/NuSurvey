@@ -196,8 +196,11 @@
 
 
 <h2 class="col1">Results</h2>
+<div class="col2" >
+    <a href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id })' target="_blank" class="print-button">Print</a>
+    <a href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = true})' target="_blank" class="print-button">Print With Background</a>
+</div>
 
-<a class="col2" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id })' target="_blank"><img alt="Print this result" src="@Url.Image("big_print.png")"/></a>
 
 <fieldset class="display-form">
 @Html.Partial("_Results", @Model.SurveyResponse)

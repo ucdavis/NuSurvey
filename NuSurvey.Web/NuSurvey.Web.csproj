@@ -246,6 +246,7 @@
     <Content Include="Images\managePhotos.png" />
     <Content Include="Images\mcmt-header.jpg" />
     <Content Include="Images\mcmt-thumb.png" />
+    <Content Include="Images\MCMT_pdf.jpg" />
     <Content Include="Images\pdf.png" />
     <Content Include="Images\pdfCheckbox.png" />
     <Content Include="Images\pdf_hover.png" />
@@ -255,6 +256,7 @@
     <Content Include="Images\review.png" />
     <Content Include="Images\small_print.png" />
     <Content Include="Images\test.png" />
+    <Content Include="Images\HK_pdf.jpg" />
     <Content Include="Images\top_blue_bar.jpg" />
     <Content Include="Images\updown.png" />
     <Content Include="Images\Users.png" />
