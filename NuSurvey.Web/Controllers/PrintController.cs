@@ -18,7 +18,7 @@ namespace NuSurvey.Web.Controllers
     /// <summary>
     /// Controller for the Print class
     /// </summary>
-    [User]
+    
     public class PrintController : ApplicationController
     {
         private readonly IRepository<Survey> _surveyRepository;
@@ -76,6 +76,7 @@ namespace NuSurvey.Web.Controllers
         /// <param name="endDate">Filter for End Date</param>
         /// <returns></returns>
         [Admin]
+        [User]
         public ActionResult Results(int id, DateTime? beginDate, DateTime? endDate)
         {
             var survey = _surveyRepository.GetNullableById(id);
@@ -110,6 +111,7 @@ namespace NuSurvey.Web.Controllers
         /// <param name="id">Survey Id</param>
         /// <param name="picked">Arry of SurveyResponse Ids</param>
         /// <returns></returns>
+        [User]
         public ActionResult PickResults(int id, int[] picked, bool withBackground = false)
         {
             var survey = _surveyRepository.GetNullableById(id);

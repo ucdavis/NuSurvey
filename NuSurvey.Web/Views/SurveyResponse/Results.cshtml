@@ -7,7 +7,14 @@
 
 @if (Model.ShowPdfPrint) {            
     <div id="pdf_print">
-        <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id })' target="_blank"><img alt="Print this result" src="@Url.Image("big_print.png")"/></a>
+        @if (Model.PublicGuid == null)
+        {
+            <a class="col1" href='@Url.Action("Result", "Print", new {id = @Model.SurveyResponse.Id})' target="_blank"><img alt="Print this result" src="@Url.Image("big_print.png")"/></a>
+        }
+        else
+        {
+             <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid })' target="_blank"><img alt="Print this result" src="@Url.Image("big_print.png")"/></a>
+        }
     </div>
 }
 
@@ -16,8 +23,9 @@
 
 <p>
     @if (Model.PublicGuid == null)
-                                                                 {  @Html.ActionLink("Back to Survey List", "Index")}
-                                                                 else { @Html.ActionLink("Back to Survey List", "PublicSurveys")}
+    {  @Html.ActionLink("Back to Survey List", "Index")}
+    else
+    { @Html.ActionLink("Back to Survey List", "PublicSurveys")}
 </p>
 
 
