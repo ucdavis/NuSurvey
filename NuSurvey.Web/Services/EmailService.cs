@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.WindowsAzure;
 
 namespace NuSurvey.Web.Services
 {
@@ -21,6 +23,7 @@ namespace NuSurvey.Web.Services
             mail.IsBodyHtml = true;
             mail.Body = string.Format("Your Password has been reset to {0}<br />{1}<br />{2}", tempPass, "We recommend changing your password once you have logged on." ,"Please do not reply to this email. It was automatically generated."); 
             var client = new SmtpClient();
+            client.Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("SmtpAccount"), CloudConfigurationManager.GetSetting("SmtpPassword"));
             client.Send(mail);
         }
 
@@ -40,6 +43,7 @@ namespace NuSurvey.Web.Services
                                       "Please do not reply to this email. It was automatically generated.");
 
             var client = new SmtpClient();
+            client.Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("SmtpAccount"), CloudConfigurationManager.GetSetting("SmtpPassword"));
             client.Send(mail);
 
         }
