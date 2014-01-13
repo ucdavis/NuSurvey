@@ -43,7 +43,7 @@ namespace NuSurvey.Web.Services
                                       "Please do not reply to this email. It was automatically generated.");
 
             var client = new SmtpClient();
-            client.Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("SmtpAccount"), CloudConfigurationManager.GetSetting("SmtpPassword"));
+            client.Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("SmtpAccount"), CloudConfigurationManager.GetSetting("SmtpPassword")); 
             client.Send(mail);
 
         }
