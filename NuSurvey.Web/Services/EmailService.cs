@@ -39,7 +39,7 @@ namespace NuSurvey.Web.Services
                                       "We recommend changing your password once you have logged on.",
                                       "Please do not reply to this email. It was automatically generated.");
 
-            var client = new SmtpClient(); 
+            var client = new SmtpClient();
             client.Send(mail);
 
         }
