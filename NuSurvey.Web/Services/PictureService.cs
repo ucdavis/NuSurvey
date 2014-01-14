@@ -83,12 +83,14 @@ namespace NuSurvey.Web.Services
             graphic.DrawImage(origImg, rectangle);
 
             var fontSize = 16;
+            var heightAdjust = 30;
             if (width < 460)
             {
                 fontSize = 12;
                 if (width < 300)
                 {
                     fontSize = 6;
+                    heightAdjust = 10;
                 }
             }
             if (watermark)
@@ -100,7 +102,7 @@ namespace NuSurvey.Web.Services
                 SolidBrush drawBrush = new SolidBrush(Color.FromArgb(opacity, Color.Black));
 
                 // Create point for upper-left corner of drawing.
-                PointF drawPoint = new PointF(0, height - 30);
+                PointF drawPoint = new PointF(0, height - heightAdjust);
 
                 graphic.DrawString(CloudConfigurationManager.GetSetting("WatermarkText"), drawFont, drawBrush, drawPoint);
             }
