@@ -88,7 +88,7 @@ namespace NuSurvey.Web.Services
                 fontSize = 12;
                 if (width < 300)
                 {
-                    fontSize = 8;
+                    fontSize = 6;
                 }
             }
             if (watermark)
