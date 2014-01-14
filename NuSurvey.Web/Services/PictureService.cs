@@ -108,12 +108,12 @@ namespace NuSurvey.Web.Services
 
         public byte[] MakeThumbnail(byte[] img)
         {
-            return Resize(img, 120);
+            return Resize(img, 120, true);
         }
 
         public byte[] MakeDirectorThumbnail(byte[] img)
         {
-            return Resize(img, 300);
+            return Resize(img, 300, true);
         }
 
         /// <summary>

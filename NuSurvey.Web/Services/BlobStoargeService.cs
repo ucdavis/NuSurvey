@@ -50,7 +50,7 @@ namespace NuSurvey.Web.Services
             blobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
 
             var blobDirectorThumb = _container.GetBlockBlobReference(string.Format("{0}_{1}.jpg", id, Resource.DirectorThumb));
-            blobDirectorThumb.UploadFromByteArray(directorThumb, 0, thumb.Length);
+            blobDirectorThumb.UploadFromByteArray(directorThumb, 0, directorThumb.Length);
 
             var blobWater = _container.GetBlockBlobReference(string.Format("{0}_{1}.jpg", id, Resource.Water));
             blobWater.UploadFromByteArray(displayWithWater, 0, displayWithWater.Length);
