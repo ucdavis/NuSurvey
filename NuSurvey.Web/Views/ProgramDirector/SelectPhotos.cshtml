@@ -86,7 +86,7 @@
         <a href="#" class="makePrime" data-id="@photo.Id" data-psq="@psqId">
             <div id = "@divId" style="display: inline-block; padding-left: 10px;" class="@showBorder">
                 <div style="word-wrap: break-word; width: 100px;">@photo.Name</div>
-                <div><img src='@Url.Action("GetThumbnail", "Photo", new { id = photo.Id })' /></div>
+                <div><img src='@Url.Action("GetDirectorThumbnail", "Photo", new { id = photo.Id })' /></div>
             </div>
         </a>
     }
