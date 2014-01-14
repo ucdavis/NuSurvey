@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Resources;
 using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
@@ -369,7 +370,7 @@ namespace NuSurvey.Web.Controllers
                 return File(new byte[0], "image/jpg");
             }
 
-            return File( _blobStoargeService.GetPhoto(photo.Id, "Thumb"), "image/jpg");
+            return File( _blobStoargeService.GetPhoto(photo.Id, Resource.Thumb), "image/jpg");
 
         }
 
@@ -382,7 +383,7 @@ namespace NuSurvey.Web.Controllers
                 return File(new byte[0], "image/jpg");
             }
 
-            return File(_blobStoargeService.GetPhoto(photo.Id, "Water"), "image/jpg");
+            return File(_blobStoargeService.GetPhoto(photo.Id, Resource.Water), "image/jpg");
             
         }
 

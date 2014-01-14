@@ -13,6 +13,7 @@ namespace NuSurvey.Web.Services
         byte[] Resize(byte[] img, int width, bool watermark = false);
 
         byte[] MakeThumbnail(byte[] img);
+        byte[] MakeDirectorThumbnail(byte[] img);
 
         //460x290
         byte[] MakeDisplayImage(byte[] img, bool watermark = false);
@@ -107,7 +108,12 @@ namespace NuSurvey.Web.Services
 
         public byte[] MakeThumbnail(byte[] img)
         {
-            return Resize(img, 80);
+            return Resize(img, 120);
+        }
+
+        public byte[] MakeDirectorThumbnail(byte[] img)
+        {
+            return Resize(img, 300);
         }
 
         /// <summary>

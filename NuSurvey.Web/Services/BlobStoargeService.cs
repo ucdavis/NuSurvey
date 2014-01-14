@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using NuSurvey.Web.Resources;
 
 namespace NuSurvey.Web.Services
 {
@@ -38,19 +39,23 @@ namespace NuSurvey.Web.Services
         public void UploadPhoto(int id, byte[] img)
         {
             var thumb = _pictureService.MakeThumbnail(img);
+            var directorThumb = _pictureService.MakeDirectorThumbnail(img);
             var displayWithWater = _pictureService.MakeDisplayImage(img, true);
             var displayNoWater = _pictureService.MakeDisplayImage(img);
 
-            var blobOriginal = _container.GetBlockBlobReference(string.Format("{0}_Original.jpg", id));
+            var blobOriginal = _container.GetBlockBlobReference(string.Format("{0}_{1}.jpg", id, Resource.Original));
             blobOriginal.UploadFromByteArray(img, 0, img.Length);
 
-            var blobThumb = _container.GetBlockBlobReference(string.Format("{0}_Thumb.jpg", id));
+            var blobThumb = _container.GetBlockBlobReference(string.Format("{0}_{1}.jpg", id, Resource.Thumb));
             blobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
 
-            var blobWater = _container.GetBlockBlobReference(string.Format("{0}_Water.jpg", id));
+            var blobDirectorThumb = _container.GetBlockBlobReference(string.Format("{0}_{1}.jpg", id, Resource.DirectorThumb));
+            blobDirectorThumb.UploadFromByteArray(directorThumb, 0, thumb.Length);
+
+            var blobWater = _container.GetBlockBlobReference(string.Format("{0}_{1}.jpg", id, Resource.Water));
             blobWater.UploadFromByteArray(displayWithWater, 0, displayWithWater.Length);
 
-            var blobNoWater = _container.GetBlockBlobReference(string.Format("{0}_PDF.jpg", id));
+            var blobNoWater = _container.GetBlockBlobReference(string.Format("{0}_{1}.jpg", id, Resource.PDF));
             blobNoWater.UploadFromByteArray(displayNoWater, 0, displayNoWater.Length);
         }
 
