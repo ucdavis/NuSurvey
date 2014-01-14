@@ -82,10 +82,19 @@ namespace NuSurvey.Web.Services
             graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
             graphic.DrawImage(origImg, rectangle);
 
+            var fontSize = 16;
+            if (width < 460)
+            {
+                fontSize = 12;
+                if (width < 300)
+                {
+                    fontSize = 8;
+                }
+            }
             if (watermark)
             {
                 // Create font and brush.
-                Font drawFont = new Font("Arial", 16, FontStyle.Bold);
+                Font drawFont = new Font("Arial", fontSize, FontStyle.Bold);
                 int opacity = 128; // 50% opaque (0 = invisible, 255 = fully opaque)
 
                 SolidBrush drawBrush = new SolidBrush(Color.FromArgb(opacity, Color.Black));
