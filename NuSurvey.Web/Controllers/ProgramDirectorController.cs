@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
@@ -20,13 +21,15 @@ namespace NuSurvey.Web.Controllers
         private readonly IRepository<Survey> _surveyRepository;
         private readonly IRepository<PrintedSurvey> _printedSurveyRepository;
         private readonly IRepository<Photo> _photoRepository;
+        private readonly IPrintService _printService;
 
 
-        public ProgramDirectorController(IRepository<Survey> surveyRepository, IRepository<PrintedSurvey> printedSurveyRepository, IRepository<Photo> photoRepository)
+        public ProgramDirectorController(IRepository<Survey> surveyRepository, IRepository<PrintedSurvey> printedSurveyRepository, IRepository<Photo> photoRepository, IPrintService printService)
         {
             _surveyRepository = surveyRepository;
             _printedSurveyRepository = printedSurveyRepository;
             _photoRepository = photoRepository;
+            _printService = printService;
         }
 
         //
@@ -133,6 +136,8 @@ namespace NuSurvey.Web.Controllers
         {
             var userId = CurrentUser.Identity.Name;
             var printedSurvey = _printedSurveyRepository.Queryable.Single(a => a.Id == id && a.UserId == userId);
+
+            return _printService.PrintDirector(printedSurvey);
 
             return View(printedSurvey);
         }

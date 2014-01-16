@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using NuSurvey.Web.Resources;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using NuSurvey.Core.Domain;
@@ -18,10 +19,19 @@ namespace NuSurvey.Web.Services
         FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url, bool useBackgroundImage = false, SurveyResponse publicSurveyResponse = null);
         FileContentResult PrintMultiple(int id, IRepository repository, HttpRequestBase request, UrlHelper url, DateTime? beginDate, DateTime? endDate);
         FileContentResult PrintPickList(int id, IRepository repository, HttpRequestBase request, UrlHelper url, int[] surveyResponseIds, bool useBackgroundImage = false);
+
+        FileContentResult PrintDirector(PrintedSurvey printedSurvey);
     }
 
     public class PrintService : IPrintService
     {
+        private readonly IBlobStoargeService _blobStoargeService;
+
+        public PrintService(IBlobStoargeService blobStoargeService)
+        {
+            _blobStoargeService = blobStoargeService;
+        }
+
         //public virtual FileContentResult PrintSingle(int id)
         //{
         //    var rview = new Microsoft.Reporting.WebForms.ReportViewer();
@@ -298,6 +308,199 @@ namespace NuSurvey.Web.Services
             var bytes = ms.ToArray();
 
             return new FileContentResult(bytes, "application/pdf");
+        }
+
+        public FileContentResult PrintDirector2(PrintedSurvey printedSurvey)
+        {
+            Check.Require(printedSurvey != null);
+
+
+            var doc = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
+            var ms = new MemoryStream();
+            var writer = PdfWriter.GetInstance(doc, ms);
+            Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
+            Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
+
+            doc.Open();
+
+            var table = new PdfPTable(2);
+            table.TotalWidth = 454f;
+            table.LockedWidth = true;
+            var widths = new[] { 33f, 67f };
+            table.SetWidths(widths);
+
+            var questionCounter = 0;
+            foreach (var psq in printedSurvey.PrintedSurveyQuestions)
+            {
+                questionCounter++;
+
+
+
+                Image FakeImage = null;
+                if(questionCounter % 2 == 0)
+                {
+                    FakeImage = new Jpeg(_blobStoargeService.GetPhoto(22, Resource.Thumb));
+                }
+                else
+                {
+                    FakeImage = new Jpeg(_blobStoargeService.GetPhoto(23, Resource.Original));
+                }
+
+                table.AddCell(FakeImage);
+                var cell = new PdfPCell(new Paragraph(psq.Question.Name + "\n\n" + "Some radio" ));
+                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                table.AddCell(cell);
+
+
+                if (questionCounter % 5 == 0)
+                {
+                    doc.Add(table);
+                    doc.NewPage();
+                    table = new PdfPTable(2);
+                    table.TotalWidth = 454f;
+                    table.LockedWidth = true;
+                    table.SetWidths(widths);
+
+                    //TODO: Background image
+                }
+
+                if (psq.Photo != null)
+                {
+                    //TODO: Non faked photos
+                }
+            }
+            if (questionCounter % 5 != 0)
+            {
+                doc.Add(table);
+            }
+            doc.Close();
+            var bytes = ms.ToArray();
+
+            return new FileContentResult(bytes, "application/pdf");
+        }
+
+
+        public FileContentResult PrintDirector(PrintedSurvey printedSurvey)
+        {
+            Check.Require(printedSurvey != null);
+
+            var doc = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
+            var ms = new MemoryStream();
+            var writer = PdfWriter.GetInstance(doc, ms);
+            Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
+            Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
+
+            doc.Open();
+
+            var table = new PdfPTable(2);
+            table.TotalWidth = 454f;
+            table.LockedWidth = true;
+            var widths = new[] { 33f, 67f };
+            table.SetWidths(widths);
+
+            var questionCounter = 0;
+            foreach (var psq in printedSurvey.PrintedSurveyQuestions)
+            {
+                questionCounter++;
+
+
+
+                Image FakeImage = null;
+                
+                  FakeImage = new Jpeg(_blobStoargeService.GetPhoto(22, Resource.Original));
+                
+                table.AddCell(FakeImage);
+                table.AddCell("");
+
+
+                if (questionCounter % 5 == 0)
+                {
+                    doc.Add(table);
+                    doc.NewPage();
+                    table = new PdfPTable(2);
+                    table.TotalWidth = 454f;
+                    table.LockedWidth = true;
+                    table.SetWidths(widths);
+
+                    //TODO: Background image
+                }
+
+                if (psq.Photo != null)
+                {
+                    //TODO: Non faked photos
+                }
+            }
+            if (questionCounter % 5 != 0)
+            {
+                doc.Add(table);
+            }
+            doc.Close();
+
+            var someBytes = ms.ToArray();
+
+            var readerOver = new PdfReader(someBytes);
+            
+            //var reader = new PdfReader(ms.ToArray());
+            var readerUnder = new PdfReader(@"C:\temp\16.pdf");
+
+            var ms2 = new MemoryStream();
+            var stamper = new PdfStamper(readerOver, ms2);
+            PdfImportedPage page = stamper.GetImportedPage(readerUnder, 1);
+
+            int n = readerOver.NumberOfPages;
+            PdfContentByte background;
+            for (int i = 1; i <= n; i++)
+            {
+                background = stamper.GetUnderContent(i);
+                background.AddTemplate(page, 0, 0);
+            }
+            // CLose the stamper
+            stamper.Close();
+
+            var bytes = ms2.ToArray();
+
+            return new FileContentResult(bytes, "application/pdf");
+
+            //using (var ms2 = new MemoryStream())
+            //{
+            //    var doc = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
+            //    var writer = PdfWriter.GetInstance(doc, ms2);
+
+            //    using (var stamper = new PdfStamper(reader, ms2))
+            //    {
+
+            //        int PageCount = reader.NumberOfPages;
+            //        for (int i = 1; i <= PageCount; i++)
+            //        {
+
+            //            //ColumnText.ShowTextAligned(stamper.GetOverContent(i), Element.ALIGN_LEFT, new Phrase(String.Format("Page {0} of {1}", i, PageCount), _font), 520, 40, 0);
+            //            stamper.GetOverContent(i);
+
+            //            var table = new PdfPTable(2);
+            //            table.TotalWidth = 454f;
+            //            table.LockedWidth = true;
+            //            var widths = new[] { 33f, 67f };
+            //            table.SetWidths(widths);
+
+            //            Image FakeImage = null;
+            //            for (int j = 0; j < 4; j++)
+            //            {
+            //                FakeImage = new Jpeg(_blobStoargeService.GetPhoto(22, Resource.Original));
+            //                table.AddCell(FakeImage);
+            //                table.AddCell("");
+
+            //                doc.Add(table);
+            //            }
+
+            //        }
+
+            //    }
+            //    return new FileContentResult(ms2.ToArray(), "application/pdf");
+            //}
+
+
+
         }
 
 
