@@ -385,7 +385,12 @@ namespace NuSurvey.Web.Services
         {
             Check.Require(printedSurvey != null);
 
+            var readerUnder = new PdfReader(@"C:\temp\HK_Tool_Print_Pg1.pdf");
+
             var doc = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
+            doc.SetPageSize(readerUnder.GetPageSize(1));
+            doc.SetMargins(58, 0, 0, 0);
+
             var ms = new MemoryStream();
             var writer = PdfWriter.GetInstance(doc, ms);
             Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
@@ -393,48 +398,50 @@ namespace NuSurvey.Web.Services
 
             doc.Open();
 
-            var table = new PdfPTable(2);
-            table.TotalWidth = 454f;
-            table.LockedWidth = true;
-            var widths = new[] { 33f, 67f };
-            table.SetWidths(widths);
+            ProcessHkPage1(doc, printedSurvey);
 
-            var questionCounter = 0;
-            foreach (var psq in printedSurvey.PrintedSurveyQuestions)
-            {
-                questionCounter++;
+            //var table = new PdfPTable(2);
+            //table.TotalWidth = 454f;
+            //table.LockedWidth = true;
+            //var widths = new[] { 33f, 67f };
+            //table.SetWidths(widths);
+
+            //var questionCounter = 0;
+            //foreach (var psq in printedSurvey.PrintedSurveyQuestions)
+            //{
+            //    questionCounter++;
 
 
 
-                Image FakeImage = null;
+            //    Image FakeImage = null;
                 
-                  FakeImage = new Jpeg(_blobStoargeService.GetPhoto(22, Resource.Original));
+            //      FakeImage = new Jpeg(_blobStoargeService.GetPhoto(22, Resource.Original));
                 
-                table.AddCell(FakeImage);
-                table.AddCell("");
+            //    table.AddCell(FakeImage);
+            //    table.AddCell("");
 
 
-                if (questionCounter % 5 == 0)
-                {
-                    doc.Add(table);
-                    doc.NewPage();
-                    table = new PdfPTable(2);
-                    table.TotalWidth = 454f;
-                    table.LockedWidth = true;
-                    table.SetWidths(widths);
+            //    if (questionCounter % 5 == 0)
+            //    {
+            //        doc.Add(table);
+            //        doc.NewPage();
+            //        table = new PdfPTable(2);
+            //        table.TotalWidth = 454f;
+            //        table.LockedWidth = true;
+            //        table.SetWidths(widths);
 
-                    //TODO: Background image
-                }
+            //        //TODO: Background image
+            //    }
 
-                if (psq.Photo != null)
-                {
-                    //TODO: Non faked photos
-                }
-            }
-            if (questionCounter % 5 != 0)
-            {
-                doc.Add(table);
-            }
+            //    if (psq.Photo != null)
+            //    {
+            //        //TODO: Non faked photos
+            //    }
+            //}
+            //if (questionCounter % 5 != 0)
+            //{
+            //    doc.Add(table);
+            //}
             doc.Close();
 
             var someBytes = ms.ToArray();
@@ -442,10 +449,11 @@ namespace NuSurvey.Web.Services
             var readerOver = new PdfReader(someBytes);
             
             //var reader = new PdfReader(ms.ToArray());
-            var readerUnder = new PdfReader(@"C:\temp\16.pdf");
+            
 
             var ms2 = new MemoryStream();
             var stamper = new PdfStamper(readerOver, ms2);
+
             PdfImportedPage page = stamper.GetImportedPage(readerUnder, 1);
 
             int n = readerOver.NumberOfPages;
@@ -500,6 +508,48 @@ namespace NuSurvey.Web.Services
             //}
 
 
+
+        }
+
+        private void ProcessHkPage1(Document doc, PrintedSurvey printedSurvey)
+        {
+            var table = new PdfPTable(1);
+            table.TotalWidth = 220f;
+            table.LockedWidth = true;
+            table.HorizontalAlignment = Element.ALIGN_LEFT;
+            table.DefaultCell.Border = 0;
+            table.DefaultCell.Padding = 0;
+            table.DefaultCell.PaddingBottom = 13.5f;
+
+            //var widths = new[] { 33f, 67f };
+            //table.SetWidths(widths);
+
+            for (int i = 0; i < 4; i++)
+            {
+                var psq = printedSurvey.PrintedSurveyQuestions[i];
+                Image FakeImage = null;
+
+                FakeImage = new Jpeg(_blobStoargeService.GetPhoto(22, Resource.Original));
+
+                if (i == 0)
+                {
+                    table.DefaultCell.PaddingTop = 200;
+                }
+                else
+                {
+                    table.DefaultCell.PaddingTop = 0;
+                }
+
+                if (i == 3)
+                {
+                    table.DefaultCell.PaddingBottom = 0;
+                }
+                table.AddCell(FakeImage);
+                //table.AddCell("");
+            }
+
+            doc.Add(table);
+            doc.NewPage();
 
         }
 
