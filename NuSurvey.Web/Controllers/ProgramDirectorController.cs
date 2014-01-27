@@ -137,7 +137,7 @@ namespace NuSurvey.Web.Controllers
             var userId = CurrentUser.Identity.Name;
             var printedSurvey = _printedSurveyRepository.Queryable.Single(a => a.Id == id && a.UserId == userId);
 
-            return _printService.PrintDirector(printedSurvey);
+            return _printService.PrintDirector(printedSurvey, Request, Url);
 
             return View(printedSurvey);
         }
