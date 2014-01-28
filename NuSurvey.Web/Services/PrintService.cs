@@ -385,8 +385,8 @@ namespace NuSurvey.Web.Services
         {
             Check.Require(printedSurvey != null);
 
-            //var readerUnder = new PdfReader(@"C:\temp\HK_Tool_Print_Pg1.pdf");
-            var readerUnder = new PdfReader(@"C:\temp\HK_Tool_Print_AllPages.pdf");
+            var pdfUnderPath = GetAbsoluteUrl(request, url, string.Format("~/Content/{0}-director-print.pdf", printedSurvey.Survey.ShortName.Trim().ToUpper()));
+            var readerUnder = new PdfReader(pdfUnderPath);
 
             var doc = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
             doc.SetPageSize(readerUnder.GetPageSize(1));
