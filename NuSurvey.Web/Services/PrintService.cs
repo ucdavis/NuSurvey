@@ -481,12 +481,12 @@ namespace NuSurvey.Web.Services
 
                 if (i == 2)
                 {
-                    table.DefaultCell.PaddingTop = 1;
+                    table.DefaultCell.PaddingTop = 1.5f;
                 }
 
                 if (i == 3)
                 {
-                    table.DefaultCell.PaddingTop = 1f;
+                    table.DefaultCell.PaddingTop = 0.5f;
                     table.DefaultCell.PaddingBottom = 0;
                 }
 
