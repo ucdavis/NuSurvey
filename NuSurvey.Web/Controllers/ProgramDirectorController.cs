@@ -68,9 +68,9 @@ namespace NuSurvey.Web.Controllers
                 psq.Question = question;
                 psq.Photo = question.PrimaryPhoto;
                 psq.Order = question.Order;
-                if (psq.Photo == null)
+                if (psq.Photo == null || psq.Photo.IsPrintable == false || psq.Photo.IsActive == false)
                 {
-                    psq.Photo = question.Photos.FirstOrDefault();
+                    psq.Photo = question.Photos.FirstOrDefault(a => a.IsPrintable && a.IsActive);
                 }
 
                 printedSurvey.PrintedSurveyQuestions.Add(psq);
@@ -137,9 +137,9 @@ namespace NuSurvey.Web.Controllers
             var userId = CurrentUser.Identity.Name;
             var printedSurvey = _printedSurveyRepository.Queryable.Single(a => a.Id == id && a.UserId == userId);
 
-            return _printService.PrintDirector(printedSurvey, Request, Url);
+            var printedFile = _printService.PrintDirector(printedSurvey, Request, Url);
 
-            return View(printedSurvey);
+            return File(printedFile.FileContents, printedFile.ContentType, string.Format("{0}-{1}.pdf", printedSurvey.Survey.ShortName.Trim(), id));
         }
 
     }

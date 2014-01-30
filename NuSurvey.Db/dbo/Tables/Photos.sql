@@ -7,5 +7,6 @@
     [FileContents] VARBINARY(MAX) NULL, 
     [DateCreated] DATETIME NOT NULL DEFAULT getdate(), 
     [ThumbNail] VARBINARY(MAX) NULL, 
-    [IsActive] BIT NOT NULL DEFAULT 1
+    [IsActive] BIT NOT NULL DEFAULT 1, 
+    [IsPrintable] BIT NOT NULL DEFAULT 1
 )

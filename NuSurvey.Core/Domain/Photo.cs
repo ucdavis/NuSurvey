@@ -15,6 +15,7 @@ namespace NuSurvey.Core.Domain
             PhotoTags = new List<PhotoTag>();
             Questions = new List<Question>();
             IsActive = true;
+            IsPrintable = true;
         }
         [Required]
         [StringLength(100)]
@@ -25,6 +26,8 @@ namespace NuSurvey.Core.Domain
         public virtual DateTime DateCreated { get; set; }
         //public virtual byte[] ThumbNail { get; set; }
         public virtual bool IsActive { get; set; }
+
+        public virtual bool IsPrintable { get; set; }
 
         public virtual IList<PhotoTag> PhotoTags { get; set; }
         public virtual IList<Question> Questions { get; set; }
@@ -51,6 +54,7 @@ namespace NuSurvey.Core.Domain
             Map(x => x.DateCreated);
             //Map(x => x.ThumbNail);
             Map(x => x.IsActive);
+            Map(x => x.IsPrintable);
 
             HasMany(x => x.PhotoTags).Inverse();
 

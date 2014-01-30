@@ -65,6 +65,7 @@ namespace NuSurvey.Web.Controllers
             photo.ContentType = uploadedPhoto.ContentType;
             photo.Name = photoEditModel.Photo.Name;
             photo.FileName = uploadedPhoto.FileName;
+            photo.IsPrintable = photoEditModel.Photo.IsPrintable;
 
             //photo.ThumbNail = _pictureService.MakeThumbnail(photo.FileContents);
             if (!string.IsNullOrWhiteSpace(photoEditModel.Tags))
@@ -135,12 +136,13 @@ namespace NuSurvey.Web.Controllers
                 var img = reader.ReadBytes(uploadedPhoto.ContentLength);
                 photo.ContentType = uploadedPhoto.ContentType;
                 photo.FileName = uploadedPhoto.FileName;
-                photo.DateCreated = DateTime.Now;
+                photo.DateCreated = DateTime.Now;                
 
                 //photo.ThumbNail = _pictureService.MakeThumbnail(photo.FileContents);
                 _blobStoargeService.UploadPhoto(photo.Id, img);
             }
             photo.Name = photoEditModel.Photo.Name;
+            photo.IsPrintable = photoEditModel.Photo.IsPrintable;
 
             //TODO: Test tags...
             var photoTags = new List<PhotoAction>();

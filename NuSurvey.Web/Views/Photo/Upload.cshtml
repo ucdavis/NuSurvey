@@ -34,6 +34,17 @@ Example: Dinosaur 1  *@
                 @Html.ValidationMessageFor(model => model.Photo.Name)
             </div>
         </li>
+        
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.Photo.IsPrintable) 
+                <span>*</span>
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Photo.IsPrintable)
+                @Html.ValidationMessageFor(model => model.Photo.IsPrintable)
+            </div>
+        </li>
 	
 
         <li>
