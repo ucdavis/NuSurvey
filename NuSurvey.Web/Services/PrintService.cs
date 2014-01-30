@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using NuSurvey.Web.Resources;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using NuSurvey.Core.Domain;
@@ -18,10 +19,19 @@ namespace NuSurvey.Web.Services
         FileContentResult PrintSingle(int id, IRepository repository, HttpRequestBase request, UrlHelper url, bool useBackgroundImage = false, SurveyResponse publicSurveyResponse = null);
         FileContentResult PrintMultiple(int id, IRepository repository, HttpRequestBase request, UrlHelper url, DateTime? beginDate, DateTime? endDate);
         FileContentResult PrintPickList(int id, IRepository repository, HttpRequestBase request, UrlHelper url, int[] surveyResponseIds, bool useBackgroundImage = false);
+
+        FileContentResult PrintDirector(PrintedSurvey printedSurvey, HttpRequestBase request, UrlHelper url);
     }
 
     public class PrintService : IPrintService
     {
+        private readonly IBlobStoargeService _blobStoargeService;
+
+        public PrintService(IBlobStoargeService blobStoargeService)
+        {
+            _blobStoargeService = blobStoargeService;
+        }
+
         //public virtual FileContentResult PrintSingle(int id)
         //{
         //    var rview = new Microsoft.Reporting.WebForms.ReportViewer();
@@ -298,6 +308,338 @@ namespace NuSurvey.Web.Services
             var bytes = ms.ToArray();
 
             return new FileContentResult(bytes, "application/pdf");
+        }
+
+        public FileContentResult PrintDirector2(PrintedSurvey printedSurvey)
+        {
+            Check.Require(printedSurvey != null);
+
+
+            var doc = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
+            var ms = new MemoryStream();
+            var writer = PdfWriter.GetInstance(doc, ms);
+            Font arial = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.NORMAL, BaseColor.BLACK);
+            Font arialBold = FontFactory.GetFont("Arial", BaseFont.CP1252, BaseFont.EMBEDDED, 12, Font.BOLD, BaseColor.BLACK);
+
+            doc.Open();
+
+            var table = new PdfPTable(2);
+            table.TotalWidth = 454f;
+            table.LockedWidth = true;
+            var widths = new[] { 33f, 67f };
+            table.SetWidths(widths);
+
+            var questionCounter = 0;
+            foreach (var psq in printedSurvey.PrintedSurveyQuestions)
+            {
+                questionCounter++;
+
+
+
+                Image FakeImage = null;
+                if(questionCounter % 2 == 0)
+                {
+                    FakeImage = new Jpeg(_blobStoargeService.GetPhoto(22, Resource.Thumb));
+                }
+                else
+                {
+                    FakeImage = new Jpeg(_blobStoargeService.GetPhoto(23, Resource.Original));
+                }
+
+                table.AddCell(FakeImage);
+                var cell = new PdfPCell(new Paragraph(psq.Question.Name + "\n\n" + "Some radio" ));
+                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                table.AddCell(cell);
+
+
+                if (questionCounter % 5 == 0)
+                {
+                    doc.Add(table);
+                    doc.NewPage();
+                    table = new PdfPTable(2);
+                    table.TotalWidth = 454f;
+                    table.LockedWidth = true;
+                    table.SetWidths(widths);
+
+                    //TODO: Background image
+                }
+
+                if (psq.Photo != null)
+                {
+                    //TODO: Non faked photos
+                }
+            }
+            if (questionCounter % 5 != 0)
+            {
+                doc.Add(table);
+            }
+            doc.Close();
+            var bytes = ms.ToArray();
+
+            return new FileContentResult(bytes, "application/pdf");
+        }
+
+
+        public FileContentResult PrintDirector(PrintedSurvey printedSurvey, HttpRequestBase request, UrlHelper url)
+        {
+            Check.Require(printedSurvey != null);
+
+            var pdfUnderPath = GetAbsoluteUrl(request, url, string.Format("~/Content/{0}-director-print.pdf", printedSurvey.Survey.ShortName.Trim().ToUpper()));
+            var readerUnder = new PdfReader(pdfUnderPath);
+
+            var doc = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
+            doc.SetPageSize(readerUnder.GetPageSize(1));
+            doc.SetMargins(58, 0, 0, 0);
+
+            var ms = new MemoryStream();
+            var writer = PdfWriter.GetInstance(doc, ms);
+
+            doc.Open();
+
+            var questions = printedSurvey.PrintedSurveyQuestions.OrderBy(a => a.Order).ToArray();
+
+            ProcessHkPage1(doc, questions, request, url);
+            ProcessHkPage2(doc, questions, request, url);
+            ProcessHkMiddlePages(doc, questions, 9, request, url);
+            ProcessHkMiddlePages(doc, questions, 14, request, url);
+            ProcessHkMiddlePages(doc, questions, 19, request, url);
+            ProcessHkMiddlePages(doc, questions, 24, request, url);
+            ProcessHkMiddlePages(doc, questions, 29, request, url);
+            ProcessHkMiddlePages(doc, questions, 34, request, url);
+            ProcessHkMiddlePages(doc, questions, 39, request, url);
+            ProcessHkLastPage(doc, questions, request, url);
+
+            doc.Close();
+
+            var someBytes = ms.ToArray();
+
+            var readerOver = new PdfReader(someBytes);
+            
+            //var reader = new PdfReader(ms.ToArray());
+            
+
+            var ms2 = new MemoryStream();
+            var stamper = new PdfStamper(readerOver, ms2);
+
+            
+
+            int n = readerOver.NumberOfPages;
+            PdfContentByte background;
+            for (int i = 1; i <= n; i++)
+            {
+                PdfImportedPage page = stamper.GetImportedPage(readerUnder, i);
+                background = stamper.GetUnderContent(i);
+                background.AddTemplate(page, 0, 0);
+            }
+            // CLose the stamper
+            stamper.Close();
+
+            var bytes = ms2.ToArray();
+
+            return new FileContentResult(bytes, "application/pdf");
+
+        }
+
+
+
+
+        private void ProcessHkPage1(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
+        {
+            var table = new PdfPTable(1);
+            table.TotalWidth = 219f;
+
+            table.LockedWidth = true;
+ 
+            table.HorizontalAlignment = Element.ALIGN_LEFT;
+            table.DefaultCell.Border = 0;
+            table.DefaultCell.Padding = 0;
+            table.DefaultCell.PaddingBottom = 13.5f;
+
+
+            for (int i = 0; i < 4; i++)
+            {
+                var psq = questions[i];
+                Image selectedImage = null;
+                if(psq.Photo != null)
+                {
+                    selectedImage = new Jpeg(_blobStoargeService.GetPhoto(psq.Photo.Id, Resource.Original));
+                }
+                //Image FakeImage = null;
+                //selectedImage = new Jpeg(_blobStoargeService.GetPhoto(10, Resource.Original));
+
+                if (i == 0)
+                {
+                    table.DefaultCell.PaddingTop = 215.5f;
+                    table.DefaultCell.PaddingBottom = 32.5f;
+                }
+                else
+                {
+                    table.DefaultCell.PaddingTop = 0;
+                    table.DefaultCell.PaddingBottom = 35f;
+                }
+
+                if (i == 2)
+                {
+                    table.DefaultCell.PaddingTop = 1.5f;
+                }
+
+                if (i == 3)
+                {
+                    table.DefaultCell.PaddingTop = 0.5f;
+                    table.DefaultCell.PaddingBottom = 0;
+                }
+
+                if (selectedImage == null)
+                {
+                    selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
+                }
+                table.AddCell(selectedImage);
+
+            }
+
+            doc.Add(table);
+            doc.NewPage();
+
+        }
+
+        private void ProcessHkPage2(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
+        {
+            var table = new PdfPTable(1);
+            table.TotalWidth = 219f;
+            table.LockedWidth = true;
+            table.HorizontalAlignment = Element.ALIGN_LEFT;
+            table.DefaultCell.Border = 0;
+            table.DefaultCell.Padding = 0;
+            table.DefaultCell.PaddingBottom = 13.5f;
+
+
+            for (int i = 0; i < 4; i++)
+            {
+                var psq = questions[i+4];
+                Image selectedImage = null;
+                if (psq.Photo != null)
+                {
+                    selectedImage = new Jpeg(_blobStoargeService.GetPhoto(psq.Photo.Id, Resource.Original));
+                }
+                //Image FakeImage = null;
+                //selectedImage = new Jpeg(_blobStoargeService.GetPhoto(10, Resource.Original));
+
+                if (i == 0)
+                {
+                    table.DefaultCell.PaddingTop = 63;
+                    table.DefaultCell.PaddingBottom = 35f;
+                }
+                else
+                {
+                    table.DefaultCell.PaddingTop = 0;
+                    table.DefaultCell.PaddingBottom = 34.5f;
+                }
+
+                if (i == 3)
+                {
+                    table.DefaultCell.PaddingTop = 2;
+                    table.DefaultCell.PaddingBottom = 0;
+                }
+                if (selectedImage == null)
+                {
+                    selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
+                }
+                table.AddCell(selectedImage);
+
+            }
+
+            doc.Add(table);
+            doc.NewPage();
+        }
+
+        private void ProcessHkMiddlePages(Document doc, PrintedSurveyQuestion[] questions, int firstQuestionOnPage, HttpRequestBase request, UrlHelper url)
+        {
+            var table = new PdfPTable(1);
+            table.TotalWidth = 219f;
+            table.LockedWidth = true;
+            table.HorizontalAlignment = Element.ALIGN_LEFT;
+            table.DefaultCell.Border = 0;
+            table.DefaultCell.Padding = 0;
+            table.DefaultCell.PaddingBottom = 13.5f;
+
+
+            for (int i = 0; i < 5; i++)
+            {
+                var psq = questions[i + firstQuestionOnPage];
+                Image selectedImage = null;
+                if (psq.Photo != null)
+                {
+                    selectedImage = new Jpeg(_blobStoargeService.GetPhoto(psq.Photo.Id, Resource.Original));
+                }
+                //Image FakeImage = null;
+                //selectedImage = new Jpeg(_blobStoargeService.GetPhoto(10, Resource.Original));
+
+                if (i == 0)
+                {
+                    table.DefaultCell.PaddingTop = 63;
+                    table.DefaultCell.PaddingBottom = 35f;
+                }
+                else
+                {
+                    table.DefaultCell.PaddingTop = 0;
+                    table.DefaultCell.PaddingBottom = 34.5f;
+                }
+
+                if (i == 3)
+                {
+                    table.DefaultCell.PaddingTop = 2;
+                    table.DefaultCell.PaddingBottom = 34.5f;
+                }
+
+                if (i == 4)
+                {
+                    table.DefaultCell.PaddingTop = 1.5f;
+                    table.DefaultCell.PaddingBottom = 0;
+                }
+                if (selectedImage == null)
+                {
+                    selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
+                }
+                table.AddCell(selectedImage);
+
+            }
+
+            doc.Add(table);
+            doc.NewPage();
+        }
+
+        private void ProcessHkLastPage(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
+        {
+            var table = new PdfPTable(1);
+            table.TotalWidth = 219f;
+            table.LockedWidth = true;
+            table.HorizontalAlignment = Element.ALIGN_LEFT;
+            table.DefaultCell.Border = 0;
+            table.DefaultCell.Padding = 0;
+            table.DefaultCell.PaddingBottom = 13.5f;
+
+            var psq = questions[44];
+            Image selectedImage = null;
+            if (psq.Photo != null)
+            {
+                selectedImage = new Jpeg(_blobStoargeService.GetPhoto(psq.Photo.Id, Resource.Original));
+            }
+
+            //Image FakeImage = null;
+            //selectedImage = new Jpeg(_blobStoargeService.GetPhoto(10, Resource.Original));
+
+            table.DefaultCell.PaddingTop = 63;
+
+            if (selectedImage == null)
+            {
+                selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
+            }
+            table.AddCell(selectedImage);
+
+
+            doc.Add(table);
+            doc.NewPage();
         }
 
 
