@@ -252,6 +252,7 @@
     <Content Include="Images\mcmt-header.jpg" />
     <Content Include="Images\mcmt-thumb.png" />
     <Content Include="Images\MCMT_pdf.jpg" />
+    <Content Include="Images\NoImage.jpg" />
     <Content Include="Images\pdf.png" />
     <Content Include="Images\pdfCheckbox.png" />
     <Content Include="Images\pdf_hover.png" />
@@ -372,6 +373,7 @@
     <None Include="Content\Fonts\SourceSansPro-Semibold-webfont.eot" />
     <None Include="Content\Fonts\SourceSansPro-Semibold-webfont.ttf" />
     <None Include="Content\Fonts\SourceSansPro-Semibold-webfont.woff" />
+    <None Include="Content\HK-director-print.pdf" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
