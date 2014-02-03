@@ -70,13 +70,13 @@
 }
 
 
-#branding span.header, .main {
+#branding span.header, .container-center {
     display: block;
     margin: 0 auto;
     padding: 2em 0 0.2em;
 }
 
-#branding span.header, #personalbar, .main, #footertext, #system_wide_status_text {
+#branding span.header, #personalbar, .container-center, #footertext, #system_wide_status_text {
     width: 1020px;
 }
 
