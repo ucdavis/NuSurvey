@@ -30,10 +30,10 @@
 
 }
 
-
-
-
-
+body {
+    font: 11.5px/16px Verdana,Arial,sans-serif;
+    min-width: 1200px;
+}
 
 #branding {
   background: #ede6de; /* Old browsers */
@@ -59,6 +59,10 @@
   z-index: 2;
 }
 
+.main {
+	margin: 0;
+	padding: 0;
+}
 
 #branding h1 {
     font-size: 3em;
@@ -66,17 +70,15 @@
     padding-bottom: 0.2em;
     text-align: left;
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-
 }
 
-
-#branding span.header, .main {
+#branding span.header, .container-center {
     display: block;
     margin: 0 auto;
     padding: 2em 0 0.2em;
 }
 
-#branding span.header, #personalbar, .main, #footertext, #system_wide_status_text {
+#branding span.header, #personalbar, .container-center, #footertext, #system_wide_status_text {
     width: 1020px;
 }
 
@@ -115,9 +117,6 @@
 
 #personalbar {
     margin: 5px auto;
-}
-#branding span.header, #personalbar, .main, #footertext, #system_wide_status_text {
-    width: 1020px;
 }
 
 .display-mcmt-question {
@@ -181,13 +180,6 @@ input.button {
   
   color: #603813;
 }
-
-
-body {
-    font: 11.5px/16px Verdana,Arial,sans-serif;
-    min-width: 1200px;
-}
-
 
 .display-form ul {
   text-align: left;
@@ -276,8 +268,8 @@ fieldset {
     font-style: italic;
     vertical-align: top;
 }
-#footer .col1 {
-    border-right: 2px solid #603813;
+#footer .col2 {
+    border-left: 1px solid #603813;
 }
 #footer .navigation {
     text-align: left;
@@ -352,6 +344,6 @@ nav {
 	font-weight: bold;
 	font-size: 1.2em;
 	background: linear-gradient(#4A94B4 , #03205B 40%);
-	padding: 8px 0px;
+	padding: 2px 2px 8px 2px;
 	border-radius: 8px;
 }        
