@@ -248,6 +248,7 @@
     <Content Include="Images\hk-thumb.png" />
     <Content Include="Images\logo-caes-long-cap.png" />
     <Content Include="Images\logo-ucdavis.png" />
+    <Content Include="Images\logo.png" />
     <Content Include="Images\managePhotos.png" />
     <Content Include="Images\mcmt-header.jpg" />
     <Content Include="Images\mcmt-thumb.png" />
