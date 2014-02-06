@@ -44,7 +44,7 @@ body {
     background: -ms-linear-gradient(top, #EDE6DE, #E7DED4);
     background: linear-gradient(top, #EDE6DE #E7DED4);
      
-  /*   -webkit-border-radius: 4px;
+  /* -webkit-border-radius: 4px;
     -khtml-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -62,6 +62,7 @@ body {
 .main {
 	margin: 0;
 	padding: 0;
+	background: url('../images/wavegrid_tan1.png') repeat; /* ADDED MLR 020414 */
 }
 
 #branding h1 {
@@ -72,11 +73,17 @@ body {
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
 
-#branding span.header, .container-center {
+#branding span.header /* Removed. container-center MRL 020414 */ {
     display: block;
     margin: 0 auto;
-    padding: 2em 0 0.2em;
+    padding: 1em 0 0.2em; /* Value changed MLR 020414 */
 }
+
+/* Added MLR 020414 */
+.container-center {
+    margin: 0 auto;
+}
+/***/
 
 #branding span.header, #personalbar, .container-center, #footertext, #system_wide_status_text {
     width: 1020px;
@@ -86,6 +93,12 @@ body {
   background:  url("../Images/mcmt-header.jpg") no-repeat scroll  #FFFFFF;
   
 }
+
+/*Added MLR 020414 */
+.hk-survey {
+  background:  url("../Images/hk-header.jpg") no-repeat scroll  #FFFFFF; 
+}
+/*****/
 
 #branding, #footer {
     color: #603813;
@@ -100,14 +113,27 @@ body {
 }
 
 .navigation {
-    text-align: right;
+    text-align: left; /* Value changed MLR 020414 */
+	color: #fff;
+	max-width: 1020px;
+	margin: 0 auto;
 }
 
 .navigation li {
     display: inline-block;
     list-style-type: none;
-    padding: 0 0 0 1em;
+    padding: 0 2em; /* Value changed MLR 020414 */
 }
+
+/* ADDED MLR 020414 */
+.navigation li a {
+	border-right: 1px solid #006896;
+}
+
+.navigation li a:first-child {
+	border-left: 1px solid #006896;
+}
+/*********/
 
 #branding a, #footer a {
     color: #603813;
@@ -210,7 +236,7 @@ input.button {
 }
 .ui-widget-header {
     background: /* url("images/ui-bg_highlight-soft_0_014a81_1x100.png") repeat-x scroll 50% 50% */ #8CC63F;
-    border: 1px solid #8CC63F;
+    border: 0px solid #8CC63F; /* Value Changed MLR 020414 */
     color: #FFFFFF;
     font-weight: bold;
     -webkit-border-radius: 8px;
@@ -231,7 +257,8 @@ fieldset {
     background: -moz-linear-gradient(top, #EDE6DE, #E7DED4);
     background: -o-linear-gradient(top, #EDE6DE, #E7DED4);
     background: -ms-linear-gradient(top, #EDE6DE, #E7DED4);
-    background: linear-gradient(top, #EDE6DE #E7DED4);    margin-top: 5em;
+    background: linear-gradient(top, #EDE6DE #E7DED4);    
+	margin-top: 0; /*Changed value MLR 020414 */	
     padding: 1em 0;
 }
 #footertext {
@@ -283,10 +310,12 @@ fieldset {
 
 #parents {
 	background: url(../images/diagonal_waves_blue1.png) repeat;
+	padding: 5em 0 3em 0; /*Added MLR 020414 */	
 }
 
 #staff {
-	background: url('../images/wavegrid_tan1.png') repeat;
+	/**** REMOVE MLR 020414   background: url('../images/wavegrid_tan1.png') repeat;  */
+	padding: 3em 0 5em 0; /*Added MLR 020414 */	
 }
 
 #parents-left {
