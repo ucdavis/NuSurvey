@@ -406,6 +406,8 @@
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Properties\PublishProfiles\TestOnlyReplace.pubxml" />
     <Content Include="Views\Educator\Index.cshtml" />
+    <Content Include="Views\Account\TermsAndConditions.cshtml" />
+    <Content Include="Views\Shared\_HomeLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NuSurvey.Core\NuSurvey.Core.csproj">

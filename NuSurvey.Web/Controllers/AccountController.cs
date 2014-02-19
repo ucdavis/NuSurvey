@@ -525,6 +525,11 @@ namespace NuSurvey.Web.Controllers
             return View();
         }
 
+        public ActionResult TermsAndConditions()
+        {
+            return View();
+        }
+
     }
 
     public class UsersRoles
