@@ -246,7 +246,7 @@ namespace NuSurvey.Web.Controllers
                 return File(new byte[0], "image/jpg");
             }
 
-            return File(_blobStoargeService.GetPhoto(photo.Id, Resource.Thumb), "image/jpg");
+            return File(_blobStoargeService.GetPhoto(photo.Id, Resource.Water), "image/jpg");
         }
 
         /// <summary>
