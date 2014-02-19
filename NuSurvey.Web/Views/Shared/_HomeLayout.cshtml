@@ -56,7 +56,7 @@
 
 
         <div class="main @ViewBag.surveyimage">
-            <div id="messagecontainer">
+            <div>
                 @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
                 { 
                 <div id="error_message">
@@ -70,16 +70,19 @@
                     @TempData["Message"]
                 </div>
                 }
-                
-                <div class="col1 results">
-                    @*<h2>@ViewBag.Title</h2>*@
+                @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage) || !string.IsNullOrWhiteSpace(TempData["Message"] as string))
+                {
+                    <div class="col1 results">
+                        @*<h2>@ViewBag.Title</h2>*@
+                    </div>
+
+                    <div class="col2">
+                        @* Render Subpage Navigation *@
+                        @RenderSection("SubNav", false)
+                    </div>
+                }
                 </div>
                 
-                <div class="col2">
-                    @* Render Subpage Navigation *@
-                    @RenderSection("SubNav", false)
-                </div>
-            </div>
             @RenderBody()
         </div>
     </div>            
