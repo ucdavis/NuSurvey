@@ -19,7 +19,7 @@ namespace NuSurvey.Web.Services
     {
         public void SendPasswordReset(string userName, string tempPass)
         {
-            var mail = new MailMessage("automatedemail@caes.ucdavis.edu", userName, "Nutrition Survey Password Reset", "");
+            var mail = new MailMessage("automatedemail@caes.ucdavis.edu", userName, "Healthy Kids Website Password Reset", "");
             mail.IsBodyHtml = true;
             mail.Body = string.Format("Your Password has been reset to {0}<br />{1}<br />{2}", tempPass, "We recommend changing your password once you have logged on." ,"Please do not reply to this email. It was automatically generated."); 
             var client = new SmtpClient();
@@ -29,10 +29,10 @@ namespace NuSurvey.Web.Services
 
         public void SendNewUser(HttpRequestBase request, UrlHelper url, string userName, string tempPass)
         {
-            var mail = new MailMessage("automatedemail@caes.ucdavis.edu", userName, "Nutrition Survey Account Created", "");
+            var mail = new MailMessage("automatedemail@caes.ucdavis.edu", userName, "Healthy Kids Website Account Created", "");
             mail.IsBodyHtml = true;
             mail.Body = string.Format("{0}<br />{1} {2}<br />{3} {4}<br />{5} {6}<br />{7}<br />{8}",
-                                      "An account has been created for you for the Nutrition Survey.",
+                                      "An account has been created for you for the Healthy Kids Website.",
                                       "You can access it by logging in here: ",
                                       GetAbsoluteUrl(request, url, "~/Account/LogOn"),
                                       "With your email address: ",
