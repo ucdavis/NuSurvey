@@ -4,36 +4,26 @@
 }
 
 
-/* ------- FONTS ------ */
+/* ------- FONT NOTES ------ */   /* Changed MLR 022714 */
 
-@font-face {
-    font-family: "SourceSansProBold";
-    src: url("../Content/Fonts/SourceSansPro-Bold-webfont.eot");
-    src: url("../Content/Fonts/SourceSansPro-Bold-webfont.eot?#iefix") format("embedded-opentype"),
-         url("../Content/Fonts/SourceSansPro-Bold-webfont.woff") format("woff"),
-         url("../Content/Fonts/SourceSansPro-Bold-webfont.ttf") format("truetype"),
-         url("../Content/Fonts/SourceSansPro-Bold-webfont.svg?#SourceSansProBold") format("svg");
-    font-weight: normal;
-    font-style: normal;
+/* REMOVED all @font-face references MLR 022714 */
 
-}
-
-@font-face {
-    font-family: "SourceSansProSemibold";
-    src: url("../Content/Fonts/SourceSansPro-Semibold-webfont.eot");
-    src: url("../Content/Fonts/SourceSansPro-Semibold-webfont.eot?#iefix") format("embedded-opentype"),
-         url("../Content/Fonts/SourceSansPro-Semibold-webfont.woff") format("woff"),
-         url("../Content/Fonts/SourceSansPro-Semibold-webfont.ttf") format("truetype"),
-         url("../Content/Fonts/SourceSansPro-Semibold-webfont.svg?#SourceSansProSemibold") format("svg");
-    font-weight: normal;
-    font-style: normal;
-
-}
+/* 	ADD the following reference note MLR 022714
+	Name: Source Sans Pro
+	Normal: 400
+	Semi-bold: 600
+	Bold: 700
+	Ultra-bold: 900
+*/
 
 body {
-    font: 11.5px/16px Verdana,Arial,sans-serif;
+    font: 11.5px/16px 'Source Sans Pro',Arial,sans-serif;
     min-width: 1200px;
 }
+
+h2 {  /* ADD MLR 022714 */
+	margin: 20px 0 10px 0;  /* ADD MLR 022714 */
+}  /* ADD MLR 022714 */
 
 #branding {
   background: #ede6de; /* Old browsers */
@@ -83,24 +73,26 @@ body {
 .container-center {
     margin: 0 auto;
 }
-/***/
 
-#branding span.header, #personalbar, .container-center, #footertext, #system_wide_status_text {
+#branding span.header, .container-center, #footertext, #system_wide_status_text { /* REMOVE '#personalbar' MLR 022714 */
     width: 1020px;
 }
 
 .mcmt-survey {
-  background:  url("../Images/mcmt-header.jpg") no-repeat scroll  #FFFFFF;
-  
+  background:  url("../Images/mcmt-header.jpg") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; /* EDIT MLR 022714 */
 }
 
 /*Added MLR 020414 */
 .hk-survey {
-  background:  url("../Images/hk-header.jpg") no-repeat scroll  #FFFFFF; 
+  background:  url("../Images/hk-header.jpg") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; /* EDIT MLR 022714 */ 
 }
 /*****/
 
-#branding, #footer {
+.mcmt-survey .container-center, .hk-survey .container-center { /* ADD MLR 022714 */
+	padding: 0 26px; /* ADD MLR 022714 */
+} /* ADD MLR 022714 */
+
+#branding, #footer, .display-form { /* EDIT MLR 022714 */
     color: #603813;
 }
 
@@ -122,28 +114,32 @@ body {
 .navigation li {
     display: inline-block;
     list-style-type: none;
-    padding: 0 2em; /* Value changed MLR 020414 */
+    padding: 12px 12px; /* Value changed MLR 022714 */
+	color: #FFF; /* ADDED MLR 022714 */
 }
 
 /* ADDED MLR 020414 */
-.navigation li a {
+.navigation li { /* EDIT MLR 022714 */
 	border-right: 1px solid #006896;
 }
 
-.navigation li a:first-child {
+.navigation li:first-child { /* EDIT MLR 022714 */
 	border-left: 1px solid #006896;
 }
 /*********/
 
 #branding a, #footer a {
     color: #603813;
-    font-weight: bold;
+    font-weight: 700;
     text-decoration: none;
 }
 
 #personalbar {
     margin: 5px auto;
+	text-align: right; /* ADD MLR 022714 */
 }
+
+/******* PARENT QUESTION DISPLAY *******/   /* <---- ADD NOTE MLR 022714 */
 
 .display-mcmt-question {
     background: #D6EFFF; /* Old browsers */
@@ -166,9 +162,26 @@ body {
     border-radius: 14px;
   
     margin: 408px 0 0 0;
+	padding: 10px 10px 40px 10px; /* ADD MLR 022714 */
     color: #03205B;
-    font: 16px/25px 'SourceSansProSemibold', Arial, sans-serif;  
+    font: 16px/25px 'Source Sans Pro', Arial, sans-serif;
+	font-weight: 600;
 }
+
+.display-mcmt-question img, .display-hk-question img {  /* ADD MLR 022714 */
+	margin-right: 25px;  /* ADD MLR 022714 */
+}  /* ADD MLR 022714 */
+
+
+.display-mcmt-question .editor-field input, .display-hk-quesiton .editor-field input {  /* ADD MLR 022714 */
+	margin-left: 100px;  /* ADD MLR 022714 */
+}  /* ADD MLR 022714 */
+
+.display-mcmt-question .editor-label label, .display-hk-quesiton .editor-label label {  /* ADD MLR 022714 */
+	font-size: 1.3em;  /* ADD MLR 022714 */
+	font-weight: 900;  /* ADD MLR 022714 */
+}  /* ADD MLR 022714 */
+
 
 form {
     text-align: left;
@@ -207,14 +220,25 @@ input.button {
   color: #603813;
 }
 
+/******* PROGRESS BAR *******/   /* <<--- ADD NOTE MLR 022714 */
+
+.display-form { /* ADD MLR 022714 */
+	margin: 15px 0; /* ADD MLR 022714 */  
+} /* ADD MLR 022714 */
+
 .display-form ul {
   text-align: left;
   margin: 0;
 }
 .display-form ul li {
-    list-style-type: none;
-    margin: 0;
+  list-style-type: none;
+  margin: 5px 0 0 0; /* Value changed MLR 022714 */
 }
+
+.display-label, .display-details { /* ADD MLR 022714 */
+	display: inline; /* ADD MLR 022714 */
+	padding-right: 20px; /* ADD MLR 022714 */
+} /* ADD MLR 022714 */
 
 .ui-progressbar {
     height: 2em;
@@ -236,14 +260,19 @@ input.button {
 }
 .ui-widget-header {
     background: /* url("images/ui-bg_highlight-soft_0_014a81_1x100.png") repeat-x scroll 50% 50% */ #8CC63F;
-    border: 0px solid #8CC63F; /* Value Changed MLR 020414 */
+    border: 0px solid #4A94B4; /* Value Changed MLR 022714 */
     color: #FFFFFF;
-    font-weight: bold;
+    font-weight: 700;
     -webkit-border-radius: 8px;
     -khtml-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
 }
+
+.ui-widget-header div {   /*ADD MLR 022714 */
+	display: inline;   /*ADD MLR 022714 */
+	padding: 5px 15px;   /*ADD MLR 022714 */
+}   /*ADD MLR 022714 */
 
 fieldset {
   border: none;
@@ -260,6 +289,7 @@ fieldset {
     background: linear-gradient(top, #EDE6DE #E7DED4);    
 	margin-top: 0; /*Changed value MLR 020414 */	
     padding: 1em 0;
+	font-size: .7em; /* ADDED MLR 022714 */
 }
 #footertext {
     /*color: #FFFFFF;*/
@@ -370,7 +400,7 @@ nav {
 	float: right;
 	color: #fff;
 	text-align: center;
-	font-weight: bold;
+	font-weight: 700;
 	font-size: 1.2em;
 	background: linear-gradient(#4A94B4 , #03205B 40%);
 	padding: 2px 2px 8px 2px;
