@@ -49,7 +49,7 @@ namespace NuSurvey.Web.Services
                 SolidBrush drawBrush = new SolidBrush(Color.FromArgb(opacity, Color.Black));
 
                 // Create point for upper-left corner of drawing.
-                PointF drawPoint = new PointF(0, height - 30);
+                PointF drawPoint = new PointF(0, height - 90);
 
                 graphic.DrawString(CloudConfigurationManager.GetSetting("WatermarkText"), drawFont, drawBrush, drawPoint);
             }
