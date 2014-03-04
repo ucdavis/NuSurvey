@@ -5,9 +5,13 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
-    <PostConversionRemoveFromScc>;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\Properties\Database.sqldeployment;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\Properties\Database.sqlsettings;Properties\Database.sqlsettings;Properties\Database.sqldeployment;Properties\Database.sqlcmdvars;Properties\Database.sqlpermissions;Schema Objects\Database Level Objects\Storage\Files\NutritionSurveys_log.sqlfile.sql;Schema Objects\Database Level Objects\Storage\Files\NutritionSurveys.sqlfile.sql;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\NuSurvey.SQL.dbproj</PostConversionRemoveFromScc>
-    <PostConversionAddToScc>;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\Release.publish.xml;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\Debug.publish.xml;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\Test.publish.xml;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\Permissions.sql;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\NuSurvey.SQL.sqlproj</PostConversionAddToScc>
-    <PostConversionCheckOutFromScc>;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\Schema Comparisons\VogelToInternalSchemaComparison.scmp;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\Schema Comparisons\VogelToTerrySchemaComparison.scmp;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\Schema Comparisons\VogeyToDonBotSchemaComparison.scmp;C:\Users\kirkland\Documents\GitHub\NuSurvey\NuSurvey.SQL\Schema Comparisons\TerryToInternalSchemaComparison.scmp</PostConversionCheckOutFromScc>
+    <PostConversionRemoveFromScc>
+    </PostConversionRemoveFromScc>
+    <PostConversionAddToScc>
+    </PostConversionAddToScc>
+    <PostConversionCheckOutFromScc>
+    </PostConversionCheckOutFromScc>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
