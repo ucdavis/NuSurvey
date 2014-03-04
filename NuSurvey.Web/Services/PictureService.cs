@@ -83,14 +83,14 @@ namespace NuSurvey.Web.Services
             graphic.DrawImage(origImg, rectangle);
 
             var fontSize = 16;
-            var heightAdjust = 30;
+            var heightAdjust = 90;
             if (width < 460)
             {
                 fontSize = 12;
                 if (width < 300)
                 {
                     fontSize = 6;
-                    heightAdjust = 10;
+                    heightAdjust = 30;
                 }
             }
             if (watermark)
