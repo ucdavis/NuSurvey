@@ -1,0 +1,92 @@
+﻿@model NuSurvey.Web.Controllers.ProgramDirectorViewModel
+
+
+@{
+    ViewBag.Title = "Program Director Page";
+
+}
+
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({ "bJQueryUI": true });
+        });    
+    </script>
+}
+
+<h2>Available Surveys to Customize</h2>
+<table class="datatable">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                Name
+            </th>
+            <th>
+                ShortName
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ var odd = false; }
+        @foreach (var item in Model.Surveys) {
+            <tr class="@(odd ? "odd": "even")">
+                <td>
+                    <a href='@Url.Action("Create", "ProgramDirector", new { surveyId = @item.Id })'><img title="Create a Printable Survey from this Survey" alt="Create a Printable Survey from this Survey" src="@Url.Image("copy.png")"/></a>                                
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.ShortName
+                </td>
+            </tr>
+            odd = !odd;
+        }
+    </tbody>
+</table>
+
+<h2>Surveys You have Duplicated</h2>
+
+<table class="datatable">
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				Name
+			</th>
+            <th>
+                ShortName
+            </th>
+            <th>Created</th>
+            <th></th>
+		</tr>
+	</thead>
+	<tbody>
+@{  odd = false; }
+@foreach (var item in Model.PrintedSurveys) {
+		<tr class="@(odd ? "odd": "even")">
+			<td>
+                <a href='@Url.Action("SelectPhotos", "ProgramDirector", new { id = @item.Id })'><img alt="Customize" src="@Url.Image("edit.png")"/></a>                                
+                <a href='@Url.Action("Print", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("print.png")"/></a>
+            </td>
+			<td>
+				@item.Survey.Name
+			</td>
+            <td>
+                @item.Survey.ShortName
+            </td>
+            <td>
+                @item.DateCreated
+            </td>
+            <td>
+                <a href='@Url.Action("Delete", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("delete.png")"/></a>
+            </td>
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+

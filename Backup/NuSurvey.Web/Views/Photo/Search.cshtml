@@ -1,0 +1,73 @@
+﻿@using NuSurvey.Core.Domain
+@model NuSurvey.Web.Controllers.PhotoSearchModel
+
+
+@{
+    ViewBag.Title = "Search Results";
+}
+
+
+
+@section SubNav
+{
+    @if (Model.QuestionId != null)
+    {
+
+        <ul class="navigation">
+            <li>
+                @if (Model.EditDetail == "E")
+                {
+                    <a href="@Url.Action("Edit", "Question", new { id = Model.QuestionId, surveyId = Model.SurveyId, categoryId = Model.CategoryId })">Back to Question</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Details", "Question", new { id = Model.QuestionId, surveyId = Model.SurveyId, categoryId = Model.CategoryId })">Back to Question</a>
+                }
+            </li>
+        </ul>
+    }
+}
+
+@helper PhotoContainer(PhotoTag photoTag)
+    {
+    <div style="display: inline-block">
+        <div style="word-wrap: break-word; width: 100px;">@photoTag.Photo.Name</div>
+        <div><a href="@Url.Action("Details", "Photo", new { id = photoTag.Photo.Id, questionId = Model.QuestionId, surveyId = Model.SurveyId, categoryId = Model.CategoryId, editDetail = Model.EditDetail })"><img src='@Url.Action("GetThumbnail", new { id = photoTag.Photo.Id })' /></a></div>
+        <div>
+            @foreach (var tag in photoTag.Photo.PhotoTags)
+            {
+                <a href="@Url.Action("Search", "Photo", new { tag = tag.Name, questionId = Model.QuestionId, surveyId = Model.SurveyId, categoryId = Model.CategoryId, editDetail = Model.EditDetail })">@tag.Name</a>
+            }
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("Search", "Photo", FormMethod.Get))
+{
+    <input type="search" id="tag" name="tag" placeholder="Enter search term" value="@Model.SearchTag" class="searchbox" />
+    @Html.Hidden("questionId", Model.QuestionId)
+    @Html.Hidden("surveyId", Model.SurveyId)
+    @Html.Hidden("categoryId", Model.CategoryId)
+    @Html.Hidden("editDetail", Model.EditDetail)
+    <input type="submit" class="button searchbutton" value="Go!"/>
+}
+
+<fieldset>
+    <legend>Searchable Tags</legend>
+    <div style="display: inline-block">
+        @foreach (var tag in Model.UniqueTags)
+        {
+            <a href="@Url.Action("Search", "Photo", new {tag = tag, questionId = Model.QuestionId, surveyId = Model.SurveyId, categoryId = Model.CategoryId, editDetail = Model.EditDetail})">@tag</a>
+        }        
+    </div>
+</fieldset>
+<fieldset class="display-form">
+    <legend>Matching Photos for tag @Model.SearchTag</legend>
+    @foreach (var item in Model.PhotoTags)
+    {
+        @PhotoContainer(item);
+    }
+</fieldset>
+
+
+

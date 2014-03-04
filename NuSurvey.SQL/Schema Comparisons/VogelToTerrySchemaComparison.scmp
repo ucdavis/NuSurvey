@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SchemaComparison>
-  <Version>1</Version>
+  <Version>10</Version>
   <SourceModelProvider>
     <ConnectionBasedModelProvider>
       <ConnectionString>Data Source=VOGEL;Initial Catalog=NuSurvey;Integrated Security=True;Password=</ConnectionString>
@@ -26,7 +26,7 @@
     </SchemaCompareSettingsService>
     <ConfigurationOptionsElement>
       <PropertyElementName>
-        <Name>PlanGenerationType</Name>
+        <Name>SqlDeploymentOptions</Name>
         <Value>Sql100SchemaDeploymentOptions</Value>
       </PropertyElementName>
       <PropertyElementName>
@@ -34,7 +34,7 @@
         <Value>True</Value>
       </PropertyElementName>
       <PropertyElementName>
-        <Name>DoNotUseAlterAssemblyStatementsToUpdateCLRTypes</Name>
+        <Name>NoAlterStatementsToChangeCLRTypes</Name>
         <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
@@ -102,15 +102,15 @@
         <Value>True</Value>
       </PropertyElementName>
       <PropertyElementName>
-        <Name>BlockIncrementalDeploymentIfDataLoss</Name>
+        <Name>BlockOnPossibleDataLoss</Name>
         <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
-        <Name>PerformDatabaseBackup</Name>
+        <Name>BackupDatabaseBeforeChanges</Name>
         <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
-        <Name>SingleUserMode</Name>
+        <Name>DeployDatabaseInSingleUserMode</Name>
         <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
@@ -282,11 +282,11 @@
         <Value>True</Value>
       </PropertyElementName>
       <PropertyElementName>
-        <Name>AlwaysCreateNewDatabase</Name>
+        <Name>CreateNewDatabase</Name>
         <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
-        <Name>GenerateDropsIfNotInProject</Name>
+        <Name>DropObjectsNotInSource</Name>
         <Value>True</Value>
       </PropertyElementName>
       <PropertyElementName>
@@ -310,11 +310,11 @@
         <Value>True</Value>
       </PropertyElementName>
       <PropertyElementName>
-        <Name>Microsoft.Data.Schema.Sql.SchemaModel.ISqlPermissionStatement</Name>
+        <Name>Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlPermissionStatement</Name>
         <Value>ExcludedType</Value>
       </PropertyElementName>
       <PropertyElementName>
-        <Name>Microsoft.Data.Schema.Sql.SchemaModel.ISqlExtendedProperty</Name>
+        <Name>Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlExtendedProperty</Name>
         <Value>ExcludedType</Value>
       </PropertyElementName>
     </ConfigurationOptionsElement>
@@ -331,4 +331,5 @@
       <Name>testapp</Name>
     </SelectedItem>
   </ExcludedTargetElements>
+  <SchemaCompareViewSettings />
 </SchemaComparison>

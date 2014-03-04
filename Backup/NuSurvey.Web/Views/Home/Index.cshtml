@@ -1,0 +1,95 @@
+﻿@model NuSurvey.Web.Controllers.HomeController.HomeViewModel
+           
+@{
+    ViewBag.Title = "Healthy Kids - Home Page";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.balloon').bt({ positions: 'bottom' });
+        });
+    </script>
+
+}
+
+<span class="SpecialFont">
+    <div id="parents">
+        <div class="container-center">
+            <div id="parents-left">
+                <h2>PARENTS</h2>
+                <p>Want to keep your child healthy?</p>
+                <p>Take the Healthy Kids or My Child at Meal Time survey for goals created just for you and your child!</p>
+                <img src="@Url.Image("arrow.png")" alt="Select a Survey" />
+            </div>
+	
+            <div id="parents-right">
+                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "HK"})'><img src="@Url.Image("hk-thumb.png")" alt="Healthy Kids Survey"  /></a> 
+                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "MCMT" })'><img src="@Url.Image("mcmt-thumb.png")" alt="My Child At Mealtime Survey" /></a> 
+            
+            </div>
+            <br style="clear:both">
+        </div> <!--- END main MLR 121313 --->
+
+    </div>
+
+    <div id="staff">
+        <div class="container-center">
+            <div id="staff-left">
+                <h3>Educators</h3>
+                <p>Are you using these surveys with your classes?</p>
+                <p>Enter several completed Healthy Kids or My Child at Meal Time surveys using this page. Personalized goals will be created and can be printed for each participant.</p>
+                <a href='@Url.Action("Index", "Educator")'>
+                    <div class="login-button">
+                        <p>Login Here</p>
+                    </div>
+                </a>
+            </div>
+	
+            <div id="staff-right">
+                <h3>Directors</h3>
+                <p>Want to use these surveys with your program?</p>
+                <p>Download the current Healthy Kids or My Child or Meal Time surveys or create photo-customized versions tailored to your target audience.</p>
+                <a href='@Url.Action("Index", "ProgramDirector")'>
+                    <div class="login-button">
+                        <p>Login Here</p>
+                    </div>
+                </a>
+            </div>
+            <br style="clear:both">
+        </div> <!--- END main MLR 121313 --->
+
+    </div>
+</span>
+@*<h3>
+    Parents
+</h3>
+<a class="balloon" href='@Url.Action("PublicSurveys", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
+
+@if (Model.Admin || Model.User) {}
+    <h3>
+        Educators
+    </h3>
+    <a class="balloon" href='@Url.Action("Index", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
+
+    <a class="balloon" href='@Url.Action("Review", "Survey")' title="Review Your Surveys"><img alt="Review Your Surveys" src="@Url.Image("review.png")"/></a>
+
+
+<h3>
+    Program Director
+</h3>
+<a class="balloon" href='@Url.Action("Index", "ProgramDirector")' title="Manage Your Surveys"><img alt="Manage Your Surveys" src="@Url.Image("big_print.png")"/></a>
+
+<h3>
+    Manage Account
+</h3>
+*@
+
+@*<h1>
+    <a href="@Url.Action("Index", "SurveyResponse")">Answer Surveys</a> 
+</h1>*@
+

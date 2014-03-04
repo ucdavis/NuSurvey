@@ -1,0 +1,30 @@
+﻿
+
+
+@{
+    ViewBag.Title = "Index";
+
+}
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'> </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.balloon').bt({ positions: 'bottom' });
+        });
+    </script>
+}
+
+    <h3>
+        Educators
+    </h3>
+    <a class="balloon" href='@Url.Action("Index", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
+
+    <a class="balloon" href='@Url.Action("Review", "Survey")' title="Review Your Surveys"><img alt="Review Your Surveys" src="@Url.Image("review.png")"/></a>
+
+
+<h3>
+
+
+
+

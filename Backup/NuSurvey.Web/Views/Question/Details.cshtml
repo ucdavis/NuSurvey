@@ -1,0 +1,120 @@
+﻿@using NuSurvey.Core.Domain
+@model NuSurvey.Web.Controllers.QuestionDetailViewModel
+
+@{
+    ViewBag.Title = "Question Details";
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Administration", "Home")">Admin Home</a> 
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "Survey")">Surveys</a> 
+        </li>
+        <li>
+            <a href="@Url.Action("Edit", "Survey", new { id = @Model.Question.Survey.Id })">Edit Survey</a> 
+        </li>
+        @if (Model.Category != null)
+        {
+            <li>
+                <a href="@Url.Action("Edit", "Category", new { id = @Model.Category.Id })">Edit Category</a> 
+            </li>
+        }
+        <li>
+            Details
+        </li>
+    </ul>
+}
+
+@helper PhotoContainer(Photo photo)
+{
+    <div style="display: inline-block">
+        <div style="word-wrap: break-word; width: 100px;">@photo.Name</div>
+        @if (Model.Category != null)
+        {
+            <div><a href="@Url.Action("Details", "Photo", new { id = photo.Id, questionId = Model.Question.Id, categoryId = Model.Category.Id, editDetail = "D" })"><img src='@Url.Action("GetThumbnail", "Photo", new { id = photo.Id })' /></a></div>
+            <div>
+                @foreach (var tag in photo.PhotoTags)
+                {
+                    <a href="@Url.Action("Search", "Photo", new { tag = tag.Name, questionId = Model.Question.Id, categoryId = Model.Category.Id, editDetail = "D" })">@tag.Name</a>
+                }
+            </div>
+        }
+        else
+        {
+            <div><a href="@Url.Action("Details", "Photo", new { id = photo.Id, questionId = Model.Question.Id, editDetail = "D" })"><img src='@Url.Action("GetThumbnail", "Photo", new { id = photo.Id })' /></a></div>
+            <div>
+                @foreach (var tag in photo.PhotoTags)
+                {
+                    <a href="@Url.Action("Search", "Photo", new { tag = tag.Name, questionId = Model.Question.Id, editDetail = "D" })">@tag.Name</a>
+                }
+            </div>
+        }
+    </div>
+}
+
+@*<h2>Details</h2>*@
+<fieldset class="display-form">
+    <ul>
+        <li>
+            <div class="display-label">@Html.LabelFor(a => a.Question.Name)</div>
+            <div class="display-details">@Html.HtmlEncode(@Model.Question.Name)</div>
+        </li>
+        <li>     
+            <div class="display-label">@Html.LabelFor(a => a.Question.IsActive)</div>       
+            <div class="display-details">@Html.DisplayFor(a => a.Question.IsActive)</div>
+        </li>
+        <li>
+            <div class="display-label">@Html.LabelFor(a => a.Question.Order)</div>
+            <div class="display-details">@Html.DisplayFor(a => a.Question.Order)</div>
+        </li>
+        <li>
+            <div class="display-label">@Html.LabelFor(a => a.Question.IsOpenEnded)</div>
+            <div class="display-details">@Html.DisplayFor(a => a.Question.IsOpenEnded)</div>
+        </li>
+        <li>
+            <div class="display-label">@Html.LabelFor(a => a.Question.CreateDate)</div>
+            <div class="display-details">@String.Format("{0:g}", Model.Question.CreateDate)</div>
+        </li>
+        <li>
+            <div class="display-label">@Html.LabelFor(a => a.Question.Responses)</div>
+            <div class="display-details">
+                @foreach (var response in Model.Question.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
+                {
+                    <input id="Questions[@response.Order]" type="radio" value="@response.Id" name="Questions.ResponseId" />                             
+                    <label for="Questions[@response.Order]">@response.Value (score = @response.Score)</label> <br />
+                }
+            </div>
+        </li>
+    </ul>
+    
+    <fieldset>
+        <legend>Related Photos</legend>
+        <fieldset>
+            <legend>Click on a tag to find related photos to add</legend>
+            <div style="display: inline-block">
+                @if (Model.Category != null)
+                {
+                    foreach (var tag in Model.UniqueTags)
+                    {
+                        <a href="@Url.Action("Search", "Photo", new { tag = tag, questionId = Model.Question.Id, categoryId = Model.Category.Id, editDetail = "D" })">@tag</a>
+                    }
+                }
+                else
+                {
+                    foreach (var tag in Model.UniqueTags)
+                    {
+                        <a href="@Url.Action("Search", "Photo", new { tag = tag, questionId = Model.Question.Id, editDetail = "D" })">@tag</a>
+                    }
+                }
+            </div>
+        </fieldset>
+        @foreach (var item in Model.Question.Photos)
+        {
+            @PhotoContainer(item)        
+        }
+    </fieldset>
+</fieldset>
+
