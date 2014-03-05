@@ -40,8 +40,12 @@ namespace NuSurvey.Web.Controllers
         /// <returns></returns>
         [Authorize]
         public ActionResult Index()
-        {
+        {            
             var isPublic = !(CurrentUser.IsInRole(RoleNames.User) || CurrentUser.IsInRole(RoleNames.Admin));
+            if (isPublic)
+            {
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
             var viewModel = ActiveSurveyViewModel.Create(Repository, isPublic);
 
             return View(viewModel);
