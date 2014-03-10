@@ -243,6 +243,7 @@
     <Content Include="Images\Admin.png" />
     <Content Include="Images\AnswerSurvey.png" />
     <Content Include="Images\arrow.png" />
+    <Content Include="Images\arrow2.png" />
     <Content Include="Images\background.png" />
     <Content Include="Images\big_print.png" />
     <Content Include="Images\collection.png" />
