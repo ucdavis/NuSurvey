@@ -125,7 +125,7 @@ h2 {  /* ADD MLR 022714 */
 #messagecontainer .col2 .navigation li {    /* ADD MLR 031014 */
 	border: none;    /* ADD MLR 031014 */
 	padding: 7px 8px;    /* ADD MLR 031014 */
-	background: url(../images/arrow.png) top right no-repeat;	    /* ADD MLR 031014 */
+	background: url(../images/arrow2.png) top right no-repeat;	    /* Value Changed MLR 031114 */
 }    /* ADD MLR 031014 */
 
 #messagecontainer .col2 .navigation li:last-child {    /* ADD MLR 031014 */
@@ -145,26 +145,31 @@ h2 {  /* ADD MLR 022714 */
 nav a {   /*ADD MLR 030314 */
     color: #fff;    /*ADD MLR 030314 */
 	padding: 7px 12px;   /* ADD MLR 030314 */
+    text-decoration: none;
 }   /*ADD MLR 030314 */
 
 #branding a:link {   /*ADD MLR 030314 */
     color: #fff;   /*ADD MLR 030314 */
 	background: none;   /* ADD MLR 030314 */
+    text-decoration: none;
 }   /*ADD MLR 030314 */
 
 #branding a:visited {   /*ADD MLR 030314 */
     color: #fff;   /*ADD MLR 030314 */
 	background: none;   /* ADD MLR 030314 */
+    text-decoration: none;
 }   /*ADD MLR 030314 */
 
 #branding a:hover {   /*ADD MLR 030314 */
     color: #03205B;   /*ADD MLR 030314 */
 	background: #B6D2E5;   /*ADD MLR 030314 */
+    text-decoration: none;
 }   /*ADD MLR 030314 */
 
 #branding a:active {   /*ADD MLR 030314 */
     color: #fff;   /*ADD MLR 030314 */
 	background: none;   /* ADD MLR 030314 */
+    text-decoration: none;
 }   /*ADD MLR 030314 */
 
 #personalbar {
@@ -174,18 +179,22 @@ nav a {   /*ADD MLR 030314 */
 
 #personalbar a:link {   /*ADD MLR 031014 */
     color: #603813;   /*ADD MLR 031014 */
+    text-decoration: none;
 }   /*ADD MLR 031014 */
 
 #personalbar a:visited {   /*ADD MLR 031014 */
     color: #603813;   /*ADD MLR 031014 */
+    text-decoration: none;
 }   /*ADD MLR 031014 */
 
 #personalbar a:hover {   /*ADD MLR 031014 */
     color: #03205B;   /*ADD MLR 031014 */
+    text-decoration: none;
 }   /*ADD MLR 031014 */
 
 #personalbar a:active {   /*ADD MLR 031014 */
     color: #603813;   /*ADD MLR 031014 */
+    text-decoration: none;
 }   /*ADD MLR 031014 */
 
 /***---------- PARENT QUESTION DISPLAY ----------***/   /* <---- ADD NOTE MLR 022714 */
@@ -404,12 +413,11 @@ fieldset legend {
     background: linear-gradient(top, #EDE6DE #E7DED4);    
 	margin-top: 0; /*Changed value MLR 020414 */	
     padding: 1em 0;
-	font-size: 1.1em; /* Value Changed MLR 031014 */
+	font-size: 1.0em; /* Value Changed MLR 031114 */
 	text-align: center;   /* ADDED MLR 030314 */
 }
 #footertext {
-    /*color: #FFFFFF;*/
-    font-size: 1.1em; /* Value Changed MLR 031014 */
+    font-size: 1.0em; /* Value Changed MLR 031114 */
     margin: 0 auto;
 }
 #footertext a {
@@ -417,6 +425,7 @@ fieldset legend {
 }
 #footertext a:hover {
     color: #EDE6DE;
+    text-decoration: none;
 }
 #footertext ul li {
     display: inline-block;
@@ -433,9 +442,11 @@ fieldset legend {
     display: block;
     padding-left: 10px;
     width: 200px;
+    text-decoration: none;
 }
 #footer .col1 .navigation li a:hover {
     background-color: #603813;
+    text-decoration: none;
 }
 #footer .col2 {
     font-style: italic;
@@ -471,7 +482,7 @@ fieldset legend {
 }
 
 #parents-left h2 {
-	font-size: 3.2em;
+	font-size: 4.0em;    /* Value Changed MLR 031114 */
 }
 
 #parents-left p {
@@ -496,13 +507,13 @@ nav {
 }
 
 #staff-left h3, #staff-right h3 {
-	font-size: 2.0em;
+	font-size: 3.0em;    /* Value Changed MLR 031114 */
 	margin: 0 0 10px 0;
 }
 
 #staff-left p, #staff-right p {
 	line-height: 1.5em;
-	font-size: 1.1em;
+	font-size: 1.4em;    /* Value Changed MLR 031114 */
 }
 
 #staff-left {
@@ -521,4 +532,31 @@ nav {
 	background: linear-gradient(#4A94B4 , #03205B 40%);
 	padding: 2px 2px 8px 2px;
 	border-radius: 8px;
-}        
+}       
+
+
+/******* GOAL RESULTS PAGE PARENTS *******/     /* ADD MLR 031214 */
+
+.result_fieldset_page {
+	background:  url('../images/hk-goal-bkgd.jpg') repeat
+}
+
+.result_thanks {
+	margin: 125px 55px 0 55px;
+	height: 80px;
+}
+
+.result_fieldset_positive {
+	margin: 15px 90px;
+	height:	60px;
+}
+
+.result_fieldset_majorgoal {
+	margin: 70px 90px 0 90px;
+	height: 30px;
+}
+
+.result_category {
+	margin: 52px 108px 0 108px;
+	height: 82px;
+}
