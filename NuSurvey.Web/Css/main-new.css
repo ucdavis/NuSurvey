@@ -538,7 +538,7 @@ nav {
 /******* GOAL RESULTS PAGE PARENTS *******/     /* ADD MLR 031214 */
 
 .result_fieldset_page {
-	background:  url('../images/hk-goal-bkgd.jpg') repeat
+	background:  url('../images/hk-goal-bkgd.jpg') no-repeat;
 }
 
 .result_thanks {
