@@ -20,6 +20,61 @@
 
 
     @Html.Partial("_UserDetails")
+
+<fieldset class="display-form">
+    <legend>User Details</legend>
+    <ul>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.FirstName)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.FirstName)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.LastName)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.LastName)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.Title)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.Title)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.Agency)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.Agency)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.City)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.City)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.State)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.State)
+            </div>
+        </li>
+    </ul>
+</fieldset>
+
 <fieldset class="display-form"> 
 <legend>Roles</legend>
 <ul>

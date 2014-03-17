@@ -36,7 +36,67 @@ Example: Dinosaur 1  *@
 	@*<h4>Form Header</h4>*@
 	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
 	<p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
-	<ul>
+    <ul>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.FirstName)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.FirstName)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.FirstName)
+            </div>
+        </li>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.LastName)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.LastName)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.LastName)
+            </div>
+        </li>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.Title)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.Title)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.Title)
+            </div>
+        </li>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.Agency)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.Agency)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.Agency)
+            </div>
+        </li>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.City)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.City)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.City)
+            </div>
+        </li>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.State)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.State)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.State)
+            </div>
+        </li>
         <li>
             <div class="editor-label">
                 @Html.Label("Admin") 
@@ -55,21 +115,21 @@ Example: Dinosaur 1  *@
                 @Html.ValidationMessageFor(model => model.IsProgramDirector)
             </div>
         </li>
-		<li>
-			<div class="editor-label">
-				@Html.Label("Educator") 
-			</div>
-			<div class="editor-field">
-				@Html.EditorFor(model => model.IsUser)
-				@Html.ValidationMessageFor(model => model.IsUser)
-			</div>
-		</li>
-		<li>
-			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
-			<label>&nbsp;</label>
-			<input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "ManageUsers")
-		</li>
-	</ul>
+        <li>
+            <div class="editor-label">
+                @Html.Label("Educator") 
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.IsUser)
+                @Html.ValidationMessageFor(model => model.IsUser)
+            </div>
+        </li>
+        <li>
+            @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+            <label>&nbsp;</label>
+            <input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "ManageUsers")
+        </li>
+    </ul>
 </fieldset>
 }
 

@@ -18,10 +18,12 @@ namespace NuSurvey.Core.Domain
         }
         [Required]
         [StringLength(100)]
-        public virtual string Firstname { get; set; }
+        [Display(Name = "First Name")]
+        public virtual string FirstName { get; set; }
 
         [Required]
         [StringLength(100)]
+        [Display(Name = "Last Name")]
         public virtual string LastName { get; set; }
 
         [StringLength(100)]
@@ -46,7 +48,7 @@ namespace NuSurvey.Core.Domain
         {
             Id(x => x.Id).GeneratedBy.Assigned();
 
-            Map(x => x.Firstname);
+            Map(x => x.FirstName);
             Map(x => x.LastName);
             Map(x => x.Title);
             Map(x => x.Agency);

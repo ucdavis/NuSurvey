@@ -153,7 +153,7 @@ namespace NuSurvey.Web.Controllers
                 try
                 {
                     var user = new User(model.Email.ToLower().Trim());
-                    user.Firstname = model.User.Firstname;
+                    user.FirstName = model.User.FirstName;
                     user.LastName = model.User.LastName;
                     user.Title = model.User.Title;
                     user.Agency = model.User.Agency;
@@ -287,6 +287,7 @@ namespace NuSurvey.Web.Controllers
             }
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
+            viewModel.UserDetails = _userRepository.GetNullableById(id.Trim().ToLower());
             viewModel.User = MembershipService.GetUser(id);
 
             return View(viewModel);
@@ -335,6 +336,22 @@ namespace NuSurvey.Web.Controllers
                 Message = "Problem with Updating Roles";
             }
 
+            try
+            {
+                var userToUpdate = _userRepository.GetNullableById(editUserViewModel.Email.ToLower().Trim()) ?? new User(editUserViewModel.Email.ToLower().Trim());
+                userToUpdate.FirstName = editUserViewModel.UserDetails.FirstName;
+                userToUpdate.LastName = editUserViewModel.UserDetails.LastName;
+                userToUpdate.Title = editUserViewModel.UserDetails.Title;
+                userToUpdate.Agency = editUserViewModel.UserDetails.Agency;
+                userToUpdate.City = editUserViewModel.UserDetails.City;
+                userToUpdate.State = editUserViewModel.UserDetails.State;
+                _userRepository.EnsurePersistent(userToUpdate);
+            }
+            catch
+            {
+ 
+            }
+
             return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
         }
 
@@ -359,6 +376,7 @@ namespace NuSurvey.Web.Controllers
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
             viewModel.User = MembershipService.GetUser(id);
+            viewModel.UserDetails = _userRepository.GetNullableById(id.Trim().ToLower());
 
             return View(viewModel);
         }
@@ -388,6 +406,18 @@ namespace NuSurvey.Web.Controllers
                 if (MembershipService.DeleteUser(id))
                 {
                     Message = "User Removed";
+                    try
+                    {
+                        var userDetail = _userRepository.GetNullableById(id.Trim().ToLower());
+                        if (userDetail != null)
+                        {
+                            _userRepository.Remove(userDetail);
+                        }
+                    }
+                    catch 
+                    {
+                        
+                    }
                 }
                 else
                 {

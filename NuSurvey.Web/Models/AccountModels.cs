@@ -110,6 +110,8 @@ namespace NuSurvey.Web.Models
         public bool Confirm { get; set; }
         public MembershipUser User { get; set; }
 
+        public User UserDetails { get; set; }
+
         public static EditUserViewModel Create(string email, IMembershipService membershipService)
         {
             Check.Require(!string.IsNullOrWhiteSpace(email));

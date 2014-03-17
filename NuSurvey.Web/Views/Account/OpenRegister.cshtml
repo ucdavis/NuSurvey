@@ -65,12 +65,12 @@
             </li>
             <li>
                 <div class="editor-label required">
-                    @Html.LabelFor(model => model.User.Firstname)<span>*</span>
+                    @Html.LabelFor(model => model.User.FirstName)<span>*</span>
                 </div>
                 <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.User.Firstname)
+                    @Html.EditorFor(model => model.User.FirstName)
                     <span class="field-warning"></span>
-                    @Html.ValidationMessageFor(model => model.User.Firstname)
+                    @Html.ValidationMessageFor(model => model.User.FirstName)
                 </div>
             </li>
             <li>
