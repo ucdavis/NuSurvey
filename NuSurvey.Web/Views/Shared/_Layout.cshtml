@@ -50,7 +50,7 @@
         <div id="personalbar">
             @if (Request.IsAuthenticated)
             {                 
-                <div class="col1"><span id="welcome_user">Welcome @Context.User.Identity.Name</span></div>
+                <div class="col2"><span id="welcome_user">Welcome @Context.User.Identity.Name</span></div>
                 <div class="col2" id="LogOffOn">@Html.ActionLink("Log Off", "Logoff", "Account")</div>
                 <div class="col2" id="ChangePassword">@Html.ActionLink("Manage Account", "ManageAccount", "Account")</div>
             }
