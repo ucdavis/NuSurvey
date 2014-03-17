@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
@@ -263,6 +265,9 @@ namespace NuSurvey.Web.Controllers
         public ActionResult ManageUsers(bool hideAdmin = false, bool hideUser= false, bool hidePublic = true, bool hideProgramDirector = false)
         {
             var viewModel = ManageUsersViewModel.Create(MembershipService.GetUsersAndRoles(CurrentUser.Identity.Name.ToLower()), hideAdmin, hideUser, hidePublic, hideProgramDirector);
+
+            var userList = viewModel.Users.Select(a => a.UserName).Distinct().ToList();
+            viewModel.UserDetaiList = _userRepository.Queryable.Where(a => userList.Contains(a.Id)).ToList();
 
             return View(viewModel);
         }
@@ -600,6 +605,8 @@ namespace NuSurvey.Web.Controllers
         public bool HidePublic { get; set; }
         public IQueryable<UsersRoles> Users { get; set; }
 
+        public IList<User> UserDetaiList { get; set; }
+
         public static ManageUsersViewModel Create(IQueryable<UsersRoles> users, bool hideAdmin, bool hideUser, bool hidePublic, bool hideProgramDirector)
         {
             var viewModel = new ManageUsersViewModel
@@ -622,7 +629,8 @@ namespace NuSurvey.Web.Controllers
                 {
                     viewModel.Users = viewModel.Users.Where(a => !a.ProgramDirector);
                 }
-  
+
+          
 
             return viewModel;
 
