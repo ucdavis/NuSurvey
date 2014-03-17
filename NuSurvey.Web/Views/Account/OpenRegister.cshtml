@@ -64,6 +64,66 @@
                 </div>
             </li>
             <li>
+                <div class="editor-label required">
+                    @Html.LabelFor(model => model.User.Firstname)<span>*</span>
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.User.Firstname)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.User.Firstname)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label required">
+                    @Html.LabelFor(model => model.User.LastName)<span>*</span>
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.User.LastName)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.User.LastName)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label required">
+                    @Html.LabelFor(model => model.User.Title)<span>*</span>
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.User.Title)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.User.Title)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label required">
+                    @Html.LabelFor(model => model.User.Agency)<span>*</span>
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.User.Agency)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.User.Agency)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label required">
+                    @Html.LabelFor(model => model.User.City)<span>*</span>
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.User.City)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.User.City)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label required">
+                    @Html.LabelFor(model => model.User.State)<span>*</span>
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.User.State)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.User.State)
+                </div>
+            </li>
+            <li>
                 <div class="editor-label">
                     @Html.Label("Roles")
                 </div>

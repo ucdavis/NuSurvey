@@ -9,7 +9,7 @@
   </SourceModelProvider>
   <TargetModelProvider>
     <ConnectionBasedModelProvider>
-      <ConnectionString>Data Source=.\sqlexpress;Initial Catalog=HealthyKids;Integrated Security=True;Pooling=False;MultipleActiveResultSets=False;Application Name="Microsoft SQL Server Data Tools, Schema Compare"</ConnectionString>
+      <ConnectionString>Data Source=d0glfdskpr.database.windows.net;Initial Catalog=HealthyKids;User ID=healthykids@d0glfdskpr;Pooling=False</ConnectionString>
     </ConnectionBasedModelProvider>
   </TargetModelProvider>
   <SchemaCompareSettingsService>

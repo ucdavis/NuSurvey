@@ -3,11 +3,13 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using MvcContrib;
+using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Models;
 using NuSurvey.Web.Services;
 using System.Linq.Expressions;
 using System.Linq;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 
 namespace NuSurvey.Web.Controllers
@@ -15,6 +17,7 @@ namespace NuSurvey.Web.Controllers
     public class AccountController : ApplicationController
     {
         private readonly IEmailService _emailService;
+        private readonly IRepositoryWithTypedId<User, string> _userRepository;
         private IFormsAuthenticationService FormsService { get; set; }
         private IMembershipService MembershipService { get; set; }
 
@@ -26,9 +29,10 @@ namespace NuSurvey.Web.Controllers
             base.Initialize(requestContext);
         }
 
-        public AccountController(IEmailService emailService, IFormsAuthenticationService formsAuthenticationService, IMembershipService membershipService)
+        public AccountController(IEmailService emailService, IFormsAuthenticationService formsAuthenticationService, IMembershipService membershipService, IRepositoryWithTypedId<User, string> userRepository)
         {
             _emailService = emailService;
+            _userRepository = userRepository;
             if (formsAuthenticationService != null)
             {
                 FormsService = formsAuthenticationService;
@@ -102,6 +106,7 @@ namespace NuSurvey.Web.Controllers
             ViewBag.ProgramDirectorRole = RoleNames.ProgramDirector;
 
             var viewModel = new OpenRegisterModel();
+            viewModel.User = new User();
 
             return View(viewModel);
         }
@@ -142,9 +147,26 @@ namespace NuSurvey.Web.Controllers
                     Message = "User created, but problem with roles.";
                 }
                 var tempPass = MembershipService.ResetPassword(model.Email.ToLower());
-                _emailService.SendNewUser(Request, Url, model.Email.ToLower(), tempPass);
+                //_emailService.SendNewUser(Request, Url, model.Email.ToLower(), tempPass);
 
                 Message = string.Format("{0} {1}", Message, "You will received an email with instructions");
+                try
+                {
+                    var user = new User(model.Email.ToLower().Trim());
+                    user.Firstname = model.User.Firstname;
+                    user.LastName = model.User.LastName;
+                    user.Title = model.User.Title;
+                    user.Agency = model.User.Agency;
+                    user.City = model.User.City;
+                    user.State = model.User.State;
+
+                    _userRepository.EnsurePersistent(user);
+                }
+                catch (Exception ex)
+                {
+                    var yyy = ex.Message;
+
+                }
 
                 return this.RedirectToAction(a => a.LogOn());
 
