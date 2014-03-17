@@ -147,7 +147,7 @@ namespace NuSurvey.Web.Controllers
                     Message = "User created, but problem with roles.";
                 }
                 var tempPass = MembershipService.ResetPassword(model.Email.ToLower());
-                //_emailService.SendNewUser(Request, Url, model.Email.ToLower(), tempPass);
+                _emailService.SendNewUser(Request, Url, model.Email.ToLower(), tempPass);
 
                 Message = string.Format("{0} {1}", Message, "You will received an email with instructions");
                 try
