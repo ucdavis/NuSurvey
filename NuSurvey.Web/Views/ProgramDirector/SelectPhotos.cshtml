@@ -61,7 +61,7 @@
     {
         var fieldId = "field_" + psq.Id;
         <fieldset id="@fieldId">
-            <legend>Question:<strong> @psq.Question.Name</strong></legend>
+            <legend>Question:<strong>@Html.HtmlEncode(psq.Question.Name)</strong></legend>
             @{ var primaryId = psq.Photo != null ? psq.Photo.Id : 0; }
             @PhotoConatiner(psq.Photo, psq.Id, true)
             @foreach (var photo in psq.Question.Photos.Where(a => a.Id != primaryId && a.IsActive && a.IsPrintable))
