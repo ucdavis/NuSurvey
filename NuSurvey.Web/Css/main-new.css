@@ -132,6 +132,10 @@ h2 {  /* ADD MLR 022714 */
 	background: none;	    /* ADD MLR 031014 */
 }    /* ADD MLR 031014 */
 
+#messagecontainer {
+	text-align: left;
+}
+
 
 
 /*********/
@@ -145,31 +149,26 @@ h2 {  /* ADD MLR 022714 */
 nav a {   /*ADD MLR 030314 */
     color: #fff;    /*ADD MLR 030314 */
 	padding: 7px 12px;   /* ADD MLR 030314 */
-    text-decoration: none;
 }   /*ADD MLR 030314 */
 
 #branding a:link {   /*ADD MLR 030314 */
     color: #fff;   /*ADD MLR 030314 */
 	background: none;   /* ADD MLR 030314 */
-    text-decoration: none;
 }   /*ADD MLR 030314 */
 
 #branding a:visited {   /*ADD MLR 030314 */
     color: #fff;   /*ADD MLR 030314 */
 	background: none;   /* ADD MLR 030314 */
-    text-decoration: none;
 }   /*ADD MLR 030314 */
 
 #branding a:hover {   /*ADD MLR 030314 */
     color: #03205B;   /*ADD MLR 030314 */
 	background: #B6D2E5;   /*ADD MLR 030314 */
-    text-decoration: none;
 }   /*ADD MLR 030314 */
 
 #branding a:active {   /*ADD MLR 030314 */
     color: #fff;   /*ADD MLR 030314 */
 	background: none;   /* ADD MLR 030314 */
-    text-decoration: none;
 }   /*ADD MLR 030314 */
 
 #personalbar {
@@ -179,22 +178,18 @@ nav a {   /*ADD MLR 030314 */
 
 #personalbar a:link {   /*ADD MLR 031014 */
     color: #603813;   /*ADD MLR 031014 */
-    text-decoration: none;
 }   /*ADD MLR 031014 */
 
 #personalbar a:visited {   /*ADD MLR 031014 */
     color: #603813;   /*ADD MLR 031014 */
-    text-decoration: none;
 }   /*ADD MLR 031014 */
 
 #personalbar a:hover {   /*ADD MLR 031014 */
     color: #03205B;   /*ADD MLR 031014 */
-    text-decoration: none;
 }   /*ADD MLR 031014 */
 
 #personalbar a:active {   /*ADD MLR 031014 */
     color: #603813;   /*ADD MLR 031014 */
-    text-decoration: none;
 }   /*ADD MLR 031014 */
 
 /***---------- PARENT QUESTION DISPLAY ----------***/   /* <---- ADD NOTE MLR 022714 */
@@ -384,8 +379,8 @@ table {   /* ADD MLR 030314 */
 /******* DIRECTOR PRINT SELECTION PAGE *******/
 
 .makePrime div {    /* ADD MLR 031014 */
-	padding: 10px;    /* ADD MLR 031014 */
-	margin-left: 20px    /* ADD MLR 031014 */
+	padding: 5px;    /* Changed value MLR 031914 */
+	/* margin-left: 20px     REMOVE MLR 031014 */
 }    /* ADD MLR 031014 */
 
 .green_border {
@@ -399,7 +394,25 @@ table {   /* ADD MLR 030314 */
 
 fieldset legend {
 	font-size: 1.8em;
+	background: #D4E6ED;     /* ADD MLR 031914 */
+	padding: 10px;     /* ADD MLR 031914 */ 
+	margin: 30px 0 10px 0;     /* ADD MLR 031914 */ 
+	width: 100%;     /* ADD MLR 031914 */
 }
+
+
+/******* EDUCATOR ENTRY PAGE *******/
+
+.even , .odd {     /* ADD MLR 031914 */
+	margin: 40px 0;     /* ADD MLR 031914 */
+}     /* ADD MLR 031914 */
+
+.even div input, .odd div input {     /* ADD MLR 031914 */
+	float: left;     /* ADD MLR 031914 */
+	margin: 0 10px 0 0;     /* ADD MLR 031914 */
+}     /* ADD MLR 031914 */
+
+
 
 
 /* ----- FOOTER  -----*/
@@ -425,7 +438,6 @@ fieldset legend {
 }
 #footertext a:hover {
     color: #EDE6DE;
-    text-decoration: none;
 }
 #footertext ul li {
     display: inline-block;
@@ -442,11 +454,9 @@ fieldset legend {
     display: block;
     padding-left: 10px;
     width: 200px;
-    text-decoration: none;
 }
 #footer .col1 .navigation li a:hover {
     background-color: #603813;
-    text-decoration: none;
 }
 #footer .col2 {
     font-style: italic;
@@ -532,31 +542,4 @@ nav {
 	background: linear-gradient(#4A94B4 , #03205B 40%);
 	padding: 2px 2px 8px 2px;
 	border-radius: 8px;
-}       
-
-
-/******* GOAL RESULTS PAGE PARENTS *******/     /* ADD MLR 031214 */
-
-.result_fieldset_page {
-	background:  url('../images/hk-goal-bkgd.jpg') no-repeat;
-}
-
-.result_thanks {
-	margin: 125px 55px 0 55px;
-	height: 80px;
-}
-
-.result_fieldset_positive {
-	margin: 15px 90px;
-	height:	60px;
-}
-
-.result_fieldset_majorgoal {
-	margin: 70px 90px 0 90px;
-	height: 30px;
-}
-
-.result_category {
-	margin: 52px 108px 0 108px;
-	height: 82px;
-}
+}        
