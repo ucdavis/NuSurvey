@@ -85,8 +85,7 @@
         var showBorder = selected ? "green_border" : string.Empty;
         var divId = string.Format("photo{0}_{1}", photo.Id, psqId);
         <a href="#" class="makePrime" data-id="@photo.Id" data-psq="@psqId">
-            <div id = "@divId" style="display: inline-block; padding-left: 10px;" class="@showBorder">
-                <div style="word-wrap: break-word; width: 300px;">@photo.Name</div>
+            <div id = "@divId" style="display: inline-block; padding-left: 10px;" class="@showBorder">                
                 <div><img src='@Url.Action("GetDirectorThumbnail", "Photo", new { id = photo.Id })' /></div>
             </div>
         </a>
