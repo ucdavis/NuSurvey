@@ -57,12 +57,19 @@
 
 @Html.AntiForgeryToken()
 
+<p>Click on the desired photo for each question. The selected photo will be outlined in blue.
+Your selections are automatically saved. To print or save your tailored survey click the “Back to list” link in the upper right corner. You will then click the printer icon next to your saved survey.
+</p>
 
+@{
+        var counter = 0;
+    }
     @foreach (var psq in Model.PrintedSurveyQuestions.OrderBy(a => a.Order))
-    {
+    {        
+        counter++;               
         var fieldId = "field_" + psq.Id;
         <fieldset id="@fieldId">
-            <legend>Question:<strong>@Html.HtmlEncode(psq.Question.Name)</strong></legend>
+            <legend>Question @counter: <strong>@Html.HtmlEncode(psq.Question.Name)</strong></legend>
             @{ var primaryId = psq.Photo != null ? psq.Photo.Id : 0; }
             @PhotoConatiner(psq.Photo, psq.Id, true)
             @foreach (var photo in psq.Question.Photos.Where(a => a.Id != primaryId && a.IsActive && a.IsPrintable))
