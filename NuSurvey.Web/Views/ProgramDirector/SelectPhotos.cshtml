@@ -9,7 +9,8 @@
 @section AdditionalScripts{
     <script type="text/javascript">
         $(function () {
-            $(".makePrime").click(function () {
+            $(".makePrime").click(function (e) {
+                e.preventDefault();
                 var photoId = $(this).data("id");
                 var psqId = $(this).data("psq");
                 var divId = "#photo" + photoId + "_" + psqId;
@@ -22,7 +23,7 @@
                             var fieldId = "#field_" + psqId + " .green_border";
                             $(fieldId).removeClass("green_border");
                             $(divId).addClass("green_border");
-                            scrollTo($("#field_" + psqId));
+                            //scrollTo($("#field_" + psqId));
                         } else {
                             alert("There was a problem making this photo the one to display with the question.");
                         }
