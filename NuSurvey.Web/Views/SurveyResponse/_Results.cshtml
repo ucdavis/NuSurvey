@@ -14,7 +14,7 @@
     <fieldset class="result_fieldset_goals">
     @if(Model.NegativeCategory1 != null){
     <fieldset class="result_fieldset_majorgoal">
-    <legend class="result_legend_majorgoal">Major Goal</legend>                
+                   
         <div class="result_majorgoal">
             <div class="result_checkbox">@Html.Raw("&#x25fb;")</div> @Model.NegativeCategory1.Encouragement
             <div class="result_goalcount">@Model.NegativeCategory1.CategoryGoals.Where(x => x.IsActive).Count() ways to do this would be:</div>
@@ -22,7 +22,7 @@
     </fieldset>
     <div class="result_category group">
         <fieldset class="result_fieldset_minorgoals">
-        <legend class="result_legend_minorgoal">Minor Goals</legend>
+        
             <div class="result_minorgoals">    
                 @foreach (var goal in Model.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
                 { 
@@ -35,12 +35,11 @@
     </div>
     }
     
-    <div class="result_or">OR</div>
 
     @if (Model.NegativeCategory2 != null)
     {
     <fieldset class="result_fieldset_majorgoal">
-    <legend class="result_legend_majorgoal">Major Goal</legend>
+    
         <div class="result_majorgoal">
             <div class="result_checkbox">@Html.Raw("&#x25fb;")</div> 
             @Model.NegativeCategory2.Encouragement
@@ -49,7 +48,7 @@
     </fieldset>
     <div class="result_category group">
         <fieldset class="result_fieldset_minorgoals">
-        <legend class="result_legend_minorgoal">Minor Goals</legend>
+        
         <div class="result_minorgoals"> 
             @foreach (var goal in Model.NegativeCategory2.CategoryGoals.Where(x => x.IsActive))
             { 

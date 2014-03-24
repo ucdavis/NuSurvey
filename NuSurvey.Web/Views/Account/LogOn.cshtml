@@ -5,14 +5,7 @@
 }
 
 @section SubNav {
-    <ul class="navigation">
-        <li>
-            @Html.ActionLink("Forgot Password?", "ForgotPassword")
-        </li>
-        <li>
-            <li>@Html.ActionLink("New Account", "OpenRegister", "Account")</li>
-        </li>
-    </ul>
+
 }
 
 
@@ -57,11 +50,19 @@
                 @Html.LabelFor(m => m.RememberMe)
             </div>
             </li>
-            <li>
-            @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
-			<label>&nbsp;</label>
-			<input class="button" type="submit" value="Log On" />
-            </li>
+                <li>
+                    @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+                    <label>&nbsp;</label>
+                    <input class="button" type="submit" value="Log On" />
+                </li>
+
+                    <li>
+                        @Html.ActionLink("Forgot Password?", "ForgotPassword")
+                    </li>
+                    <li>
+                    <li>@Html.ActionLink("New Account", "OpenRegister", "Account")</li>
+                    </li>
+               
             </ul>
         </fieldset>
     </div>
