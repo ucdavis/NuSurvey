@@ -80,9 +80,7 @@ using (Html.BeginForm())
 		        <li>
 			        @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
 			        <label>&nbsp;</label>
-			        <input class="button" type="submit" value="Next" /> | @if (Model.PublicGuid == null)
-                                                                 {  @Html.ActionLink("Cancel", "Index")}
-                                                                 else { @Html.ActionLink("Cancel", "PublicSurveys")}
+			        <input class="button" type="submit" value="Next" /> 
 		        </li>
 	        </ul>
         </fieldset>

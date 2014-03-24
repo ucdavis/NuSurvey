@@ -23,7 +23,7 @@
             <div id="parents-left">
                 <h2>PARENTS</h2>
                 <p>Want to keep your child healthy?</p>
-                <p>Take the Healthy Kids or My Child at Meal Time survey for goals created just for you and your child!</p>
+                <p>Take the survey and have goals created just for you and your child!</p>
                 <img src="@Url.Image("arrow.png")" alt="Select a Survey" />
             </div>
 	
@@ -41,24 +41,26 @@
         <div class="container-center">
             <div id="staff-left">
                 <h3>Educators</h3>
-                <p>Are you using these surveys with your classes?</p>
-                <p>Enter several completed Healthy Kids or My Child at Meal Time surveys using this page. Personalized goals will be created and can be printed for each participant.</p>
+                <p>Are you using these surveys with your classes?  <i>Healthy Kids</i> or <i>My Child at Meal Time</i>?</p>
+                <p>Begin here to quickly enter completed surveys for an entire class. Create personal goal sheets for each participant.</p>
                 <a href='@Url.Action("Index", "Educator")'>
                     <div class="login-button">
                         <p>Login Here</p>
                     </div>
                 </a>
+                <p>New User? @Html.ActionLink("Create an account here.", "OpenRegister", "Account")</p>
             </div>
 	
             <div id="staff-right">
                 <h3>Directors</h3>
-                <p>Want to use these surveys with your program?</p>
-                <p>Download the current Healthy Kids or My Child or Meal Time surveys or create photo-customized versions tailored to your target audience.</p>
+                <p>Want to use these surveys with your program?  Register and open an account to have access to these tools.</p>
+                <p>Download the current <i>Healthy Kids</i> or <i>My Child at Meal Time</i> surveys or create photo-customized versions tailored to your target audience.</p>
                 <a href='@Url.Action("Index", "ProgramDirector")'>
                     <div class="login-button">
                         <p>Login Here</p>
                     </div>
                 </a>
+                <p>New User? @Html.ActionLink("Create an account here.", "OpenRegister", "Account")</p>
             </div>
             <br style="clear:both">
         </div> <!--- END main MLR 121313 --->
