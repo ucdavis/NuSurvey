@@ -155,12 +155,19 @@ namespace NuSurvey.Web.Controllers
                 try
                 {
                     var user = new User(model.Email.ToLower().Trim());
-                    user.FirstName = model.User.FirstName;
-                    user.LastName = model.User.LastName;
+                    user.Name = model.User.Name;
                     user.Title = model.User.Title;
                     user.Agency = model.User.Agency;
+                    user.Street = model.User.Street;
                     user.City = model.User.City;
                     user.State = model.User.State;
+                    user.Zip = model.User.Zip;
+                    user.TargetPopulationWic = model.User.TargetPopulationWic;
+                    user.TargetPopulationSnap = model.User.TargetPopulationSnap;
+                    user.TargetPopulationHeadStart = model.User.TargetPopulationHeadStart;
+                    user.TargetPopulationEfnep = model.User.TargetPopulationEfnep;
+                    user.TargetPopulationLowIncome = model.User.TargetPopulationLowIncome;
+                    user.TargetPopulationOther = model.User.TargetPopulationOther;
 
                     _userRepository.EnsurePersistent(user);
                 }
@@ -344,12 +351,21 @@ namespace NuSurvey.Web.Controllers
             try
             {
                 var userToUpdate = _userRepository.GetNullableById(editUserViewModel.Email.ToLower().Trim()) ?? new User(editUserViewModel.Email.ToLower().Trim());
-                userToUpdate.FirstName = editUserViewModel.UserDetails.FirstName;
-                userToUpdate.LastName = editUserViewModel.UserDetails.LastName;
+
+                userToUpdate.Name = editUserViewModel.UserDetails.Name;
                 userToUpdate.Title = editUserViewModel.UserDetails.Title;
                 userToUpdate.Agency = editUserViewModel.UserDetails.Agency;
+                userToUpdate.Street = editUserViewModel.UserDetails.Street;
                 userToUpdate.City = editUserViewModel.UserDetails.City;
                 userToUpdate.State = editUserViewModel.UserDetails.State;
+                userToUpdate.Zip = editUserViewModel.UserDetails.Zip;
+                userToUpdate.TargetPopulationWic = editUserViewModel.UserDetails.TargetPopulationWic;
+                userToUpdate.TargetPopulationSnap = editUserViewModel.UserDetails.TargetPopulationSnap;
+                userToUpdate.TargetPopulationHeadStart = editUserViewModel.UserDetails.TargetPopulationHeadStart;
+                userToUpdate.TargetPopulationEfnep = editUserViewModel.UserDetails.TargetPopulationEfnep;
+                userToUpdate.TargetPopulationLowIncome = editUserViewModel.UserDetails.TargetPopulationLowIncome;
+                userToUpdate.TargetPopulationOther = editUserViewModel.UserDetails.TargetPopulationOther;
+
                 _userRepository.EnsurePersistent(userToUpdate);
             }
             catch

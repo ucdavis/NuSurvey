@@ -26,18 +26,10 @@
     <ul>
         <li>
             <div class="display-label">
-                @Html.LabelFor(model => model.UserDetails.FirstName)
+                @Html.LabelFor(model => model.UserDetails.Name)
             </div>
             <div class="display-details">
-                @Html.DisplayFor(model => model.UserDetails.FirstName)
-            </div>
-        </li>
-        <li>
-            <div class="display-label">
-                @Html.LabelFor(model => model.UserDetails.LastName)
-            </div>
-            <div class="display-details">
-                @Html.DisplayFor(model => model.UserDetails.LastName)
+                @Html.DisplayFor(model => model.UserDetails.Name)
             </div>
         </li>
         <li>
@@ -58,6 +50,14 @@
         </li>
         <li>
             <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.Street)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.Street)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
                 @Html.LabelFor(model => model.UserDetails.City)
             </div>
             <div class="display-details">
@@ -70,6 +70,63 @@
             </div>
             <div class="display-details">
                 @Html.DisplayFor(model => model.UserDetails.State)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.Zip)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.Zip)
+            </div>
+        </li>
+        
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.TargetPopulationWic)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.TargetPopulationWic)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.TargetPopulationSnap)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.TargetPopulationSnap)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.TargetPopulationHeadStart)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.TargetPopulationHeadStart)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.TargetPopulationEfnep)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.TargetPopulationEfnep)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.TargetPopulationLowIncome)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.TargetPopulationLowIncome)
+            </div>
+        </li>
+        <li>
+            <div class="display-label">
+                @Html.LabelFor(model => model.UserDetails.TargetPopulationOther)
+            </div>
+            <div class="display-details">
+                @Html.DisplayFor(model => model.UserDetails.TargetPopulationOther)
             </div>
         </li>
     </ul>
