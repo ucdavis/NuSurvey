@@ -25,9 +25,11 @@ namespace NuSurvey.Core.Domain
         [StringLength(200)]
         public virtual string Name { get; set; }
 
+        [Required]
         [StringLength(200)]
         public virtual string Title { get; set; }
 
+        [Required]
         [StringLength(250)]
         [Display(Name = "Agency/Institution")]
         public virtual string Agency { get; set; }

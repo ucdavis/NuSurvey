@@ -39,26 +39,16 @@ Example: Dinosaur 1  *@
     <ul>
         <li>
             <div class="editor-label required">
-                @Html.LabelFor(model => model.UserDetails.FirstName)<span>*</span>
+                @Html.LabelFor(model => model.UserDetails.Name)<span>*</span>
             </div>
             <div class="editor-field wideText">
-                @Html.EditorFor(model => model.UserDetails.FirstName)
+                @Html.EditorFor(model => model.UserDetails.Name)
                 <span class="field-warning"></span>
-                @Html.ValidationMessageFor(model => model.UserDetails.FirstName)
+                @Html.ValidationMessageFor(model => model.UserDetails.Name)
             </div>
         </li>
         <li>
             <div class="editor-label required">
-                @Html.LabelFor(model => model.UserDetails.LastName)<span>*</span>
-            </div>
-            <div class="editor-field wideText">
-                @Html.EditorFor(model => model.UserDetails.LastName)
-                <span class="field-warning"></span>
-                @Html.ValidationMessageFor(model => model.UserDetails.LastName)
-            </div>
-        </li>
-        <li>
-            <div class="editor-label">
                 @Html.LabelFor(model => model.UserDetails.Title)
             </div>
             <div class="editor-field wideText">
@@ -68,13 +58,23 @@ Example: Dinosaur 1  *@
             </div>
         </li>
         <li>
-            <div class="editor-label">
+            <div class="editor-label required">
                 @Html.LabelFor(model => model.UserDetails.Agency)
             </div>
             <div class="editor-field wideText">
                 @Html.EditorFor(model => model.UserDetails.Agency)
                 <span class="field-warning"></span>
                 @Html.ValidationMessageFor(model => model.UserDetails.Agency)
+            </div>
+        </li>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.Street)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.Street)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.Street)
             </div>
         </li>
         <li>
@@ -98,32 +98,109 @@ Example: Dinosaur 1  *@
             </div>
         </li>
         <li>
-            <div class="editor-label">
-                @Html.Label("Admin") 
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.Zip)<span>*</span>
             </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.IsAdmin)
-                @Html.ValidationMessageFor(model => model.IsAdmin)
-            </div>
-        </li>
-        <li>
-            <div class="editor-label">
-                @Html.Label("Program Director") 
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.IsProgramDirector)
-                @Html.ValidationMessageFor(model => model.IsProgramDirector)
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.Zip)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.Zip)
             </div>
         </li>
-        <li>
-            <div class="editor-label">
-                @Html.Label("Educator") 
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.IsUser)
-                @Html.ValidationMessageFor(model => model.IsUser)
-            </div>
-        </li>
+        <fieldset>
+            <legend>Target Population</legend>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationWic)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationWic)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationWic)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationSnap)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationSnap)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationSnap)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationHeadStart)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationHeadStart)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationHeadStart)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationEfnep)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationEfnep)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationEfnep)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationLowIncome)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationLowIncome)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationLowIncome)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationOther)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationOther)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationOther)
+                </div>
+            </li>
+        </fieldset>
+        <fieldset>
+            <legend>Roles</legend>
+
+            <li>
+                <div class="editor-label">
+                    @Html.Label("Admin")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.IsAdmin)
+                    @Html.ValidationMessageFor(model => model.IsAdmin)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.Label("Program Director")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.IsProgramDirector)
+                    @Html.ValidationMessageFor(model => model.IsProgramDirector)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.Label("Educator")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.IsUser)
+                    @Html.ValidationMessageFor(model => model.IsUser)
+                </div>
+            </li>
+        </fieldset>
         <li>
             @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
             <label>&nbsp;</label>

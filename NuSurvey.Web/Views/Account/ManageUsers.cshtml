@@ -103,9 +103,8 @@
 		        Educator
 		    </th>
 		    <th>
-		        First Name
+		        Name
 		    </th>
-		    <th>Last Name</th>
             <th>Agency</th>
             <th></th>
 		</tr>
@@ -147,13 +146,7 @@
 		    <td>
 		        @if (user != null)
 		        {
-		            @Html.HtmlEncode(user.FirstName)
-		        }
-		    </td>
-		    <td>
-		        @if (user != null)
-		        {
-		            @Html.HtmlEncode(user.LastName)
+		            @Html.HtmlEncode(user.Name)
 		        }
 		    </td>
             <td>

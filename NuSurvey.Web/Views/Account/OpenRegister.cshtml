@@ -53,7 +53,7 @@
 
         <p><strong>Note!</strong> To answer surveys anonymously,  you don't have to register. Just click the image on the home page to answer surveys for Parents.</p>
         <ul>
-            <li>
+            <li>            
                 <div class="editor-label required">
                     @Html.LabelFor(model => model.Email)<span>*</span> 
                 </div>
@@ -62,29 +62,20 @@
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.Email)
                 </div>
+            </li>           
+            
+            <li>
+                <div class="editor-label required">
+                    @Html.LabelFor(model => model.User.Name)<span>*</span>
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.User.Name)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.User.Name)
+                </div>
             </li>
             <li>
                 <div class="editor-label required">
-                    @Html.LabelFor(model => model.User.FirstName)<span>*</span>
-                </div>
-                <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.User.FirstName)
-                    <span class="field-warning"></span>
-                    @Html.ValidationMessageFor(model => model.User.FirstName)
-                </div>
-            </li>
-            <li>
-                <div class="editor-label required">
-                    @Html.LabelFor(model => model.User.LastName)<span>*</span>
-                </div>
-                <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.User.LastName)
-                    <span class="field-warning"></span>
-                    @Html.ValidationMessageFor(model => model.User.LastName)
-                </div>
-            </li>
-            <li>
-                <div class="editor-label">
                     @Html.LabelFor(model => model.User.Title)
                 </div>
                 <div class="editor-field wideText">
@@ -94,13 +85,23 @@
                 </div>
             </li>
             <li>
-                <div class="editor-label">
+                <div class="editor-label required">
                     @Html.LabelFor(model => model.User.Agency)
                 </div>
                 <div class="editor-field wideText">
                     @Html.EditorFor(model => model.User.Agency)
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.User.Agency)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label required">
+                    @Html.LabelFor(model => model.User.Street)<span>*</span>
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.User.Street)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.User.Street)
                 </div>
             </li>
             <li>
@@ -123,6 +124,63 @@
                     @Html.ValidationMessageFor(model => model.User.State)
                 </div>
             </li>
+            <li>
+                <div class="editor-label required">
+                    @Html.LabelFor(model => model.User.Zip)<span>*</span>
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.User.Zip)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.User.Zip)
+                </div>
+            </li>
+            <fieldset>
+                <legend>Target Population</legend>
+                <li>
+                    <div class="editor-field wideText">
+                        @Html.EditorFor(model => model.User.TargetPopulationWic) @Html.LabelFor(model => model.User.TargetPopulationWic)
+                        <span class="field-warning"></span>
+                        @Html.ValidationMessageFor(model => model.User.TargetPopulationWic)
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-field wideText">
+                        @Html.EditorFor(model => model.User.TargetPopulationSnap) @Html.LabelFor(model => model.User.TargetPopulationSnap)
+                        <span class="field-warning"></span>
+                        @Html.ValidationMessageFor(model => model.User.TargetPopulationSnap)
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-field wideText">
+                        @Html.EditorFor(model => model.User.TargetPopulationHeadStart) @Html.LabelFor(model => model.User.TargetPopulationHeadStart)
+                        <span class="field-warning"></span>
+                        @Html.ValidationMessageFor(model => model.User.TargetPopulationHeadStart)
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-field wideText">
+                        @Html.EditorFor(model => model.User.TargetPopulationEfnep) @Html.LabelFor(model => model.User.TargetPopulationEfnep)
+                        <span class="field-warning"></span>
+                        @Html.ValidationMessageFor(model => model.User.TargetPopulationEfnep)
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-field wideText">
+                        @Html.EditorFor(model => model.User.TargetPopulationLowIncome) @Html.LabelFor(model => model.User.TargetPopulationLowIncome)
+                        <span class="field-warning"></span>
+                        @Html.ValidationMessageFor(model => model.User.TargetPopulationLowIncome)
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-field wideText">
+                        @Html.EditorFor(model => model.User.TargetPopulationOther) @Html.LabelFor(model => model.User.TargetPopulationOther)
+                        <span class="field-warning"></span>
+                        @Html.ValidationMessageFor(model => model.User.TargetPopulationOther)
+                    </div>
+                </li>
+            </fieldset>
+            
+
             <li>
                 <div class="editor-label">
                     @Html.Label("Roles")
