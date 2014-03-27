@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using DataAnnotationsExtensions;
+using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers;
 using NuSurvey.Web.Controllers.Filters;
 using UCDArch.Core.Utils;
@@ -96,6 +97,8 @@ namespace NuSurvey.Web.Models
 
         public string[] Roles { get; set; }
 
+        public User User { get; set; }
+
     }
 
     public class EditUserViewModel
@@ -106,6 +109,8 @@ namespace NuSurvey.Web.Models
         public bool IsProgramDirector { get; set; }
         public bool Confirm { get; set; }
         public MembershipUser User { get; set; }
+
+        public User UserDetails { get; set; }
 
         public static EditUserViewModel Create(string email, IMembershipService membershipService)
         {

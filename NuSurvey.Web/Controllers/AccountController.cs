@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using MvcContrib;
+using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
 using NuSurvey.Web.Models;
 using NuSurvey.Web.Services;
 using System.Linq.Expressions;
 using System.Linq;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 
 namespace NuSurvey.Web.Controllers
@@ -15,6 +19,7 @@ namespace NuSurvey.Web.Controllers
     public class AccountController : ApplicationController
     {
         private readonly IEmailService _emailService;
+        private readonly IRepositoryWithTypedId<User, string> _userRepository;
         private IFormsAuthenticationService FormsService { get; set; }
         private IMembershipService MembershipService { get; set; }
 
@@ -26,9 +31,10 @@ namespace NuSurvey.Web.Controllers
             base.Initialize(requestContext);
         }
 
-        public AccountController(IEmailService emailService, IFormsAuthenticationService formsAuthenticationService, IMembershipService membershipService)
+        public AccountController(IEmailService emailService, IFormsAuthenticationService formsAuthenticationService, IMembershipService membershipService, IRepositoryWithTypedId<User, string> userRepository)
         {
             _emailService = emailService;
+            _userRepository = userRepository;
             if (formsAuthenticationService != null)
             {
                 FormsService = formsAuthenticationService;
@@ -102,6 +108,7 @@ namespace NuSurvey.Web.Controllers
             ViewBag.ProgramDirectorRole = RoleNames.ProgramDirector;
 
             var viewModel = new OpenRegisterModel();
+            viewModel.User = new User();
 
             return View(viewModel);
         }
@@ -145,6 +152,30 @@ namespace NuSurvey.Web.Controllers
                 _emailService.SendNewUser(Request, Url, model.Email.ToLower(), tempPass);
 
                 Message = string.Format("{0} {1}", Message, "You will received an email with instructions");
+                try
+                {
+                    var user = new User(model.Email.ToLower().Trim());
+                    user.Name = model.User.Name;
+                    user.Title = model.User.Title;
+                    user.Agency = model.User.Agency;
+                    user.Street = model.User.Street;
+                    user.City = model.User.City;
+                    user.State = model.User.State;
+                    user.Zip = model.User.Zip;
+                    user.TargetPopulationWic = model.User.TargetPopulationWic;
+                    user.TargetPopulationSnap = model.User.TargetPopulationSnap;
+                    user.TargetPopulationHeadStart = model.User.TargetPopulationHeadStart;
+                    user.TargetPopulationEfnep = model.User.TargetPopulationEfnep;
+                    user.TargetPopulationLowIncome = model.User.TargetPopulationLowIncome;
+                    user.TargetPopulationOther = model.User.TargetPopulationOther;
+
+                    _userRepository.EnsurePersistent(user);
+                }
+                catch (Exception ex)
+                {
+                    var yyy = ex.Message;
+
+                }
 
                 return this.RedirectToAction(a => a.LogOn());
 
@@ -242,6 +273,9 @@ namespace NuSurvey.Web.Controllers
         {
             var viewModel = ManageUsersViewModel.Create(MembershipService.GetUsersAndRoles(CurrentUser.Identity.Name.ToLower()), hideAdmin, hideUser, hidePublic, hideProgramDirector);
 
+            var userList = viewModel.Users.Select(a => a.UserName).Distinct().ToList();
+            viewModel.UserDetaiList = _userRepository.Queryable.Where(a => userList.Contains(a.Id)).ToList();
+
             return View(viewModel);
         }
 
@@ -265,6 +299,7 @@ namespace NuSurvey.Web.Controllers
             }
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
+            viewModel.UserDetails = _userRepository.GetNullableById(id.Trim().ToLower());
             viewModel.User = MembershipService.GetUser(id);
 
             return View(viewModel);
@@ -313,6 +348,31 @@ namespace NuSurvey.Web.Controllers
                 Message = "Problem with Updating Roles";
             }
 
+            try
+            {
+                var userToUpdate = _userRepository.GetNullableById(editUserViewModel.Email.ToLower().Trim()) ?? new User(editUserViewModel.Email.ToLower().Trim());
+
+                userToUpdate.Name = editUserViewModel.UserDetails.Name;
+                userToUpdate.Title = editUserViewModel.UserDetails.Title;
+                userToUpdate.Agency = editUserViewModel.UserDetails.Agency;
+                userToUpdate.Street = editUserViewModel.UserDetails.Street;
+                userToUpdate.City = editUserViewModel.UserDetails.City;
+                userToUpdate.State = editUserViewModel.UserDetails.State;
+                userToUpdate.Zip = editUserViewModel.UserDetails.Zip;
+                userToUpdate.TargetPopulationWic = editUserViewModel.UserDetails.TargetPopulationWic;
+                userToUpdate.TargetPopulationSnap = editUserViewModel.UserDetails.TargetPopulationSnap;
+                userToUpdate.TargetPopulationHeadStart = editUserViewModel.UserDetails.TargetPopulationHeadStart;
+                userToUpdate.TargetPopulationEfnep = editUserViewModel.UserDetails.TargetPopulationEfnep;
+                userToUpdate.TargetPopulationLowIncome = editUserViewModel.UserDetails.TargetPopulationLowIncome;
+                userToUpdate.TargetPopulationOther = editUserViewModel.UserDetails.TargetPopulationOther;
+
+                _userRepository.EnsurePersistent(userToUpdate);
+            }
+            catch
+            {
+ 
+            }
+
             return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
         }
 
@@ -337,6 +397,7 @@ namespace NuSurvey.Web.Controllers
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
             viewModel.User = MembershipService.GetUser(id);
+            viewModel.UserDetails = _userRepository.GetNullableById(id.Trim().ToLower());
 
             return View(viewModel);
         }
@@ -366,6 +427,18 @@ namespace NuSurvey.Web.Controllers
                 if (MembershipService.DeleteUser(id))
                 {
                     Message = "User Removed";
+                    try
+                    {
+                        var userDetail = _userRepository.GetNullableById(id.Trim().ToLower());
+                        if (userDetail != null)
+                        {
+                            _userRepository.Remove(userDetail);
+                        }
+                    }
+                    catch 
+                    {
+                        
+                    }
                 }
                 else
                 {
@@ -548,6 +621,8 @@ namespace NuSurvey.Web.Controllers
         public bool HidePublic { get; set; }
         public IQueryable<UsersRoles> Users { get; set; }
 
+        public IList<User> UserDetaiList { get; set; }
+
         public static ManageUsersViewModel Create(IQueryable<UsersRoles> users, bool hideAdmin, bool hideUser, bool hidePublic, bool hideProgramDirector)
         {
             var viewModel = new ManageUsersViewModel
@@ -570,7 +645,8 @@ namespace NuSurvey.Web.Controllers
                 {
                     viewModel.Users = viewModel.Users.Where(a => !a.ProgramDirector);
                 }
-  
+
+          
 
             return viewModel;
 

@@ -26,8 +26,6 @@
 );
 
 
-GO
-EXECUTE sp_tableoption @TableNamePattern = N'[dbo].[aspnet_Membership]', @OptionName = N'text in row', @OptionValue = N'3000';
 
 
 GO

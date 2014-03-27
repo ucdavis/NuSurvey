@@ -8,5 +8,5 @@
 
 
 GO
-EXECUTE sp_tableoption @TableNamePattern = N'[dbo].[aspnet_PersonalizationAllUsers]', @OptionName = N'text in row', @OptionValue = N'6000';
+
 

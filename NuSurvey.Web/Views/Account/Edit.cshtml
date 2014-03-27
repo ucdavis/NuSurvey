@@ -36,40 +36,177 @@ Example: Dinosaur 1  *@
 	@*<h4>Form Header</h4>*@
 	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
 	<p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
-	<ul>
+    <ul>
         <li>
-            <div class="editor-label">
-                @Html.Label("Admin") 
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.Name)<span>*</span>
             </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.IsAdmin)
-                @Html.ValidationMessageFor(model => model.IsAdmin)
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.Name)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.Name)
             </div>
         </li>
         <li>
-            <div class="editor-label">
-                @Html.Label("Program Director") 
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.Title)
             </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.IsProgramDirector)
-                @Html.ValidationMessageFor(model => model.IsProgramDirector)
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.Title)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.Title)
             </div>
         </li>
-		<li>
-			<div class="editor-label">
-				@Html.Label("Educator") 
-			</div>
-			<div class="editor-field">
-				@Html.EditorFor(model => model.IsUser)
-				@Html.ValidationMessageFor(model => model.IsUser)
-			</div>
-		</li>
-		<li>
-			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
-			<label>&nbsp;</label>
-			<input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "ManageUsers")
-		</li>
-	</ul>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.Agency)
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.Agency)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.Agency)
+            </div>
+        </li>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.Street)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.Street)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.Street)
+            </div>
+        </li>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.City)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.City)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.City)
+            </div>
+        </li>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.State)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.State)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.State)
+            </div>
+        </li>
+        <li>
+            <div class="editor-label required">
+                @Html.LabelFor(model => model.UserDetails.Zip)<span>*</span>
+            </div>
+            <div class="editor-field wideText">
+                @Html.EditorFor(model => model.UserDetails.Zip)
+                <span class="field-warning"></span>
+                @Html.ValidationMessageFor(model => model.UserDetails.Zip)
+            </div>
+        </li>
+        <fieldset>
+            <legend>Target Population</legend>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationWic)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationWic)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationWic)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationSnap)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationSnap)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationSnap)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationHeadStart)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationHeadStart)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationHeadStart)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationEfnep)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationEfnep)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationEfnep)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationLowIncome)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationLowIncome)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationLowIncome)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserDetails.TargetPopulationOther)
+                </div>
+                <div class="editor-field wideText">
+                    @Html.EditorFor(model => model.UserDetails.TargetPopulationOther)
+                    <span class="field-warning"></span>
+                    @Html.ValidationMessageFor(model => model.UserDetails.TargetPopulationOther)
+                </div>
+            </li>
+        </fieldset>
+        <fieldset>
+            <legend>Roles</legend>
+
+            <li>
+                <div class="editor-label">
+                    @Html.Label("Admin")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.IsAdmin)
+                    @Html.ValidationMessageFor(model => model.IsAdmin)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.Label("Program Director")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.IsProgramDirector)
+                    @Html.ValidationMessageFor(model => model.IsProgramDirector)
+                </div>
+            </li>
+            <li>
+                <div class="editor-label">
+                    @Html.Label("Educator")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.IsUser)
+                    @Html.ValidationMessageFor(model => model.IsUser)
+                </div>
+            </li>
+        </fieldset>
+        <li>
+            @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+            <label>&nbsp;</label>
+            <input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "ManageUsers")
+        </li>
+    </ul>
 </fieldset>
 }
 

@@ -99,9 +99,13 @@
             <th>
                 Program Director
             </th>
-			<th>
-				Educator
-			</th>
+		    <th>
+		        Educator
+		    </th>
+		    <th>
+		        Name
+		    </th>
+            <th>Agency</th>
             <th></th>
 		</tr>
 	</thead>
@@ -109,6 +113,9 @@
 @{ var odd = false; }
 @foreach (var item in Model.Users)
 {
+    
+        var user = Model.UserDetaiList.FirstOrDefault(a => a.Id == item.UserName);   
+    
 		<tr class="@(odd ? "odd" : "even")">	
         <td>            
 				<a href='@Url.Action("Edit", "Account", new { id = @item.UserName })'>
@@ -121,21 +128,33 @@
             <td>
                 @if (item.Admin)
                 { 
-                    @Html.Encode("Admin");
+                    @Html.Encode("Admin")
                 }
             </td>
             			<td>
 				@if (item.ProgramDirector)
     { 
-                 @Html.Encode("Program Director");
+                 @Html.Encode("Program Director")
     }
 			</td>
-			<td>
-				@if (item.User)
-    { 
-                 @Html.Encode("Educator");
-    }
-			</td>
+		    <td>
+		        @if (item.User)
+		        { 
+		            @Html.Encode("Educator")
+		        }
+		    </td>
+		    <td>
+		        @if (user != null)
+		        {
+		            @Html.HtmlEncode(user.Name)
+		        }
+		    </td>
+            <td>
+                @if (user != null)
+                {
+                    @Html.HtmlEncode(user.Agency)
+                }
+            </td>
             <td>
                 <a href='@Url.Action("Delete", "Account", new { id = @item.UserName })'><img alt="Delete this user" src="@Url.Image("delete.png")"/></a>     
             </td>

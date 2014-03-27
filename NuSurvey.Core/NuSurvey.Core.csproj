@@ -99,6 +99,7 @@
     <Compile Include="Domain\Response.cs" />
     <Compile Include="Domain\Survey.cs" />
     <Compile Include="Domain\SurveyResponse.cs" />
+    <Compile Include="Domain\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\StaticValues.Designer.cs">
       <AutoGen>True</AutoGen>
