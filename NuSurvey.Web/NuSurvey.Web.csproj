@@ -391,6 +391,7 @@
     <None Include="Content\Fonts\SourceSansPro-Semibold-webfont.ttf" />
     <None Include="Content\Fonts\SourceSansPro-Semibold-webfont.woff" />
     <Content Include="Content\HK-director-print.pdf" />
+    <Content Include="Content\MCMT-director-print.pdf" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
