@@ -21,6 +21,10 @@ body {
     min-width: 1200px;
 }
 
+a {
+	text-decoration: none;
+}
+
 h2 {  /* ADD MLR 022714 */
 	margin: 20px 0 10px 0;  /* ADD MLR 022714 */
 }  /* ADD MLR 022714 */
@@ -230,9 +234,9 @@ nav a {   /*ADD MLR 030314 */
     -moz-border-radius: 14px;
     border-radius: 14px;
   
-    margin: 156px 0 0 0; /* Changed value MLR 040114 */
+    margin: 156px 50px 0 50px; /* Changed value MLR 040214 */
 	padding: 10px 10px 40px 10px; /* ADD MLR 022714 */
-    font: 16px/25px 'Source Sans Pro', Arial, sans-serif;
+    font: 20px/30px 'Source Sans Pro', Arial, sans-serif;  /* Changed value MLR 040214 */
 	font-weight: 600;
 }
 
@@ -272,9 +276,17 @@ nav a {   /*ADD MLR 030314 */
 }  /* ADD MLR 022714 */
 
 .display-mcmt-question .editor-label label, .display-hk-question .editor-label label {  /* ADD MLR 022714 */
-	font-size: 1.3em;  /* ADD MLR 022714 */
+	font-size: 1.5em;  /* Changed value MLR 040114 */
 	font-weight: 900;  /* ADD MLR 022714 */
 }  /* ADD MLR 022714 */
+
+.display-mcmt-question .editor-field, .display-hk-question .editor-field {  /* ADD MLR 040214 */
+	text-align: center;    /* ADD MLR 040214 */
+}   /* ADD MLR 040214 */
+
+.parent-response-options {  /* ADD MLR 040214 */
+	text-align: left;  /* ADD MLR 040214 */
+}  /* ADD MLR 040214 */
 
 form {
     text-align: left;
@@ -287,10 +299,18 @@ form fieldset ul {
     padding: 10px 75px;    /* Value Changed MLR 0303014 */
 }
 
+.display-mcmt-question ul, .display-hk-question ul {  /* ADD MLR 040214 */
+	padding: 10px 40px;    /* ADD MLR 040214 */
+}    /* ADD MLR 040214 */
+
 form ul li {
     list-style-type: none;
     margin: 10px 0;
 }
+
+.display-mcmt-question input.button, .display-hk-question input.button {    /* ADD MLR 040214 */
+	float: right;    /* ADD MLR 040214 */
+}    /* ADD MLR 040214 */
 
 
 
@@ -339,6 +359,7 @@ input.button {
     height: 2em;
     width: 47%;
     text-align: left;
+	padding: 1px; /* ADD MLR 040214 */
 }
 .ui-widget-content {
     background: #EDE6DE;
@@ -359,7 +380,7 @@ input.button {
 
 .ui-progressbar .ui-progressbar-value {    /* EDIT moved from above ".ui-widget-header" to below MLR 031014 */
     height: 100%;    /* MOVED MLR 301014 */
-    margin: -1px;    /* MOVED MLR 301014 */
+    margin: 0px;    /* Changed value MLR 040214 */
 	padding: 0px;    /* ADD MLR 301014 */
 	-webkit-border-radius: 8px;    /* MOVED from .ui-widget-header set above MLR 031014 */
     -khtml-border-radius: 8px;    /* MOVED from .ui-widget-header set above MLR 031014 */
@@ -411,6 +432,7 @@ fieldset legend {
 	padding: 10px;     /* ADD MLR 031914 */ 
 	margin: 30px 0 10px 0;     /* ADD MLR 031914 */ 
 	width: 100%;     /* ADD MLR 031914 */
+	color: #03205B;   /* ADD MLR 040214 */
 }
 
 
@@ -498,7 +520,7 @@ fieldset legend {
 
 #staff {
 	/**** REMOVE MLR 020414   background: url('../images/wavegrid_tan1.png') repeat;  */
-	padding: 3em 0 5em 0; /*Added MLR 020414 */	
+	padding: 3em 0 0 0; /*Changed value MLR 040214 */	
 }
 
 #parents-left {
@@ -521,14 +543,14 @@ fieldset legend {
 	float: right;
 }
 
-nav {
+nav, #nav {
 	height: 30px;   /* Value Change MLR 030314 */
 	background: #4A94B4;
 }
 
 #staff-left, #staff-right {
 	width: 41%;
-	padding: 0 4% 4% 4%;
+	padding: 0 4% 20px 4%;
 	color: #42210B;
 }
 
@@ -547,16 +569,52 @@ nav {
 	border-right: solid 1px #A17C52;
 }
 
+#staff .float-right {    /* ADD MLR 040214 */
+	float: right;     /* ADD MLR 040214 */
+	margin: 10px 0 0 100px;     /* ADD MLR 040214 */
+	font-size: 1.2em;    /* ADD MLR 040214 */
+}    /* ADD MLR 040214 */
+
 .login-button {
 	width: 105px;
-	height: 19px;
+	height: 25px;
 	border: solid 2px #03205B;
 	float: right;
 	color: #fff;
 	text-align: center;
 	font-weight: 700;
 	font-size: 1.2em;
+	background: #4A94B4; /* Important! fix for IE & older browsers */   /* ADD MLR 040214 */
 	background: linear-gradient(#4A94B4 , #03205B 40%);
 	padding: 2px 2px 8px 2px;
 	border-radius: 8px;
-}        
+	margin: 15px 0 0 0;
+} 
+
+#login-form {   /* ADD MLR 040214 */
+	max-width: 550px;   /* ADD MLR 040214 */
+	margin: 0 auto;   /* ADD MLR 040214 */
+}   /* ADD MLR 040214 */
+
+#login-form .editor-field input {   /* ADD MLR 040214 */
+	font-size: 1.4em;   /* ADD MLR 040214 */
+	padding: 10px;   /* ADD MLR 040214 */
+	width: 300px;   /* ADD MLR 040214 */
+	color: #03205B;   /* ADD MLR 040214 */
+}   /* ADD MLR 040214 */
+
+
+/********** ERROR MESSAGE HANDELING **********/
+
+.validation-summary-errors {   /* ADD MLR 040214 */
+	font-size: 1.2em;   /* ADD MLR 040214 */
+	font-weight: bold;   /* ADD MLR 040214 */
+	padding: 10px;   /* ADD MLR 040214 */
+	width: 100%;   /* ADD MLR 040214 */
+	background: #BC272D;   /* ADD MLR 040214 */
+	color: #fff;   /* ADD MLR 040214 */
+}          /* ADD MLR 040214 */
+
+.validation-summary-errors ul {   /* ADD MLR 040214 */
+	list-style: none;    /* ADD MLR 040214 */
+}   /* ADD MLR 040214 */
