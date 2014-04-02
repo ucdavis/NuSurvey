@@ -276,7 +276,7 @@ nav a {   /*ADD MLR 030314 */
 }  /* ADD MLR 022714 */
 
 .display-mcmt-question .editor-label label, .display-hk-question .editor-label label {  /* ADD MLR 022714 */
-	font-size: 1.5em;  /* Changed value MLR 040114 */
+	font-size: 1.3em;  /* Changed value MLR 040114 */
 	font-weight: 900;  /* ADD MLR 022714 */
 }  /* ADD MLR 022714 */
 
@@ -300,7 +300,7 @@ form fieldset ul {
 }
 
 .display-mcmt-question ul, .display-hk-question ul {  /* ADD MLR 040214 */
-	padding: 10px 40px;    /* ADD MLR 040214 */
+	padding: 0 10px;    /* ADD MLR 040214 */
 }    /* ADD MLR 040214 */
 
 form ul li {
@@ -359,8 +359,8 @@ input.button {
     height: 2em;
     width: 47%;
     text-align: left;
-	padding: 1px; /* ADD MLR 040214 */
 }
+
 .ui-widget-content {
     background: #EDE6DE;
     border: 1px solid #C7B299;
@@ -386,7 +386,7 @@ input.button {
     -khtml-border-radius: 8px;    /* MOVED from .ui-widget-header set above MLR 031014 */
     -moz-border-radius: 8px;    /* MOVED from .ui-widget-header set above MLR 031014 */
     border-radius: 8px;    /* MOVED from .ui-widget-header set above MLR 031014 */
-	border: 1px solid #006896;    /* ADD MLR 301014 */
+	/*border: 1px solid #006896;     ADD MLR 301014 */
 }    /* MOVED MLR 301014 */
 
 .ui-widget-header div {   /*ADD MLR 022714 */
