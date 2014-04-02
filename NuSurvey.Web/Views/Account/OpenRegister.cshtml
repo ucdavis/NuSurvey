@@ -28,12 +28,6 @@
                 }
                  
             });
-
-            $("#openRegister").submit(function() {
-                if(!confirm("You are requesting permission to download the Healthy Kids pediatric obesity risk assessment form to your computer. Healthy Kids© is protected by copyright laws and is property of University of California. By downloading Healthy Kids, you agree to keep the original form unchanged. This means that you are not entitled to modify or use the photographs for any other purpose. In addition, all references and logos may not be altered in any way nor removed. ")) {
-                    return false;
-                }
-            });
         });
     </script>    
 }
@@ -49,7 +43,7 @@
 
     <fieldset>
         @{var isChecked = "";}
-        <p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
+        
 
         <p><strong>Note!</strong> To answer surveys anonymously,  you don't have to register. Just click the image on the home page to answer surveys for Parents.</p>
         <ul>
@@ -205,7 +199,13 @@
             <li>
                 <div class="editor-label required">
                     
-                    @Html.Label("Permissions for use")<span>*</span> @Html.ActionLink("May be found here", "TermsAndConditions")
+                    @Html.Label("Permissions for use")<span>*</span>
+                    <p>
+                        You are requesting permission to download the <i>Healthy Kids</i> pediatric obesity risk assessment form to your computer. <i>Healthy Kids</i>© is protected by copyright laws and is property of University of California. By downloading <i>Healthy Kids</i>, you agree to keep the original form unchanged. This means that you are not entitled to modify or use the photographs for any other purpose. In addition, all references and logos may not be altered in any way nor removed.
+                    </p>
+                    <p>
+                        In case of a doubt concerning your planned use of the <i>Healthy Kids</i> form or content (photographs, logo or survey questions), please click here to contact us directly.
+                    </p>
                 </div>
                 <div class="editor-field">
                     <ul class="checkbox_container">
@@ -230,7 +230,7 @@
             <li>
                 @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
                 <label>&nbsp;</label>
-                <input class="button submit" type="submit" value="Create" onclick='return jQuery.confirm("Do you agree to all the terms and conditions?"); return false;'/> | @Html.ActionLink("Cancel", "Index", "Home")
+                <input class="button submit" type="submit" value="Create"/> | @Html.ActionLink("Cancel", "Index", "Home")
             </li>
         </ul>
     </fieldset>
