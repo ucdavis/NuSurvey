@@ -70,7 +70,7 @@
 		<tr class="@(odd ? "odd": "even")">
 			<td>
                 <a href='@Url.Action("SelectPhotos", "ProgramDirector", new { id = @item.Id })'><img alt="Customize" src="@Url.Image("edit.png")"/></a>                                
-                <a href='@Url.Action("Print", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("print.png")"/></a>
+                <a onclick="return confirm('You are requesting permission to download the Healthy Kids pediatric obesity risk assessment form to your computer. Healthy Kids© is protected by copyright laws and is property of University of California. By downloading Healthy Kids, you agree to keep the original form unchanged. This means that you are not entitled to modify or use the photographs for any other purpose. In addition, all references and logos may not be altered in any way nor removed.');" href='@Url.Action("Print", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("print.png")" /></a>                
             </td>
 			<td>
 				@item.Survey.Name

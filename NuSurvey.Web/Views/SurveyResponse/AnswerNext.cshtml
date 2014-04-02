@@ -110,40 +110,43 @@
                         <img style="width: 460px; height: 290px; float: left; margin-right: 1em; background: green; display: inline-block;"/>
                     }
                     @Html.HtmlEncode(Model.CurrentQuestion.Name) <br />
-                    if (Model.SurveyAnswer != null && Model.SurveyAnswer.Answer != null)
-                    {
-                        ans = Model.SurveyAnswer.Answer;
-                    }
-                    else
-                    {
-                        ans = string.Empty;
-                    }
-                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Time)
-                    {
-                        <input id="Questions" class="text-box single-line time" type="text" value="@ans" name="Questions.Answer"/>
-                    } 
-                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeAmPm)
-                    {
-                        <input id="Questions" class="text-box single-line timeRange" type="text" value="@ans" name="Questions.Answer"/>
-                    } 
-                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeRange)
-                    {
-                        if (Model.SurveyAnswer != null && Model.SurveyAnswer.AnswerRange != null)
+                    <div class="misty-extra-special">
+                        @if (Model.SurveyAnswer != null && Model.SurveyAnswer.Answer != null)
                         {
-                            ansRange = Model.SurveyAnswer.AnswerRange;
+                            ans = Model.SurveyAnswer.Answer;
                         }
-                        else 
+                        else
                         {
-                            ansRange = string.Empty;
+                            ans = string.Empty;
                         }
-                        <input id="Questions" class="text-box single-line timeRange" type="text" value="@ans" name="Questions.Answer"/>
-                        <input id="QuestionsRange" class="text-box single-line timeRange" type="text" value="@ansRange" name="Questions.AnswerRange"/>
-                    }
-                    if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.WholeNumber || Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Decimal)
-                    {
-                        <input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer"/>
-                    }
-                    @*<input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer"/>  *@                 
+                        @if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Time)
+                        {
+                            <input id="Questions" class="text-box single-line time" type="text" value="@ans" name="Questions.Answer"/>
+                        } 
+                        @if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeAmPm)
+                        {
+                            <input id="Questions" class="text-box single-line timeRange" type="text" value="@ans" name="Questions.Answer"/>
+                        } 
+                        @if (Model.CurrentQuestion.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeRange)
+                        {
+                            if (Model.SurveyAnswer != null && Model.SurveyAnswer.AnswerRange != null)
+                            {
+                                ansRange = Model.SurveyAnswer.AnswerRange;
+                            }
+                            else
+                            {
+                                ansRange = string.Empty;
+                            }
+                            <input id="Questions" class="text-box single-line timeRange" type="text" value="@ans" name="Questions.Answer"/>
+                            <input id="QuestionsRange" class="text-box single-line timeRange" type="text" value="@ansRange" name="Questions.AnswerRange"/>
+                        }
+                        @if (Model.CurrentQuestion.OpenEndedQuestionType == (int) NuSurvey.Core.Domain.QuestionType.WholeNumber || Model.CurrentQuestion.OpenEndedQuestionType == (int) NuSurvey.Core.Domain.QuestionType.Decimal)
+                        {
+                            <input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer"/>
+                        }
+                    </div>
+
+                        @*<input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer"/>  *@                 
                 }
                 else
                 {
@@ -156,20 +159,23 @@
                         <img style="width: 460px; height: 290px; float: left; margin-right: 1em; background: green; display: inline-block;"/>
                     }
                     @Html.HtmlEncode(Model.CurrentQuestion.Name) <br />
-                    foreach (var response in Model.CurrentQuestion.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
-                    {
-                        var isChecked = string.Empty;
-                        if (Model.SurveyAnswer != null)
+                    <div class="misty-extra-special">
+                        @foreach (var response in Model.CurrentQuestion.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
                         {
-                            if (response.Id == Model.SurveyAnswer.ResponseId)
+                            var isChecked = string.Empty;
+                            if (Model.SurveyAnswer != null)
                             {
-                                isChecked = "checked=\"checked\"";
+                                if (response.Id == Model.SurveyAnswer.ResponseId)
+                                {
+                                    isChecked = "checked=\"checked\"";
+                                }
                             }
+
+                            <input id="Questions[@response.Order]" type="radio" value="@response.Id" @isChecked name="Questions.ResponseId" />
+                            <label for="Questions[@response.Order]">@response.Value</label>
+                            <br />
                         }
-                        
-                        <input id="Questions[@response.Order]" type="radio" value="@response.Id" @isChecked name="Questions.ResponseId" />                             
-                        <label for="Questions[@response.Order]">@response.Value</label> <br />
-                    }
+                    </div>
                 }
                 @Html.ValidationMessage("Questions")
             </div>
