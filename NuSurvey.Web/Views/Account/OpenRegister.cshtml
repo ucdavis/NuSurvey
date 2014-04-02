@@ -48,82 +48,58 @@
         <p><strong>Note!</strong> To answer surveys anonymously,  you don't have to register. Just click the image on the home page to answer surveys for Parents.</p>
         <ul>
             <li>            
-                <div class="editor-label required">
-                    @Html.LabelFor(model => model.Email)<span>*</span> 
-                </div>
                 <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.Email)
+                    @Html.TextBoxFor(model => model.Email, new { placeholder = "Email address*" })                    
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.Email)
                 </div>
             </li>           
             
             <li>
-                <div class="editor-label required">
-                    @Html.LabelFor(model => model.User.Name)<span>*</span>
-                </div>
                 <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.User.Name)
+                    @Html.TextBoxFor(model => model.User.Name, new { placeholder = "Name*" })
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.User.Name)
                 </div>
             </li>
             <li>
-                <div class="editor-label required">
-                    @Html.LabelFor(model => model.User.Title)
-                </div>
                 <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.User.Title)
+                    @Html.TextBoxFor(model => model.User.Title, new { placeholder = "Title*" })
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.User.Title)
                 </div>
             </li>
             <li>
-                <div class="editor-label required">
-                    @Html.LabelFor(model => model.User.Agency)
-                </div>
                 <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.User.Agency)
+                    @Html.TextBoxFor(model => model.User.Agency, new { placeholder = "Agency/Institution*" })
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.User.Agency)
                 </div>
             </li>
             <li>
-                <div class="editor-label required">
-                    @Html.LabelFor(model => model.User.Street)<span>*</span>
-                </div>
                 <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.User.Street)
+                    @Html.TextBoxFor(model => model.User.Street, new { placeholder = "Street*" })
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.User.Street)
                 </div>
             </li>
             <li>
-                <div class="editor-label required">
-                    @Html.LabelFor(model => model.User.City)<span>*</span>
-                </div>
                 <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.User.City)
+                    @Html.TextBoxFor(model => model.User.City, new { placeholder = "City*" })
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.User.City)
                 </div>
             </li>
             <li>
-                <div class="editor-label required">
-                    @Html.LabelFor(model => model.User.State)<span>*</span>
-                </div>
                 <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.User.State)
+                    @Html.TextBoxFor(model => model.User.State, new { placeholder = "State*" })
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.User.State)
                 </div>
             </li>
             <li>
-                <div class="editor-label required">
-                    @Html.LabelFor(model => model.User.Zip)<span>*</span>
-                </div>
                 <div class="editor-field wideText">
-                    @Html.EditorFor(model => model.User.Zip)
+                    @Html.TextBoxFor(model => model.User.Zip, new { placeholder = "Zip*" })
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.User.Zip)
                 </div>

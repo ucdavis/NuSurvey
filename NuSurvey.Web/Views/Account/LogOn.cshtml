@@ -26,21 +26,14 @@
             <legend>Account Information</legend>
             <ul>
             <li>
-            <div class="editor-label">
-                @*@Html.LabelFor(m => m.UserName)*@
-                @Html.Label("Email")
-            </div>
             <div class="editor-field wideText">
-                @Html.EditorFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName, new{placeholder="Email"})
                 @Html.ValidationMessageFor(m => m.UserName)
             </div>
             </li>
             <li>
-            <div class="editor-label">
-                @Html.LabelFor(m => m.Password)
-            </div>
             <div class="editor-field">
-                @Html.PasswordFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password, new { placeholder = "Password" })
                 @Html.ValidationMessageFor(m => m.Password)
             </div>
             </li>
