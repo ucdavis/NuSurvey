@@ -16,77 +16,110 @@
     </script>
 }
 
-<h2>Available Surveys to Customize</h2>
-<table class="datatable">
-    <thead>
-        <tr>
-            <th></th>
-            <th>
-                Name
-            </th>
-            <th>
-                ShortName
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @{ var odd = false; }
-        @foreach (var item in Model.Surveys) {
-            <tr class="@(odd ? "odd": "even")">
-                <td>
-                    <a href='@Url.Action("Create", "ProgramDirector", new { surveyId = @item.Id })'><img title="Create a Printable Survey from this Survey" alt="Create a Printable Survey from this Survey" src="@Url.Image("copy.png")"/></a>                                
-                </td>
-                <td>
-                    @item.Name
-                </td>
-                <td>
-                    @item.ShortName
-                </td>
+<div class="dashboard-header">
+    <h2>Director Dashboard</h2>
+    <p><i>Healthy Kids</i> and <i>My Child at Meal Time</i> are two researched based obesity risk rapid self-assessment tools designed for low-income and low-literate ethnically diverse parents of preschool age children. You can download PDF formatted files of these tools for use with your program participants. Alternatively, you may tailor the tools’ photographs to better represent your program’s target population.</p>
+</div>
+
+<div class="dashboard-detail">
+    <h3>Supplemental Materials</h3>
+    <p>If you would like to use the original version of the <i>Healthy Kids</i> or <i>My Child at Meal Time</i> surveys download them here. Additional supplemental materials are provided as well such as instruction guides.</p>
+    <ul>
+        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/healthykidssurvey.pdf' title="Healthy Kids Survey"><img alt="Download Healthy Kids Survey" src="/Images/DownloadHealthyKids.png" /></a> </li>
+
+        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/mychildsurvey.pdf' title="My Child Survey"><img alt="Download My Child at Meal Time Survey" src="/Images/DownloadMyChild.png" /></a></li>
+
+        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/healthykids_instguide.pdf' title="Healthy Kids Instruction Guide"><img alt="Healthy Kids Instruction Guide" src="/Images/InstGuideHealthyKids.png" /></a> </li>
+
+        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/mychild_instguide.pdf' title="My Child Instruction Guide"><img alt="My Child at Meal Time Instruction Guide" src="/Images/InstGuideMyChild.png" /></a></li>
+    </ul>
+</div>
+
+<div class="dashboard-detail">
+    <h3>Select a survey to customize</h3>
+    <p>Click the icon of the survey you would like to customize. A new editable version will appear in the table below.</p>
+    <ul>
+        <li><a class="director-icon" href='/ProgramDirector/Create?surveyId=1' title="Create Healthy Kids Survey"><img alt="Create Healthy Kids Survey" src="/Images/CreateHealthyKids.png" /></a> </li>
+
+        <li><a class="director-icon" href='/ProgramDirector/Create?surveyId=2' title="Create My Child Survey"><img alt="Create My Child at Meal Time Survey" src="/Images/CreateMyChild.png" /></a></li>
+    </ul>
+</div>
+
+<div class="dashboard-detail">
+
+    <h2>Your Customized Surveys</h2>
+    <p>Click on the paper icon for the survey you would like tailor. Click the corresponding printer icon to download the print quality PDF. You can then print now or save the survey file for later printing. The PDF file generated is formatted for professional printing with a .125" bleed on each side.</p>
+
+    <table class="datatable">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    ShortName
+                </th>
             </tr>
-            odd = !odd;
-        }
-    </tbody>
-</table>
-
-<h2>Surveys You have Duplicated</h2>
-
-<table class="datatable">
-	<thead>
-		<tr>
-			<th></th>
-			<th>
-				Name
-			</th>
-            <th>
-                ShortName
-            </th>
-            <th>Created</th>
-            <th></th>
-		</tr>
-	</thead>
-	<tbody>
-@{  odd = false; }
-@foreach (var item in Model.PrintedSurveys) {
-		<tr class="@(odd ? "odd": "even")">
-			<td>
-                <a href='@Url.Action("SelectPhotos", "ProgramDirector", new { id = @item.Id })'><img alt="Customize" src="@Url.Image("edit.png")"/></a>                                
-                <a onclick="return confirm('You are requesting permission to download the Healthy Kids pediatric obesity risk assessment form to your computer. Healthy Kids© is protected by copyright laws and is property of University of California. By downloading Healthy Kids, you agree to keep the original form unchanged. This means that you are not entitled to modify or use the photographs for any other purpose. In addition, all references and logos may not be altered in any way nor removed.');" href='@Url.Action("Print", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("print.png")" /></a>                
-            </td>
-			<td>
-				@item.Survey.Name
-			</td>
-            <td>
-                @item.Survey.ShortName
-            </td>
-            <td>
-                @item.DateCreated
-            </td>
-            <td>
-                <a href='@Url.Action("Delete", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("delete.png")"/></a>
-            </td>
-		</tr>
-		odd = !odd;
-}
-	</tbody>
-</table>
-
+        </thead>
+        <tbody>
+            @{ var odd = false; }
+            @foreach (var item in Model.Surveys)
+            {
+                <tr class="@(odd ? "odd": "even")">
+                    <td>
+                        <a href='@Url.Action("Create", "ProgramDirector", new { surveyId = @item.Id })'><img title="Create a Printable Survey from this Survey" alt="Create a Printable Survey from this Survey" src="@Url.Image("copy.png")" /></a>
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.ShortName
+                    </td>
+                </tr>
+                odd = !odd;
+            }
+        </tbody>
+    </table>
+    <h2>Surveys You have Duplicated</h2>
+    <table class="datatable">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    ShortName
+                </th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{  odd = false; }
+            @foreach (var item in Model.PrintedSurveys)
+            {
+                <tr class="@(odd ? "odd": "even")">
+                    <td>
+                        <a href='@Url.Action("SelectPhotos", "ProgramDirector", new { id = @item.Id })'><img alt="Customize" src="@Url.Image("edit.png")" /></a>
+                        <a onclick="return confirm('You are requesting permission to download the Healthy Kids pediatric obesity risk assessment form to your computer. Healthy Kids© is protected by copyright laws and is property of University of California. By downloading Healthy Kids, you agree to keep the original form unchanged. This means that you are not entitled to modify or use the photographs for any other purpose. In addition, all references and logos may not be altered in any way nor removed.');" href='@Url.Action("Print", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("print.png")" /></a>
+                    </td>
+                    <td>
+                        @item.Survey.Name
+                    </td>
+                    <td>
+                        @item.Survey.ShortName
+                    </td>
+                    <td>
+                        @item.DateCreated
+                    </td>
+                    <td>
+                        <a href='@Url.Action("Delete", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("delete.png")" /></a>
+                    </td>
+                </tr>
+                odd = !odd;
+            }
+        </tbody>
+    </table>
+</div>
