@@ -327,7 +327,7 @@ form fieldset {
 }
 
 form fieldset ul {
-    padding: 10px 75px;    /* Value Changed MLR 0303014 */
+    padding: 10px 200px;    /* Value Changed MLR 0404014 */
 }
 
 .display-mcmt-question ul, .display-hk-question ul {  /* ADD MLR 040214 */
@@ -470,13 +470,22 @@ fieldset legend {
 /******* EDUCATOR ENTRY PAGE *******/
 
 .even , .odd {     /* ADD MLR 031914 */
-	margin: 40px 0;     /* ADD MLR 031914 */
+	margin: 20px 0;     /* ADD MLR 031914 */
+	padding: 20px;     /* ADD MLR 040414 */
+	font-size: 1.2em;     /* ADD MLR 040414 */
+	line-height: 20px;     /* ADD MLR 040414 */
 }     /* ADD MLR 031914 */
 
+.even {     /* ADD MLR 040414 */
+		background: #D4E6ED;     /* ADD MLR 040414 */
+}     /* ADD MLR 040414 */
+
 .even div input, .odd div input {     /* ADD MLR 031914 */
-	float: left;     /* ADD MLR 031914 */
-	margin: 0 10px 0 0;     /* ADD MLR 031914 */
+	margin: 4px 10px 0 0;     /* Changed value MLR 040414 */
+	padding: 5px;      /* ADD MLR 040414 */
+	width: 150px;      /* ADD MLR 040414 */
 }     /* ADD MLR 031914 */
+
 
 
 
@@ -681,6 +690,12 @@ nav, #nav {
 
 
 
+#pdf_print {
+	font-size: 1.4em;
+}
+
+
+
 /********** EDUCATOR & DIRECTOR DASHBOARD **********/
 
 .dashboard-header {   /* ADD MLR 040314 */
@@ -734,3 +749,13 @@ nav, #nav {
 .validation-summary-errors ul {   /* ADD MLR 040214 */
 	list-style: none;    /* ADD MLR 040214 */
 }   /* ADD MLR 040214 */
+
+.field-validation-error {   /* ADD MLR 040714 */
+	background: #BC272D;   /* ADD MLR 040714 */
+	padding: 2px 4px;   /* ADD MLR 040714 */
+	color: #fff;   /* ADD MLR 040714 */
+	font-weight: bold;   /* ADD MLR 040714 */
+	font-size: 1.1em;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
+
+style="background: #BC272D; padding: 2px 4px; color: #fff; font-weight: bold; font-size: 1.1em;"
