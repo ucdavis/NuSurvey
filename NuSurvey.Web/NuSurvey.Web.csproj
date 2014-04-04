@@ -260,6 +260,7 @@
     <Content Include="Images\delete.png" />
     <Content Include="Images\details.png" />
     <Content Include="Images\diagonal_waves_blue1.png" />
+    <Content Include="Images\Director-dashboard-edit.png" />
     <Content Include="Images\DownloadHealthyKids.png" />
     <Content Include="Images\DownloadMyChild.png" />
     <Content Include="Images\edit.png" />

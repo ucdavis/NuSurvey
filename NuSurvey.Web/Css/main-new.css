@@ -164,6 +164,8 @@ h2 {  /* ADD MLR 022714 */
 #messagecontainer {
 	text-align: left;
 	font-size: 1.2em;
+	max-width: 900px;
+	margin: 0 auto;
 }
 
 
@@ -233,11 +235,13 @@ nav a {   /*ADD MLR 030314 */
 /***---------- PARENT QUESTION DISPLAY ----------***/   /* <---- ADD NOTE MLR 022714 */
 
 .mcmt-survey {
-  background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; /* Value Changed MLR 030314 */
-}
+	background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; /* Value Changed MLR 030314 */
+	padding: 156px 0 0 0;    /*ADD MLR 040314 */
+ }
 
 .hk-survey {    /*Added MLR 020414 */
-  background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; /* Value changed MLR 030314 */ 
+	background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; /* Value changed MLR 030314 */ 
+	padding: 156px 0 0 0;    /*ADD MLR 040314 */
 }
 
 .mcmt-survey .container-center, .hk-survey .container-center { /* ADD MLR 022714 */
@@ -255,7 +259,7 @@ nav a {   /*ADD MLR 030314 */
     -moz-border-radius: 14px;
     border-radius: 14px;
   
-    margin: 156px 50px 0 50px; /* Changed value MLR 040214 */
+    margin: 0px 50px 0 50px; /* Changed value MLR 040314 */
 	padding: 10px 10px 40px 10px; /* ADD MLR 022714 */
     font: 20px/30px 'Source Sans Pro', Arial, sans-serif;  /* Changed value MLR 040214 */
 	font-weight: 600;
@@ -427,7 +431,7 @@ table {   /* ADD MLR 030314 */
 }   /* ADD MLR 030314 */
 
 .dataTables_wrapper {   /* ADD MLR 030314 */
-	padding: 5px 40px 15px 40px;   /* ADD MLR 030314 */
+	padding: 5px 0 15px 0;   /* ADD MLR 030314 */
 }   /* ADD MLR 030314 */
 
 
@@ -627,27 +631,28 @@ nav, #nav {
 /******* GOAL RESULTS PAGE PARENTS *******/     /* ADD MLR 031214 */
 
 .result_fieldset_page {     /* ADD MLR 031214 */
-	background:  url('../images/hk-goal-bkgd.jpg') repeat;     /* ADD MLR 031214 */
+	background:  url('../images/hk-goal-bkgd.jpg') no-repeat;     /* ADD MLR 031214 */
 }     /* ADD MLR 031214 */
 
 .result_thanks {     /* ADD MLR 031214 */
 	margin: 125px 55px 0 55px;     /* ADD MLR 031214 */
-	height: 80px;     /* ADD MLR 031214 */
+	height: 60px;     /* Changed value MLR 040314 */
 }     /* ADD MLR 031214 */
 
 .result_fieldset_positive {     /* ADD MLR 031214 */
-	margin: 15px 90px;     /* ADD MLR 031214 */
-	height:	60px;     /* ADD MLR 031214 */
+	margin: 40px 90px;     /* Changed value MLR 040314 */
+	height:	20px;     /* Changed value MLR 040314 */
 }     /* ADD MLR 031214 */
 
 .result_fieldset_majorgoal {     /* ADD MLR 031214 */
-	margin: 70px 90px 0 90px;     /* ADD MLR 031214 */
+	margin: 60px 90px 0 90px;     /* Changed value MLR 040314 */
 	height: 30px;     /* ADD MLR 031214 */
 }     /* ADD MLR 031214 */
 
-.result_category {     /* ADD MLR 031214 */
+.result_minorgoals {     /* Changed class MLR 040314 */
 	margin: 52px 108px 0 108px;     /* ADD MLR 031214 */
 	height: 82px;     /* ADD MLR 031214 */
+	max-width: 420px;     /* ADD MLR 040314 */
 }     /* ADD MLR 031214 */
 
 .result_checkbox {     /* ADD MLR 040314 */
@@ -657,6 +662,10 @@ nav, #nav {
 
 .result_quiz {     /* ADD MLR 040314 */
 	font-size: 2.5em;     /* ADD MLR 040314 */
+	padding: 5px 0;      /* ADD MLR 040314 */
+	font-weight:bold;      /* ADD MLR 040314 */
+	color:#30205B;     /* ADD MLR 040314 */
+	line-height: 40px;     /* ADD MLR 040314 */
 }     /* ADD MLR 040314 */
 
 
@@ -664,7 +673,7 @@ nav, #nav {
 /********** EDUCATOR & DIRECTOR DASHBOARD **********/
 
 .dashboard-header {   /* ADD MLR 040314 */
-	width: 65%;   /* ADD MLR 040314 */
+	width: 80%;   /* ADD MLR 040314 */
 }   /* ADD MLR 040314 */
 
 .dashboard-header  h2{   /* ADD MLR 040314 */
@@ -673,7 +682,7 @@ nav, #nav {
 }   /* ADD MLR 040314 */
 
 .dashboard-detail {   /* ADD MLR 040314 */
-	margin: 20px 0 0 0;   /* ADD MLR 040314 */
+	margin: 20px 0px 0 75px;   /* ADD MLR 040314 */
 }   /* ADD MLR 040314 */
 
 .dashboard-detail h3 {   /* ADD MLR 040314 */
@@ -681,6 +690,10 @@ nav, #nav {
 	padding: 10px;   /* ADD MLR 040314 */
 	background: #D4E6ED;   /* ADD MLR 040314 */
 	color: #03205B;   /* ADD MLR 040314 */
+}   /* ADD MLR 040314 */
+
+.dashboard-detail p {   /* ADD MLR 040314 */
+	margin: 20px 0 0 0;   /* ADD MLR 040314 */
 }   /* ADD MLR 040314 */
 
 .dashboard-detail ul {   /* ADD MLR 040314 */
