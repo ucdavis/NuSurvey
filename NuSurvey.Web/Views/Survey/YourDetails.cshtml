@@ -116,7 +116,7 @@
     <table id="yourDetails" class="datatable">
 	    <thead>
 		    <tr>
-			    <th></th>
+			    @*<th></th>*@
 			    <th>
 				    Name
 			    </th>
@@ -141,9 +141,9 @@
      }
     @foreach (var item in Model.SurveyResponses) {
 		    <tr class="@(odd ? "odd": "even")" data-multi-id="@item.Id">
-			    <td>
+			    @*<td>
                     <a href='@Url.Action("Details", "SurveyResponse", new { id = @item.Id, fromYourDetails=true })'><img alt="Details of Survey Response" src="@Url.Image("details.png")"/></a>        
-			    </td>
+			    </td>*@
 			    <td>
 				    @item.StudentId
 			    </td>
