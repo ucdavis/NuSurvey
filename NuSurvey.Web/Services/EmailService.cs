@@ -21,7 +21,7 @@ namespace NuSurvey.Web.Services
         {
             var mail = new MailMessage("automatedemail@caes.ucdavis.edu", userName, "Healthy Kids Website Password Reset", "");
             mail.IsBodyHtml = true;
-            mail.Body = string.Format("Your Password has been reset to {0}<br />{1}<br />{2}", tempPass, "We recommend changing your password once you have logged on." ,"Please do not reply to this email. It was automatically generated."); 
+            mail.Body = string.Format("Your Password has been set to {0}<br />{1}<br />{2}", tempPass, "We recommend changing your password once you have logged on by clicking the \"Manage Account\" link in the upper right corner." ,"Please do not reply to this email. It was automatically generated."); 
             var client = new SmtpClient();
             client.Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("SmtpAccount"), CloudConfigurationManager.GetSetting("SmtpPassword"));
             client.Send(mail);
@@ -39,7 +39,7 @@ namespace NuSurvey.Web.Services
                                       userName,
                                       "And this password: ",
                                       tempPass,
-                                      "We recommend changing your password once you have logged on.",
+                                      "We recommend changing your password once you have logged on by clicking the \"Manage Account\" link in the upper right corner.",
                                       "Please do not reply to this email. It was automatically generated.");
 
             var client = new SmtpClient();

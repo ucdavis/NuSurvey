@@ -57,7 +57,7 @@ Example: Dinosaur 1  *@
 	@*<legend>Survey Response</legend>*@
 	<h4>Answer All Survey Questions</h4>
 	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
-	<p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
+	<p>Enter the first name of the participant. This name with be used to customize the goal sheet. Enter answers for each question. If a participant did not answer a question or checked multiple answers click the "Bypass question" box. When you have finished entering all the questions click the "Submit" button at the bottom of the page. All questions must be answered or "Bypass question" selected.</p>
 	<ul>
 		<li>
 			<div class="editor-label required">
@@ -166,13 +166,10 @@ Example: Dinosaur 1  *@
 		<li>
 			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
 			<label>&nbsp;</label>
-			<input class="button" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "Index")
+			<input class="button" type="submit" value="Submit" />
 		</li>
 	</ul>
 </fieldset>
 }
 
-<div>
-	@Html.ActionLink("Back to List", "Index")
-</div>
 

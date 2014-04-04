@@ -50,7 +50,7 @@
 <div class="dashboard-detail">
 
     <h2>Your Customized Surveys</h2>
-    <p>Click on the paper icon for the survey you would like tailor. Click the corresponding printer icon to download the print quality PDF. You can then print now or save the survey file for later printing. The PDF file generated is formatted for professional printing with a .125" bleed on each side.</p>
+    <p>Click on the tool icon to edit the survey you would like tailor. Click the download icon to generate a print quality PDF. You can choose to print now or save the survey file for later printing. The PDF file generated is formatted for professional printing with a .125" bleed on each side.</p>
 
     <h2>Surveys You have Duplicated</h2>
     <table class="datatable">
@@ -86,7 +86,7 @@
                         @item.DateCreated
                     </td>
                     <td>
-                        <a href='@Url.Action("Delete", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("delete.png")" /></a>
+                        <a onclick="return confirm('Are you sure you want to delete this survey?');" href='@Url.Action("Delete", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("delete.png")" /></a>
                     </td>
                 </tr>
                 odd = !odd;
