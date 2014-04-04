@@ -52,37 +52,6 @@
     <h2>Your Customized Surveys</h2>
     <p>Click on the paper icon for the survey you would like tailor. Click the corresponding printer icon to download the print quality PDF. You can then print now or save the survey file for later printing. The PDF file generated is formatted for professional printing with a .125" bleed on each side.</p>
 
-    <table class="datatable">
-        <thead>
-            <tr>
-                <th></th>
-                <th>
-                    Name
-                </th>
-                <th>
-                    ShortName
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ var odd = false; }
-            @foreach (var item in Model.Surveys)
-            {
-                <tr class="@(odd ? "odd": "even")">
-                    <td>
-                        <a href='@Url.Action("Create", "ProgramDirector", new { surveyId = @item.Id })'><img title="Create a Printable Survey from this Survey" alt="Create a Printable Survey from this Survey" src="@Url.Image("copy.png")" /></a>
-                    </td>
-                    <td>
-                        @item.Name
-                    </td>
-                    <td>
-                        @item.ShortName
-                    </td>
-                </tr>
-                odd = !odd;
-            }
-        </tbody>
-    </table>
     <h2>Surveys You have Duplicated</h2>
     <table class="datatable">
         <thead>
@@ -91,15 +60,15 @@
                 <th>
                     Name
                 </th>
-                <th>
+                @*<th>
                     ShortName
-                </th>
+                </th>*@
                 <th>Created</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @{  odd = false; }
+            @{  var odd = false; }
             @foreach (var item in Model.PrintedSurveys)
             {
                 <tr class="@(odd ? "odd": "even")">
@@ -110,9 +79,9 @@
                     <td>
                         @item.Survey.Name
                     </td>
-                    <td>
+                    @*<td>
                         @item.Survey.ShortName
-                    </td>
+                    </td>*@
                     <td>
                         @item.DateCreated
                     </td>
