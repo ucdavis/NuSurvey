@@ -11,7 +11,13 @@
 
     <script type="text/javascript">
         $(function () {
-            $("table.datatable").dataTable({ "bJQueryUI": true });
+            $("table.datatable").dataTable({
+                "bJQueryUI": true,
+                "aaSorting": [[3, "desc"]],
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0,1,4] } //Disables sort on icon columns
+                ]
+            });
         });    
     </script>
 }
@@ -52,11 +58,11 @@
     <h2>Your Customized Surveys</h2>
     <p>Click on the tool icon to edit the survey you would like tailor. Click the download icon to generate a print quality PDF. You can choose to print now or save the survey file for later printing. The PDF file generated is formatted for professional printing with a .125" bleed on each side.</p>
 
-    <h2>Surveys You have Duplicated</h2>
     <table class="datatable">
         <thead>
             <tr>
-                <th></th>
+                <th>Customize</th>
+                <th>Download/Print</th>
                 <th>
                     Name
                 </th>
@@ -64,7 +70,7 @@
                     ShortName
                 </th>*@
                 <th>Created</th>
-                <th></th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -73,7 +79,9 @@
             {
                 <tr class="@(odd ? "odd": "even")">
                     <td>
-                        <a href='@Url.Action("SelectPhotos", "ProgramDirector", new { id = @item.Id })'><img alt="Customize" src="@Url.Image("edit.png")" /></a>
+                        <a href='@Url.Action("SelectPhotos", "ProgramDirector", new { id = @item.Id })'><img alt="Customize" src="@Url.Image("edit.png")" /></a>                        
+                    </td>
+                    <td>                        
                         <a onclick="return confirm('You are requesting permission to download the Healthy Kids pediatric obesity risk assessment form to your computer. Healthy Kids© is protected by copyright laws and is property of University of California. By downloading Healthy Kids, you agree to keep the original form unchanged. This means that you are not entitled to modify or use the photographs for any other purpose. In addition, all references and logos may not be altered in any way nor removed.');" href='@Url.Action("Print", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("print.png")" /></a>
                     </td>
                     <td>
