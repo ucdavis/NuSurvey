@@ -48,7 +48,7 @@
 @using (Html.BeginForm())
 {
 	@Html.AntiForgeryToken()
-	@Html.ValidationSummary(true)
+	@Html.ValidationSummary(true, "There were errors below, please correct them.")
     @Html.HiddenFor(x => x.Survey.Id)
 
 <fieldset>
@@ -78,19 +78,20 @@ Example: Dinosaur 1  *@
         @foreach (var item in Model.Questions)
         {
             <li class="@(odd ? "odd" : "even")">
-                <div class="editor-field">
+                <div class="editor-field bypass">
                     @{var isBypassChecked = string.Empty;
-                          if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null)
-                          {
-                              if (Model.SurveyAnswers.ElementAtOrDefault(indexCounter).BypassQuestion)
-                              {
-                                  isBypassChecked = "checked=\"checked\"";
-                              }
-                          }
-                      }
-                    <input id="Questions[@indexCounter]_BypassQuestion" class="check-box" type="checkbox" @isBypassChecked value="true" name="Questions[@indexCounter].BypassQuestion" >
+                    if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null)
+                    {
+                        if (Model.SurveyAnswers.ElementAtOrDefault(indexCounter).BypassQuestion)
+                        {
+                            isBypassChecked = "checked=\"checked\"";
+                        }
+                    }
+                    }
+                    <input id="Questions[@indexCounter]_BypassQuestion" class="check-box" type="checkbox" @isBypassChecked value="true" name="Questions[@indexCounter].BypassQuestion">
                 </div>
-                <div class="editor-label">
+
+                <div class="editor-label bypass">
                     @Html.Label("Bypass Question")
                 </div>
                 <br />
