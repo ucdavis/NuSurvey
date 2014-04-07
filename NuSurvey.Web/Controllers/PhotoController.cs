@@ -376,18 +376,6 @@ namespace NuSurvey.Web.Controllers
 
         }
 
-        public ActionResult GetDirectorThumbnail(int id)
-        {
-            var photo = _photoRepository.GetById(id);
-
-            if (photo == null)
-            {
-                return File(new byte[0], "image/jpg");
-            }
-
-            return File(_blobStoargeService.GetPhoto(photo.Id, Resource.DirectorThumb), "image/jpg");
-
-        }
 
         public ActionResult GetPhoto(int id)
         {

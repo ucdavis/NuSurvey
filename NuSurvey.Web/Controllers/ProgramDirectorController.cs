@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using NuSurvey.Core.Domain;
 using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.Web.Resources;
 using NuSurvey.Web.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
@@ -22,14 +23,16 @@ namespace NuSurvey.Web.Controllers
         private readonly IRepository<PrintedSurvey> _printedSurveyRepository;
         private readonly IRepository<Photo> _photoRepository;
         private readonly IPrintService _printService;
+        private readonly IBlobStoargeService _blobStoargeService;
 
 
-        public ProgramDirectorController(IRepository<Survey> surveyRepository, IRepository<PrintedSurvey> printedSurveyRepository, IRepository<Photo> photoRepository, IPrintService printService)
+        public ProgramDirectorController(IRepository<Survey> surveyRepository, IRepository<PrintedSurvey> printedSurveyRepository, IRepository<Photo> photoRepository, IPrintService printService, IBlobStoargeService blobStoargeService)
         {
             _surveyRepository = surveyRepository;
             _printedSurveyRepository = printedSurveyRepository;
             _photoRepository = photoRepository;
             _printService = printService;
+            _blobStoargeService = blobStoargeService;
         }
 
         //
@@ -99,6 +102,20 @@ namespace NuSurvey.Web.Controllers
             var printedSurvey = _printedSurveyRepository.Queryable.Single(a => a.Id == id && a.UserId == userId);
 
             return View(printedSurvey);
+        }
+
+        [ProgramDirector]
+        public ActionResult GetDirectorThumbnail(int id)
+        {
+            var photo = _photoRepository.GetById(id);
+
+            if (photo == null)
+            {
+                return File(new byte[0], "image/jpg");
+            }
+
+            return File(_blobStoargeService.GetPhoto(photo.Id, Resource.DirectorThumb), "image/jpg");
+
         }
 
         [ProgramDirector]

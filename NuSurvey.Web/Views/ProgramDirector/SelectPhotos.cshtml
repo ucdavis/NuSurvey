@@ -92,7 +92,7 @@
         var divId = string.Format("photo{0}_{1}", photo.Id, psqId);
         <a href="#" class="makePrime" data-id="@photo.Id" data-psq="@psqId">
             <div id = "@divId" style="display: inline-block; padding-left: 10px;" class="@showBorder">                
-                <div><img src='@Url.Action("GetDirectorThumbnail", "Photo", new { id = photo.Id })' /></div>
+                <div><img src='@Url.Action("GetDirectorThumbnail", "ProgramDirector", new { id = photo.Id })' /></div>
             </div>
         </a>
     }
