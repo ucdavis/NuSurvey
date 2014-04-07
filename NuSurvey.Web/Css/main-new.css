@@ -134,7 +134,6 @@ h2 {  /* ADD MLR 022714 */
 
 .navigation {
     text-align: left; /* Value changed MLR 020414 */
-	color: #fff;
 	max-width: 1020px;
 	margin: 0 auto;
 }
@@ -143,7 +142,6 @@ h2 {  /* ADD MLR 022714 */
     display: inline-block;
     list-style-type: none;
     padding: 7px 0px; /* Value changed MLR 030314 */
-	color: #FFF; /* ADDED MLR 022714 */
 	float: left;   /* ADD MLR 030314 */
 }
 
@@ -159,8 +157,8 @@ h2 {  /* ADD MLR 022714 */
 /*******  BREADCRUMBS  *******/    /* ADD MLR 031014 */
 #messagecontainer .col2 .navigation li {    /* ADD MLR 031014 */
 	border: none;    /* ADD MLR 031014 */
-	padding: 7px 8px;    /* ADD MLR 031014 */
-	background: url(../images/arrow2.png) top right no-repeat;	    /* Value Changed MLR 031114 */
+	padding: 0px 8px;    /* ADD MLR 031014 */
+	background: url(../images/arrow2.png) center right no-repeat;	    /* Value Changed MLR 031114 */
 }    /* ADD MLR 031014 */
 
 #messagecontainer .col2 .navigation li:last-child {    /* ADD MLR 031014 */
@@ -170,9 +168,15 @@ h2 {  /* ADD MLR 022714 */
 #messagecontainer {
 	text-align: left;
 	font-size: 1.2em;
-	max-width: 900px;
+	max-width: 1020px;
 	margin: 0 auto;
+	padding: 20px 0 0 0;
 }
+
+#messagecontainer .col2 {     /* ADD MLR 040714 */
+	width: 500px;     /* ADD MLR 040714 */
+	font-size: 1em;     /* ADD MLR 040714 */
+}     /* ADD MLR 040714 */
 
 
 
@@ -420,7 +424,7 @@ input.button {
 	/*border: 1px solid #006896;     ADD MLR 301014 */
 }    /* MOVED MLR 301014 */
 
-.ui-widget-header div {   /*ADD MLR 022714 */
+.ui-widget-header div, .dataTables_wrapper div {   /*Changed value MLR 040714 */
 	display: inline;   /*ADD MLR 022714 */
 	padding: 5px 15px;   /*ADD MLR 022714 */
 }   /*ADD MLR 022714 */
@@ -436,9 +440,36 @@ table {   /* ADD MLR 030314 */
 	width: 100%;   /* ADD MLR 030314 */
 }   /* ADD MLR 030314 */
 
+td {   /* ADD MLR 040714 */
+	padding: 0 5px;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
+
 .dataTables_wrapper {   /* ADD MLR 030314 */
 	padding: 5px 0 15px 0;   /* ADD MLR 030314 */
 }   /* ADD MLR 030314 */
+
+#filter_container {   /* ADD MLR 040714 */
+	margin: 20px;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
+
+.ui-accordion-content-active {   /* ADD MLR 040714 */
+	border-radius: 0px;   /* ADD MLR 040714 */
+	background: #D4E6ED;   /* ADD MLR 040714 */
+	color: ##03205B;;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
+
+#yourDetails tr {   /* ADD MLR 040714 */
+	line-height: 25px;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
+
+.ui-icon {   /* ADD MLR 040714 */
+	float: right;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
+
+.bt-active {   /* ADD MLR 040714 */
+	background: #03205B;   /* ADD MLR 040714 */
+	color: #fff;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
 
 
 /******* DIRECTOR PRINT SELECTION PAGE *******/
@@ -481,10 +512,13 @@ fieldset legend {
 }     /* ADD MLR 040414 */
 
 .even div input, .odd div input {     /* ADD MLR 031914 */
-	margin: 4px 10px 0 0;     /* Changed value MLR 040414 */
+	margin: 4px 10px 0 100px;     /* Changed value MLR 040414 */
 	padding: 5px;      /* ADD MLR 040414 */
-	width: 150px;      /* ADD MLR 040414 */
 }     /* ADD MLR 031914 */
+
+.even .editor-field .check-box {      /* ADD MLR 040714 */
+	margin: 10px;      /* ADD MLR 040714 */
+}      /* ADD MLR 040714 */
 
 
 
@@ -596,6 +630,7 @@ nav, #nav {
 
 #staff-left h3, #staff-right h3 {
 	font-size: 3.0em;    /* Value Changed MLR 031114 */
+	line-height: 30px;     /* ADD MLR 040714 */
 	margin: 0 0 10px 0;
 }
 
@@ -626,7 +661,7 @@ nav, #nav {
 	font-size: 1.2em;
 	background: #03205B; /* Important! fix for IE & older browsers */   /* ADD MLR 040214 */
 	background: linear-gradient(#4A94B4 , #03205B 40%);
-	padding: 7px 2px 10px 2px;  /* Changed value MLR 040314 */
+	padding: 0px 5px 10px 5px;  /* Changed value MLR 040314 */
 	border-radius: 8px;
 	margin: 15px 0 0 0;
 } 
@@ -651,7 +686,7 @@ nav, #nav {
 /******* GOAL RESULTS PAGE PARENTS *******/     /* ADD MLR 031214 */
 
 .result_fieldset_page {     /* ADD MLR 031214 */
-	background:  url('../images/hk-goal-bkgd.jpg') no-repeat;     /* ADD MLR 031214 */
+	background:  url('../images/hk-goal-bkgd.jpg') top left no-repeat;     /* Changed value MLR 040714 */
 }     /* ADD MLR 031214 */
 
 .result_thanks {     /* ADD MLR 031214 */
@@ -752,7 +787,8 @@ nav, #nav {
 
 .field-validation-error {   /* ADD MLR 040714 */
 	background: #BC272D;   /* ADD MLR 040714 */
-	padding: 2px 4px;   /* ADD MLR 040714 */
+	padding: 0px 4px 2px 4px;   /* ADD MLR 040714 */
+	margin: 3px;      /* ADD MLR 040714 */
 	color: #fff;   /* ADD MLR 040714 */
 	font-weight: bold;   /* ADD MLR 040714 */
 	font-size: 1.1em;   /* ADD MLR 040714 */
