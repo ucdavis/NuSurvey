@@ -67,21 +67,9 @@
 
     </script>
 }
-@section SubNav {
-    <ul class="navigation">
-        <li>
-            <a href="@Url.Action("Index", "Home")">Home</a> 
-        </li>
-        <li>
-            <a href="@Url.Action("Review", "Survey")">Surveys</a> 
-        </li>
-        <li>
-            Responses
-        </li>
-    </ul>
-}
 
-<p>Below is a list of surveys you have entered. You can highlight the surveys you want to print customized goal sheets for by clicking the participant's name. To deselect just click their name again. Once you have selected all of the desired participants, click the printer icon at the bottom left. A PDF file will be generated and open in a new window or tab. You can then print or save the file.</p>
+
+<p>Below is a list of surveys you have entered. You can select multiple surveys and print customized goal sheets by clicking the participants’ name. Click again to remove them from your selection. Once you have selected the desired participants, click the printer icon at the bottom. A PDF will be generated and open in a new window or tab. You can then print or save the file.</p>
 <div id="filter_container">
     <h3><a href="#">Filters</a></h3>
     @using (Html.BeginForm("YourDetails", "Survey", FormMethod.Post)) {
@@ -194,7 +182,7 @@
             </li>        
             <li>
                 <label>&nbsp;</label>
-                <button id="printButton" name="button" title="Select rows in the table above to print goal sheets for those participants." style="background-color:transparent; border:none;"><img src="@Url.Image("big_print.png")" /></button>                
+                <button id="printButton" name="button" title="Click on names above to print goal sheets" style="background-color:transparent; border:none;"><img src="@Url.Image("big_print.png")" /></button>                
             </li>
         </ul>
     </div>
