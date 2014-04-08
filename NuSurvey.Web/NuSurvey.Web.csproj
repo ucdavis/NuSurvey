@@ -264,6 +264,7 @@
     <Content Include="Images\DownloadMyChild.png" />
     <Content Include="Images\edit.png" />
     <Content Include="Images\email.png" />
+    <Content Include="Images\GoalsHealthyKids.png" />
     <Content Include="Images\hk-goal-bkgd.jpg" />
     <Content Include="Images\hk-header.png" />
     <Content Include="Images\hk-thumb.png" />
