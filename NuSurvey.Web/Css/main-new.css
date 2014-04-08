@@ -411,6 +411,8 @@ input.button {
     color: #FFFFFF;
     font-weight: 700;
 	padding: 5px 0;   /* ADD MLR 030314 */
+	display: block;     /* ADD MLR 040814 */
+	width: 100%;     /* ADD MLR 040814 */
 }
 
 .ui-progressbar .ui-progressbar-value {    /* EDIT moved from above ".ui-widget-header" to below MLR 031014 */
@@ -424,7 +426,7 @@ input.button {
 	/*border: 1px solid #006896;     ADD MLR 301014 */
 }    /* MOVED MLR 301014 */
 
-.ui-widget-header div {   /*ADD MLR 022714 */
+.ui-widget-header div {   /*Changed value MLR 040814 */
 	display: inline;   /*ADD MLR 022714 */
 	padding: 5px 15px;   /*ADD MLR 022714 */
 }   /*ADD MLR 022714 */
@@ -440,9 +442,41 @@ table {   /* ADD MLR 030314 */
 	width: 100%;   /* ADD MLR 030314 */
 }   /* ADD MLR 030314 */
 
+td {   /* ADD MLR 040714 */
+	padding: 0 5px;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
+
 .dataTables_wrapper {   /* ADD MLR 030314 */
 	padding: 5px 0 15px 0;   /* ADD MLR 030314 */
 }   /* ADD MLR 030314 */
+
+#filter_container {   /* ADD MLR 040714 */
+	margin: 20px;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
+
+.ui-accordion-content-active {   /* ADD MLR 040714 */
+	border-radius: 0px;   /* ADD MLR 040714 */
+	background: #D4E6ED;   /* ADD MLR 040714 */
+	color: ##03205B;;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
+
+.ui-accordion {   /* ADD MLR 040814 */
+	width: 30%;   /* ADD MLR 040814 */
+	color: #03205B;   /* ADD MLR 040814 */
+}   /* ADD MLR 040814 */
+
+#yourDetails tr {   /* ADD MLR 040714 */
+	line-height: 27px;   /* Changed value MLR 040814 */
+}   /* ADD MLR 040714 */
+
+.ui-icon {   /* ADD MLR 040714 */
+	float: right;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
+
+.bt-active {   /* ADD MLR 040714 */
+	background: #03205B;   /* ADD MLR 040714 */
+	color: #fff;   /* ADD MLR 040714 */
+}   /* ADD MLR 040714 */
 
 
 /******* DIRECTOR PRINT SELECTION PAGE *******/
@@ -492,6 +526,14 @@ fieldset legend {
 .even .editor-field .check-box {      /* ADD MLR 040714 */
 	margin: 10px;      /* ADD MLR 040714 */
 }      /* ADD MLR 040714 */
+
+.bypass {      /* ADD MLR 040814 */
+	float: right;      /* ADD MLR 040814 */
+}      /* ADD MLR 040814 */
+
+div .editor-label .bypass {      /* ADD MLR 040814 */
+	padding: 5px 0;      /* ADD MLR 040814 */
+}      /* ADD MLR 040814 */
 
 
 
@@ -649,12 +691,36 @@ nav, #nav {
 	line-height: 1.3em;
 }
 
-#login-form .editor-field input, #openRegister .editor-field input {   /* Changed value MLR 040414 */
+#login-form .editor-label label, #openRegister .editor-label label {   /* ADD MLR 040814 */
+	font-size: 2em;   /* ADD MLR 040814 */
+	line-height: 1.3em;   /* ADD MLR 040814 */
+	font-weight: bold;   /* ADD MLR 040814 */
+}   /* ADD MLR 040814 */
+
+#login-form .editor-field input, #openRegister .editor-field input, #SurveyResponse_StudentId {   /* Changed value MLR 040414 */
 	font-size: 1.4em;   /* ADD MLR 040214 */
-	padding: 10px;   /* ADD MLR 040214 */
+	padding: 8px;   /* Changed value MLR 040814 */
 	width: 300px;   /* ADD MLR 040214 */
 	color: #03205B;   /* ADD MLR 040214 */
 }   /* ADD MLR 040214 */
+
+#login-form fieldset ul, #openRegister fieldset ul {   /* ADD MLR 040814 */
+	padding: 10px;   /* ADD MLR 040814 */
+}   /* ADD MLR 040814 */
+
+#login-form fieldset legend, #openRegister fieldset h3, #openRegister fieldset p {   /* ADD MLR 040814 */
+	width: 550px;   /* ADD MLR 040814 */
+}   /* ADD MLR 040814 */
+
+#openRegister .checkbox {   /* ADD MLR 040814 */
+	width: 20px;   /* ADD MLR 040814 */
+	padding: 0px 7px 0px 70px;   /* ADD MLR 040814 */
+}   /* ADD MLR 040814 */
+
+
+
+
+
 
 /******* GOAL RESULTS PAGE PARENTS *******/     /* ADD MLR 031214 */
 
