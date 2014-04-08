@@ -15,7 +15,10 @@
                 "bJQueryUI": true,
                 "aaSorting": [[3, "desc"]],
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0,1,4] } //Disables sort on icon columns
+                    { 'bSortable': false, 'sWidth': "75px", 'aTargets': [0] },
+                    { 'bSortable': false, 'sWidth': "105px", 'aTargets': [1] },
+                    { 'bSortable': true, 'sWidth': "160px", 'aTargets': [3] },
+                    { 'bSortable': false, 'sWidth': "75px", 'aTargets': [4] }
                 ]
             });
         });    
@@ -30,8 +33,8 @@
 </div>
 
 <div class="dashboard-detail">
-    <h3>Supplemental Materials</h3>
-    <p>If you would like to use the original version of the <i>Healthy Kids</i> or <i>My Child at Meal Time</i> surveys download them here. Additional supplemental materials are provided as well such as instruction guides.</p>
+    <h3>Downloadable Materials</h3>
+    <p>If you would like to use the original versions of the <i>Healthy Kids</i> or <i>My Child at Meal Time</i> surveys you can  download by clicking the corresponding icon below. Other supplemental materials, such as instruction guides to provide data collection consistency, are provided as well.</p>
     <ul>
         <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/healthykidssurvey.pdf' title="Healthy Kids Survey"><img alt="Download Healthy Kids Survey" src="@Url.Image("DownloadHealthyKids.png")" /></a> </li>
 
@@ -46,7 +49,7 @@
 </div>
 
 <div class="dashboard-detail">
-    <h3>Select a survey to customize</h3>
+    <h3>Select a Survey to Customize</h3>
     <p>Click the icon of the survey you would like to customize. A new editable version will appear in the table below.</p>
     <ul>
         <li><a class="director-icon" href='/ProgramDirector/Create?surveyId=1' title="Create Healthy Kids Survey"><img alt="Create Healthy Kids Survey" src="@Url.Image("CreateHealthyKids.png")" /></a> </li>
