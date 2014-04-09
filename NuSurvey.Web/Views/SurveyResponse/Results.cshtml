@@ -10,6 +10,7 @@
         @if (Model.PublicGuid == null)
         {
             <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = true})' target="_blank"><img alt="Print Results" /></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = false})' target="_blank"><img alt="Print Results without background" /></a>
         }
         else
         {
