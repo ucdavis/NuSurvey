@@ -41,13 +41,15 @@
                 }
             });
 
-            //A hack to fix this being removed by the TableTools above
-            $(".dataTables_info").addClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix");
-            $(".dataTables_length").addClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix");
-            $(".dataTables_filter").addClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix");
-            $(".yourDetails_wrapper").addClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix");
-            $(".dataTables_length").before('<span class="ui-widget-header" style="height: 62px; width: 36px; padding-left: 76px; padding-bottom: 19px;"></span>');
+            ////A hack to fix this being removed by the TableTools above
+            $(".dataTables_info").addClass("mmm-info");
+            $(".dataTables_length").addClass("mmm-length");
+            $(".dataTables_filter").addClass("mmm-filter");
+            $(".dataTables_paginate").addClass("mmm-paginate ");
+            //$(".dataTables_length").before('<span class="ui-widget-header" style="height: 62px; width: 36px; padding-left: 76px; padding-bottom: 19px;"></span>');
             $(".DTTT_container").removeClass("ui-buttonset");
+
+
 
         });
     </script>
