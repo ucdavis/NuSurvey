@@ -2,7 +2,7 @@
            
 <div class="result_quiz">Your @Model.Survey.QuizType Quiz Results</div>
 
-<fieldset class="result_fieldset_page">
+<fieldset class="result_fieldset_page @string.Format("{0}-background-image", Model.Survey.ShortName.ToUpper().Trim())">
     <div class="result_thanks">Thank you @Model.StudentId for taking the time to complete the @Model.Survey.Name quiz.<br />We hope this feedback will help you and your family make healthy food and activity choices.</div>
 
     <fieldset class="result_fieldset_positive">
