@@ -188,7 +188,7 @@ h2 {  /* ADD MLR 022714 */
     text-decoration: none;
 }
 
-nav a {   /*ADD MLR 030314 */
+#nav a {   /*Changed value MLR 040914 */
     color: #fff;    /*ADD MLR 030314 */
 	padding: 7px 12px;   /* ADD MLR 030314 */
 }   /*ADD MLR 030314 */
@@ -632,7 +632,7 @@ div .editor-label .bypass {      /* ADD MLR 040814 */
 	float: right;
 }
 
-nav, #nav {
+#nav {
 	height: 30px;   /* Value Change MLR 030314 */
 	background: #4A94B4;
 }
@@ -692,9 +692,8 @@ nav, #nav {
 }
 
 #login-form .editor-label label, #openRegister .editor-label label {   /* ADD MLR 040814 */
-	font-size: 2em;   /* ADD MLR 040814 */
+	font-size: 1.3em;   /* ADD MLR 040814 */
 	line-height: 1.3em;   /* ADD MLR 040814 */
-	font-weight: bold;   /* ADD MLR 040814 */
 }   /* ADD MLR 040814 */
 
 #login-form .editor-field input, #openRegister .editor-field input, #SurveyResponse_StudentId {   /* Changed value MLR 040414 */
@@ -712,9 +711,9 @@ nav, #nav {
 	width: 550px;   /* ADD MLR 040814 */
 }   /* ADD MLR 040814 */
 
-#openRegister .checkbox {   /* ADD MLR 040814 */
+#openRegister .editor-field .checkbox input, #openRegister .editor-field .check-box input {   /* ADD MLR 040814 */
 	width: 20px;   /* ADD MLR 040814 */
-	padding: 0px 7px 0px 70px;   /* ADD MLR 040814 */
+	margin: 0px 7px 0px 70px;   /* ADD MLR 040814 */
 }   /* ADD MLR 040814 */
 
 
