@@ -426,7 +426,7 @@ input.button {
 	/*border: 1px solid #006896;     ADD MLR 301014 */
 }    /* MOVED MLR 301014 */
 
-.ui-widget-header div {   /*Changed value MLR 040814 */
+.ui-widget-header div  {   /*Changed value MLR 041014 */
 	display: inline;   /*ADD MLR 022714 */
 	padding: 5px 15px;   /*ADD MLR 022714 */
 }   /*ADD MLR 022714 */
@@ -447,7 +447,7 @@ td {   /* ADD MLR 040714 */
 }   /* ADD MLR 040714 */
 
 .dataTables_wrapper {   /* ADD MLR 030314 */
-	padding: 5px 0 15px 0;   /* ADD MLR 030314 */
+	padding: 15px 0;   /* Changed value MLR 041014 */
 }   /* ADD MLR 030314 */
 
 #filter_container {   /* ADD MLR 040714 */
@@ -478,6 +478,33 @@ td {   /* ADD MLR 040714 */
 	color: #fff;   /* ADD MLR 040714 */
 }   /* ADD MLR 040714 */
 
+.td-customize, .td-download, .td-delete {   /* ADD MLR 041014 */
+	text-align: center;   /* ADD MLR 041014 */
+}   /* ADD MLR 041014 */
+
+.mmm-length, .mmm-filter, .mmm-info, .mmm-paginate {   /* ADD MLR 041014 */
+	background: #4A94B4;   /* ADD MLR 041014 */
+	color: #ffffff;   /* ADD MLR 041014 */
+	float: left;   /* ADD MLR 041014 */
+}   /* ADD MLR 041014 */
+
+.mmm-length, .mmm-info {   /* ADD MLR 041014 */
+	padding: 5px 15px;   /* ADD MLR 041014 */
+}   /* ADD MLR 041014 */
+
+.mmm-filter {   /* ADD MLR 041014 */
+	padding: 5px 0 5px 20px;   /* ADD MLR 041014 */
+	width: 860px;   /* ADD MLR 041014 */
+}
+
+.datatable DTTT_selectable {   /* ADD MLR 041014 */
+	margin: 5px 0;   /* ADD MLR 041014 */
+}   /* ADD MLR 041014 */
+
+#yourDetails_wrapper {   /* ADD MLR 041014 */
+	padding: 5px 0 0 0;   /* ADD MLR 041014 */
+}   /* ADD MLR 041014 */
+
 
 /******* DIRECTOR PRINT SELECTION PAGE *******/
 
@@ -494,6 +521,10 @@ td {   /* ADD MLR 040714 */
     -moz-border-radius: 3px;    /* ADD MLR 031014 */
     border-radius: 3px;    /* ADD MLR 031014 */
 }
+
+.makePrime div {     /* ADD MLR 040914 */
+	display: inline;     /* ADD MLR 040914 */
+}     /* ADD MLR 040914 */
 
 fieldset legend {
 	font-size: 1.8em;
@@ -692,8 +723,8 @@ div .editor-label .bypass {      /* ADD MLR 040814 */
 }
 
 #login-form .editor-label label, #openRegister .editor-label label {   /* ADD MLR 040814 */
-	font-size: 1.3em;   /* ADD MLR 040814 */
-	line-height: 1.3em;   /* ADD MLR 040814 */
+	font-size: 1.1em;   /* Changed value MLR 041014 */
+	line-height: 1.5em;   /* Changed value MLR 041014 */
 }   /* ADD MLR 040814 */
 
 #login-form .editor-field input, #openRegister .editor-field input, #SurveyResponse_StudentId {   /* Changed value MLR 040414 */
@@ -711,7 +742,7 @@ div .editor-label .bypass {      /* ADD MLR 040814 */
 	width: 550px;   /* ADD MLR 040814 */
 }   /* ADD MLR 040814 */
 
-#openRegister .editor-field .checkbox input, #openRegister .editor-field .check-box input {   /* ADD MLR 040814 */
+#openRegister .editor-field .checkbox_container .checkbox, #openRegister .editor-field .check-box {   /* Changed value MLR 041014 */
 	width: 20px;   /* ADD MLR 040814 */
 	margin: 0px 7px 0px 70px;   /* ADD MLR 040814 */
 }   /* ADD MLR 040814 */
@@ -800,7 +831,7 @@ div .editor-label .bypass {      /* ADD MLR 040814 */
 }   /* ADD MLR 040314 */
 
 .dashboard-detail li {   /* ADD MLR 040314 */
-    display: inline-block;   /* ADD MLR 040314 */
+    display: inline;   /* ADD MLR 040314 */
     list-style-type: none;   /* ADD MLR 040314 */
     padding: 0 30px 0 0;    /* ADD MLR 040314 */
 	/* float: left;    ADD MLR 040314 */
