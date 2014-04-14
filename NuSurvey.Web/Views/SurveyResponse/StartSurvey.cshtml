@@ -70,7 +70,7 @@ using (Html.BeginForm())
 	        <ul>
 		        <li>
 			        <div class="editor-label required">
-                        @Html.LabelFor(a => a.SurveyResponse.StudentId)<span>*</span> 
+                        @Html.Label("Your First Name")<span>*</span> 
 			        </div>
 			        <div class="editor-field">
 				        @Html.EditorFor(model => model.SurveyResponse.StudentId)

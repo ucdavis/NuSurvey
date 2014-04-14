@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Web.Configuration
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Healthy Kids - @ViewBag.Title</title>
@@ -96,8 +97,9 @@
                     2010-85215-20658 from the USDA National Institute of Food and Agriculture, Human Nutrition and Obesity-93330.
                     </li>
                     <li>Programmed By The College Of Agricultural And Environmental Science Dean's Office. 
-                    Copyright The Regents of the University of California, Davis campus, 2005-14. All Rights Reserved. 
-                    Version # @ViewBag.Version</li>
+                        Copyright The Regents of the University of California, Davis campus, 2005-14. All Rights Reserved. 
+                        Version # @ViewBag.Version</li>
+                    <li>Having technical issues? Contact us <a href="mailto:healthykids@ucdavis.edu">here</a>.</li>
                 </ul>
             </div>
         </div>
@@ -112,7 +114,7 @@
 
     @*----------- Google Analytics ---------- *@
     <script>
-        var _gaq = [["_setAccount", "UA-XXXXX-X"], ["_trackPageview"]]; // Change UA-XXXXX-X to be your site's ID 
+        var _gaq = [["_setAccount", '@WebConfigurationManager.AppSettings["AnalyticsKey"]'], ["_trackPageview"]]; // Change UA-XXXXX-X to be your site's ID 
         (function (d, t) {
             var g = d.createElement(t), s = d.getElementsByTagName(t)[0]; g.async = 1;
             g.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";

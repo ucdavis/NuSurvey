@@ -696,7 +696,7 @@ namespace NuSurvey.Web.Controllers
 
                 _surveyResponseRepository.EnsurePersistent(surveyResponseToCreate);
 
-                Message = "SurveyResponse Created Successfully";
+                Message = "Below are the customized goals for the survey you entered. You can use the \"Print Results\" link below to print this individual goal sheet. If you would like to print a text-only version or goal sheets for multiple participants at one time go to the Educators Dashboard and select the Review & Print section for the survey you are working with.";
 
                 return this.RedirectToAction(a => a.Results(surveyResponseToCreate.Id, null));
             }

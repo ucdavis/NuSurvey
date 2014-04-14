@@ -28,12 +28,6 @@
                 }
                  
             });
-
-            $("#openRegister").submit(function() {
-                if(!confirm("You are requesting permission to download the Healthy Kids pediatric obesity risk assessment form to your computer. Healthy Kids© is protected by copyright laws and is property of University of California. By downloading Healthy Kids, you agree to keep the original form unchanged. This means that you are not entitled to modify or use the photographs for any other purpose. In addition, all references and logos may not be altered in any way nor removed. ")) {
-                    return false;
-                }
-            });
         });
     </script>    
 }
@@ -49,21 +43,21 @@
 
     <fieldset>
         @{var isChecked = "";}
-        <p>All required fields are in <strong>bold</strong> and have a red <span class="required">*</span> next to the field label.</p>
-
+        
+        <h3>Complete the form below to create a new account with Healthy Kids. Once the account has been created a confirmation and password will be sent to your email address. This may take a few minutes to receive.</h3>
         <p><strong>Note!</strong> To answer surveys anonymously,  you don't have to register. Just click the image on the home page to answer surveys for Parents.</p>
         <ul>
-            <li>            
+            <li>
                 <div class="editor-label required">
-                    @Html.LabelFor(model => model.Email)<span>*</span> 
+                    @Html.LabelFor(model => model.Email)<span>*</span>
                 </div>
                 <div class="editor-field wideText">
                     @Html.EditorFor(model => model.Email)
                     <span class="field-warning"></span>
                     @Html.ValidationMessageFor(model => model.Email)
                 </div>
-            </li>           
-            
+            </li>
+
             <li>
                 <div class="editor-label required">
                     @Html.LabelFor(model => model.User.Name)<span>*</span>
@@ -179,7 +173,6 @@
                     </div>
                 </li>
             </fieldset>
-            
 
             <li>
                 <div class="editor-label">
@@ -189,14 +182,14 @@
                     <ul class="checkbox_container">
                         <li>
                             @{
-                                isChecked = Model.Roles != null && Model.Roles.Contains(RoleNames.User) ? "checked=\"checked\"" : "";
+    isChecked = Model.Roles != null && Model.Roles.Contains(RoleNames.User) ? "checked=\"checked\"" : "";
                             }
                             <input class="checkbox" type="checkbox" value="@ViewBag.UserRole" @isChecked name="Roles" /> Educator
                         </li>
                         <li>
                             @{
-                                isChecked = Model.Roles != null && Model.Roles.Contains(RoleNames.ProgramDirector) ? "checked=\"checked\"" : "";
-                            }                            
+    isChecked = Model.Roles != null && Model.Roles.Contains(RoleNames.ProgramDirector) ? "checked=\"checked\"" : "";
+                            }
                             <input class="checkbox" type="checkbox" value="@ViewBag.ProgramDirectorRole" @isChecked name="Roles" /> Program Director
                         </li>
                     </ul>
@@ -204,35 +197,41 @@
             </li>
             <li>
                 <div class="editor-label required">
-                    
-                    @Html.Label("Permissions for use")<span>*</span> @Html.ActionLink("May be found here", "TermsAndConditions")
+
+                    @Html.Label("Permissions for use")<span>*</span>
+                    <p>
+                        You are requesting permission to download the <i>Healthy Kids</i> pediatric obesity risk assessment surveys to your computer. <i>Healthy Kids</i>© is protected by copyright laws and is property of University of California. By downloading <i>Healthy Kids</i>, you agree to keep the original form unchanged. This means that you are not entitled to modify or use the photographs for any other purpose. In addition, all references and logos may not be altered in any way nor removed. You will need to print the survey "as is".
+                    </p>
+                    <p>
+                        In case of a doubt concerning your planned use of the <i>Healthy Kids</i> surveys or content (photographs, logo or survey questions), please <a href="mailto:healthykids@ucdavis.edu">click here</a> to contact us directly.
+                    </p>
                 </div>
                 <div class="editor-field">
                     <ul class="checkbox_container">
                         <li>
                             @{
-                                isChecked = Model.Agree == "agreed" ? "checked=\"checked\"" : "";
-                            } 
+    isChecked = Model.Agree == "agreed" ? "checked=\"checked\"" : "";
+                            }
                             <input class="checkbox" type="checkbox" value="agreed" @isChecked name="Agree" /> I Agree
                             @Html.ValidationMessage("Agree")
                         </li>
                     </ul>
                 </div>
             </li>
-        
+
             <li>
-                <div class="editor-field">        
+                <div class="editor-field">
                     @Html.GenerateCaptcha()
                     @Html.ValidationMessage("Captcha")
                 </div>
-            </li>        
-
+            </li>
             <li>
                 @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
                 <label>&nbsp;</label>
-                <input class="button submit" type="submit" value="Create" onclick='return jQuery.confirm("Do you agree to all the terms and conditions?"); return false;'/> | @Html.ActionLink("Cancel", "Index", "Home")
+                <input class="button submit" type="submit" value="Submit" /> | @Html.ActionLink("Cancel", "Index", "Home")
             </li>
         </ul>
+
     </fieldset>
 }
 

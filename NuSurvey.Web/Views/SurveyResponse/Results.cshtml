@@ -9,12 +9,12 @@
     <div id="pdf_print">
         @if (Model.PublicGuid == null)
         {
-            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id})' target="_blank"><img alt="Print this result" /></a>
-            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = true})' target="_blank"><img alt="Print this result With background" /></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = true})' target="_blank"><img alt="Print Results" /></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = false})' target="_blank"><img alt="Print Results without background" /></a>
         }
         else
         {
-             <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid })' target="_blank"><img alt="Print this result" src="@Url.Image("big_print.png")"/></a>
+             <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid })' target="_blank"><img alt="Print my results" src="@Url.Image("big_print.png")" /></a>
         }
     </div>
 }
@@ -22,12 +22,6 @@
 @Html.Partial("_Results", @Model.SurveyResponse)
 
 
-<p>
-    @if (Model.PublicGuid == null)
-    {  @Html.ActionLink("Back to Survey List", "Index")}
-    else
-    { @Html.ActionLink("Back to Survey List", "PublicSurveys")}
-</p>
 
 
 @section AdditionalScripts{
