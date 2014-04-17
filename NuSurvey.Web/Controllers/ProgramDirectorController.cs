@@ -105,6 +105,27 @@ namespace NuSurvey.Web.Controllers
         }
 
         [ProgramDirector]
+        [HttpPost]
+        public ActionResult SelectPhotos(int id, PrintedSurvey printedSurvey)
+        {
+            var userId = CurrentUser.Identity.Name;
+            var printedSurveyToEdit = _printedSurveyRepository.Queryable.Single(a => a.Id == id && a.UserId == userId);
+            printedSurveyToEdit.Name = printedSurvey.Name;
+            if (ModelState.IsValid)
+            {
+                _printedSurveyRepository.EnsurePersistent(printedSurveyToEdit);
+                return this.RedirectToAction(a => a.Index());
+            }
+            else
+            {
+                Message = "There were errors updating the name";
+            }
+            
+
+            return View(printedSurveyToEdit);
+        }
+
+        [ProgramDirector]
         public ActionResult GetDirectorThumbnail(int id)
         {
             var photo = _photoRepository.GetById(id);

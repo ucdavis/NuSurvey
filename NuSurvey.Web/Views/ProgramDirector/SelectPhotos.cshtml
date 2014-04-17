@@ -56,6 +56,26 @@
 
 
 @Html.AntiForgeryToken()
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <ul>
+        <li>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Name) 
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </li>
+        <li>
+            @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+            <label>&nbsp;</label>
+            <input class="button" type="submit" value="Submit" />
+        </li>
+    </ul>
+}
 
 <p>Click on your choice of photo for each question. This photo will be highlighted in blue. Your selections are automatically saved. To print or save your tailored survey click the “Back to list” link at the top. You will then click the download (arrow) icon next to your saved survey.</p>
 

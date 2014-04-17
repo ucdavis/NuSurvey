@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
 
@@ -18,6 +19,9 @@ namespace NuSurvey.Core.Domain
         public virtual Survey Survey { get; set; }
 
         public virtual IList<PrintedSurveyQuestion> PrintedSurveyQuestions { get; set; }
+
+        [StringLength(250)]
+        public virtual string Name { get; set; }
     }
 
     public class PrintedSurveyMap : ClassMap<PrintedSurvey>
@@ -28,6 +32,7 @@ namespace NuSurvey.Core.Domain
 
             Map(x => x.UserId);
             Map(x => x.DateCreated);
+            Map(x => x.Name);
 
             References(x => x.Survey);
 

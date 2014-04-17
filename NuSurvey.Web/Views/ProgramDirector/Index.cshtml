@@ -17,8 +17,8 @@
                 "aoColumnDefs": [
                     { 'bSortable': false, 'sWidth': "75px", 'aTargets': [0] },
                     { 'bSortable': false, 'sWidth': "105px", 'aTargets': [1] },
-                    { 'bSortable': true, 'sWidth': "160px", 'aTargets': [3] },
-                    { 'bSortable': false, 'sWidth': "75px", 'aTargets': [4] }
+                    { 'bSortable': true, 'sWidth': "160px", 'aTargets': [4] },
+                    { 'bSortable': false, 'sWidth': "75px", 'aTargets': [5] }
                 ]
             });
         });    
@@ -69,11 +69,11 @@
                 <th>Customize</th>
                 <th>Download/Print</th>
                 <th>
+                    Survey Name
+                </th>
+                <th>
                     Name
                 </th>
-                @*<th>
-                    ShortName
-                </th>*@
                 <th>Created</th>
                 <th>Delete</th>
             </tr>
@@ -92,9 +92,9 @@
                     <td>
                         @item.Survey.Name
                     </td>
-                    @*<td>
-                        @item.Survey.ShortName
-                    </td>*@
+                    <td>
+                        @item.Name
+                    </td>
                     <td>
                         @item.DateCreated
                     </td>
