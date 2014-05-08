@@ -376,6 +376,32 @@ namespace NuSurvey.Web.Controllers
             return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
         }
 
+        [Admin]
+        public ActionResult UnlockUser(string id)
+        {
+            if (id.Trim().ToLower() == CurrentUser.Identity.Name.ToLower())
+            {
+                Message = "Can't unlock yourself";
+                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+            }
+            if (MembershipService.GetUser(id) == null)
+            {
+                Message = "User Not Found";
+                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
+            }
+
+            if (MembershipService.UnlockUser(id.Trim().ToLower()))
+            {
+                Message = "Unlock Successful";
+            }
+            else
+            {
+                Message = "Unloack Failed";
+            }
+
+            return this.RedirectToAction(a => a.Edit(id));
+        }
+
         /// <summary>
         /// #9
         /// </summary>
@@ -483,6 +509,7 @@ namespace NuSurvey.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                
                 var tempPass = MembershipService.ResetPassword(userName);
                 _emailService.SendPasswordReset(userName, tempPass);
 

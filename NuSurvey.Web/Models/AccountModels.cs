@@ -150,6 +150,7 @@ namespace NuSurvey.Web.Models
         string ResetPassword(string userName);
         IQueryable<UsersRoles> GetUsersAndRoles(string exceptMe);
         bool IsUserInRole(string userName, string roleName);
+        bool UnlockUser(string userName);
     }
 
     public class AccountMembershipService : IMembershipService
@@ -203,7 +204,13 @@ namespace NuSurvey.Web.Models
 
         public string ResetPassword(string userName)
         {
+            //_provider.UnlockUser(userName);
             return _provider.ResetPassword(userName, null);
+        }
+
+        public bool UnlockUser(string userName)
+        {
+            return _provider.UnlockUser(userName);
         }
 
         public MembershipUser GetUser(string userName)

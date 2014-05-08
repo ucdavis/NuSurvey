@@ -24,11 +24,23 @@
 
     @Html.Partial("_UserDetails")
 
+@if (Model.User.IsLockedOut)
+{
+using (Html.BeginForm("UnlockUser", "Account"))
+ {
+     @Html.AntiForgeryToken()
+     @Html.ValidationSummary(true)
+     @Html.Hidden("id", Model.Email)
+
+     <input class="button" type="submit" value="Unlock User" />
+
+ }
+}
 
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 	@Html.ValidationSummary(true)
-    @Html.HiddenFor(a => a.Email);
+    @Html.HiddenFor(a => a.Email)
 <fieldset>
     <legend>Editable Fields</legend>
 @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
