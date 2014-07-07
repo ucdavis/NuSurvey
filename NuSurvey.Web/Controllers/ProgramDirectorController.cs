@@ -81,7 +81,9 @@ namespace NuSurvey.Web.Controllers
 
             _printedSurveyRepository.EnsurePersistent(printedSurvey);
 
-            return this.RedirectToAction(a => a.Index());
+            return this.RedirectToAction(a => a.SelectPhotos(printedSurvey.Id));
+
+            //return this.RedirectToAction(a => a.Index());
         }
 
         [ProgramDirector]

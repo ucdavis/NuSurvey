@@ -151,7 +151,7 @@ namespace NuSurvey.Web.Controllers
                 var tempPass = MembershipService.ResetPassword(model.Email.ToLower());
                 _emailService.SendNewUser(Request, Url, model.Email.ToLower(), tempPass);
 
-                Message = string.Format("{0} {1}", Message, "You will received an email with instructions");
+                Message = string.Format("{0} {1}", Message, "You will received an email with instructions including your password. Please check your spam filters.");
                 try
                 {
                     var user = new User(model.Email.ToLower().Trim());

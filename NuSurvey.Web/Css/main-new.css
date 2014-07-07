@@ -796,6 +796,12 @@ div .editor-label .bypass {      /* ADD MLR 040814 */
 
 #pdf_print {
 	font-size: 1.4em;
+	background: none repeat scroll 0 0 #fff;     /* ADD MLR 070114 */
+	border: 1px solid #4a94b4;     /* ADD MLR 070114 */
+	border-radius: 8px;     /* ADD MLR 070114 */
+	line-height: 20px;     /* ADD MLR 070114 */
+	padding: 20px;     /* ADD MLR 070114 */
+	width: 25%;     /* ADD MLR 070114 */
 }
 
 
@@ -837,6 +843,24 @@ div .editor-label .bypass {      /* ADD MLR 040814 */
 	/* float: left;    ADD MLR 040314 */
 	}   /* ADD MLR 040314 */
 	
+
+.survey-name {
+	background: none repeat scroll 0 0 #fff;     /* ADD MLR 070114 */
+	border: 1px solid #4a94b4;     /* ADD MLR 070114 */
+	border-radius: 8px;     /* ADD MLR 070114 */
+	line-height: 20px;     /* ADD MLR 070114 */
+	padding: 20px;     /* ADD MLR 070114 */
+	width: 50%;     /* ADD MLR 070114 */
+	margin: 20px 20px 30px 20px;     /* ADD MLR 070114 */
+}
+
+.survey-name ul {
+	margin: 0px;     /* ADD MLR 070114 */
+}
+
+.survey-name .editor-field {
+	width: 100%;     /* ADD MLR 070114 */
+}
 	
 
 /********** ERROR MESSAGE HANDELING **********/

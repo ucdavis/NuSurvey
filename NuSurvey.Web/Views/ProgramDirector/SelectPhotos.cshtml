@@ -62,7 +62,7 @@
     <ul>
         <li>
             <div class="editor-label">
-                @Html.LabelFor(model => model.Name) 
+                @Html.Label("Change File Name")
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Name)
@@ -72,7 +72,7 @@
         <li>
             @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
             <label>&nbsp;</label>
-            <input class="button" type="submit" value="Submit" />
+            <input class="button" type="submit" value="Save File name Change" />
         </li>
     </ul>
 }

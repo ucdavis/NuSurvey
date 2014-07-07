@@ -195,6 +195,14 @@ Example: Dinosaur 1  *@
 }
 
 <div>
-	@Html.ActionLink("Back to List", "Index")
+    @if (Model.Category != null)
+    {
+        <a href="@Url.Action("Edit", "Category", new { id = @Model.Category.Id })">Back to List</a>
+    }
+    else
+    {
+        <a href="@Url.Action("Edit", "Survey", new { id = @Model.Survey.Id })">Back to List</a>
+    }
+
 </div>
 
