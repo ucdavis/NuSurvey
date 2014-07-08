@@ -87,6 +87,22 @@ namespace NuSurvey.Web.Controllers
         }
 
         [ProgramDirector]
+        public ActionResult SetName(int id)
+        {
+            var userId = CurrentUser.Identity.Name;
+            var printedSurvey = _printedSurveyRepository.Queryable.Single(a => a.Id == id && a.UserId == userId);
+
+            return View(printedSurvey);
+        }
+
+        //[ProgramDirector]
+        //[HttpPost]
+        //public ActionResult SetName(int id, PrintedSurvey printedSurvey)
+        //{
+        //    throw new NotImplementedException("Do this");
+        //}
+
+        [ProgramDirector]
         public ActionResult Delete(int id)
         {
             var userId = CurrentUser.Identity.Name;
