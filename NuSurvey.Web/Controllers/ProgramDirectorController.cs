@@ -81,9 +81,9 @@ namespace NuSurvey.Web.Controllers
 
             _printedSurveyRepository.EnsurePersistent(printedSurvey);
 
-            return this.RedirectToAction(a => a.SelectPhotos(printedSurvey.Id));
+            return this.RedirectToAction(a => a.SetName(printedSurvey.Id));
 
-            //return this.RedirectToAction(a => a.Index());
+
         }
 
         [ProgramDirector]
@@ -95,12 +95,18 @@ namespace NuSurvey.Web.Controllers
             return View(printedSurvey);
         }
 
-        //[ProgramDirector]
-        //[HttpPost]
-        //public ActionResult SetName(int id, PrintedSurvey printedSurvey)
-        //{
-        //    throw new NotImplementedException("Do this");
-        //}
+        [ProgramDirector]
+        [HttpPost]
+        public ActionResult SetName(int id, PrintedSurvey printedSurvey)
+        {
+            var userId = CurrentUser.Identity.Name;
+            var printedSurveyToEdit = _printedSurveyRepository.Queryable.Single(a => a.Id == id && a.UserId == userId);
+
+            printedSurveyToEdit.Name = printedSurvey.Name;
+            _printedSurveyRepository.EnsurePersistent(printedSurveyToEdit);
+
+            return this.RedirectToAction(a => a.SelectPhotos(id));
+        }
 
         [ProgramDirector]
         public ActionResult Delete(int id)
