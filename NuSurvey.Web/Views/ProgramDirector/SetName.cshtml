@@ -11,7 +11,7 @@
 }
 
 @Html.AntiForgeryToken()
-@using (Html.BeginForm())
+@using (Html.BeginForm("SetName", "ProgramDirector", FormMethod.Post, new { @class = "survey-name" }))
 {
     @Html.AntiForgeryToken()
     <ul>
