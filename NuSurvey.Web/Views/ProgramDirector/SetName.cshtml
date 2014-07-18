@@ -14,6 +14,7 @@
 @using (Html.BeginForm("SetName", "ProgramDirector", FormMethod.Post, new { @class = "survey-name" }))
 {
     @Html.AntiForgeryToken()
+    <p>Create a custom name for your survey. It may help to include things like county, educator or demographic description in the file name to help identify specific surveys you have customized.</p>
     <ul>
         <li>
             <div class="editor-label">
