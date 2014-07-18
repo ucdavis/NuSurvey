@@ -14,10 +14,11 @@
 @using (Html.BeginForm("SetName", "ProgramDirector", FormMethod.Post, new { @class = "survey-name" }))
 {
     @Html.AntiForgeryToken()
+    <p>Create a custom name for your survey. It may help to include things like county, educator or demographic description in the file name to help identify specific surveys you have customized.</p>
     <ul>
         <li>
             <div class="editor-label">
-                @Html.Label("Change File Name")
+                @Html.Label("File Name")
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Name)

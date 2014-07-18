@@ -91,6 +91,10 @@ namespace NuSurvey.Web.Controllers
         {
             var userId = CurrentUser.Identity.Name;
             var printedSurvey = _printedSurveyRepository.Queryable.Single(a => a.Id == id && a.UserId == userId);
+            if (string.IsNullOrWhiteSpace(printedSurvey.Name))
+            {
+                printedSurvey.Name = string.Format("{0} {1}", printedSurvey.Survey.Name, DateTime.Now.Date.ToString("d"));
+            }
 
             return View(printedSurvey);
         }
@@ -138,7 +142,8 @@ namespace NuSurvey.Web.Controllers
             if (ModelState.IsValid)
             {
                 _printedSurveyRepository.EnsurePersistent(printedSurveyToEdit);
-                return this.RedirectToAction(a => a.Index());
+                Message = "File name updated";
+                //return this.RedirectToAction(a => a.Index());
             }
             else
             {
