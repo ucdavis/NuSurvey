@@ -11,7 +11,7 @@ namespace NuSurvey.Web.Controllers.Filters
     {
         public UserAttribute()
         {
-            Roles = string.Format("{0},{1}", RoleNames.User, RoleNames.Admin);    //Set the roles prop to a comma delimited string of allowed roles
+            Roles = string.Format("{0},{1}, {2}", RoleNames.User, RoleNames.Admin, RoleNames.ProgramDirector);    //Set the roles prop to a comma delimited string of allowed roles
         }
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
@@ -19,7 +19,7 @@ namespace NuSurvey.Web.Controllers.Filters
             {
                 filterContext.HttpContext.Response.Redirect("~/Error");
             }
-            if (filterContext.HttpContext.User != null && !filterContext.HttpContext.User.IsInRole(RoleNames.Admin) && !filterContext.HttpContext.User.IsInRole(RoleNames.User))
+            if (filterContext.HttpContext.User != null && !filterContext.HttpContext.User.IsInRole(RoleNames.Admin) && !filterContext.HttpContext.User.IsInRole(RoleNames.User) && !filterContext.HttpContext.User.IsInRole(RoleNames.ProgramDirector))
             {
                 filterContext.HttpContext.Response.Redirect("~/Error/NotAuthorized");
             }
