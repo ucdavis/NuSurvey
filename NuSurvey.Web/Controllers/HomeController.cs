@@ -15,9 +15,12 @@ namespace NuSurvey.Web.Controllers
         /// #1
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public ActionResult Index(bool parent = false)
         {
             var viewModel = HomeViewModel.Create(CurrentUser.IsInRole(RoleNames.Admin), CurrentUser.IsInRole(RoleNames.User), CurrentUser.IsInRole(RoleNames.ProgramDirector));
+
+            ViewBag.OnlyParent = parent;
+            
             return View(viewModel);
         }
 
@@ -65,7 +68,7 @@ namespace NuSurvey.Web.Controllers
 
             //ControllerContext.HttpContext.Cache.Remove("ServiceMessages");
 
-            return this.RedirectToAction(a => a.Index());
+            return this.RedirectToAction(a => a.Index(false));
         }
 
 

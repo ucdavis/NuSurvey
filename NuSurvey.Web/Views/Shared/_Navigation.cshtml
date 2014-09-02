@@ -1,7 +1,7 @@
 ﻿<div id="nav">
 <ul class="navigation">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("Parents", "Index", "Home")</li>
+    <li>@Html.ActionLink("Parents", "Index", "Home",new { parent = true}, new{})</li>
     <li>@Html.ActionLink("Educators", "Index", "Educator")</li>
      <li>@Html.ActionLink("Directors", "Index", "ProgramDirector")</li>
     @if(User.IsInRole("NSAdmin")){

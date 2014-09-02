@@ -44,7 +44,7 @@ namespace NuSurvey.Web.Controllers
             var isPublic = !(CurrentUser.IsInRole(RoleNames.User) || CurrentUser.IsInRole(RoleNames.Admin));
             if (isPublic)
             {
-                return this.RedirectToAction<HomeController>(a => a.Index());
+                return this.RedirectToAction<HomeController>(a => a.Index(false));
             }
             var viewModel = ActiveSurveyViewModel.Create(Repository, isPublic);
 
@@ -555,7 +555,7 @@ namespace NuSurvey.Web.Controllers
             {
                 return this.RedirectToAction<SurveyController>(a => a.PendingDetails(surveyId));
             }
-            return this.RedirectToAction<HomeController>(a => a.Index());
+            return this.RedirectToAction<HomeController>(a => a.Index(false));
 
         }
 
