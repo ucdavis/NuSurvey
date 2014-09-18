@@ -104,6 +104,19 @@
         </fieldset>
     }
 
+@using (Html.BeginForm("SelectPhotos", "ProgramDirector", FormMethod.Post, new { @class = "survey-name" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("photoSave", true)
+    <ul>
+    
+        <li>
+            @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+            <label>&nbsp;</label>
+            <input class="button" type="submit" value="Save Photo Selections" />
+        </li>
+    </ul>
+}
 
 @helper PhotoConatiner (Photo photo, int psqId, bool selected = false)
 {
