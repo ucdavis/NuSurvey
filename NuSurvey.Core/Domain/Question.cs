@@ -55,7 +55,7 @@ namespace NuSurvey.Core.Domain
         [Required]
         [StringLength(100)]
         [Display(Name = "Question")]
-        [AllowHtml]
+        //[AllowHtml]
         public virtual string Name { get; set; }
 
         [Display(Name = "Active")]
