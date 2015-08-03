@@ -1,31 +1,99 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model NuSurvey.Web.Controllers.HomeController.HomeViewModel
+           
+@{
+    ViewBag.Title = "Healthy Kids - Home Page";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.balloon').bt({ positions: 'bottom' });
+        });
+    </script>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+}
+
+<span class="SpecialFont">
+    <div id="parents">
+        <div class="container-center">
+            <div id="parents-left">
+                <h2>PARENTS</h2>
+                <p>Want to keep your child healthy?</p>
+                <p>Take the survey and have goals created just for you and your child!</p>
+                <img src="@Url.Image("arrow.png")" alt="Select a Survey" />
+            </div>
+	
+            <div id="parents-right">
+                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "HK"})'><img src="@Url.Image("hk-thumb.png")" alt="Healthy Kids Survey"  /></a> 
+                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "MCMT" })'><img src="@Url.Image("mcmt-thumb.png")" alt="My Child At Mealtime Survey" /></a> 
+            
+            </div>
+            <br style="clear:both">
+        </div> <!--- END main MLR 121313 --->
+
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+    @if (ViewBag.OnlyParent == null || ViewBag.OnlyParent == false)
+    {
+        <div id="staff">
+            <div class="container-center">
+                <div id="staff-left">
+                    <h3>Educators</h3>
+                    <p>Using these surveys with your classes?  <i>Healthy Kids</i> or <i>My Child at Meal Time</i>?</p>
+                    <p>Enter several completed surveys using this page. Personalized goals will be created and can be printed for each participant.</p>
+                    <a href='@Url.Action("Index", "Educator")'>
+                        <div class="login-button">
+                            <p>Login Here</p>
+                        </div>
+                    </a>
+                    <p class="float-right">New User? @Html.ActionLink("Create an account here.", "OpenRegister", "Account")</p>
+                </div>
+	
+                <div id="staff-right">
+                    <h3>Directors</h3>
+                    <p>Want to use these surveys with your program?  Register and open an account to have access to these tools.</p>
+                    <p>Download the current <i>Healthy Kids</i> or <i>My Child at Meal Time</i> surveys or create photo-customized versions tailored to your target audience.</p>
+                    <a href='@Url.Action("Index", "ProgramDirector")'>
+                        <div class="login-button">
+                            <p>Login Here</p>
+                        </div>
+                    </a>
+                    <p class="float-right">New User? @Html.ActionLink("Create an account here.", "OpenRegister", "Account")</p>
+                </div>
+                <br style="clear: both">
+            </div> <!--- END main MLR 121313 --->
+
+        </div>
+    }
+</span>
+@*<h3>
+    Parents
+</h3>
+<a class="balloon" href='@Url.Action("PublicSurveys", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
+
+@if (Model.Admin || Model.User) {}
+    <h3>
+        Educators
+    </h3>
+    <a class="balloon" href='@Url.Action("Index", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
+
+    <a class="balloon" href='@Url.Action("Review", "Survey")' title="Review Your Surveys"><img alt="Review Your Surveys" src="@Url.Image("review.png")"/></a>
+
+
+<h3>
+    Program Director
+</h3>
+<a class="balloon" href='@Url.Action("Index", "ProgramDirector")' title="Manage Your Surveys"><img alt="Manage Your Surveys" src="@Url.Image("big_print.png")"/></a>
+
+<h3>
+    Manage Account
+</h3>
+*@
+
+@*<h1>
+    <a href="@Url.Action("Index", "SurveyResponse")">Answer Surveys</a> 
+</h1>*@
+

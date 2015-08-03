@@ -1,0 +1,36 @@
+﻿@model NuSurvey.Web.Controllers.ResultsViewModel
+
+
+@{
+    ViewBag.Title = "Quiz Results";
+}
+
+@if (Model.ShowPdfPrint) {            
+    <div id="pdf_print">
+        @if (Model.PublicGuid == null)
+        {
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = true})' target="_blank"><img alt="Print Results" /></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = false})' target="_blank"><img alt="Print Results without background" /></a>
+        }
+        else
+        {
+             <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid })' target="_blank"><img alt="Print my results" src="@Url.Image("big_print.png")" /></a>
+        }
+    </div>
+}
+
+@Html.Partial("_Results", @Model.SurveyResponse)
+
+
+
+
+@section AdditionalScripts{
+
+    <style type="text/css">
+        .col1.results
+        {
+        	display:none;
+        }
+    </style>
+}
+

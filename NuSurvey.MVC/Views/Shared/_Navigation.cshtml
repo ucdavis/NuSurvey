@@ -1,0 +1,20 @@
+﻿<div id="nav">
+<ul class="navigation">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Parents", "Index", "Home",new { parent = true}, new{})</li>
+    <li>@Html.ActionLink("Educators", "Index", "Educator")</li>
+     <li>@Html.ActionLink("Directors", "Index", "ProgramDirector")</li>
+    @if(User.IsInRole("NSAdmin")){
+        <li>@Html.ActionLink("Admin", "Administration", "Home")</li>
+    }
+
+    @*<li>@Html.ActionLink("About", "About", "Home")</li>*@
+@*    <li>
+        <a href="https://secure.caes.ucdavis.edu/help/ticket/SubmitRedirect?appName=NuSurvey" target=_blank>Help</a>
+    </li>
+    <li>
+        <a href="https://secure.caes.ucdavis.edu/help/Help?appName=NuSurvey" target=_blank>FAQ</a>
+    </li>*@
+</ul>
+
+    </div>

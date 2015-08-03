@@ -1,0 +1,110 @@
+﻿@model NuSurvey.Web.Controllers.PhotoEditModel
+
+
+@{
+    ViewBag.Title = "Details";
+
+}
+
+@section SubNav
+{
+	<ul class="navigation">
+		
+        <li>@Html.ActionLink("Edit", "Edit", new { id = Model.Photo.Id }) </li>
+        @if (Model.QuestionId != null)
+        {
+            <li>
+                @if (Model.EditDetail == "E")
+                {
+                    <a href="@Url.Action("Edit", "Question", new { id = Model.QuestionId, surveyId = Model.SurveyId, categoryId = Model.CategoryId })">Back to Question</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Details", "Question", new { id = Model.QuestionId, surveyId = Model.SurveyId, categoryId = Model.CategoryId })">Back to Question</a>
+                }
+            </li>
+        }
+        else
+        {
+            <li>@Html.ActionLink("Back to List", "Index")</li>
+        }
+	</ul>
+}
+
+@section AdditionalScripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#AddRemove").click(function () {
+                var localaction = $(this).data("action");
+                var url = '@Url.Action("AddRemovePhotoFromQuestion", new {id = Model.Photo.Id, questionId = Model.QuestionId })';
+                var antiforgery = $("input[name='__RequestVerificationToken']").val();
+                var statusmessage = $("#status");
+                $.post(url, { action: localaction, __RequestVerificationToken: antiforgery }, function (result) {
+                    if (result) {
+                        if (result.success === true) {
+                            statusmessage.html(result.message);
+                        } else {
+                            statusmessage.html("Error: " + result.message);
+                        }
+                    } else {
+                        alert("There was a problem adding or removing the photo from the question.");
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+@Html.AntiForgeryToken()
+<fieldset class="display-form">
+    <legend>Photo</legend>
+	<ul>
+
+        <li>
+            <div class="display-label">Name</div>
+            <div class="display-details">@Model.Photo.Name</div>
+        </li>
+        
+        <li>
+            <div class="display-label">Tags</div>
+            <div class="display-details">
+                @foreach (var tag in Model.Photo.PhotoTags)
+                {
+                    <a href="@Url.Action("Search", "Photo", new { tag = tag.Name, questionId = Model.QuestionId })">@tag.Name</a>
+                }
+            </div>
+        </li>
+
+        <li>
+			<div class="display-label">FileName</div>
+			<div class="display-details">@Model.Photo.FileName</div>
+		</li>
+
+        <li>
+            <div class="display-label">DateCreated</div>
+            <div class="display-details">@String.Format("{0:g}", Model.Photo.DateCreated)</div>
+        </li>
+        
+        @if (Model.QuestionId != null)
+        {
+            var action = "Add";
+            if (Model.PhotoIsRelatedToQuestion == true)
+            {
+                action = "Remove";
+            }
+            <li>
+                <div class="display-label">Add/Remove from related question</div>
+                <a id="AddRemove" href="#" class="button" data-action="@action">@action</a> <div id="status" style="display: inline-block"></div>
+            </li>
+        }
+
+        <li>
+			<div class="display-label">Photo</div>
+			<div class="display-details"><img src='@Url.Action("GetPhoto", new { id = Model.Photo.Id })' /></div>
+		</li>
+
+	</ul>
+</fieldset>
+
+
+

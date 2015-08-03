@@ -1,0 +1,123 @@
+﻿@using NuSurvey.Core.Domain
+@model NuSurvey.Core.Domain.PrintedSurvey
+
+
+@{
+    ViewBag.Title = "Select Photo for Questions";
+}
+
+@section AdditionalScripts{
+    <script type="text/javascript">
+        $(function () {
+            $(".makePrime").click(function (e) {
+                e.preventDefault();
+                var photoId = $(this).data("id");
+                var psqId = $(this).data("psq");
+                var divId = "#photo" + photoId + "_" + psqId;
+                var url = '@Url.Action("MakePrimaryPhoto", "ProgramDirector", new { printedSurveyId = Model.Id})';
+
+                var antiforgery = $("input[name='__RequestVerificationToken']").val();
+                $.post(url, { id: photoId, psqId: psqId, __RequestVerificationToken: antiforgery }, function (result) {
+                    if (result) {
+                        if (result.success === true) {
+                            var fieldId = "#field_" + psqId + " .green_border";
+                            $(fieldId).removeClass("green_border");
+                            $(divId).addClass("green_border");
+                            //scrollTo($("#field_" + psqId));
+                        } else {
+                            alert("There was a problem making this photo the one to display with the question.");
+                        }
+                    } else {
+                        alert("There was a problem making this photo the one to display with the question.");
+                    }
+                });
+
+                
+            });
+        });
+
+
+        function scrollTo(id) {
+            $('html, body').animate({
+                scrollTop: id.offset().top
+            }, 100);
+        }
+    </script>
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Index", "ProgramDirector")">Back to list</a> 
+        </li>
+    </ul>
+}
+
+
+
+@Html.AntiForgeryToken()
+@using (Html.BeginForm("SelectPhotos", "ProgramDirector", FormMethod.Post, new { @class = "survey-name" }))
+{
+    @Html.AntiForgeryToken()
+    <p>To change the custom file name you assigned this survey adjust the text as desired in the field below then click "Save File Name Change"</p>
+    <ul>
+        <li>
+            <div class="editor-label">
+                @Html.Label("Change File Name")
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </li>
+        <li>
+            @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+            <label>&nbsp;</label>
+            <input class="button" type="submit" value="Save File Name Change" />
+        </li>
+    </ul>
+}
+
+<p>Click on your choice of photo for each question. This photo will be highlighted in blue. Your photo selections are automatically saved.</p>
+<p>To print or save your tailored survey click the “Back to list” link at the top. You will then click the download (arrow) icon next to your saved survey.</p>
+
+@{
+        var counter = 0;
+    }
+    @foreach (var psq in Model.PrintedSurveyQuestions.OrderBy(a => a.Order))
+    {        
+        counter++;               
+        var fieldId = "field_" + psq.Id;
+        <fieldset id="@fieldId">
+            <legend>Question @counter: <strong>@Html.HtmlEncode(psq.Question.Name)</strong></legend>
+            @{ var primaryId = psq.Photo != null ? psq.Photo.Id : 0; }
+            @PhotoConatiner(psq.Photo, psq.Id, true)
+            @foreach (var photo in psq.Question.Photos.Where(a => a.Id != primaryId && a.IsActive && a.IsPrintable))
+            {
+                @PhotoConatiner(photo, psq.Id)
+            }
+            @if (!psq.Question.Photos.Any())
+            {
+                <div>No Photos Available</div>
+            }
+
+        </fieldset>
+    }
+
+
+@helper PhotoConatiner (Photo photo, int psqId, bool selected = false)
+{
+    if (photo != null)
+    {
+        var showBorder = selected ? "green_border" : string.Empty;
+        var divId = string.Format("photo{0}_{1}", photo.Id, psqId);
+        <a href="#" class="makePrime" data-id="@photo.Id" data-psq="@psqId">
+            <div id = "@divId" style="display: inline-block; padding-left: 10px;" class="@showBorder">                
+                <div><img src='@Url.Action("GetDirectorThumbnail", "ProgramDirector", new { id = photo.Id })' /></div>
+            </div>
+        </a>
+    }
+
+}
+
+

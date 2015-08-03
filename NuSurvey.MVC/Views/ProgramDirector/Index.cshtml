@@ -1,0 +1,110 @@
+﻿@model NuSurvey.Web.Controllers.ProgramDirectorViewModel
+
+
+@{
+    ViewBag.Title = "Program Director Page";
+
+}
+
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({
+                "bJQueryUI": true,
+                "aaSorting": [[3, "desc"]],
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'sWidth': "75px", 'aTargets': [0] },
+                    { 'bSortable': false, 'sWidth': "105px", 'aTargets': [1] },
+                    { 'bSortable': false, 'sWidth': "175px", 'aTargets': [3] },
+                    { 'bSortable': true, 'sWidth': "160px", 'aTargets': [4] },
+                    { 'bSortable': false, 'sWidth': "75px", 'aTargets': [5] }
+                ]
+            });
+        });    
+    </script>
+}
+
+<noscript><h1 style="font-family: arial; color: red">This site uses JavaScript for important interactions and functions which is currently turned off for your browser. To enjoy the full possibilities of this site please enable JavaScript within your browser settings.</h1></noscript>
+
+<div class="dashboard-header">
+    <h2>Director Dashboard</h2>
+    <p><i>Healthy Kids</i> and <i>My Child at Meal Time</i> are two researched based obesity risk rapid self-assessment tools designed for low-income and low-literate ethnically diverse parents of preschool age children. You can download PDF formatted files of these tools for use with your program participants. Alternatively, you may tailor the tools’ photographs to better represent your program’s target population.</p>
+</div>
+
+<div class="dashboard-detail">
+    <h3>Downloadable Materials</h3>
+    <p>If you would like to use the original versions of the <i>Healthy Kids</i> or <i>My Child at Meal Time</i> surveys you can  download by clicking the corresponding icon below. Other supplemental materials, such as instruction guides to provide data collection consistency, are provided as well.</p>
+    <ul>
+        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/healthykidssurvey.pdf' title="Healthy Kids Survey"><img alt="Download Healthy Kids Survey" src="@Url.Image("DownloadHealthyKids.png")" /></a> </li>
+
+        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/mychildsurvey.pdf' title="My Child Survey"><img alt="Download My Child at Meal Time Survey" src="@Url.Image("DownloadMyChild.png")" /></a></li>
+
+        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/healthykids_instguide.pdf' title="Healthy Kids Instruction Guide"><img alt="Healthy Kids Instruction Guide" src="@Url.Image("InstGuideHealthyKids.png")" /></a> </li>
+
+        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/mychild_instguide.pdf' title="My Child Instruction Guide"><img alt="My Child at Meal Time Instruction Guide" src="@Url.Image("InstGuideMyChild.png")" /></a></li>
+        
+        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/healthykids_goals.pdf' title="Goals for Healthy Kids"><img alt="Goals for Healthy Kids Booklet" src="/Images/GoalsHealthyKids.png" /></a></li>
+    </ul>
+</div>
+
+<div class="dashboard-detail">
+    <h3>Select a Survey to Customize</h3>
+    <p>Click the icon of the desired survey to create a new customized version.</p>
+    <ul>
+        <li><a class="director-icon" href='/ProgramDirector/Create?surveyId=1' title="Create Healthy Kids Survey"><img alt="Create Healthy Kids Survey" src="@Url.Image("CreateHealthyKids.png")" /></a> </li>
+
+        <li><a class="director-icon" href='/ProgramDirector/Create?surveyId=2' title="Create My Child Survey"><img alt="Create My Child at Meal Time Survey" src="@Url.Image("CreateMyChild.png")" /></a></li>
+    </ul>
+</div>
+
+<div class="dashboard-detail">
+
+    <h2>Your Customized Surveys</h2>
+    <p>Click on the tool icon to edit previously generated surveys. Click the download icon to generate a high resolution, print quality PDF. This will take the system a few moments to generate. You can choose to print now or save the survey file for later printing. The PDF file generated is formatted for professional printing with a .125" bleed on each side.</p>
+
+    <table class="datatable">
+        <thead>
+            <tr>
+                <th>Customize</th>
+                <th>Download/Print</th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Survey
+                </th>
+                <th>Created</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{  var odd = false; }
+            @foreach (var item in Model.PrintedSurveys)
+            {
+                <tr class="@(odd ? "odd": "even")">
+                    <td class="td-customize">
+                        <a href='@Url.Action("SelectPhotos", "ProgramDirector", new { id = @item.Id })'><img alt="Customize" src="@Url.Image("edit.png")" /></a>                        
+                    </td>
+                    <td class="td-download">                        
+                        <a onclick="return confirm('You are requesting permission to download the Healthy Kids pediatric obesity risk assessment form to your computer. Healthy Kids© is protected by copyright laws and is property of University of California. By downloading Healthy Kids, you agree to keep the original form unchanged. This means that you are not entitled to modify or use the photographs for any other purpose. In addition, all references and logos may not be altered in any way nor removed.');" href='@Url.Action("Print", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("print.png")" /></a>
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Survey.Name
+                    </td>
+                    <td>
+                        @item.DateCreated
+                    </td>
+                    <td class="td-delete">
+                        <a onclick="return confirm('Are you sure you want to delete this survey?');" href='@Url.Action("Delete", "ProgramDirector", new { id = @item.Id })'><img alt="Print" src="@Url.Image("delete.png")" /></a>
+                    </td>
+                </tr>
+                odd = !odd;
+            }
+        </tbody>
+    </table>
+</div>

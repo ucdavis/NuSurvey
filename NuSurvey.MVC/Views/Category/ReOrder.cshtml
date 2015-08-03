@@ -1,0 +1,124 @@
+﻿@model NuSurvey.Web.Controllers.CategoryListViewModel
+
+@{
+	ViewBag.Title = "Change Rank";
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Administration", "Home")">Admin Home</a> 
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "Survey")">Surveys</a> 
+        </li>
+        <li>
+            <a href="@Url.Action("Edit", "Survey", new { id = @Model.Survey.Id })">Edit Survey</a> 
+        </li>
+        <li>
+            Change Rank
+        </li>
+    </ul>
+}
+
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.tablednd_0_5.js")'></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Initialise the table
+            $("table.DragnDrop").tableDnD({
+                onDrop: function (table, row) {
+                    //debugger;
+                    var rows = table.tBodies[0].rows;
+                    var newOrder = Array();
+                    for (var i = 0; i < rows.length; i++) {
+                        newOrder[i] = rows[i].id;
+                    }
+                    var url = '@Url.Action("ReOrder", "Category")';
+                    var postData = { tableOrder: newOrder };
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: postData,
+                        success: function (result) {
+                            if (result != true) {
+                                alert("There was a problem updating.");
+                            }
+                        },
+                        dataType: "json",
+                        traditional: true
+                    });
+                }
+            });
+        });
+    </script>
+}
+
+
+<h2>Drag And Drop Rows to Change Rank</h2>
+
+<table class="DragnDrop">
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				Rank
+			</th>
+			<th>
+				Name
+			</th>
+			<th>
+				Affirmation
+			</th>
+			<th>
+				Encouragement
+			</th>
+			<th>
+				Active
+			</th>
+			<th>
+				Ignore
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+@{ var odd = true; }
+@foreach (var item in Model.Categories)
+{
+    var jasonId = "Rank" + item.Id;
+		<tr id="@item.Id" class="@(odd ? "odd" : "even")">
+			<td>
+			</td>
+			<td>
+				@item.Rank
+			</td>
+			<td>
+				@item.Name
+			</td>
+
+			<td>
+				@item.Affirmation
+			</td>
+			<td>
+				@item.Encouragement
+			</td>
+			<td>
+                @if (item.IsActive)
+                { 
+                    @item.IsActive
+                }
+			</td>
+			<td>
+                @if (item.DoNotUseForCalculations)
+                { 
+                    @item.DoNotUseForCalculations
+                }
+			</td>
+		</tr>
+                odd = !odd;
+}
+	</tbody>
+</table>
+

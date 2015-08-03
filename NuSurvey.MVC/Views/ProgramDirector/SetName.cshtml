@@ -1,0 +1,34 @@
+﻿@using NuSurvey.Core.Domain
+@model NuSurvey.Core.Domain.PrintedSurvey
+
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Index", "ProgramDirector")">Back to list</a>
+        </li>
+    </ul>
+}
+
+@Html.AntiForgeryToken()
+@using (Html.BeginForm("SetName", "ProgramDirector", FormMethod.Post, new { @class = "survey-name" }))
+{
+    @Html.AntiForgeryToken()
+    <p>Create a custom name for your survey. It may help to include things like county, educator or demographic description in the file name to help identify specific surveys you have customized.</p>
+    <ul>
+        <li>
+            <div class="editor-label">
+                @Html.Label("File Name")
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </li>
+        <li>
+            @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+            <label>&nbsp;</label>
+            <input class="button" type="submit" value="Continue" />
+        </li>
+    </ul>
+}
