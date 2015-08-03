@@ -39,3 +39,4 @@ NuSurvey.Web/bin/*
 NuSurvey.Web/bin/NuSurvey.Core.dll
 NuSurvey.Db/NuSurvey.Db.dbmdl
 NuSurvey.Core/bin/Test/*dll
+NuSurvey.MVC/bin/*.dll
