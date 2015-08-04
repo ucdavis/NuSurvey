@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
-using NuSurvey.Web.Resources;
+using NuSurvey.MVC.Resources;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using NuSurvey.Core.Domain;
@@ -12,7 +12,7 @@ using UCDArch.Core.Utils;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace NuSurvey.Web.Services
+namespace NuSurvey.MVC.Services
 {
     public interface IPrintService
     {

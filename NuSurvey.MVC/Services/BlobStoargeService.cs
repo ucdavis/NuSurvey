@@ -3,9 +3,9 @@ using System.IO;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
-using NuSurvey.Web.Resources;
+using NuSurvey.MVC.Resources;
 
-namespace NuSurvey.Web.Services
+namespace NuSurvey.MVC.Services
 {
     public interface IBlobStoargeService
     {

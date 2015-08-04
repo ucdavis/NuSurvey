@@ -7,15 +7,15 @@ using System.Web.Mvc;
 using AutoMapper;
 using MvcContrib;
 using NuSurvey.Core.Domain;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Web.Services;
+using NuSurvey.MVC.Controllers.Filters;
+using NuSurvey.MVC.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Attributes;
 using UCDArch.Web.Helpers;
 
-namespace NuSurvey.Web.Controllers
+namespace NuSurvey.MVC.Controllers
 {
     /// <summary>
     /// Controller for the Category class

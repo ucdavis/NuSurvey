@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NuSurvey.Core.Domain;
-using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Helpers;
+using NuSurvey.MVC.Controllers;
+using NuSurvey.MVC.Helpers;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 
-namespace NuSurvey.Web.Services
+namespace NuSurvey.MVC.Services
 {
     public interface IScoreService
     {

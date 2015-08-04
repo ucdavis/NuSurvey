@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.MVC.Controllers.Filters;
 using UCDArch.Web.Attributes;
 //using Elmah;
 using MvcContrib;
 
-namespace NuSurvey.Web.Controllers
+namespace NuSurvey.MVC.Controllers
 {
     [HandleTransactionsManually]
     public class HomeController : ApplicationController

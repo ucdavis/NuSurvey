@@ -6,14 +6,14 @@ using System.Linq;
 using System.Web.Mvc;
 using MvcContrib;
 using NuSurvey.Core.Domain;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Web.Resources;
-using NuSurvey.Web.Services;
+using NuSurvey.MVC.Controllers.Filters;
+using NuSurvey.MVC.Resources;
+using NuSurvey.MVC.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using UCDArch.Web.Helpers;
 
-namespace NuSurvey.Web.Controllers
+namespace NuSurvey.MVC.Controllers
 {
     /// <summary>
     /// Controller for the SurveyResponse class

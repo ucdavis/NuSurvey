@@ -6,15 +6,15 @@ using System.Web.Routing;
 using System.Web.Security;
 using MvcContrib;
 using NuSurvey.Core.Domain;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Web.Models;
-using NuSurvey.Web.Services;
+using NuSurvey.MVC.Controllers.Filters;
+using NuSurvey.MVC.Models;
+using NuSurvey.MVC.Services;
 using System.Linq.Expressions;
 using System.Linq;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 
-namespace NuSurvey.Web.Controllers
+namespace NuSurvey.MVC.Controllers
 {
     public class AccountController : ApplicationController
     {

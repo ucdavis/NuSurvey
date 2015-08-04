@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.WindowsAzure;
 
-namespace NuSurvey.Web.Services
+namespace NuSurvey.MVC.Services
 {
     public interface IEmailService
     {

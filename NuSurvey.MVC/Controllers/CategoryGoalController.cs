@@ -2,12 +2,12 @@
 using AutoMapper;
 using MvcContrib;
 using NuSurvey.Core.Domain;
-using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.MVC.Controllers.Filters;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using UCDArch.Web.Helpers;
 
-namespace NuSurvey.Web.Controllers
+namespace NuSurvey.MVC.Controllers
 {
     /// <summary>
     /// Controller for the CategoryGoal class

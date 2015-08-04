@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace NuSurvey.Web.Controllers.Filters
+namespace NuSurvey.MVC.Controllers.Filters
 {
     /// <summary>
     /// Validator to check the captcha values

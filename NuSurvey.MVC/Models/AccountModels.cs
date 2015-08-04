@@ -7,11 +7,11 @@ using System.Web.Mvc;
 using System.Web.Security;
 using DataAnnotationsExtensions;
 using NuSurvey.Core.Domain;
-using NuSurvey.Web.Controllers;
-using NuSurvey.Web.Controllers.Filters;
+using NuSurvey.MVC.Controllers;
+using NuSurvey.MVC.Controllers.Filters;
 using UCDArch.Core.Utils;
 
-namespace NuSurvey.Web.Models
+namespace NuSurvey.MVC.Models
 {
 
     #region Models
@@ -40,7 +40,7 @@ namespace NuSurvey.Web.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace NuSurvey.Web.Helpers
+namespace NuSurvey.MVC.Helpers
 {
     public static class StringExtension
     {

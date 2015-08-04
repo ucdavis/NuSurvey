@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace NuSurvey.Web.Controllers.Filters
+namespace NuSurvey.MVC.Controllers.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class UserAttribute : AuthorizeAttribute

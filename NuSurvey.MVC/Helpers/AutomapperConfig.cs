@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using NuSurvey.Core.Domain;
 
-namespace NuSurvey.Web.Helpers
+namespace NuSurvey.MVC.Helpers
 {
     public class AutomapperConfig
     {

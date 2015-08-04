@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using Microsoft.WindowsAzure;
 
-namespace NuSurvey.Web.Services
+namespace NuSurvey.MVC.Services
 {
     public interface IPictureService
     {

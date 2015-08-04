@@ -5,15 +5,15 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using NuSurvey.Core.Domain;
-using NuSurvey.Web.Controllers.Filters;
-using NuSurvey.Web.Resources;
-using NuSurvey.Web.Services;
+using NuSurvey.MVC.Controllers.Filters;
+using NuSurvey.MVC.Resources;
+using NuSurvey.MVC.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using MvcContrib;
 using UCDArch.Web.ActionResults;
 
-namespace NuSurvey.Web.Controllers
+namespace NuSurvey.MVC.Controllers
 {
     /// <summary>
     /// Controller for the Photo class

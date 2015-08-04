@@ -6,7 +6,7 @@ using AutoMapper;
 using NuSurvey.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 
-namespace NuSurvey.Web.Services
+namespace NuSurvey.MVC.Services
 {
     public interface IArchiveService
     {

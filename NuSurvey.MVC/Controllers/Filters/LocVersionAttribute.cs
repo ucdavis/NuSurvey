@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Web.Mvc;
 
-namespace NuSurvey.Web.Controllers.Filters
+namespace NuSurvey.MVC.Controllers.Filters
 {
     /// <summary>
     /// Sets the ViewData["Version"] to a version number corresponding to the last build date.

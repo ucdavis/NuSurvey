@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
 
-namespace NuSurvey.Web.Helpers
+namespace NuSurvey.MVC.Helpers
 {
     public static class HtmlHelperExtensions
     {
