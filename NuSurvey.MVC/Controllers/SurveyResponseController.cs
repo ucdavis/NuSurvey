@@ -94,7 +94,8 @@ namespace NuSurvey.MVC.Controllers
         public ActionResult FindAndStartSurvey(string shortName)
         {
             var survey = Repository.OfType<Survey>().Queryable.Single(a => a.ShortName == shortName);
-            return this.RedirectToAction(a => a.StartSurvey(survey.Id));
+            return this.RedirectToAction("StartSurvey", new {id = survey.Id});
+            //return this.RedirectToAction(a => a.StartSurvey(survey.Id));
         }
 
         /// <summary>

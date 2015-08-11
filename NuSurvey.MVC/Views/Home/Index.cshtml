@@ -5,7 +5,8 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
-@section AdditionalScripts{
+@section AdditionalScripts
+{
     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.dataTables.min.js")'></script>
     <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
     
@@ -51,7 +52,7 @@
                     </a>
                     <p class="float-right">New User? @Html.ActionLink("Create an account here.", "OpenRegister", "Account")</p>
                 </div>
-	
+
                 <div id="staff-right">
                     <h3>Directors</h3>
                     <p>Want to use these surveys with your program?  Register and open an account to have access to these tools.</p>
@@ -64,36 +65,9 @@
                     <p class="float-right">New User? @Html.ActionLink("Create an account here.", "OpenRegister", "Account")</p>
                 </div>
                 <br style="clear: both">
-            </div> <!--- END main MLR 121313 --->
+            </div> 
 
         </div>
     }
 </span>
-@*<h3>
-    Parents
-</h3>
-<a class="balloon" href='@Url.Action("PublicSurveys", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
-
-@if (Model.Admin || Model.User) {}
-    <h3>
-        Educators
-    </h3>
-    <a class="balloon" href='@Url.Action("Index", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
-
-    <a class="balloon" href='@Url.Action("Review", "Survey")' title="Review Your Surveys"><img alt="Review Your Surveys" src="@Url.Image("review.png")"/></a>
-
-
-<h3>
-    Program Director
-</h3>
-<a class="balloon" href='@Url.Action("Index", "ProgramDirector")' title="Manage Your Surveys"><img alt="Manage Your Surveys" src="@Url.Image("big_print.png")"/></a>
-
-<h3>
-    Manage Account
-</h3>
-*@
-
-@*<h1>
-    <a href="@Url.Action("Index", "SurveyResponse")">Answer Surveys</a> 
-</h1>*@
 
