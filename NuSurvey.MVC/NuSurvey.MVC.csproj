@@ -86,17 +86,11 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Mvc">
-      <HintPath>..\packages\Mvc4Futures.4.0.20710.0\lib\net40\Microsoft.Web.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage">
       <HintPath>..\packages\WindowsAzure.Storage.3.0.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
-    </Reference>
-    <Reference Include="MvcContrib">
-      <HintPath>..\packages\StudioDonder.MvcContrib.Mvc4.3.0.0.99\lib\MvcContrib.dll</HintPath>
     </Reference>
     <Reference Include="MvcContrib.FluentHtml">
       <HintPath>..\packages\MvcContrib.Mvc3.FluentHtml-ci.3.0.100.0\lib\MvcContrib.FluentHtml.dll</HintPath>

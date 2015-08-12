@@ -44,7 +44,7 @@ namespace NuSurvey.MVC.Controllers
             if (question == null)
             {
                 Message = "Question not found.";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             var viewModel = QuestionDetailViewModel.Create(Repository, question);
@@ -71,7 +71,7 @@ namespace NuSurvey.MVC.Controllers
             if (survey == null)
             {
                 Message = "Survey Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 			var viewModel = QuestionViewModel.Create(Repository, survey);
             if (categoryId != null)
@@ -100,7 +100,7 @@ namespace NuSurvey.MVC.Controllers
             if (survey == null)
             {
                 Message = "Survey Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             var viewModel = QuestionViewModel.Create(Repository, survey);
             if (categoryId != null) //This category Id is just used for defaults and navigation
@@ -228,10 +228,10 @@ namespace NuSurvey.MVC.Controllers
                 Message = string.Format("Question Created Successfully{0}", extraMessage);
 
                 if (viewModel.Category != null)
-                {
-                    return this.RedirectToAction<CategoryController>(a => a.Edit(viewModel.Category.Id));
-                }
-                return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+                {                    
+                    return this.RedirectToAction("Edit", "Category", new {id = viewModel.Category.Id});
+                }                
+                return this.RedirectToAction("Edit", "Survey", new {id = survey.Id});
             }
             return View(viewModel);
         }
@@ -250,26 +250,26 @@ namespace NuSurvey.MVC.Controllers
             if (survey == null)
             {
                 Message = "Survey Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             var question = _questionRepository.GetNullableById(id);
             if (question == null)
             {
                 Message = "Question Not Found.";
-                return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+                return this.RedirectToAction("Edit", "Survey", new { id = survey.Id });
             }
 
             if (question.Survey.Id != survey.Id)
             {
                 Message = "Question not related to current survey";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             if (!question.Category.IsCurrentVersion)
             {
                 Message = "Question's related category is not current version";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
 
@@ -329,14 +329,14 @@ namespace NuSurvey.MVC.Controllers
             if (survey == null)
             {
                 Message = "Survey Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             var questionToEdit = _questionRepository.GetNullableById(id);
             if (questionToEdit == null)
             {
                 Message = "Question Not Found.";
-                return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+                return this.RedirectToAction("Edit", "Survey", new {id = survey.Id});
             }
 
 
@@ -591,10 +591,10 @@ namespace NuSurvey.MVC.Controllers
                         Message = string.Format("Question Edited Successfully {0} {1}", extraMessage1, extraMessage2);
 
                         if (viewModel.Category != null)
-                        {
-                            return this.RedirectToAction<CategoryController>(a => a.Edit(newOriginalCategory.Id));
+                        {                            
+                            return this.RedirectToAction("Edit", "Category", new {id = newOriginalCategory.Id});
                         }
-                        return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));   
+                        return this.RedirectToAction("Edit", "Survey", new {id = survey.Id});
                     }
                     else
                     {
@@ -638,9 +638,9 @@ namespace NuSurvey.MVC.Controllers
 
                             if (viewModel.Category != null)
                             {
-                                return this.RedirectToAction<CategoryController>(a => a.Edit(newOriginalCategory.Id));
+                                return this.RedirectToAction("Edit", "Category", new {id = newOriginalCategory.Id});
                             }
-                            return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id)); 
+                            return this.RedirectToAction("Edit", "Survey", new {id = survey.Id});
                         }
                         else
                         {
@@ -680,9 +680,9 @@ namespace NuSurvey.MVC.Controllers
 
                             if (viewModel.Category != null)
                             {
-                                return this.RedirectToAction<CategoryController>(a => a.Edit(newOriginalCategory.Id));
+                                return this.RedirectToAction("Edit", "Category", new {id = newOriginalCategory.Id});
                             }
-                            return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id)); 
+                            return this.RedirectToAction("Edit", "Survey", new { id = survey.Id });
                         }
 
                         
@@ -736,9 +736,10 @@ namespace NuSurvey.MVC.Controllers
 
                     if (viewModel.Category != null)
                     {
-                        return this.RedirectToAction<CategoryController>(a => a.Edit(viewModel.Category.Id));
+                        return this.RedirectToAction("Edit", "Category", new {id = viewModel.Category.Id});
                     }
-                    return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id)); 
+                   
+                    return this.RedirectToAction("Edit", "Survey", new { id = survey.Id });
 
                     
                 }
@@ -781,9 +782,9 @@ namespace NuSurvey.MVC.Controllers
 
                 if (viewModel.Category != null)
                 {
-                    return this.RedirectToAction<CategoryController>(a => a.Edit(questionToEdit.Category.Id));
+                    return this.RedirectToAction("Edit", "Category", new {id = questionToEdit.Category.Id});
                 }
-                return this.RedirectToAction<SurveyController>(a => a.Edit(survey.Id));
+                return this.RedirectToAction("Edit", "Survey", new { id = survey.Id });
 
                 #endregion No Versioning, editing as normal
 
@@ -806,7 +807,7 @@ namespace NuSurvey.MVC.Controllers
             var survey = Repository.OfType<Survey>().GetNullableById(id);
             if (survey == null)
             {
-                return this.RedirectToAction<SurveyController>(a => a.Index());
+                return this.RedirectToAction("Index", "Survey");
             }
 
             var viewModel = QuestionListViewModel.Create(Repository, survey);

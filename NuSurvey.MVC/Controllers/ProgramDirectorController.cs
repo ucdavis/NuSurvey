@@ -55,7 +55,7 @@ namespace NuSurvey.MVC.Controllers
             if (_printedSurveyRepository.Queryable.Count(a => a.UserId == CurrentUser.Identity.Name) >= 100)
             {
                 Message = "Maximum surveys reached, please delete existing surveys before duplicating more.";
-                return this.RedirectToAction(a => a.Index());
+                return this.RedirectToAction("Index");
             }
 
             var survey = _surveyRepository.Queryable.Single(a => a.Id == surveyId && a.IsActive);
@@ -80,8 +80,7 @@ namespace NuSurvey.MVC.Controllers
             }
 
             _printedSurveyRepository.EnsurePersistent(printedSurvey);
-
-            return this.RedirectToAction(a => a.SetName(printedSurvey.Id));
+            return this.RedirectToAction("SetName", new{id=printedSurvey.Id});
 
 
         }
@@ -109,7 +108,7 @@ namespace NuSurvey.MVC.Controllers
             printedSurveyToEdit.Name = printedSurvey.Name;
             _printedSurveyRepository.EnsurePersistent(printedSurveyToEdit);
 
-            return this.RedirectToAction(a => a.SelectPhotos(id));
+            return this.RedirectToAction("SelectPhotos", new{id});
         }
 
         [ProgramDirector]
@@ -120,7 +119,7 @@ namespace NuSurvey.MVC.Controllers
 
             _printedSurveyRepository.Remove(printedSurvey);
 
-            return this.RedirectToAction(a => a.Index());
+            return this.RedirectToAction("Index");
         }
 
         [ProgramDirector]
@@ -143,7 +142,7 @@ namespace NuSurvey.MVC.Controllers
             {
                 _printedSurveyRepository.EnsurePersistent(printedSurveyToEdit);
                 Message = "File name updated";
-                //return this.RedirectToAction(a => a.Index());
+                //return this.RedirectToAction("Index");
             }
             else
             {

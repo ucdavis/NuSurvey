@@ -94,7 +94,7 @@ namespace NuSurvey.MVC.Controllers
 
             _blobStoargeService.UploadPhoto(photo.Id, img);
 
-            return this.RedirectToAction(a => a.Index());
+            return this.RedirectToAction("Index");
         }
 
         public ActionResult Edit(int id, PhotoEditModel photoEditModel)
@@ -103,7 +103,7 @@ namespace NuSurvey.MVC.Controllers
             if (photo == null)
             {
                 Message = "Photo not found";
-                return this.RedirectToAction(a => a.Index());
+                return this.RedirectToAction("Index");
             }
 
             var viewModel = PhotoEditModel.Create(null, null, null, "E");
@@ -127,7 +127,7 @@ namespace NuSurvey.MVC.Controllers
             if (photo == null)
             {
                 Message = "Photo not found";
-                return this.RedirectToAction(a => a.Index());
+                return this.RedirectToAction("Index");
             }
             if (uploadedPhoto != null)
             {
@@ -192,7 +192,7 @@ namespace NuSurvey.MVC.Controllers
             Message = "Photo Updated";
 
             _photoRepository.EnsurePersistent(photo);
-            return this.RedirectToAction(a => a.Index());
+            return this.RedirectToAction("Index");
         }
 
 
@@ -202,7 +202,7 @@ namespace NuSurvey.MVC.Controllers
             if (photo == null)
             {
                 Message = "Photo not found";
-                return this.RedirectToAction(a => a.Index());
+                return this.RedirectToAction("Index");
             }
 
             var viewModel = PhotoEditModel.Create(questionId, surveyId, categoryId, "D");
@@ -322,7 +322,7 @@ namespace NuSurvey.MVC.Controllers
             if (photo == null)
             {
                 Message = "Photo not found";
-                return this.RedirectToAction(a => a.Index());
+                return this.RedirectToAction("Index");
             }
 
             return View(photo);
@@ -343,7 +343,7 @@ namespace NuSurvey.MVC.Controllers
                 _photoRepository.EnsurePersistent(photoToDelete);
             }
 
-            return this.RedirectToAction(a => a.Index());
+            return this.RedirectToAction("Index");
         }
 
         public ActionResult Search(string tag, int? questionId, int? surveyId, int? categoryId, string editDetail)
@@ -351,7 +351,7 @@ namespace NuSurvey.MVC.Controllers
             if (string.IsNullOrWhiteSpace(tag))
             {
                 Message = "Tag not entered";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             var viewModel = PhotoSearchModel.Create(questionId, surveyId, categoryId, editDetail);
             viewModel.PhotoTags = _photoTagRepository.Queryable.Where(a => a.Name.ToLower() == tag.ToLower()).ToList();

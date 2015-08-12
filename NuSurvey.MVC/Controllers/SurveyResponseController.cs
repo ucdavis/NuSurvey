@@ -44,7 +44,8 @@ namespace NuSurvey.MVC.Controllers
             var isPublic = !(CurrentUser.IsInRole(RoleNames.User) || CurrentUser.IsInRole(RoleNames.Admin));
             if (isPublic)
             {
-                return this.RedirectToAction<HomeController>(a => a.Index(false));
+                return this.RedirectToAction("Index", "Home");
+
             }
             var viewModel = ActiveSurveyViewModel.Create(Repository, isPublic);
 
@@ -77,12 +78,12 @@ namespace NuSurvey.MVC.Controllers
             if (surveyResponse == null)
             {
                 Message = "Survey Response Details Not Found.";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
                 //return RedirectToAction("Index");
             }
             if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
             {
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                return this.RedirectToAction("NotAuthorized", "Error");
             }
 
             var viewModel = SurveyReponseDetailViewModel.Create(Repository, surveyResponse);
@@ -122,14 +123,14 @@ namespace NuSurvey.MVC.Controllers
             if (survey == null || !survey.IsActive)
             {
                 Message = "Survey not found or not active.";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             #region Check To See if there are enough available Categories
             if (GetCountActiveCategoriesWithScore(survey) < 3)
             {
                 Message = "Survey does not have enough active categories to complete survey.";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             #endregion Check To See if there are enough available Categories
 
@@ -207,7 +208,7 @@ namespace NuSurvey.MVC.Controllers
             if (survey == null || !survey.IsActive)
             {
                 Message = "Survey not found or not active.";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             ViewBag.surveyimage = string.Format("{0}-survey", survey.ShortName.ToLower().Trim());
 
@@ -230,7 +231,7 @@ namespace NuSurvey.MVC.Controllers
                 }
 
                 
-                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id, publicGuid));
+                return this.RedirectToAction("AnswerNext", new{ id= surveyResponse.Id, publicGuid = publicGuid});
             }
 
             Message = "Please correct errors to continue";
@@ -272,14 +273,14 @@ namespace NuSurvey.MVC.Controllers
             if (surveyResponse == null || !surveyResponse.IsPending)
             {
                 Message = "Pending survey not found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
             {
                 if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
                 {
                     Message = "Not your survey";
-                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                    return this.RedirectToAction("NotAuthorized", "Error");
                 }
             }
             else
@@ -287,7 +288,7 @@ namespace NuSurvey.MVC.Controllers
                 if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
                 {
                     Message = "Not your survey";
-                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                    return this.RedirectToAction("NotAuthorized", "Error");
                 }
             }
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
@@ -295,7 +296,7 @@ namespace NuSurvey.MVC.Controllers
             
             if (viewModel.CurrentQuestion == null)
             {
-                return this.RedirectToAction(a => a.FinalizePending(surveyResponse.Id, publicGuid));
+                return this.RedirectToAction("FinalizePending", new {id = surveyResponse.IsPending, publicGuid});
             }
 
             ViewBag.surveyimage = string.Format("{0}-survey", surveyResponse.Survey.ShortName.ToLower().Trim());
@@ -321,14 +322,14 @@ namespace NuSurvey.MVC.Controllers
             if (surveyResponse == null || !surveyResponse.IsPending)
             {
                 Message = "Pending survey not found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
             {
                 if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
                 {
                     Message = "Not your survey";
-                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                    return this.RedirectToAction("NotAuthorized", "Error");
                 }
             }
             else
@@ -336,7 +337,7 @@ namespace NuSurvey.MVC.Controllers
                 if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
                 {
                     Message = "Not your survey";
-                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                    return this.RedirectToAction("NotAuthorized", "Error");
                 }
             }
 
@@ -346,7 +347,7 @@ namespace NuSurvey.MVC.Controllers
             if (question == null)
             {
                 Message = "Question survey not found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }                           
             Answer answer;
             if (surveyResponse.Answers.Where(a => a.Question.Id == question.Id).Any())
@@ -377,7 +378,7 @@ namespace NuSurvey.MVC.Controllers
                     Session[publicGuid.ToString()] = surveyResponse;
                 }
 
-                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id, publicGuid));
+                return this.RedirectToAction("AnswerNext", new{id = surveyResponse.Id, publicGuid});
             }
             else
             {
@@ -417,7 +418,7 @@ namespace NuSurvey.MVC.Controllers
                 {
                     Session[publicGuid.ToString()] = surveyResponse;
                 }
-                return this.RedirectToAction(a => a.AnswerNext(surveyResponse.Id, publicGuid));
+                return this.RedirectToAction("AnswerNext", new { id = surveyResponse.Id, publicGuid });
             }
 
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
@@ -448,14 +449,14 @@ namespace NuSurvey.MVC.Controllers
             if (surveyResponse == null || !surveyResponse.IsPending)
             {
                 Message = "Pending survey not found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
             {
                 if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
                 {
                     Message = "Not your survey";
-                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                    return this.RedirectToAction("NotAuthorized", "Error");
                 }
             }
             else
@@ -463,7 +464,7 @@ namespace NuSurvey.MVC.Controllers
                 if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
                 {
                     Message = "Not your survey";
-                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                    return this.RedirectToAction("NotAuthorized", "Error");
                 }
             }
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
@@ -480,12 +481,12 @@ namespace NuSurvey.MVC.Controllers
                 {
                     Session[publicGuid.ToString()] = surveyResponse;
                 }
-                return this.RedirectToAction(a => a.Results(surveyResponse.Id, publicGuid));
+                return this.RedirectToAction("Results", new{id = surveyResponse.Id, publicGuid});
             }
             else
             {
                 Message = "Error finalizing survey.";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
         }
 
@@ -503,12 +504,12 @@ namespace NuSurvey.MVC.Controllers
             if (surveyResponse == null || !surveyResponse.IsPending)
             {
                 Message = "Pending survey not found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Not your survey";
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                return this.RedirectToAction("NotAuthorized", "Error");
             }
             var viewModel = SingleAnswerSurveyResponseViewModel.Create(Repository, surveyResponse.Survey, surveyResponse);
             viewModel.FromAdmin = fromAdmin;
@@ -531,12 +532,12 @@ namespace NuSurvey.MVC.Controllers
             if (surveyResponse == null || !surveyResponse.IsPending)
             {
                 Message = "Pending survey not found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             if (!CurrentUser.IsInRole(RoleNames.Admin) && surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Not your survey";
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                return this.RedirectToAction("NotAuthorized", "Error");
             }
 
             var surveyId = surveyResponse.Survey.Id;
@@ -545,18 +546,18 @@ namespace NuSurvey.MVC.Controllers
             {
                 if (fromAdmin)
                 {
-                    return this.RedirectToAction<SurveyController>(a => a.PendingDetails(surveyId));
+                    return this.RedirectToAction("PendingDetails", "Survey", new {id = surveyId});
                 }
-                return this.RedirectToAction(a => a.StartSurvey(surveyId));
+                return this.RedirectToAction("StartSurvey", new{id=surveyId});
             }
 
             _surveyResponseRepository.Remove(surveyResponse);
 
             if (fromAdmin)
             {
-                return this.RedirectToAction<SurveyController>(a => a.PendingDetails(surveyId));
+                return this.RedirectToAction("PendingDetails", "Survey", new { id = surveyId });
             }
-            return this.RedirectToAction<HomeController>(a => a.Index(false));
+            return this.RedirectToAction("Index", "Home");
 
         }
 
@@ -574,14 +575,14 @@ namespace NuSurvey.MVC.Controllers
             if (survey == null || !survey.IsActive)
             {
                 Message = "Survey not found or not active.";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             #region Check To See if there are enough available Categories
             if (GetCountActiveCategoriesWithScore(survey) < 3)
             {
                 Message = "Survey does not have enough active categories to complete survey.";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             #endregion Check To See if there are enough available Categories
 
@@ -607,7 +608,7 @@ namespace NuSurvey.MVC.Controllers
             if (survey == null || !survey.IsActive)
             {
                 Message = "Survey not found or not active.";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             var surveyResponseToCreate = new SurveyResponse(survey);
@@ -699,7 +700,7 @@ namespace NuSurvey.MVC.Controllers
 
                 Message = "Below are the customized goals for the survey you entered. You can use the \"Print Results\" link below to print this individual goal sheet. If you would like to print a text-only version or goal sheets for multiple participants at one time go to the Educators Dashboard and select the Review & Print section for the survey you are working with.";
 
-                return this.RedirectToAction(a => a.Results(surveyResponseToCreate.Id, null));
+                return this.RedirectToAction("Results", new {id = surveyResponseToCreate.Id});
             }
             else
             {
@@ -736,7 +737,7 @@ namespace NuSurvey.MVC.Controllers
             if (surveyResponse == null)
             {
                 Message = "Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }            
 
             if (!CurrentUser.IsInRole(RoleNames.Admin))
@@ -746,7 +747,7 @@ namespace NuSurvey.MVC.Controllers
                     if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
                     {
                         Message = "Not your survey";
-                        return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                        return this.RedirectToAction("NotAuthorized", "Error");
                     }
                 }
                 else
@@ -754,7 +755,7 @@ namespace NuSurvey.MVC.Controllers
                     if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
                     {
                         Message = "Not your survey";
-                        return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                        return this.RedirectToAction("NotAuthorized", "Error");
                     }
                 }
             }

@@ -43,7 +43,8 @@ namespace NuSurvey.MVC.Controllers
             var survey = Repository.OfType<Survey>().GetNullableById(id);
             if (survey == null)
             {
-                return this.RedirectToAction<SurveyController>(a => a.Index());
+                return this.RedirectToAction("Index", "Survey");
+
             }
 
             var viewModel = CategoryListViewModel.Create(Repository, survey);
@@ -95,7 +96,7 @@ namespace NuSurvey.MVC.Controllers
             var survey = Repository.OfType<Survey>().GetNullableById(id);
             if (survey == null)
             {
-                return this.RedirectToAction<SurveyController>(a => a.Index());
+                return this.RedirectToAction("Index", "Survey");
             }
 
 			var viewModel = CategoryViewModel.Create(Repository, survey);
@@ -116,7 +117,7 @@ namespace NuSurvey.MVC.Controllers
             var survey = Repository.OfType<Survey>().GetNullableById(id);
             if (survey == null)
             {
-                return this.RedirectToAction<SurveyController>(a => a.Index());
+                return this.RedirectToAction("Index", "Survey");
             }
 
             var categoryToCreate = new Category(survey);
@@ -135,7 +136,7 @@ namespace NuSurvey.MVC.Controllers
 
                 Message = "Category Created Successfully";
 
-                return this.RedirectToAction(a => a.Edit(categoryToCreate.Id));
+                return this.RedirectToAction("Edit", new {id=categoryToCreate.Id});
             }
             else
             {
@@ -160,12 +161,12 @@ namespace NuSurvey.MVC.Controllers
             if (category == null)
             {
                 Message = "Category not found to edit.";
-                return this.RedirectToAction<SurveyController>(a => a.Index());
+                return this.RedirectToAction("Index", "Survey");
             }
             if (!category.IsCurrentVersion)
             {
                 Message = "Category is not Current";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             var viewModel = CategoryViewModel.Create(Repository, category.Survey);
@@ -191,12 +192,12 @@ namespace NuSurvey.MVC.Controllers
             if (categoryToEdit == null)
             {
                 Message = "Category not found to edit.";
-                return this.RedirectToAction<SurveyController>(a => a.Index());
+                return this.RedirectToAction("Index", "Survey");
             }
             if (!categoryToEdit.IsCurrentVersion)
             {
                 Message = "Category is not Current";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             var isNewVersion = false;
@@ -238,7 +239,7 @@ namespace NuSurvey.MVC.Controllers
                 
                 
                 //return this.RedirectToAction<SurveyController>(a => a.Edit(categoryToEdit.Survey.Id));
-                return this.RedirectToAction(a => a.Edit(categoryToEdit.Id));
+                return this.RedirectToAction("Edit" , new{id = categoryToEdit.Id});
             }
             else
             {

@@ -68,7 +68,7 @@ namespace NuSurvey.MVC.Controllers
 
             //ControllerContext.HttpContext.Cache.Remove("ServiceMessages");
 
-            return this.RedirectToAction(a => a.Index(false));
+            return this.RedirectToAction("Index");
         }
 
 

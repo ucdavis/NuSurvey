@@ -53,8 +53,7 @@ namespace NuSurvey.MVC.Controllers
 
             if (survey == null)
             {
-                return this.RedirectToAction(a => a.Index());
-                //return RedirectToAction("Index");
+                return this.RedirectToAction("Index");
             }
 
             var viewModel = SurveyResponseDetailViewModel.Create(Repository, survey, filterBeginDate, filterEndDate);
@@ -74,8 +73,7 @@ namespace NuSurvey.MVC.Controllers
 
             if (survey == null)
             {
-                return this.RedirectToAction(a => a.Index());
-                //return RedirectToAction("Index");
+                return this.RedirectToAction("Index");
             }
 
             var viewModel = SurveyPendingResponseDetailViewModel.Create(Repository, survey);
@@ -115,8 +113,7 @@ namespace NuSurvey.MVC.Controllers
                 _surveyRepository.EnsurePersistent(survey);
 
                 Message = "Survey Created Successfully";
-
-                return this.RedirectToAction(a => a.Edit(survey.Id));
+                return this.RedirectToAction("Edit", new{id=survey.Id});
             }
             else
             {
@@ -140,7 +137,7 @@ namespace NuSurvey.MVC.Controllers
 
             if (survey == null)
             {
-                return this.RedirectToAction(a => a.Index());
+                return this.RedirectToAction("Index");
             }
 
 			return View(survey);
@@ -162,7 +159,7 @@ namespace NuSurvey.MVC.Controllers
 
             if (surveyToEdit == null)
             {
-                return this.RedirectToAction(a => a.Index());
+                return this.RedirectToAction("Index");
             }
 
             Mapper.Map(survey, surveyToEdit);
@@ -177,7 +174,7 @@ namespace NuSurvey.MVC.Controllers
 
                 Message = "Survey Edited Successfully";
 
-                return this.RedirectToAction(a => a.Edit(surveyToEdit.Id));
+                return this.RedirectToAction("Edit", new{id= surveyToEdit.Id});
             }
             else
             {
@@ -213,7 +210,7 @@ namespace NuSurvey.MVC.Controllers
 
             if (survey == null)
             {
-                return this.RedirectToAction(a => a.Review());
+                return this.RedirectToAction("Review");
             }
 
             var viewModel = SurveyResponseDetailViewModel.Create(Repository, survey, filterBeginDate, filterEndDate);

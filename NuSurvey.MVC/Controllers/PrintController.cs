@@ -48,8 +48,8 @@ namespace NuSurvey.MVC.Controllers
                 surveyResponse = (SurveyResponse)Session[publicGuid.ToString()];
             }
             if (surveyResponse == null)
-            {
-                return this.RedirectToAction<ErrorController>(a => a.FileNotFound());
+            {                
+                return this.RedirectToAction("FileNotFound", "Error");
             }
 
             if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
@@ -60,8 +60,8 @@ namespace NuSurvey.MVC.Controllers
             if (!CurrentUser.IsInRole(RoleNames.Admin))
             {
                 if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
-                {
-                    return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                {                    
+                    return this.RedirectToAction("NotAuthorized", "Error");
                 }
             }
 
@@ -82,7 +82,7 @@ namespace NuSurvey.MVC.Controllers
             var survey = _surveyRepository.GetNullableById(id);
             if (survey == null)
             {
-                return this.RedirectToAction<ErrorController>(a => a.FileNotFound());
+                return this.RedirectToAction("FileNotFound", "Error");
             }
 
             if (beginDate == null)
@@ -117,13 +117,13 @@ namespace NuSurvey.MVC.Controllers
             var survey = _surveyRepository.GetNullableById(id);
             if (survey == null)
             {
-                return this.RedirectToAction<ErrorController>(a => a.FileNotFound());
+                return this.RedirectToAction("FileNotFound", "Error");
             }
 
             if (picked == null || picked.Length == 0)
             {
                 Message = "No Survey Responses selected. Click on the rows of the table to select/deselect them.";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             foreach (var i in picked)
             {
@@ -131,14 +131,14 @@ namespace NuSurvey.MVC.Controllers
                 if (surveyResponse == null)
                 {
                     Message = string.Format("Selected Survey Response Not Found.'{0}'", i);
-                    return this.RedirectToAction<ErrorController>(a => a.Index());
+                    return this.RedirectToAction("Index", "Error");
                 }
                 if (!CurrentUser.IsInRole(RoleNames.Admin))
                 {
                     if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
                     {
                         Message = string.Format("Selected Survey Response not yours.'{0}'", i);
-                        return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                        return this.RedirectToAction("NotAuthorized", "Error");
                     }
                 }
                 Check.Require(surveyResponse.Survey.Id == survey.Id, string.Format("SurveyResponse's survey id does not match {0} -- {1}", surveyResponse.Survey.Id, survey.Id));

@@ -35,7 +35,7 @@ namespace NuSurvey.MVC.Controllers
             if (categoryGoal == null)
             {
                 Message = "CategoryGoal Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             var viewModel = CategoryGoalViewModel.Create(Repository, categoryGoal.Category);
@@ -56,12 +56,12 @@ namespace NuSurvey.MVC.Controllers
             if (category == null)
             {
                 Message = "Category Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             if (!category.IsCurrentVersion)
             {
                 Message = "Category is not Current";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
 			var viewModel = CategoryGoalViewModel.Create(Repository, category);
@@ -83,12 +83,12 @@ namespace NuSurvey.MVC.Controllers
             if (category == null)
             {
                 Message = "Category Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             if (!category.IsCurrentVersion)
             {
                 Message = "Category is not Current";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             var categoryGoalToCreate = new CategoryGoal(category);
@@ -104,7 +104,7 @@ namespace NuSurvey.MVC.Controllers
 
                 Message = "CategoryGoal Created Successfully";
 
-                return this.RedirectToAction<CategoryController>(a => a.Edit(categoryGoalToCreate.Category.Id));
+                return this.RedirectToAction("Edit", "Category", new{id = categoryGoalToCreate.Category.Id});
             }
             else
             {
@@ -128,12 +128,12 @@ namespace NuSurvey.MVC.Controllers
             if (categoryGoal == null)
             {
                 Message = "CategoryGoal Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             if (!categoryGoal.Category.IsCurrentVersion)
             {
                 Message = "Related Category is not Current";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
 			var viewModel = CategoryGoalViewModel.Create(Repository, categoryGoal.Category);
@@ -157,12 +157,12 @@ namespace NuSurvey.MVC.Controllers
             if (categoryGoalToEdit == null)
             {
                 Message = "CategoryGoal Not Found";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
             if (!categoryGoalToEdit.Category.IsCurrentVersion)
             {
                 Message = "Related Category is not Current";
-                return this.RedirectToAction<ErrorController>(a => a.Index());
+                return this.RedirectToAction("Index", "Error");
             }
 
             Mapper.Map(categoryGoal, categoryGoalToEdit);
@@ -174,8 +174,8 @@ namespace NuSurvey.MVC.Controllers
                 _categoryGoalRepository.EnsurePersistent(categoryGoalToEdit);
 
                 Message = "CategoryGoal Edited Successfully";
-
-                return this.RedirectToAction<CategoryController>(a => a.Edit(categoryGoalToEdit.Category.Id));
+                
+                return this.RedirectToAction("Edit", "Category", new {id = categoryGoalToEdit.Category.Id});
             }
             else
             {

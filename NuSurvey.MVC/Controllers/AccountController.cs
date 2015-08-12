@@ -14,6 +14,7 @@ using System.Linq;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 
+
 namespace NuSurvey.MVC.Controllers
 {
     public class AccountController : ApplicationController
@@ -177,7 +178,8 @@ namespace NuSurvey.MVC.Controllers
 
                 }
 
-                return this.RedirectToAction(a => a.LogOn());
+
+                return this.RedirectToAction("LogOn");
 
             }
             else if(createStatus == MembershipCreateStatus.DuplicateUserName || createStatus == MembershipCreateStatus.DuplicateEmail)
@@ -250,7 +252,7 @@ namespace NuSurvey.MVC.Controllers
 
                     Message = string.Format("{0} {1}", Message, "User emailed");
 
-                    return this.RedirectToAction(a => a.ManageUsers(false, false, false, false));
+                    return this.RedirectToAction("ManageUsers", new{hideAdmin = false, hideUser= false, hidePublic = true, hideProgramDirector = false});
                 }
                 else
                 {
@@ -290,12 +292,13 @@ namespace NuSurvey.MVC.Controllers
             if (id.Trim().ToLower() == CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Can't change yourself";
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                return this.RedirectToAction("NotAuthorized", "Error"); //TODO:Check This 
+                //return this.RedirectToAction("NotAuthorized", "Error");
             }
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
+                return this.RedirectToAction("ManageUsers", new { hideAdmin = false, hideUser = false, hidePublic = true, hideProgramDirector = false });
             }
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
@@ -317,12 +320,12 @@ namespace NuSurvey.MVC.Controllers
             if (editUserViewModel.Email.Trim().ToLower() == CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Can't change yourself";
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                return this.RedirectToAction("NotAuthorized", "Error");
             }
             if (MembershipService.GetUser(editUserViewModel.Email) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
+                return this.RedirectToAction("ManageUsers", new { hideAdmin = false, hideUser = false, hidePublic = false, hideProgramDirector = false });
             }
 
             var roles = new string[]{"", "", ""};
@@ -373,7 +376,7 @@ namespace NuSurvey.MVC.Controllers
  
             }
 
-            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
+            return this.RedirectToAction("ManageUsers", new { hideAdmin = false, hideUser = false, hidePublic = false, hideProgramDirector = false });
         }
 
         [Admin]
@@ -382,12 +385,12 @@ namespace NuSurvey.MVC.Controllers
             if (id.Trim().ToLower() == CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Can't unlock yourself";
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                return this.RedirectToAction("NotAuthorized", "Error");
             }
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
+                return this.RedirectToAction("ManageUsers", new { hideAdmin = false, hideUser = false, hidePublic = false, hideProgramDirector = false });
             }
 
             if (MembershipService.UnlockUser(id.Trim().ToLower()))
@@ -399,7 +402,7 @@ namespace NuSurvey.MVC.Controllers
                 Message = "Unloack Failed";
             }
 
-            return this.RedirectToAction(a => a.Edit(id));
+            return this.RedirectToAction("Edit", new{id});
         }
 
         /// <summary>
@@ -413,12 +416,12 @@ namespace NuSurvey.MVC.Controllers
             if (id.Trim().ToLower() == CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Can't delete yourself";
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                return this.RedirectToAction("NotAuthorized", "Error");
             }
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
+                return this.RedirectToAction("ManageUsers", new { hideAdmin = false, hideUser = false, hidePublic = false, hideProgramDirector = false });
             }
 
             var viewModel = EditUserViewModel.Create(id, MembershipService);
@@ -441,12 +444,12 @@ namespace NuSurvey.MVC.Controllers
             if (id.Trim().ToLower() == CurrentUser.Identity.Name.ToLower())
             {
                 Message = "Can't delete yourself";
-                return this.RedirectToAction<ErrorController>(a => a.NotAuthorized());
+                return this.RedirectToAction("NotAuthorized", "Error");
             }
             if (MembershipService.GetUser(id) == null)
             {
                 Message = "User Not Found";
-                return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
+                return this.RedirectToAction("ManageUsers", new { hideAdmin = false, hideUser = false, hidePublic = false, hideProgramDirector = false });
             }
             if (confirm)
             {
@@ -472,7 +475,7 @@ namespace NuSurvey.MVC.Controllers
                 }
             }
 
-            return this.RedirectToAction<AccountController>(a => a.ManageUsers(false, false, false, false));
+            return this.RedirectToAction("ManageUsers", new { hideAdmin = false, hideUser = false, hidePublic = false, hideProgramDirector = false });
         }
 
         /// <summary>
@@ -514,7 +517,7 @@ namespace NuSurvey.MVC.Controllers
                 _emailService.SendPasswordReset(userName, tempPass);
 
                 Message = "A new password has been sent to your email. It should arrive in a few minutes. If you do not receive it, please check your email filters.";
-                return this.RedirectToAction(a => a.LogOn());
+                return this.RedirectToAction("LogOn");
             }
 
             Message = "Unable to reset password";
@@ -549,7 +552,7 @@ namespace NuSurvey.MVC.Controllers
                 if (MembershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
                 {
                     //return RedirectToAction("ChangePasswordSuccess");
-                    return this.RedirectToAction(a => a.ChangePasswordSuccess());
+                    return this.RedirectToAction("ChangePasswordSuccess");
                 }
                 else
                 {
@@ -617,7 +620,7 @@ namespace NuSurvey.MVC.Controllers
             }
 
 
-            return this.RedirectToAction(a => a.ChangeRoles());
+            return this.RedirectToAction("ChangeRoles");
         }
 
         public ActionResult ManageAccount()
