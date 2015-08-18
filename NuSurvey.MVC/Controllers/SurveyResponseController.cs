@@ -126,6 +126,8 @@ namespace NuSurvey.MVC.Controllers
                 return this.RedirectToAction("Index", "Error");
             }
 
+            
+
             #region Check To See if there are enough available Categories
             if (GetCountActiveCategoriesWithScore(survey) < 3)
             {
@@ -214,6 +216,12 @@ namespace NuSurvey.MVC.Controllers
 
             surveyResponse.IsPending = true;
             surveyResponse.Survey = survey;
+            surveyResponse.Survey.Questions.ToList();
+            surveyResponse.Survey.Categories.ToList();
+            foreach (var q in surveyResponse.Survey.Questions)
+            {
+                q.Responses.ToList();
+            }
             surveyResponse.UserId = !string.IsNullOrWhiteSpace(CurrentUser.Identity.Name) ? CurrentUser.Identity.Name.ToLower() : publicGuid.ToString();
 
             ModelState.Clear();
@@ -829,6 +837,7 @@ namespace NuSurvey.MVC.Controllers
             Check.Require(survey != null);
 
             var viewModel = new SingleAnswerSurveyResponseViewModel{Survey = survey, PendingSurveyResponse = pendingSurveyResponse, SurveyResponse = new SurveyResponse(survey)};
+
             viewModel.Questions = viewModel.Survey.Questions
                 .Where(a => a.IsActive && a.Category != null && a.Category.IsActive && a.Category.IsCurrentVersion)
                 .OrderBy(a => a.Order).ToList();
