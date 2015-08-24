@@ -304,7 +304,7 @@ namespace NuSurvey.MVC.Controllers
             
             if (viewModel.CurrentQuestion == null)
             {
-                return this.RedirectToAction("FinalizePending", new {id = surveyResponse.IsPending, publicGuid});
+                return this.RedirectToAction("FinalizePending", new {id = surveyResponse.Id, publicGuid});
             }
 
             ViewBag.surveyimage = string.Format("{0}-survey", surveyResponse.Survey.ShortName.ToLower().Trim());
