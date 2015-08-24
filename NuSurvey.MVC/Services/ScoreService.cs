@@ -689,13 +689,13 @@ namespace NuSurvey.MVC.Services
                 }
                 score.MaxScore = totalMax.TotalMaxScore;
                 Category category1 = category;
-                foreach (var bypassedAnswer in bypassedAnswers.Where(a => a.Category == category1))
+                foreach (var bypassedAnswer in bypassedAnswers.Where(a => a.Category.Id == category1.Id))
                 {
                     score.MaxScore = score.MaxScore - bypassedAnswer.Question.Responses.Where(a => a.IsActive).Max(a => a.Score);
                 }
                 Category category2 = category;
                 score.TotalScore =
-                    surveyResponse.Answers.Where(a => a.Category == category2).Sum(b => b.Score);
+                    surveyResponse.Answers.Where(a => a.Category.Id == category2.Id).Sum(b => b.Score);
                 if (score.MaxScore == 0)
                 {
                     //?Don't score it?
@@ -715,20 +715,20 @@ namespace NuSurvey.MVC.Services
                 .ThenBy(a => a.Rank)
                 .FirstOrDefault().Category;
             }
-            if (scores.Where(a => a.Category != surveyResponse.PositiveCategory)                
+            if (scores.Where(a => a.Category.Id != surveyResponse.PositiveCategory.Id)                
                 .FirstOrDefault() != null)
             {
                 surveyResponse.NegativeCategory1 = scores
-                .Where(a => a.Category != surveyResponse.PositiveCategory)
+                .Where(a => a.Category.Id != surveyResponse.PositiveCategory.Id)
                 .OrderBy(a => a.Percent)
                 .ThenBy(a => a.Rank)
                 .FirstOrDefault().Category;
             }
-            if (scores.Where(a => a.Category != surveyResponse.PositiveCategory && a.Category != surveyResponse.NegativeCategory1)
+            if (scores.Where(a => a.Category.Id != surveyResponse.PositiveCategory.Id && a.Category.Id != surveyResponse.NegativeCategory1.Id)
                 .FirstOrDefault() != null)
             {
                 surveyResponse.NegativeCategory2 = scores
-                .Where(a => a.Category != surveyResponse.PositiveCategory && a.Category != surveyResponse.NegativeCategory1)
+                .Where(a => a.Category.Id != surveyResponse.PositiveCategory.Id && a.Category.Id != surveyResponse.NegativeCategory1.Id)
                 .OrderBy(a => a.Percent)
                 .ThenBy(a => a.Rank)
                 .FirstOrDefault().Category;
@@ -747,7 +747,10 @@ namespace NuSurvey.MVC.Services
             if (surveyResponse.NegativeCategory2 == null)
             {
                 surveyResponse.NegativeCategory2 = surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion && a != surveyResponse.PositiveCategory && a != surveyResponse.NegativeCategory1).OrderBy(a => a.Rank).FirstOrDefault();
-            }
+            }            
+            surveyResponse.PositiveCategory.CategoryGoals = repository.OfType<CategoryGoal>().Queryable.Where(a => a.Category.Id == surveyResponse.PositiveCategory.Id).ToList();
+            surveyResponse.NegativeCategory1.CategoryGoals = repository.OfType<CategoryGoal>().Queryable.Where(a => a.Category.Id == surveyResponse.NegativeCategory1.Id).ToList();
+            surveyResponse.NegativeCategory2.CategoryGoals = repository.OfType<CategoryGoal>().Queryable.Where(a => a.Category.Id == surveyResponse.NegativeCategory2.Id).ToList();
 
 
             return;
