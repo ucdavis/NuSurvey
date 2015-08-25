@@ -5,6 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using NuSurvey.Core.Domain;
+using NuSurvey.MVC.Helpers;
+using UCDArch.Data.NHibernate;
+using UCDArch.Web.ModelBinder;
 
 namespace NuSurvey.MVC
 {
@@ -16,6 +20,9 @@ namespace NuSurvey.MVC
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            AutomapperConfig.Configure();
+
         }
     }
 }
