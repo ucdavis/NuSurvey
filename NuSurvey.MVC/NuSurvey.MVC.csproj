@@ -406,6 +406,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.jqEasyCharCounter.js" />
+    <Content Include="Scripts\jquery.jqEasyCharCounter.min.js" />
     <Content Include="Scripts\jquery.placeholder.js" />
     <Content Include="Scripts\jquery.placeholder.min.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />
