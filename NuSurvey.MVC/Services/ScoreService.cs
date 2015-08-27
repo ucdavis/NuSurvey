@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NuSurvey.Core.Domain;
 using NuSurvey.MVC.Controllers;
@@ -691,7 +692,19 @@ namespace NuSurvey.MVC.Services
                 Category category1 = category;
                 foreach (var bypassedAnswer in bypassedAnswers.Where(a => a.Category.Id == category1.Id))
                 {
-                    score.MaxScore = score.MaxScore - bypassedAnswer.Question.Responses.Where(a => a.IsActive).Max(a => a.Score);
+                    decimal byPassMax = 0.0m;
+
+                    try
+                    {
+                        byPassMax = bypassedAnswer.Question.Responses.Where(a => a.IsActive).Max(a => a.Score);
+                    }
+                    catch (Exception)
+                    {
+                        var answer = bypassedAnswer;
+                        byPassMax = repository.OfType<Response>().Queryable.Where(a => a.Question.Id == answer.Question.Id && a.IsActive).Max(m => m.Score);
+                    }
+
+                    score.MaxScore = score.MaxScore - byPassMax;
                 }
                 Category category2 = category;
                 score.TotalScore =
@@ -747,10 +760,35 @@ namespace NuSurvey.MVC.Services
             if (surveyResponse.NegativeCategory2 == null)
             {
                 surveyResponse.NegativeCategory2 = surveyResponse.Survey.Categories.Where(a => !a.DoNotUseForCalculations && a.IsActive && a.IsCurrentVersion && a != surveyResponse.PositiveCategory && a != surveyResponse.NegativeCategory1).OrderBy(a => a.Rank).FirstOrDefault();
-            }            
-            surveyResponse.PositiveCategory.CategoryGoals = repository.OfType<CategoryGoal>().Queryable.Where(a => a.Category.Id == surveyResponse.PositiveCategory.Id).ToList();
-            surveyResponse.NegativeCategory1.CategoryGoals = repository.OfType<CategoryGoal>().Queryable.Where(a => a.Category.Id == surveyResponse.NegativeCategory1.Id).ToList();
-            surveyResponse.NegativeCategory2.CategoryGoals = repository.OfType<CategoryGoal>().Queryable.Where(a => a.Category.Id == surveyResponse.NegativeCategory2.Id).ToList();
+            }
+
+            //Only populate the CG if it is running as anonymous (session variables)
+            try
+            {
+                surveyResponse.PositiveCategory.CategoryGoals.ToList();
+            }
+            catch (Exception)
+            {
+                surveyResponse.PositiveCategory.CategoryGoals = repository.OfType<CategoryGoal>().Queryable.Where(a => a.Category.Id == surveyResponse.PositiveCategory.Id).ToList();
+            }
+            try
+            {
+                surveyResponse.NegativeCategory1.CategoryGoals.ToList();
+            }
+            catch (Exception)
+            {
+                surveyResponse.NegativeCategory1.CategoryGoals = repository.OfType<CategoryGoal>().Queryable.Where(a => a.Category.Id == surveyResponse.NegativeCategory1.Id).ToList();
+            }
+            try
+            {
+                surveyResponse.NegativeCategory2.CategoryGoals.ToList();
+            }
+            catch (Exception)
+            {
+                surveyResponse.NegativeCategory2.CategoryGoals = repository.OfType<CategoryGoal>().Queryable.Where(a => a.Category.Id == surveyResponse.NegativeCategory2.Id).ToList();
+            }
+           
+            
 
 
             return;
