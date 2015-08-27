@@ -594,6 +594,10 @@ namespace NuSurvey.MVC.Controllers
             {
                 ModelState.AddModelError("Confirm", "You must agree to the Terms and Conditions before making any changes.");
             }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
 
             var roles = new string[] { "", "", "" };
