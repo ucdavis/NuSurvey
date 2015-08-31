@@ -410,6 +410,7 @@
     <Content Include="Scripts\jquery.jqEasyCharCounter.min.js" />
     <Content Include="Scripts\jquery.placeholder.js" />
     <Content Include="Scripts\jquery.placeholder.min.js" />
+    <Content Include="Scripts\jquery.tablednd_0_5.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
