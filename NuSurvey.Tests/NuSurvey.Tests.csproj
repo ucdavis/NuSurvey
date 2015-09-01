@@ -199,10 +199,6 @@
       <Project>{6ED9EFB4-5CEE-42F6-ADC3-E5839F6F10DB}</Project>
       <Name>NuSurvey.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NuSurvey.Web\NuSurvey.Web.csproj">
-      <Project>{2E160536-5729-4A5D-A526-8BDE28F68009}</Project>
-      <Name>NuSurvey.Web</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
