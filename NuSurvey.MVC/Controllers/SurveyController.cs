@@ -218,7 +218,80 @@ namespace NuSurvey.MVC.Controllers
 
             return View(viewModel);
         }
+        [Admin]
+        public ActionResult Copy(int id)
+        {
+            var oldSurvey = _surveyRepository.GetNullableById(id);
 
+            if (oldSurvey == null)
+            {
+                return this.RedirectToAction("Index");
+            }
+
+            var newSurvey = new Survey();
+            newSurvey.Name = string.Format("{0} Copy", oldSurvey.Name.Trim());
+            newSurvey.ShortName = string.Format("{0} Copy", oldSurvey.ShortName.Trim());
+            newSurvey.QuizType = oldSurvey.QuizType;
+
+            _surveyRepository.EnsurePersistent(newSurvey);
+
+            foreach (var oldCategory in oldSurvey.Categories.Where(w => w.IsActive && w.IsCurrentVersion).OrderBy(a => a.Rank))
+            {
+                var newCategory = new Category(newSurvey);
+                newCategory.Name = oldCategory.Name;
+                newCategory.Rank = oldCategory.Rank;
+                newCategory.Affirmation = oldCategory.Affirmation;
+                newCategory.Encouragement = oldCategory.Encouragement;
+                newCategory.IsActive = oldCategory.IsActive;
+                newCategory.DoNotUseForCalculations = oldCategory.DoNotUseForCalculations;
+                newCategory.IsCurrentVersion = oldCategory.IsCurrentVersion;
+                newCategory.LastUpdate = DateTime.Now;
+                newCategory.CreateDate = DateTime.Now;
+                newCategory.PreviousVersion = null;
+                foreach (var oldCategoryGoal in oldCategory.CategoryGoals.Where(a => a.IsActive))
+                {
+                    var newCategoryGoal = new CategoryGoal(newCategory);
+                    newCategoryGoal.Name = oldCategoryGoal.Name;
+                    newCategoryGoal.IsActive = true;
+                    newCategory.AddCategoryGoal(newCategoryGoal);
+                }
+
+                foreach (var oldCategoryQuestion in oldCategory.Questions.Where(a => a.IsActive).OrderBy(o => o.Order))
+                {
+
+                    var newQuestion = new Question();
+                    newQuestion.Name = oldCategoryQuestion.Name;
+                    newQuestion.Order = oldCategoryQuestion.Order;
+                    newQuestion.IsOpenEnded = oldCategoryQuestion.IsOpenEnded;
+                    newQuestion.OpenEndedQuestionType = oldCategoryQuestion.OpenEndedQuestionType;
+                    newQuestion.AllowBypass = oldCategoryQuestion.AllowBypass;
+                    newQuestion.PrimaryPhoto = oldCategoryQuestion.PrimaryPhoto;
+
+
+                    foreach (var oldResponse in oldCategoryQuestion.Responses.Where(a => a.IsActive).OrderBy(o => o.Order))
+                    {
+                        var newResponse = new Response();
+                        newResponse.Value = oldResponse.Value;
+                        newResponse.Score = oldResponse.Score;
+                        newResponse.Order = oldResponse.Order;
+                        newResponse.IsActive = oldResponse.IsActive;
+                        newQuestion.AddResponse(newResponse);
+                    }
+                    
+                    foreach (var photo in oldCategoryQuestion.Photos)
+                    {
+                        newQuestion.Photos.Add(photo);
+                    }
+
+                    newCategory.AddQuestions(newQuestion);
+                }
+                Repository.OfType<Category>().EnsurePersistent(newCategory);
+            }
+
+            //_surveyRepository.EnsurePersistent(newSurvey);
+
+            return RedirectToAction("Index");
+        }
 
         
     }
