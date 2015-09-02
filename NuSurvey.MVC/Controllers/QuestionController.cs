@@ -316,7 +316,7 @@ namespace NuSurvey.MVC.Controllers
             //  3) Open Ended Changed
             //  4) Response added
             //  5) Response Hidden/Unhidden (Response.IsActive)
-            //  6) quesion (name) is changed
+            //  6) question (name) is changed
 
             var originalCategoryId = 0;
             var newCategoryId = 0;
@@ -465,6 +465,7 @@ namespace NuSurvey.MVC.Controllers
                 }
             }
             question.Survey = questionToEdit.Survey;
+            question.PrimaryPhoto = questionToEdit.PrimaryPhoto;
             
 
 
@@ -746,7 +747,7 @@ namespace NuSurvey.MVC.Controllers
                 #endregion Original Is not Versioned, but new Category Is
 
                 #region No Versioning, editing as normal                                
-
+                
                 Mapper.Map(question, questionToEdit);
 
                 questionToEdit.Responses.Clear();
