@@ -19,7 +19,9 @@ namespace NuSurvey.MVC.Helpers
                 .ForMember(x => x.Rank, x => x.Ignore())
                 .ForMember(x => x.LastUpdate, x => x.Ignore())
                 .ForMember(x => x.CreateDate, x => x.Ignore())
-                .ForMember(x => x.Survey, x => x.Ignore());
+                .ForMember(x => x.Survey, x => x.Ignore())
+                .ForMember(x => x.CategoryGoals, x => x.Ignore())
+                .ForMember(x => x.Questions, x => x.Ignore());
 
             CreateMap<CategoryGoal, CategoryGoal>()
                 .ForMember(x => x.Id, x => x.Ignore())
