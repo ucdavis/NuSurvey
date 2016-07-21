@@ -11,6 +11,7 @@ using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using System.Linq;
 using System.Linq.Expressions;
+using NuSurvey.MVC.Helpers;
 
 namespace NuSurvey.MVC.Services
 {
@@ -895,6 +896,10 @@ namespace NuSurvey.MVC.Services
 
             //1
             var thankYou = new PdfPCell(new Paragraph(string.Format("Thank you {0} for taking the time to complete the {1} quiz. We hope this feedback will help you and your family make healthy feeding choices.", surveyResponse.StudentId, surveyResponse.Survey.Name), arial));
+            if (surveyResponse.Survey.ShortName.IsSpanish())
+            {
+                thankYou = new PdfPCell(new Paragraph(string.Format("Gracias {0} por tomar el tiempo para completar el examen de {1}. Esperemos que estas recomendaciones le ayude a usted y a su familia elegir alimentos y actividades sanos.", surveyResponse.StudentId, surveyResponse.Survey.Name), arial));
+            }
             thankYou.Colspan = 2;
             thankYou.Border = 0;
             thankYou.PaddingTop = 10f;
