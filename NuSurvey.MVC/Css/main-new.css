@@ -8,7 +8,7 @@
 	Ultra-bold: 900
 */
 
-html, body { font: 16px/20px 'Source Sans Pro',Arial,sans-serif; min-width: 1200px; color: #03205B; height: 100%;} /* */
+html, body { font: 16px/20px 'Source Sans Pro',Arial,sans-serif; color: #03205B; height: 100%;} /* */
 
 .wrapper {min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -70px; background: url('../images/wavegrid_tan1.png') repeat;}
 
@@ -36,13 +36,15 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 .float-right { float: right; }  
 
-#branding span.header, .container-center, #footertext, #system_wide_status_text { width: 1020px; }
+#branding span.header, .container-center, #footertext, #system_wide_status_text { width: 100%; max-width: 1020px; }
 
 #branding, #footer, .display-form { color: #603813; }
 
-.col1 { margin-right: 10px; width: 802px; }
+.col1 { margin-right: 10px; width: 80%; max-width: 802px; }
 
-.col2 { width: 198px; }
+.col1 img {width: 100%;}
+
+.col2 { width: 25%; max-width: 198px; }
 
 .col1, .col2 { display: inline-block; }
 
@@ -92,12 +94,16 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 
 
-/***---------- PARENT QUESTION DISPLAY ----------***/ 
-.mcmt-survey { background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
-.mcmts-survey { background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; } /*spanish*/
+/***---------- PARENT QUESTION DISPLAY ----------***/
+
+.quiz-inst {width: 100%; max-width: 1020px; margin: 0 auto;}
+.quiz-inst img {width: 100%;}
+
+//**.mcmt-survey { background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
+.mcmts-survey { background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
 
 .hk-survey { background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
-.hks-survey { background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; } /*spanish*/
+.hks-survey { background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }**/
 
 .mcmt-survey .container-center, .hk-survey .container-center { padding: 0 26px; }
 .mcmts-survey .container-center, .hk-survey .container-center { padding: 0 26px; }
@@ -131,6 +137,8 @@ form ul li { list-style-type: none; margin: 10px 0; }
 .display-mcmt-question input.button, .display-mcmts-question input.button, .display-hk-question input.button, .display-hks-question input.button { float: right; }
 
 input.button { font-size: 1.2em; padding: 3px 15px 3px; background: #ede6de; /* Old browsers */ background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4); background: -moz-linear-gradient(top, #EDE6DE, #E7DED4); background: -o-linear-gradient(top, #EDE6DE, #E7DED4); background: -ms-linear-gradient(top, #EDE6DE, #E7DED4); background: linear-gradient(top, #EDE6DE #E7DED4); -webkit-border-radius: 4px; -khtml-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #603813; }
+
+.container-center { width: 80%; max-width: 850px; margin: 0 auto; }
 
 
 
@@ -297,8 +305,7 @@ div .editor-label .bypass { padding: 5px 0; }
 
 
 /***---------- GOAL RESULTS PAGE PARENTS ----------***/
-.result_fieldset_page.MCMT-background-image { background:  url('../images/hk-goal-bkgd.jpg') top left no-repeat; }
-.result_fieldset_page.HK-background-image { background:  url('../images/hk-goal-bkgd.jpg') top left no-repeat; }
+.result_fieldset_page { background:  url('../images/hk-goal-bkgd.jpg') top left no-repeat; } 
 
 .result_thanks { margin: 125px 55px 0 55px; height: 60px; } 
 
@@ -347,3 +354,17 @@ div .editor-label .bypass { padding: 5px 0; }
 .field-validation-error { background: #BC272D; padding: 0px 4px 2px 4px; margin: 3px; color: #fff; font-weight: bold; font-size: 1.1em; }
 
 style="background: #BC272D; padding: 2px 4px; color: #fff; font-weight: bold; font-size: 1.1em;"
+
+
+
+
+
+
+
+/***---------- Tablet Queries ----------***/
+@media screen and (max-width: 1020px) {
+
+#branding span.header { padding: 0 0 0 12px; }
+
+.container-center {font: 26px/25px 'Source Sans Pro', Arial, sans-serif;}
+}
