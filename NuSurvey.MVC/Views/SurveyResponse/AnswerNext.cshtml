@@ -112,11 +112,11 @@
                 {
                     if (Model.CurrentQuestion.PrimaryPhoto != null)
                     {
-                        <img src='@Url.Action("GetPhoto", "SurveyResponse", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' style="width: 50%; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                        <img src='@Url.Action("GetPhoto", "SurveyResponse", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' class="parent-ques-img"/>
                     }
                     else
                     {
-                        <img style="width: 50%; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                        <img class="parent-ques-img"/>
                     }
                     @Html.HtmlEncode(Model.CurrentQuestion.Name) <br />
                     <div class="parent-response-options">
@@ -161,11 +161,11 @@
                 {
                     if (Model.CurrentQuestion.PrimaryPhoto != null)
                     {
-                        <img src='@Url.Action("GetPhoto", "SurveyResponse", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' style="width: 50%; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                        <img src='@Url.Action("GetPhoto", "SurveyResponse", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' class="parent-ques-img"/>
                     }
                     else
                     {
-                        <img style="width: 50%; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                        <img class="parent-ques-img"/>
                     }
                     @Html.HtmlEncode(Model.CurrentQuestion.Name) <br />
                     <div class="parent-response-options">
