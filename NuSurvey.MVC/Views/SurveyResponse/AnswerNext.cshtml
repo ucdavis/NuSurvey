@@ -5,6 +5,7 @@
 @{
     ViewBag.Title = "Next Question";
     Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    ViewBag.questionDisplay = string.Format("display-{0}-question", Model.Survey.ShortName.ToLower().Trim());
 }
 
 
@@ -72,10 +73,11 @@
 
 @section QuizImage
 {
+
     @if (!Model.Survey.ShortName.IsSpanish() && Model.Survey.ShortName.ToLower().Trim() == "hk") //Don't really need the IsSpanish, just thinking of future.
     {
         <div class="quiz-inst">
-            <img src='@Url.Image("hk-header.png")'/>            
+            <img src='@Url.Image("hk-header.png")'/>
         </div>
     }
 }
