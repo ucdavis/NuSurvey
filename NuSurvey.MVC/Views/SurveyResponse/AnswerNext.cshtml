@@ -5,6 +5,7 @@
 @{
     ViewBag.Title = "Next Question";
     Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    ViewBag.questionDisplay = string.Format("display-{0}-question", Model.Survey.ShortName.ToLower().Trim());
 }
 
 
@@ -72,10 +73,11 @@
 
 @section QuizImage
 {
+
     @if (!Model.Survey.ShortName.IsSpanish() && Model.Survey.ShortName.ToLower().Trim() == "hk") //Don't really need the IsSpanish, just thinking of future.
     {
         <div class="quiz-inst">
-            <img src='@Url.Image("hk-header.png")'/>            
+            <img src='@Url.Image("hk-header.png")'/>
         </div>
     }
 }
@@ -87,12 +89,12 @@
 	@Html.ValidationSummary(true)
     @Html.HiddenFor(x => x.SurveyResponse.Id)
     @Html.HiddenFor(x => x.PublicGuid)
-    var questionClass = string.Format("display-{0}-question", Model.Survey.ShortName.ToLower().Trim());
+
     
     
     <input id="byPassAnswer" name="byPassAnswer" type="hidden" />
 
-    <fieldset class="@questionClass">
+    <fieldset>
     @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
     Example: Dinosaur 1  *@
 	    @*<legend>Survey Response</legend>*@
@@ -112,11 +114,11 @@
                 {
                     if (Model.CurrentQuestion.PrimaryPhoto != null)
                     {
-                        <img src='@Url.Action("GetPhoto", "SurveyResponse", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' style="width: 50%; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                        <img src='@Url.Action("GetPhoto", "SurveyResponse", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' class="parent-ques-img"/>
                     }
                     else
                     {
-                        <img style="width: 50%; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                        <img class="parent-ques-img"/>
                     }
                     @Html.HtmlEncode(Model.CurrentQuestion.Name) <br />
                     <div class="parent-response-options">
@@ -161,11 +163,11 @@
                 {
                     if (Model.CurrentQuestion.PrimaryPhoto != null)
                     {
-                        <img src='@Url.Action("GetPhoto", "SurveyResponse", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' style="width: 50%; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                        <img src='@Url.Action("GetPhoto", "SurveyResponse", new {id = Model.CurrentQuestion.PrimaryPhoto.Id})' class="parent-ques-img"/>
                     }
                     else
                     {
-                        <img style="width: 50%; float: left; margin-right: 1em; background: green; display: inline-block;"/>
+                        <img class="parent-ques-img"/>
                     }
                     @Html.HtmlEncode(Model.CurrentQuestion.Name) <br />
                     <div class="parent-response-options">

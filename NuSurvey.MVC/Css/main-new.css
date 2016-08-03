@@ -40,11 +40,11 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 #branding, #footer, .display-form { color: #603813; }
 
-.col1 { margin-right: 10px; width: 80%; max-width: 802px; }
+.col1 { margin-right: 10px; width: 20%; }
 
 .col1 img {width: 100%;}
 
-.col2 { width: 25%; max-width: 198px; }
+.col2 { width: 25%; }
 
 .col1, .col2 { display: inline-block; }
 
@@ -99,11 +99,11 @@ h2 { margin: 30px 0 0px 0; } /* */
 .quiz-inst {width: 100%; max-width: 1020px; margin: 0 auto;}
 .quiz-inst img {width: 100%;}
 
-//**.mcmt-survey { background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
-.mcmts-survey { background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
+/**.mcmt-survey { background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }**/
+/**.mcmts-survey { background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }**/
 
-.hk-survey { background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
-.hks-survey { background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }**/
+/**.hk-survey { background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }**/
+/**.hks-survey { background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }**/
 
 .mcmt-survey .container-center, .hk-survey .container-center { padding: 0 26px; }
 .mcmts-survey .container-center, .hk-survey .container-center { padding: 0 26px; }
