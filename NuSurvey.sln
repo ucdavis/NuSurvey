@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuSurvey.Web", "NuSurvey.Web\NuSurvey.Web.csproj", "{2E160536-5729-4A5D-A526-8BDE28F68009}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuSurvey.Tests", "NuSurvey.Tests\NuSurvey.Tests.csproj", "{54C5BE5C-68E8-46F5-B53C-2C711CE963AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuSurvey.Core", "NuSurvey.Core\NuSurvey.Core.csproj", "{6ED9EFB4-5CEE-42F6-ADC3-E5839F6F10DB}"
@@ -22,9 +20,6 @@ Global
 		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2E160536-5729-4A5D-A526-8BDE28F68009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E160536-5729-4A5D-A526-8BDE28F68009}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E160536-5729-4A5D-A526-8BDE28F68009}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{54C5BE5C-68E8-46F5-B53C-2C711CE963AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{54C5BE5C-68E8-46F5-B53C-2C711CE963AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54C5BE5C-68E8-46F5-B53C-2C711CE963AE}.Test|Any CPU.ActiveCfg = Test|Any CPU
