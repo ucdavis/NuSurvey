@@ -70,6 +70,7 @@ namespace NuSurvey.MVC.Services
                         questionToDuplicate.Photos.Add(newPhoto);
                     }
                     Mapper.Map(question, questionToDuplicate);
+                    questionToDuplicate.Category = question.Category;
                     newVersion.AddQuestions(questionToDuplicate);
                 }
 
@@ -137,6 +138,7 @@ namespace NuSurvey.MVC.Services
                     questionToDuplicate.Photos.Add(newPhoto);
                 }
                 Mapper.Map(question, questionToDuplicate);
+                questionToDuplicate.Category = question.Category;
                 newVersion.AddQuestions(questionToDuplicate);
             }
 

@@ -131,6 +131,7 @@ namespace NuSurvey.MVC.Controllers
 
             var questionToCreate = new Question(survey);
             Mapper.Map(question, questionToCreate);
+            questionToCreate.Category = question.Category; //Removed from the mapper..
 
             foreach (var responsesParameter in viewModel.Responses)
             {
@@ -749,6 +750,7 @@ namespace NuSurvey.MVC.Controllers
                 #region No Versioning, editing as normal                                
                 
                 Mapper.Map(question, questionToEdit);
+                questionToEdit.Category = question.Category; //Removed from the maper.
 
                 questionToEdit.Responses.Clear();
 
