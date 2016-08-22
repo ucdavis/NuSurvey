@@ -1,9 +1,10 @@
-﻿@model NuSurvey.MVC.Controllers.ProgramDirectorViewModel
+﻿@using Microsoft.WindowsAzure
+@model NuSurvey.MVC.Controllers.ProgramDirectorViewModel
 
 
 @{
     ViewBag.Title = "Program Director Page";
-
+    var pdfServer = CloudConfigurationManager.GetSetting("PdfServer");
 }
 
 @section AdditionalScripts{
@@ -37,15 +38,15 @@
     <h3>Downloadable Materials</h3>
     <p>If you would like to use the original versions of the <i>Healthy Kids</i> or <i>My Child at Meal Time</i> surveys you can  download by clicking the corresponding icon below. Other supplemental materials, such as instruction guides to provide data collection consistency, are provided as well.</p>
     <ul>
-        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/healthykidssurvey.pdf' title="Healthy Kids Survey"><img alt="Download Healthy Kids Survey" src="@Url.Image("DownloadHealthyKids.png")" /></a> </li>
+        <li><a class="director-icon" href=@(string.Format("{0}healthykidssurvey.pdf", pdfServer)) title="Healthy Kids Survey"><img alt="Download Healthy Kids Survey" src="@Url.Image("DownloadHealthyKids.png")" /></a> </li>
 
-        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/mychildsurvey.pdf' title="My Child Survey"><img alt="Download My Child at Meal Time Survey" src="@Url.Image("DownloadMyChild.png")" /></a></li>
+        <li><a class="director-icon" href=@(string.Format("{0}mychildsurvey.pdf", pdfServer)) title="My Child Survey"><img alt="Download My Child at Meal Time Survey" src="@Url.Image("DownloadMyChild.png")" /></a></li>
 
-        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/healthykids_instguide.pdf' title="Healthy Kids Instruction Guide"><img alt="Healthy Kids Instruction Guide" src="@Url.Image("InstGuideHealthyKids.png")" /></a> </li>
+        <li><a class="director-icon" href=@(string.Format("{0}healthykids_instguide.pdf", pdfServer))  title="Healthy Kids Instruction Guide"><img alt="Healthy Kids Instruction Guide" src="@Url.Image("InstGuideHealthyKids.png")" /></a> </li>
 
-        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/mychild_instguide.pdf' title="My Child Instruction Guide"><img alt="My Child at Meal Time Instruction Guide" src="@Url.Image("InstGuideMyChild.png")" /></a></li>
+        <li><a class="director-icon" href=@(string.Format("{0}mychild_instguide.pdf", pdfServer)) title="My Child Instruction Guide"><img alt="My Child at Meal Time Instruction Guide" src="@Url.Image("InstGuideMyChild.png")" /></a></li>
         
-        <li><a class="director-icon" href='http://townsendlab.ucdavis.edu/PDF_Files/healthykids/healthykids_goals.pdf' title="Goals for Healthy Kids"><img alt="Goals for Healthy Kids Booklet" src="/Images/GoalsHealthyKids.png" /></a></li>
+        <li><a class="director-icon" href=@(string.Format("{0}healthykids_goals.pdf", pdfServer))  title="Goals for Healthy Kids"><img alt="Goals for Healthy Kids Booklet" src="/Images/GoalsHealthyKids.png" /></a></li>
     </ul>
 </div>
 
