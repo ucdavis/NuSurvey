@@ -1,0 +1,43 @@
+﻿@model NuSurvey.MVC.Controllers.HomeController.HomeViewModel
+
+@{
+    ViewBag.Title = "Healthy Kids - Home Page";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    ViewBag.IsSpanish = true;
+}
+
+@section AdditionalScripts
+{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/DataTables/jquery.dataTables.min.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.balloon').bt({ positions: 'bottom' });
+        });
+    </script>
+
+}
+
+<span class="SpecialFont">
+    <div id="parents">
+        <div class="container-center">
+            <div id="parents-left">
+                <h2>PARENTS</h2>
+                <p>Want to keep your child healthy?</p>
+                <p>Take the survey and have goals created just for you and your child!</p>
+                <img src="@Url.Image("arrow.png")" alt="Select a Survey" />
+            </div>
+
+            <div id="parents-right">
+                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "HKS"})'><img src="@Url.Image("hk-thumb.png")" alt="Healthy Kids Survey" /></a>
+                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "MCMTS" })'><img src="@Url.Image("mcmt-thumb.png")" alt="My Child At Mealtime Survey" /></a>
+
+            </div>
+            <br style="clear:both">
+        </div> <!--- END main MLR 121313 --->
+
+    </div>
+    
+</span>
+

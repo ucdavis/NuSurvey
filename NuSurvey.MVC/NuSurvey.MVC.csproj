@@ -507,6 +507,7 @@
     <Content Include="Views\SurveyResponse\PublicSurveys.cshtml" />
     <Content Include="Views\SurveyResponse\Results.cshtml" />
     <Content Include="Views\SurveyResponse\StartSurvey.cshtml" />
+    <Content Include="Views\Home\Spanish.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

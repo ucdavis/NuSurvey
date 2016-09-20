@@ -1,9 +1,14 @@
-﻿@model NuSurvey.MVC.Controllers.SingleAnswerSurveyResponseViewModel
+﻿@using NuSurvey.MVC.Helpers
+@model NuSurvey.MVC.Controllers.SingleAnswerSurveyResponseViewModel
 
 
 @{
     ViewBag.Title = "Start Survey";
     Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    if (Model.Survey.ShortName.IsSpanish())
+    {
+        ViewBag.IsSpanish = true;
+    }
 }
 
 @section AdditionalScripts{
