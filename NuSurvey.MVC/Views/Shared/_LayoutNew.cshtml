@@ -58,8 +58,8 @@
 
 
         <div class="main @ViewBag.surveyimage">
+            @RenderSection("QuizImage", false)
             <div class="container-center">
-                @RenderSection("QuizImage", false)
                 <div class="@ViewBag.questionDisplay">
                     <div id="messagecontainer">
                         @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
