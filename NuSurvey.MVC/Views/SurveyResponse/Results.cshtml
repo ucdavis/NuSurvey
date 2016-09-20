@@ -1,9 +1,20 @@
-﻿@model NuSurvey.MVC.Controllers.ResultsViewModel
+﻿@using NuSurvey.MVC.Helpers
+@model NuSurvey.MVC.Controllers.ResultsViewModel
 
 
 @{
     ViewBag.Title = "Quiz Results";
     Layout = "~/Views/Shared/_LayoutNew.cshtml";
+
+        if (Model.SurveyResponse.Survey.ShortName.IsSpanish())
+        {
+            ViewBag.IsSpanish = true;
+        }
+        if (Model.SurveyResponse.Survey.QuizType.Equals("Kiosk", StringComparison.OrdinalIgnoreCase))
+        {
+            ViewBag.IsKiosk = true;
+        }
+
 }
 
 @if (Model.ShowPdfPrint) {            
