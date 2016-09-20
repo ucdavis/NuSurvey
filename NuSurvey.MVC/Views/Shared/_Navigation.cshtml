@@ -1,13 +1,23 @@
 ﻿<div id="nav">
-<ul class="navigation">
-    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("Parents", "Index", "Home",new { parent = true}, new{})</li>
-    <li>@Html.ActionLink("Educators", "Index", "Educator")</li>
-     <li>@Html.ActionLink("Directors", "Index", "ProgramDirector")</li>
-    @if(User.IsInRole("NSAdmin")){
-        <li>@Html.ActionLink("Admin", "Administration", "Home")</li>
-    }
+    <ul class="navigation">
+        @if (ViewBag.IsSpanish != null && (bool) ViewBag.IsSpanish)
+        {
+            <li>@Html.ActionLink("SSHome", "Spanish", "Home")</li>
+            <li>@Html.ActionLink("SSParents", "Spanish", "Home", new {parent = true}, new {})</li>
+            <li>@Html.ActionLink("Not Spanish?", "Index", "Home")</li>
+        }
+        else
+        {
+            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+            <li>@Html.ActionLink("Parents", "Index", "Home", new {parent = true}, new {})</li>
+            <li>@Html.ActionLink("Educators", "Index", "Educator")</li>
+            <li>@Html.ActionLink("Directors", "Index", "ProgramDirector")</li>
+        }
 
-</ul>
+        @if (User.IsInRole("NSAdmin"))
+        {
+            <li>@Html.ActionLink("Admin", "Administration", "Home")</li>
+        }
 
-    </div>
+    </ul>
+</div>

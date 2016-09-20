@@ -6,6 +6,10 @@
     ViewBag.Title = "Next Question";
     Layout = "~/Views/Shared/_LayoutNew.cshtml";
     ViewBag.questionDisplay = string.Format("display-{0}-question", Model.Survey.ShortName.ToLower().Trim());
+    if (Model.Survey.ShortName.IsSpanish())
+    {
+        ViewBag.IsSpanish = true;
+    }
 }
 
 
