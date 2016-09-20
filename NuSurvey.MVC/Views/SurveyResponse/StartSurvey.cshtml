@@ -9,6 +9,10 @@
     {
         ViewBag.IsSpanish = true;
     }
+    if (Model.Survey.QuizType.Equals("Kiosk", StringComparison.OrdinalIgnoreCase))
+    {
+        ViewBag.IsKiosk = true;
+    }
 }
 
 @section AdditionalScripts{
