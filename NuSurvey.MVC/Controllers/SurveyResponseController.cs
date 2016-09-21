@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using MvcContrib;
 using NuSurvey.Core.Domain;
 using NuSurvey.MVC.Controllers.Filters;
+using NuSurvey.MVC.Helpers;
 using NuSurvey.MVC.Resources;
 using NuSurvey.MVC.Services;
 using UCDArch.Core.PersistanceSupport;
@@ -394,7 +395,14 @@ namespace NuSurvey.MVC.Controllers
             }
             if (questions.Invalid)
             {
-                ModelState.AddModelError("Questions", questions.Message);
+                if (surveyResponse.Survey.ShortName.IsSpanish())
+                {
+                    ModelState.AddModelError("Questions", questions.Message.TranslateErrorMessage());
+                }
+                else
+                {
+                    ModelState.AddModelError("Questions", questions.Message);
+                }
             }
             else
             {

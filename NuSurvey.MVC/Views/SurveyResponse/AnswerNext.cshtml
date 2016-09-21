@@ -113,9 +113,17 @@
 	    @*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
 	    <ul>
 		    <li>
-            <div class="editor-label required">
-                <label>Question @Model.CurrentQuestion.Order </label>
-            </div>
+		        <div class="editor-label required">
+                    @if (Model.Survey.ShortName.IsSpanish())
+                    {
+                        <label>Pregunta @Model.CurrentQuestion.Order </label>
+                    }
+                    else
+                    {
+                        <label>Question @Model.CurrentQuestion.Order </label>
+                    }	
+		            
+		        </div>
             @{ 
                 var ans = string.Empty; 
                 var ansRange = string.Empty;
@@ -206,7 +214,15 @@
 		    <li>
 			    @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
 			    <label>&nbsp;</label>
-			    <input class="button" type="submit" value="Next" /> 
+                @if (Model.Survey.ShortName.IsSpanish())
+                {
+                    <input class="button" type="submit" value="Siguiente" />
+                }
+                else
+                {
+                    <input class="button" type="submit" value="Next" />
+                }
+                
 		    </li>
 	    </ul>
     </fieldset>
@@ -214,8 +230,49 @@
 
 @Html.Partial("_SurveyResponseProgress")
 
+@if (Model.Survey.ShortName.IsSpanish())
+{
+    <div class="display-form" id="opendialog" title="Se han producido errores, pero se puede hacer lo siguiente:" style="display: none;">
+        <ul>
+            <li>
+                <span class="field-validation-error">
+                    @Html.ValidationSummary("Errores:")
+                </span>
+            </li>
+            <li>
+                <input class="bypassOption button" type="button" value="Volver a la pregunta" data-bypass="" />
+            </li>
+            <li>
+                <div style="display: inline-block; vertical-align: middle">
+                    <input class="bypassOption button" type="button" value="Continúe con la pregunta siguiente" data-bypass="skip" style="margin-right: 10px;" />
+                </div>
+                <div style="display: inline-block; vertical-align: middle">
+                    <div class="editor-field">
+                        <label>Razón para saltar pregunta:</label>
+                    </div>
+                    <div class="editor-field">
+                        <input class="bypassreason" id="BypassReason1" type="radio" name="BypassReason" value="*Not Known*" />
+                        <label>No sé la respuesta.</label>
+                        <br />
+                        <input class="bypassreason" id="BypassReason2" type="radio" name="BypassReason" value="*Not Answered*" />
+                        <label>No quiero responder.</label>
+                    </div>
+                </div>
+            </li>
 
-<div class="display-form" id="opendialog" title="There were errors but you can do the following:" style="display: none;">
+            @*            <li>
+                    <input class="bypassOption button" type="button" value="I do not know the answer" data-bypass="*Not Known*" />
+                </li>
+
+                <li>
+                    <input class="bypassOption button" type="button" value="I do not want to answer the question" data-bypass="*Not Answered*" />
+                </li>*@
+        </ul>
+    </div>
+}
+else
+{
+    <div class="display-form" id="opendialog" title="There were errors but you can do the following:" style="display: none;">
         <ul>
             <li>
                 <span class="field-validation-error">
@@ -223,27 +280,27 @@
                 </span>
             </li>
             <li>
-                <input class="bypassOption button" type="button" value="Back To Question" data-bypass="" />
+                <input class="bypassOption button" type="button" value="Back To Question" data-bypass=""/>
             </li>
             <li>
-                <div style="display:inline-block; vertical-align: middle">
-                    <input class="bypassOption button" type="button" value="Continue To Next Question" data-bypass="skip" style="margin-right: 10px;" /> 
+                <div style="display: inline-block; vertical-align: middle">
+                    <input class="bypassOption button" type="button" value="Continue To Next Question" data-bypass="skip" style="margin-right: 10px;"/>
                 </div>
-                <div style="display:inline-block; vertical-align: middle">
+                <div style="display: inline-block; vertical-align: middle">
                     <div class="editor-field">
                         <label>Reason for skipping question:</label>
                     </div>
                     <div class="editor-field">
-                        <input class="bypassreason" id="BypassReason1" type="radio" name="BypassReason" value="*Not Known*" />
+                        <input class="bypassreason" id="BypassReason1" type="radio" name="BypassReason" value="*Not Known*"/>
                         <label>I do not know the answer.</label>
                         <br/>
-                        <input class="bypassreason" id="BypassReason2" type="radio" name="BypassReason" value="*Not Answered*" />
-                        <label>I do not want to answer.</label>                            
+                        <input class="bypassreason" id="BypassReason2" type="radio" name="BypassReason" value="*Not Answered*"/>
+                        <label>I do not want to answer.</label>
                     </div>
                 </div>
             </li>
 
-@*            <li>
+            @*            <li>
                 <input class="bypassOption button" type="button" value="I do not know the answer" data-bypass="*Not Known*" />
             </li>
 
@@ -253,6 +310,6 @@
         </ul>
     </div>
 
-
+}
 
 

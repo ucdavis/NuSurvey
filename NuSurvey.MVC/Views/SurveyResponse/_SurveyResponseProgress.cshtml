@@ -1,21 +1,42 @@
 ﻿@model NuSurvey.MVC.Controllers.SingleAnswerSurveyResponseViewModel
 
+@if (ViewBag.IsSpanish != null && (bool)ViewBag.IsSpanish)
+{
+    <fieldset class="display-form">
+        <h3>Progreso</h3>
+        <ul>
+            <li>
+                <div id="progressbar"></div>
+            </li>
+            <li>
+                <div class="display-label"><label>Contestada</label></div>
+                <div class="display-details">@Html.DisplayFor(a => a.AnsweredQuestions)</div>
+            </li>
+            <li>
+                <div class="display-label"><label>Total de preguntas</label></div>
+                <div class="display-details">@Html.DisplayFor(a => a.TotalActiveQuestions)</div>
+            </li>
+        </ul>
+    </fieldset>
+}
+else
+{
     <fieldset class="display-form">
         <h3>Progress</h3>
         <ul>
             <li>
                 <div id="progressbar"></div>
             </li>
-		    <li>
-			    <div class="display-label">@Html.LabelFor(a => a.AnsweredQuestions)</div>
-			    <div class="display-details">@Html.DisplayFor(a => a.AnsweredQuestions)</div>
-		    </li>
-		    <li>     
-                <div class="display-label">@Html.LabelFor(a => a.TotalActiveQuestions)</div>       
-			    <div class="display-details">@Html.DisplayFor(a => a.TotalActiveQuestions)</div>
-		    </li>
+            <li>
+                <div class="display-label">@Html.LabelFor(a => a.AnsweredQuestions)</div>
+                <div class="display-details">@Html.DisplayFor(a => a.AnsweredQuestions)</div>
+            </li>
+            <li>
+                <div class="display-label">@Html.LabelFor(a => a.TotalActiveQuestions)</div>
+                <div class="display-details">@Html.DisplayFor(a => a.TotalActiveQuestions)</div>
+            </li>
         </ul>
     </fieldset>
-
+}
 
 
