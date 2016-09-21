@@ -113,9 +113,17 @@
 	    @*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
 	    <ul>
 		    <li>
-            <div class="editor-label required">
-                <label>Question @Model.CurrentQuestion.Order </label>
-            </div>
+		        <div class="editor-label required">
+                    @if (Model.Survey.ShortName.IsSpanish())
+                    {
+                        <label>Pregunta @Model.CurrentQuestion.Order </label>
+                    }
+                    else
+                    {
+                        <label>Question @Model.CurrentQuestion.Order </label>
+                    }	
+		            
+		        </div>
             @{ 
                 var ans = string.Empty; 
                 var ansRange = string.Empty;
@@ -206,7 +214,15 @@
 		    <li>
 			    @* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
 			    <label>&nbsp;</label>
-			    <input class="button" type="submit" value="Next" /> 
+                @if (Model.Survey.ShortName.IsSpanish())
+                {
+                    <input class="button" type="submit" value="Siguiente" />
+                }
+                else
+                {
+                    <input class="button" type="submit" value="Next" />
+                }
+                
 		    </li>
 	    </ul>
     </fieldset>
