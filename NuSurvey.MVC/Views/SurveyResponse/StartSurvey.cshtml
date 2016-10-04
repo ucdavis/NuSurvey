@@ -80,13 +80,28 @@ using (Html.BeginForm())
 		        <li>
 		            <div class="editor-label required">
 		                @if (Model.Survey.ShortName.IsSpanish())
-                        {
-                            @Html.Label("Su nombre")<span>*</span>
-                        }
-                        else
-                        {
-		                    @Html.Label("Your First Name")<span>*</span>
+		                {
+		                    if (ViewBag.IsKiosk)
+		                    {
+		                        @Html.Label("Nombre de su hijo")<span>*</span>
+		                    }
+		                    else
+		                    {
+		                        @Html.Label("Su nombre")<span>*</span>
+		                    }
+
 		                }
+		                else
+		                {
+		                    if (ViewBag.IsKiosk)
+		                    {
+		                        @Html.Label("Your Child\'s Name")<span>*</span>
+		                    }
+		                    else
+		                    {
+		                        @Html.Label("Your First Name")<span>*</span>
+		                    }
+		                }		                    
 		            </div>
 		            <div class="editor-field">
 		                @if (Model.Survey.ShortName.IsSpanish())
