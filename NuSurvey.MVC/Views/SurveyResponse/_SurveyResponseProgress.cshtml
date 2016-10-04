@@ -1,5 +1,15 @@
 ﻿@model NuSurvey.MVC.Controllers.SingleAnswerSurveyResponseViewModel
-
+@{
+    var displayText = string.Empty;
+    if (ViewBag.IsSpanish != null && (bool) ViewBag.IsSpanish)
+    {
+        displayText = string.Format("Contestada {0} de {1}", Model.AnsweredQuestions, Model.TotalActiveQuestions);
+    }
+    else
+    {
+        displayText = string.Format("Answered {0} of {1}", Model.AnsweredQuestions, Model.TotalActiveQuestions);
+    }
+}
 @if (ViewBag.IsSpanish != null && (bool)ViewBag.IsSpanish)
 {
     <fieldset class="display-form">
@@ -9,12 +19,7 @@
                 <div id="progressbar"></div>
             </li>
             <li>
-                <div class="display-label"><label>Contestada</label></div>
-                <div class="display-details">@Html.DisplayFor(a => a.AnsweredQuestions)</div>
-            </li>
-            <li>
-                <div class="display-label"><label>Total de preguntas</label></div>
-                <div class="display-details">@Html.DisplayFor(a => a.TotalActiveQuestions)</div>
+                <div class="display-details">@displayText</div>
             </li>
         </ul>
     </fieldset>
@@ -28,12 +33,7 @@ else
                 <div id="progressbar"></div>
             </li>
             <li>
-                <div class="display-label">@Html.LabelFor(a => a.AnsweredQuestions)</div>
-                <div class="display-details">@Html.DisplayFor(a => a.AnsweredQuestions)</div>
-            </li>
-            <li>
-                <div class="display-label">@Html.LabelFor(a => a.TotalActiveQuestions)</div>
-                <div class="display-details">@Html.DisplayFor(a => a.TotalActiveQuestions)</div>
+                <div class="display-details">@displayText</div>
             </li>
         </ul>
     </fieldset>
