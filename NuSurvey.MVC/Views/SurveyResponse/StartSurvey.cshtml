@@ -110,11 +110,11 @@ using (Html.BeginForm())
 		            <div class="editor-field">
 		                @if (Model.Survey.ShortName.IsSpanish())
                         {
-                            <input class="text-box single-line" data-val="true" data-val-length="El nombre del campo debe ser una cadena con una longitud máxima de 50." data-val-length-max="50" data-val-required="Se requiere que el campo Nombre." id="SurveyResponse_StudentId" name="SurveyResponse.StudentId" type="text" value="">
+                            <input autocomplete="off" class="text-box single-line" data-val="true" data-val-length="El nombre del campo debe ser una cadena con una longitud máxima de 50." data-val-length-max="50" data-val-required="Se requiere que el campo Nombre." id="SurveyResponse_StudentId" name="SurveyResponse.StudentId" type="text" value="">
                         }
                         else
                         {
-		                    @Html.EditorFor(model => model.SurveyResponse.StudentId)
+		                    @Html.EditorFor(model => model.SurveyResponse.StudentId, new { htmlAttributes = new { autocomplete = "off" }})
                         }
 		                @Html.ValidationMessageFor(model => model.SurveyResponse.StudentId)
 		            </div>
