@@ -26,6 +26,10 @@
         {
             <li>@Html.ActionLink("Admin", "Administration", "Home")</li>
         }
+        @if (ViewBag.RestartKiosk != null && (bool)ViewBag.RestartKiosk == true)
+        {
+            <li>@Html.ActionLink("Restart Kiosk Mode", "Kiosk", "Home")</li>
+        }
 
     </ul>
 </div>
