@@ -35,6 +35,7 @@ namespace NuSurvey.MVC.Controllers
 
         public ActionResult Kiosk(bool parent = true)
         {
+            Session.Abandon();
             var viewModel = HomeViewModel.Create(CurrentUser.IsInRole(RoleNames.Admin), CurrentUser.IsInRole(RoleNames.User), CurrentUser.IsInRole(RoleNames.ProgramDirector));
 
             ViewBag.OnlyParent = true;
