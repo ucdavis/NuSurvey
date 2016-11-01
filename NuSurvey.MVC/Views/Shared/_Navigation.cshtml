@@ -1,12 +1,12 @@
 ﻿<div id="nav">
     <ul class="navigation">
-        @if (ViewBag.IsKiosk != null && (bool) ViewBag.IsKiosk)
+        @if (ViewBag.IsKiosk != null && (bool)ViewBag.IsKiosk)
         {
-
+            <li>@Html.ActionLink("Start Over", "Kiosk", "Home")</li>
         }
         else
         {
-            if (ViewBag.IsSpanish != null && (bool) ViewBag.IsSpanish)
+            if (ViewBag.IsSpanish != null && (bool)ViewBag.IsSpanish)
             {
                 <li>@Html.ActionLink("SSHome", "Spanish", "Home")</li>
                 <li>@Html.ActionLink("SSParents", "Spanish", "Home", new {parent = true}, new {})</li>
@@ -25,6 +25,10 @@
         @if (User.IsInRole("NSAdmin"))
         {
             <li>@Html.ActionLink("Admin", "Administration", "Home")</li>
+        }
+        @if (ViewBag.RestartKiosk != null && (bool)ViewBag.RestartKiosk == true)
+        {
+            <li>@Html.ActionLink("Restart Kiosk Mode", "Kiosk", "Home")</li>
         }
 
     </ul>

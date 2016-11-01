@@ -342,6 +342,7 @@
     <Content Include="Images\HK_pdf.jpg" />
     <Content Include="Images\InstGuideHealthyKids.png" />
     <Content Include="Images\InstGuideMyChild.png" />
+    <Content Include="Images\kiosk-header-04.png" />
     <Content Include="Images\logo-caes-long-cap.png" />
     <Content Include="Images\logo-ucdavis.png" />
     <Content Include="Images\logo.png" />
@@ -508,6 +509,7 @@
     <Content Include="Views\SurveyResponse\Results.cshtml" />
     <Content Include="Views\SurveyResponse\StartSurvey.cshtml" />
     <Content Include="Views\Home\Spanish.cshtml" />
+    <Content Include="Views\Home\Kiosk.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

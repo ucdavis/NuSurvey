@@ -18,6 +18,10 @@
         ViewBag.IsKiosk = true;
         ViewBag.KioskClass = "display-kiosk-question";
     }
+    else
+    {
+        ViewBag.IsKiosk = false;
+    }
 }
 
 
@@ -90,6 +94,12 @@
     {
         <div class="quiz-inst">
             <img src='@Url.Image("hk-header.png")'/>
+        </div>
+    }
+    @if ((bool)ViewBag.IsKiosk)
+    {
+        <div class="quiz-inst">
+            <img src='@Url.Image("kiosk-header-04.png")' />
         </div>
     }
 }
