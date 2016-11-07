@@ -1,0 +1,118 @@
+﻿@using NuSurvey.MVC.Helpers
+@model NuSurvey.MVC.Controllers.ResultsViewModel
+
+
+@{
+    ViewBag.Title = "Quiz Results";
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+
+        if (Model.SurveyResponse.Survey.ShortName.IsSpanish())
+        {
+            ViewBag.IsSpanish = true;
+        }
+        if (Model.SurveyResponse.Survey.QuizType.Equals("Kiosk", StringComparison.OrdinalIgnoreCase))
+        {
+            ViewBag.IsKiosk = true;
+        }
+
+}
+
+@if (Model.ShowPdfPrint) {            
+    <div id="pdf_print">
+        @if (Model.PublicGuid == null)
+        {
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = true})' target="_blank"><img alt="Print Results" /></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = false})' target="_blank"><img alt="Print Results without background" /></a>
+        }
+        else
+        {
+             <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid })' target="_blank"><img alt="Print my results" src="@Url.Image("big_print.png")" /></a>
+        }
+    </div>
+}
+
+<div class="result_quiz">Your @Model.SurveyResponse.Survey.QuizType Quiz Results</div>
+
+<fieldset class="result_fieldset_page @string.Format("{0}-background-image", Model.SurveyResponse.Survey.ShortName.ToUpper().Trim())">
+    @if (Model.SurveyResponse.Survey.ShortName.IsSpanish())
+    {
+        <div class="result_thanks">Gracias @Model.SurveyResponse.StudentId por tomar el tiempo para completar el examen de @Model.SurveyResponse.Survey.Name.<br />Esperemos que estas recomendaciones le ayude a usted y a su familia elegir alimentos y actividades sanos.</div>
+    }
+    else
+    {
+        <div class="result_thanks">Thank you @Model.SurveyResponse.StudentId for taking the time to complete the @Model.SurveyResponse.Survey.Name quiz.<br />We hope this feedback will help you and your family make healthy food and activity choices.</div>
+    }
+
+    <fieldset class="result_fieldset_positive">
+        <div class="result_category positive">@Model.SurveyResponse.PositiveCategory.Affirmation</div>
+    </fieldset>
+
+
+    <fieldset class="result_fieldset_goals">
+        @if (Model.SurveyResponse.NegativeCategory1 != null)
+        {
+            <fieldset class="result_fieldset_majorgoal">
+
+                <div class="result_majorgoal">
+                    <div class="result_checkbox">@Html.Raw("&#x25fb;")</div> @Model.SurveyResponse.NegativeCategory1.Encouragement
+                </div>
+            </fieldset>
+            <div class="result_category group">
+                <fieldset class="result_fieldset_minorgoals">
+
+                    <div class="result_minorgoals">
+                        @foreach (var goal in Model.SurveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
+                        {
+                            <div class="result_minorgoal">
+                                <div class="result_checkbox">@Html.Raw("&#x25fb;")</div>
+                                <div class="result_goalname">@goal.Name</div>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+        }
+
+
+        @if (Model.SurveyResponse.NegativeCategory2 != null)
+        {
+            <fieldset class="result_fieldset_majorgoal">
+
+                <div class="result_majorgoal">
+                    <div class="result_checkbox">@Html.Raw("&#x25fb;")</div>
+                    @Model.SurveyResponse.NegativeCategory2.Encouragement
+                </div>
+            </fieldset>
+            <div class="result_category group">
+                <fieldset class="result_fieldset_minorgoals">
+
+                    <div class="result_minorgoals">
+                        @foreach (var goal in Model.SurveyResponse.NegativeCategory2.CategoryGoals.Where(x => x.IsActive))
+                        {
+                            <div class="result_minorgoal">
+                                <div class="result_checkbox">@Html.Raw("&#x25fb;")</div>
+                                <div class="result_goalname">@goal.Name</div>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+        }
+
+    </fieldset>
+
+</fieldset>
+
+
+
+
+@section AdditionalScripts{
+
+    <style type="text/css">
+        .col1.results
+        {
+        	display:none;
+        }
+    </style>
+}
+

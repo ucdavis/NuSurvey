@@ -497,6 +497,10 @@ namespace NuSurvey.MVC.Controllers
                 {
                     Session[publicGuid.ToString()] = surveyResponse;
                 }
+                if (surveyResponse.Survey.QuizType.Equals("Kiosk", StringComparison.OrdinalIgnoreCase))
+                {
+                    return this.RedirectToAction("KioskResults", new { id = surveyResponse.Id, publicGuid });
+                }
                 return this.RedirectToAction("Results", new{id = surveyResponse.Id, publicGuid});
             }
             else
@@ -781,6 +785,49 @@ namespace NuSurvey.MVC.Controllers
             //if (CurrentUser.IsInRole(RoleNames.Admin) || CurrentUser.IsInRole(RoleNames.User))
             //{
                 viewModel.ShowPdfPrint = true;
+            //}
+
+            return View(viewModel);
+        }
+
+        public ActionResult KioskResults(int id, Guid? publicGuid)
+        {
+            var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+            {
+                surveyResponse = (SurveyResponse)Session[publicGuid.ToString()];
+            }
+            if (surveyResponse == null)
+            {
+                Message = "Not Found";
+                return this.RedirectToAction("Index", "Error");
+            }
+
+            if (!CurrentUser.IsInRole(RoleNames.Admin))
+            {
+                if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+                {
+                    if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+                    {
+                        Message = "Not your survey";
+                        return this.RedirectToAction("NotAuthorized", "Error");
+                    }
+                }
+                else
+                {
+                    if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
+                    {
+                        Message = "Not your survey";
+                        return this.RedirectToAction("NotAuthorized", "Error");
+                    }
+                }
+            }
+
+            var viewModel = ResultsViewModel.Create(surveyResponse, false);
+            viewModel.PublicGuid = publicGuid;
+            //if (CurrentUser.IsInRole(RoleNames.Admin) || CurrentUser.IsInRole(RoleNames.User))
+            //{
+            viewModel.ShowPdfPrint = true;
             //}
 
             return View(viewModel);
