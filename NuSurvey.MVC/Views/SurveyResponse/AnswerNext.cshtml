@@ -126,11 +126,11 @@
 		        <div class="editor-label required">
                     @if (Model.Survey.ShortName.IsSpanish())
                     {
-                        <label>Pregunta @Model.CurrentQuestion.Order </label>
+                        <label>Pregunta @( Model.AnsweredQuestions + 1) </label>
                     }
                     else
                     {
-                        <label>Question @Model.CurrentQuestion.Order </label>
+                        <label>Question @( Model.AnsweredQuestions + 1) </label>
                     }	
 		            
 		        </div>
