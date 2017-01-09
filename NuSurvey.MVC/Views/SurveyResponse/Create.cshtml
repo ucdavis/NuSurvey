@@ -1,0 +1,177 @@
+﻿@using NuSurvey.MVC.Helpers
+@model NuSurvey.MVC.Controllers.SurveyResponseViewModel
+           
+
+
+@{
+    ViewBag.Title = "Answers";
+}
+@section AdditionalScripts{
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.ui.timepicker.js")'></script>
+    
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.time').timepicker({
+                defaultTime: '1:00',
+                showLeadingZero: false,
+                showPeriodLabels: false,
+                hours: {
+                    starts: 1,                  // first displayed hour
+                    ends: 12                    // last displayed hour
+                },
+                minutes: {
+                    starts: 0,                  // first displayed minute
+                    ends: 55,                   // last displayed minute
+                    interval: 5                 // interval of displayed minutes
+                },
+                rows: 3
+            });
+
+            $('.timeRange').timepicker({
+                defaultTime: '1:00',
+                showLeadingZero: false,
+                showPeriod: true,
+                rows: 4
+            });
+        });
+
+
+    </script>
+
+}
+
+
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true, "There were errors below, please correct them.")
+    @Html.HiddenFor(x => x.Survey.Id)
+
+<fieldset>
+@* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
+Example: Dinosaur 1  *@
+	@*<legend>Survey Response</legend>*@
+	<h4>Answer All Survey Questions</h4>
+	@*<p>Be specific so the user understands what exactly you are looking for.  Example: After Dinosaur 1 moves out of his/her parents' den what will Dinosaur 1 do?  We need to know his employment plan, feeding area, as well as living situation.  This information will not be sold or given to carnivores.</p>*@
+	<p>Enter the first name of the participant. This name with be used to customize the goal sheet. Enter answers for each question. If a participant did not answer a question or checked multiple answers click the "Bypass question" box. When you have finished entering all the questions click the "Submit" button at the bottom of the page. All questions must be answered or "Bypass question" box selected.</p>
+	<ul>
+		<li>
+			<div class="editor-label required">
+                @Html.LabelFor(a => a.SurveyResponse.StudentId)<span>*</span> 
+			</div>
+			<div class="editor-field">
+				@Html.EditorFor(model => model.SurveyResponse.StudentId)
+				@Html.ValidationMessageFor(model => model.SurveyResponse.StudentId)
+			</div>
+		</li>
+
+        @{ 
+            var odd = false;
+            var indexCounter = 0;
+            var ans = string.Empty; 
+            var ansRange = string.Empty;
+        }
+        @foreach (var item in Model.Questions)
+        {
+            <li class="@(odd ? "odd" : "even")">
+                <div class="editor-field bypass">
+                    @{var isBypassChecked = string.Empty;
+                    if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null)
+                    {
+                        if (Model.SurveyAnswers.ElementAtOrDefault(indexCounter).BypassQuestion)
+                        {
+                            isBypassChecked = "checked=\"checked\"";
+                        }
+                    }
+                    }
+                    <input id="Questions[@indexCounter]_BypassQuestion" class="check-box" type="checkbox" @isBypassChecked value="true" name="Questions[@indexCounter].BypassQuestion">
+                </div>
+
+                <div class="editor-label bypass">
+                    @Html.Label("Bypass Question")
+                </div>
+                <br />
+
+                <div class="editor-label required">
+                    <label>@item.Order. @Html.HtmlEncode(item.Name) <span>*</span></label>
+                </div>
+                <div class="editor-field ">
+                    <input id="Questions[@indexCounter]_QuestionId" type="hidden" value="@item.Id" name="Questions[@indexCounter].QuestionId" />
+                    @if (item.IsOpenEnded)
+                    {
+                        if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter).Answer != null)
+                        {
+                            ans = Model.SurveyAnswers.ElementAtOrDefault(indexCounter).Answer;
+                        }
+                        else {
+                            ans = string.Empty;
+                        }
+                        if (item.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Time)
+                        {
+                            var timeId = "Questions" + indexCounter;
+                            <input id="@timeId" class="text-box single-line time" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
+                        }
+                        if (item.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeAmPm)
+                        {
+                            var timeId = "Questions" + indexCounter;
+                            <input id="@timeId" class="text-box single-line timeRange" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
+                        }
+                        if (item.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeRange)
+                        {
+                            if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter).AnswerRange != null)
+                            {
+                                ansRange = Model.SurveyAnswers.ElementAtOrDefault(indexCounter).AnswerRange;
+                            }
+                            else
+                            {
+                                ansRange = string.Empty;
+                            }
+                            var timeId = "Questions" + indexCounter;
+                            var timeRangeId = "QuestionsRange" + indexCounter;
+                            <input id="@timeId" class="text-box single-line timeRange" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
+                            <input id="@timeRangeId" class="text-box single-line timeRange" type="text" value="@ansRange" name="Questions[@indexCounter].AnswerRange"/>
+                        }
+                        if (item.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.WholeNumber || item.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Decimal)
+                        {
+                            <input id="Questions[@indexCounter]" class="text-box single-line" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var response in item.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
+                        {
+                            var isChecked = string.Empty;
+                            if (Model.SurveyAnswers != null && Model.SurveyAnswers.ElementAtOrDefault(indexCounter) != null)
+                            {
+                                if (response.Id == Model.SurveyAnswers.ElementAtOrDefault(indexCounter).ResponseId)
+                                {
+                                    isChecked = "checked=\"checked\"";
+                                }
+                            }
+                            <input id="Questions[@indexCounter][@response.Order]" type="radio" value="@response.Id" @isChecked name="Questions[@indexCounter].ResponseId" />                             
+                            <label for="Questions[@indexCounter][@response.Order]">@response.Value</label> <br />
+                        }
+                    }
+                    @Html.ValidationMessage("Questions[" + @indexCounter + "]")
+                </div>
+                
+            </li>
+               odd = !odd;
+               indexCounter = indexCounter + 1;
+        }
+
+		<li>
+			@* For the clear and submit buttons an empty label is required. Example: <label>&nbsp;</label> *@
+			<label>&nbsp;</label>
+			<input class="button" type="submit" value="Submit" />
+		</li>
+	</ul>
+</fieldset>
+}
+
+

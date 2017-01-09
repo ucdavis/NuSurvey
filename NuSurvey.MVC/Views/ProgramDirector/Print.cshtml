@@ -1,0 +1,110 @@
+﻿@using NuSurvey.MVC.Helpers
+@model NuSurvey.Core.Domain.PrintedSurvey
+
+@{
+    ViewBag.Title = Model.Survey.Name;
+}
+@section AdditionalScripts{
+
+
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Index", "ProgramDirector")">Back to list</a> 
+        </li>
+    </ul>
+}
+
+
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+
+<fieldset>
+    <ul>
+
+        @{ 
+            var odd = false;
+            var indexCounter = 0;
+            var ans = string.Empty; 
+            var ansRange = string.Empty;
+            var questionNumber = 0;
+        }
+        @foreach (var item in Model.PrintedSurveyQuestions.OrderBy(a => a.Order))
+        {
+            questionNumber++;
+            <li class="@(odd ? "odd" : "even")">
+
+                <div class="editor-label">
+                    <label>@questionNumber.
+                        <div>
+                            @if (item.Photo != null)
+                            {
+                                <img src='@Url.Action("GetThumbnail", "Photo", new {id = item.Photo.Id})' />
+                            }
+                        </div>
+                    </label>
+                </div>
+                <div class="editor-field">
+                @Html.HtmlEncode(item.Question.Name) <br/>
+                    <input id="Questions[@indexCounter]_QuestionId" type="hidden" value="@item.Id" name="Questions[@indexCounter].QuestionId" />
+                    @if (item.Question.IsOpenEnded)
+                    {
+                        ans = string.Empty;
+                        if (item.Question.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Time)
+                        {
+                            var timeId = "Questions" + indexCounter;
+                            <input id="@timeId" class="text-box single-line time" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
+                        }
+                        if (item.Question.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeAmPm)
+                        {
+                            var timeId = "Questions" + indexCounter;
+                            <input id="@timeId" class="text-box single-line timeRange" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
+                        }
+                        if (item.Question.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.TimeRange)
+                        {
+
+                            ansRange = string.Empty;
+                            var timeId = "Questions" + indexCounter;
+                            var timeRangeId = "QuestionsRange" + indexCounter;
+                            <input id="@timeId" class="text-box single-line timeRange" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
+                            <input id="@timeRangeId" class="text-box single-line timeRange" type="text" value="@ansRange" name="Questions[@indexCounter].AnswerRange"/>
+                        }
+                        if (item.Question.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.WholeNumber || item.Question.OpenEndedQuestionType == (int)NuSurvey.Core.Domain.QuestionType.Decimal)
+                        {
+                            <input id="Questions[@indexCounter]" class="text-box single-line" type="text" value="@ans" name="Questions[@indexCounter].Answer"/>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var response in item.Question.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
+                        {
+                            var isChecked = string.Empty;
+  
+                            <input id="Questions[@indexCounter][@response.Order]" type="radio" value="@response.Id" @isChecked name="Questions[@indexCounter].ResponseId" />                             
+                            <label for="Questions[@indexCounter][@response.Order]">@response.Value</label> <br />
+                        }
+                    }
+                    @Html.ValidationMessage("Questions[" + @indexCounter + "]")
+                </div>
+                
+            </li>
+               odd = !odd;
+               indexCounter = indexCounter + 1;
+        }
+
+	</ul>
+</fieldset>
+}
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
+
+
+
+
+

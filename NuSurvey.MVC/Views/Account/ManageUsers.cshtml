@@ -1,0 +1,169 @@
+﻿@using NuSurvey.MVC.Helpers
+@model NuSurvey.MVC.Controllers.ManageUsersViewModel
+
+@{
+	ViewBag.Title = "Manage Users";
+}
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Administration", "Home")">Admin Home</a> 
+        </li>
+        <li>
+            Manage Users
+        </li>
+    </ul>
+}
+
+
+
+@section AdditionalScripts{
+     <script type="text/javascript" src='@Url.Content("~/Scripts/DataTables/jquery.dataTables.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({ "bJQueryUI": true });
+        });    
+    </script>
+
+        <script type="text/javascript">
+            $(function () {
+                $("#filter_container").accordion({ collapsible: true, autoHeight: false, active: false });
+            });
+    </script>
+}
+
+
+<p>
+	@Html.ActionLink("Create New", "Register")
+</p>
+
+<div id="filter_container">
+    <h3><a href="#">Filters</a></h3>
+    @using (Html.BeginForm("ManageUsers", "Account", FormMethod.Post)) {
+        @Html.AntiForgeryToken();
+
+            <ul>        
+                <li>
+                    <div class="editor-label">
+                        
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(x => x.HideAdmin) @Html.Label("Hide Admin Users")
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-label">
+                        
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(x => x.HideProgramDirector) @Html.Label("Hide Program Director Users")
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-label">
+                        
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(x => x.HideUser) @Html.Label("Hide Educator Users")
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-label">
+                        
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(x => x.HidePublic) @Html.Label("Hide users without roles")
+                    </div>
+                </li>
+
+                <li>
+                    <label>&nbsp;</label>
+			        <input class="button" type="submit" value="Apply" />
+                </li>
+            </ul>
+
+    }
+</div>
+
+<table class="datatable">
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				User Name/Email
+			</th>
+            <th>
+                Admin
+            </th>
+            <th>
+                Program Director
+            </th>
+		    <th>
+		        Educator
+		    </th>
+		    <th>
+		        Name
+		    </th>
+            <th>Agency</th>
+            <th></th>
+		</tr>
+	</thead>
+	<tbody>
+@{ var odd = false; }
+@foreach (var item in Model.Users)
+{
+    
+        var user = Model.UserDetaiList.FirstOrDefault(a => a.Id == item.UserName);   
+    
+		<tr class="@(odd ? "odd" : "even")">	
+        <td>            
+				<a href='@Url.Action("Edit", "Account", new { id = @item.UserName })'>
+					<img alt="Edit this user" src='@Url.Image("edit.png")' />
+				</a>
+            </td>
+			<td>
+				@item.UserName
+			</td>
+            <td>
+                @if (item.Admin)
+                { 
+                    @Html.Encode("Admin")
+                }
+            </td>
+            			<td>
+				@if (item.ProgramDirector)
+    { 
+                 @Html.Encode("Program Director")
+    }
+			</td>
+		    <td>
+		        @if (item.User)
+		        { 
+		            @Html.Encode("Educator")
+		        }
+		    </td>
+		    <td>
+		        @if (user != null)
+		        {
+		            @Html.HtmlEncode(user.Name)
+		        }
+		    </td>
+            <td>
+                @if (user != null)
+                {
+                    @Html.HtmlEncode(user.Agency)
+                }
+            </td>
+            <td>
+                <a href='@Url.Action("Delete", "Account", new { id = @item.UserName })'><img alt="Delete this user" src="@Url.Image("delete.png")"/></a>     
+            </td>
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+
+
+

@@ -1,0 +1,42 @@
+﻿@model NuSurvey.MVC.Controllers.SingleAnswerSurveyResponseViewModel
+@{
+    var displayText = string.Empty;
+    if (ViewBag.IsSpanish != null && (bool) ViewBag.IsSpanish)
+    {
+        displayText = string.Format("Contestada {0} de {1}", Model.AnsweredQuestions, Model.TotalActiveQuestions);
+    }
+    else
+    {
+        displayText = string.Format("Answered {0} of {1}", Model.AnsweredQuestions, Model.TotalActiveQuestions);
+    }
+}
+@if (ViewBag.IsSpanish != null && (bool)ViewBag.IsSpanish)
+{
+    <fieldset class="display-form">
+        <h3>Progreso</h3>
+        <ul>
+            <li>
+                <div id="progressbar"></div>
+            </li>
+            <li>
+                <div class="display-details">@displayText</div>
+            </li>
+        </ul>
+    </fieldset>
+}
+else
+{
+    <fieldset class="display-form">
+        <h3>Progress</h3>
+        <ul>
+            <li>
+                <div id="progressbar"></div>
+            </li>
+            <li>
+                <div class="display-details">@displayText</div>
+            </li>
+        </ul>
+    </fieldset>
+}
+
+
