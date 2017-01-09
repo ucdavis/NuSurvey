@@ -1,0 +1,83 @@
+﻿@model NuSurvey.MVC.Controllers.SurveyPendingResponseDetailViewModel
+
+
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/DataTables/jquery.dataTables.min.js")'></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("table.datatable").dataTable({ "bJQueryUI": true });
+        });    
+    </script>
+
+}
+
+@{
+    ViewBag.Title = "Pending Details";
+}
+
+
+@section SubNav {
+    <ul class="navigation">
+        <li>
+            <a href="@Url.Action("Administration", "Home")">Admin Home</a> 
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "Survey")">Surveys</a> 
+        </li>
+        <li>
+            <a href="@Url.Action("Details", "Survey", new { id = @Model.Survey.Id })">Responses</a>
+        </li>
+        <li>
+            Pending responses
+        </li>
+    </ul>
+}
+
+
+<table class="datatable">
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				Name
+			</th>
+			<th>
+				DateTaken
+			</th>
+            <th>
+                User Id
+            </th>
+            <th>
+                # Answers
+            </th>
+            <th></th>
+		</tr>
+	</thead>
+	<tbody>
+@{ var odd = false; }
+@foreach (var item in Model.SurveyResponses) {
+		<tr class="@(odd ? "odd": "even")">
+			<td>
+			</td>
+			<td>
+				@item.StudentId
+			</td>
+			<td>
+				@String.Format("{0:g}", item.DateTaken)
+			</td>
+            <td>
+                @item.UserId
+            </td>
+            <td>
+                @item.Answers.Count
+            </td>
+            <td>
+                <a href='@Url.Action("DeletePending", "SurveyResponse", new { id = @item.Id, fromAdmin = true })'><img alt="Delete this Survey response" src="@Url.Image("delete.png")"/></a>
+            </td>
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+

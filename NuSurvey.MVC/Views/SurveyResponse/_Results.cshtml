@@ -1,0 +1,79 @@
+﻿@using NuSurvey.MVC.Helpers
+@model NuSurvey.Core.Domain.SurveyResponse
+           
+<div class="result_quiz">Your @Model.Survey.QuizType Quiz Results</div>
+
+<fieldset class="result_fieldset_page @string.Format("{0}-background-image", Model.Survey.ShortName.ToUpper().Trim())">
+    @if (Model.Survey.ShortName.IsSpanish())
+    {
+        <div class="result_thanks">Gracias @Model.StudentId por tomar el tiempo para completar el examen de @Model.Survey.Name.<br />Esperemos que estas recomendaciones le ayude a usted y a su familia elegir alimentos y actividades sanos.</div>
+    }
+    else
+    {
+        <div class="result_thanks">Thank you @Model.StudentId for taking the time to complete the @Model.Survey.Name quiz.<br/>We hope this feedback will help you and your family make healthy food and activity choices.</div>
+    }
+
+    <fieldset class="result_fieldset_positive">
+        <div class="result_category positive">@Model.PositiveCategory.Affirmation</div>
+    </fieldset>
+
+
+    <fieldset class="result_fieldset_goals">
+        @if (Model.NegativeCategory1 != null)
+        {
+            <fieldset class="result_fieldset_majorgoal">
+
+                <div class="result_majorgoal">
+                    <div class="result_checkbox">@Html.Raw("&#x25fb;")</div> @Model.NegativeCategory1.Encouragement
+                </div>
+            </fieldset>
+            <div class="result_category group">
+                <fieldset class="result_fieldset_minorgoals">
+
+                    <div class="result_minorgoals">
+                        @foreach (var goal in Model.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
+                        {
+                            <div class="result_minorgoal">
+                                <div class="result_checkbox">@Html.Raw("&#x25fb;")</div>
+                                <div class="result_goalname">@goal.Name</div>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+        }
+
+
+        @if (Model.NegativeCategory2 != null)
+        {
+            <fieldset class="result_fieldset_majorgoal">
+
+                <div class="result_majorgoal">
+                    <div class="result_checkbox">@Html.Raw("&#x25fb;")</div>
+                    @Model.NegativeCategory2.Encouragement
+                </div>
+            </fieldset>
+            <div class="result_category group">
+                <fieldset class="result_fieldset_minorgoals">
+
+                    <div class="result_minorgoals">
+                        @foreach (var goal in Model.NegativeCategory2.CategoryGoals.Where(x => x.IsActive))
+                        {
+                            <div class="result_minorgoal">
+                                <div class="result_checkbox">@Html.Raw("&#x25fb;")</div>
+                                <div class="result_goalname">@goal.Name</div>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+        }
+
+    </fieldset>
+
+</fieldset>
+
+
+
+
+

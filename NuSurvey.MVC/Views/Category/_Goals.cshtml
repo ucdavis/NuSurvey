@@ -1,0 +1,40 @@
+﻿@model NuSurvey.MVC.Controllers.CategoryViewModel
+
+    <h2>Goals</h2>
+    <p>
+	    @Html.ActionLink("Create New", "Create", "CategoryGoal", new {id = Model.Category.Id }, new { }) 
+    </p>
+    <table class="datatable goals">
+	    <thead>
+		    <tr>
+			    <th></th>
+			    <th>
+				    Goal
+			    </th>
+ 
+			    <th>
+				    Active
+			    </th>
+		    </tr>
+	    </thead>
+	    <tbody>
+    @{ var odd = false; }
+    @foreach (var item in Model.Category.CategoryGoals) {
+		    <tr class="@(odd ? "odd": "even")">
+			    <td>
+                	<a href='@Url.Action("Details", "CategoryGoal", new { id = @item.Id })'><img src="@Url.Image("details.png")" alt="View the details of this Goal"/>
+                    <a href='@Url.Action("Edit", "CategoryGoal", new { id = @item.Id })'><img src="@Url.Image("edit.png")" alt="Edit this Goal"/>                    
+			    </td>
+			    <td>
+				    @item.Name
+			    </td>
+			    <td>
+                    @if (item.IsActive){ 
+                        @item.IsActive
+                    }
+			    </td>
+		    </tr>
+                    odd = !odd;
+    }
+	    </tbody>
+    </table>
