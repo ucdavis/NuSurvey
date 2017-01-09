@@ -1,0 +1,55 @@
+﻿@model NuSurvey.MVC.Controllers.ActiveSurveyViewModel
+
+@{
+    ViewBag.Title = "Active Surveys";
+}
+
+@*<h2>Active Surveys</h2>*@
+
+<table>
+	<thead>
+		<tr>
+			<th></th>
+			<th>
+				Name
+			</th>
+			<th>
+				Short Name
+			</th>
+            <th>
+                Questions
+            </th>
+		</tr>
+	</thead>
+	<tbody>
+@{ var odd = false; }
+@foreach (var item in Model.Surveys) {
+		<tr class="@(odd ? "odd": "even")">
+			<td>
+                @if (Model.IsPublic){
+                    @Html.ActionLink("Start Survey", "StartSurvey", new { id = item.Id })
+                }
+                else
+                { 
+                    @Html.ActionLink("Answer", "Create", new { id = item.Id })
+                }				
+			</td>
+			<td>
+				@item.Name
+			</td>
+			<td>
+				@item.ShortName
+			</td>
+            <td>
+                @item.Questions.Where(a => a.IsActive && a.Category.IsActive && a.Category.IsCurrentVersion).Count()
+            </td>
+		</tr>
+		odd = !odd;
+}
+	</tbody>
+</table>
+
+
+
+
+
