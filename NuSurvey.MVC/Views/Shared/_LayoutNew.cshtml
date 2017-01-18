@@ -30,29 +30,32 @@
     <div class="wrapper">
         @* Render System Wide Status Here *@ 
         @Html.Partial("_SystemMessage")
-        
-        <div id="branding">
-            <span class="header">
-                <div class="col1">
-                    <a href="@Url.Action("Index", "Home")">
-                        <span><img src="@Url.Image("logo.png")" alt="Healthy Kids UC Davis Departhment of Nutrition | University of California Cooperative Extension" /></span>
-                    </a>
-                </div>
-                <div class="col2">
-                          <div id="personalbar">
-            @if (Request.IsAuthenticated)
-            {                 
-                <div class="col2"><span id="welcome_user">Welcome @Context.User.Identity.Name</span></div>
-                <div class="col2" id="LogOffOn">@Html.ActionLink("Log Off", "Logoff", "Account")</div>
-                <div class="col2" id="ChangePassword">@Html.ActionLink("Manage Account", "ManageAccount", "Account")</div>
-            }
-        </div>  
-                   
-                </div>
-            </span>
-            @* Render Navigation *@
-             @Html.Partial("_Navigation")
-        </div>
+        @if (ViewBag.IsKiosk == null || !(bool) ViewBag.IsKiosk)
+        {
+            <div id="branding">
+                <span class="header">
+                    <div class="col1">
+                        <a href="@Url.Action("Index", "Home")">
+                            <span><img src="@Url.Image("logo.png")" alt="Healthy Kids UC Davis Departhment of Nutrition | University of California Cooperative Extension"/></span>
+                        </a>
+                    </div>
+                    <div class="col2">
+                        <div id="personalbar">
+                            @if (Request.IsAuthenticated)
+                            {
+                                <div class="col2"><span id="welcome_user">Welcome @Context.User.Identity.Name</span>
+                                </div>
+                                <div class="col2" id="LogOffOn">@Html.ActionLink("Log Off", "Logoff", "Account")</div>
+                                <div class="col2" id="ChangePassword">@Html.ActionLink("Manage Account", "ManageAccount", "Account")</div>
+                            }
+                        </div>
+
+                    </div>
+                </span>
+                @* Render Navigation *@
+                @Html.Partial("_Navigation")
+            </div>
+        }
         @* Update depending on user login status *@
 
 

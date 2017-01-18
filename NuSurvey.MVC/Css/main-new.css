@@ -36,7 +36,7 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 .float-right { float: right; }  
 
-#branding span.header, .container-center, #footertext, #system_wide_status_text { width: 1020px; }
+#branding span.header, .container-center, #system_wide_status_text { width: 1020px; }
 
 #branding, #footer, .display-form { color: #603813; }
 
@@ -221,7 +221,7 @@ div .editor-label .bypass { padding: 5px 0; }
 
 
 /***---------- FOOTER ----------***/
-#footer { background: #ede6de; background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4); background: -moz-linear-gradient(top, #EDE6DE, #E7DED4); background: -o-linear-gradient(top, #EDE6DE, #E7DED4); background: -ms-linear-gradient(top, #EDE6DE, #E7DED4); background: linear-gradient(top, #EDE6DE #E7DED4); margin-top: 0; padding: 1em 0; font-size: .7em; text-align: center; height: 70px; }
+#footer { background: #ede6de; background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4); background: -moz-linear-gradient(top, #EDE6DE, #E7DED4); background: -o-linear-gradient(top, #EDE6DE, #E7DED4); background: -ms-linear-gradient(top, #EDE6DE, #E7DED4); background: linear-gradient(top, #EDE6DE #E7DED4); margin-top: 0; padding: 1em 3em; font-size: .7em; text-align: left; }
 
 #footertext { font-size: 1.0em; margin: 0 auto; }
 
@@ -360,6 +360,7 @@ div .editor-label .bypass { padding: 5px 0; }
 
 .w-50per {
   width: 50%;
+  background: url('../images/kiosk-banner.png') top right no-repeat;
 }
 
 .sq-50per-content {
