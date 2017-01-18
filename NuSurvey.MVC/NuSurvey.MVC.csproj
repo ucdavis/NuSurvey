@@ -347,6 +347,7 @@
     <Content Include="Images\HK_pdf.jpg" />
     <Content Include="Images\InstGuideHealthyKids.png" />
     <Content Include="Images\InstGuideMyChild.png" />
+    <Content Include="Images\kiosk-banner-01.png" />
     <Content Include="Images\kiosk-header-04.png" />
     <Content Include="Images\logo-caes-long-cap.png" />
     <Content Include="Images\logo-ucdavis.png" />
