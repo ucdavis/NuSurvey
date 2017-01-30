@@ -1,4 +1,5 @@
-﻿@using NuSurvey.MVC.Helpers
+﻿@using FluentNHibernate.Utils
+@using NuSurvey.MVC.Helpers
 @model NuSurvey.MVC.Controllers.SingleAnswerSurveyResponseViewModel
 
 
@@ -34,9 +35,32 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            var isKiosk = @(ViewBag.IsKiosk.ToString().ToLower());
+            if (isKiosk === true) {
+                //Increment the idle time counter every minute.
+                var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+
+                //Zero the idle timer on mouse movement.
+                $(this).on('mousemove mousedown keypress', function ()
+                {
+                    idleTime = 0;
+                    console.log("Cleared");
+                });
+            }
+
+
+            function timerIncrement() {
+                idleTime++;
+                console.log("idle " + idleTime);
+                if (idleTime >= 3) { // 3 minutes
+                    var url = '@Url.Action("Kiosk", "Home")';
+                    window.location.href = url;
+                }
+            }
+
             var percent = (@Model.AnsweredQuestions / @Model.TotalActiveQuestions) * 100;
             $("#progressbar").progressbar({ value: percent });
-            
+
             $('.time').timepicker({
                 defaultTime: '1:00',
                 showLeadingZero: false,
@@ -73,8 +97,8 @@
                         alert("You must select a reason to skip the question, or go back to the question");
                     }
                     else{
-                         $("#byPassAnswer").val(reason); 
-                         $("#opendialog").dialog("close");  
+                         $("#byPassAnswer").val(reason);
+                         $("#opendialog").dialog("close");
                          $("form").submit();
                     }
                 }
