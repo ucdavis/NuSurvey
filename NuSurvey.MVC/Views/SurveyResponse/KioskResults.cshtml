@@ -115,19 +115,16 @@
             var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
 
             //Zero the idle timer on mouse movement.
-            $(this).mousemove(function (e) {
+            $(this).on('mousemove mousedown keypress', function ()
+            {
                 idleTime = 0;
-            });
-            $(this).keypress(function (e) {
-                idleTime = 0;
-            });
-            $(this).mousedown(function (e) {
-                idleTime = 0;
+                //console.log("Cleared");
             });
         });
 
         function timerIncrement() {
             idleTime++;
+            //console.log("idle " + idleTime);
             if (idleTime >= 5) { // 5 minutes
                 var url = '@Url.Action("Kiosk", "Home")';
                 window.location.href = url;
