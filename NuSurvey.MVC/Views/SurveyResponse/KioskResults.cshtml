@@ -125,7 +125,7 @@
         function timerIncrement() {
             idleTime++;
             //console.log("idle " + idleTime);
-            if (idleTime >= 5) { // 5 minutes
+            if (idleTime >= 3) { // 3 minutes
                 var url = '@Url.Action("Kiosk", "Home")';
                 window.location.href = url;
             }
