@@ -121,9 +121,10 @@
     }
     @if ((bool)ViewBag.IsKiosk)
     {
-        <div class="quiz-inst">
+        //Question page: remove the div & img with the instructions. These are usually attached to a class on the 'main' div. 
+        @*<div class="quiz-inst">
             <img src='@Url.Image("kiosk-header-04.png")' />
-        </div>
+        </div>*@
     }
 }
 
