@@ -103,11 +103,65 @@
 
 </fieldset>
 
+<div id="overlay">
+    <div id="nowPrintingWrapper">
+        <section id="nowPrinting">
+            <h1>Now Printing</h1>
+            <p><img src="images/icon_loading.gif" /></p>
+        </section>
+    </div>
+    <div id="nowLoadingWrapper">
+        <section id="nowLoading">
+            <h1>Now Loading</h1>
+            <p><img src="images/icon_loading.gif" /></p>
+        </section>
+    </div>
+</div>
+
+<section class="btmMg20">
+    <h2 class="h2-tit-01 btmMg20">Results</h2>
+</section>
+
+<form onsubmit='return false;' id="form">
+    <div class="container">
+        <div class="wrapper">
+            <div id="canvasBlock">
+                <div id='canvasFrame'>
+                    <canvas id='canvasPaper' width='576' height='640'>
+                        Your browser does not support Canvas!
+                    </canvas>
+                </div>
+            </div>
+        </div>
+        <div id="optionBlock">
+            <dl>
+                <dt>Paper Width</dt>
+                <dd>
+                    :
+                    <select id='paperWidth' onchange='onResizeCanvas(); refocusWidthSelectbox();'>
+                        <option value='inch2' selected='selected'>2 Inch</option>
+                        <option value='inch3'>3 Inch</option>
+                        <option value='inch4'>4 Inch</option>
+                    </select>
+                </dd>
+            </dl>
+        </div>
+        <hr>
+        <footer>
+            <input id="sendBtn" type="button" value="Send" onclick="onSendMessage()" />
+        </footer>
+    </div>
+</form>
 
 
 
-@section AdditionalScripts{
-    
+
+@section AdditionalScripts
+{
+
+    <script src="@Url.Content("~/Scripts/StarWebPrintBuilder.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/StarWebPrintTrader.js")" type="text/javascript"></script>
+
     <script type="text/javascript">
         var idleTime = 0;
         $(document).ready(function () {
@@ -115,30 +169,362 @@
             var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
 
             //Zero the idle timer on mouse movement.
-            $(this).on('mousemove mousedown keypress', function ()
-            {
-                idleTime = 0;
-                //console.log("Cleared");
-            });
+            $(this).on('mousemove mousedown keypress',
+                function() {
+                    idleTime = 0;
+                    //console.log("Cleared");
+                });
         });
 
         function timerIncrement() {
             idleTime++;
             //console.log("idle " + idleTime);
-            if (idleTime >= 3) { // 3 minutes
+            if (idleTime >= 3) { // 3 minutes 
                 var url = '@Url.Action("Kiosk", "Home")';
                 window.location.href = url;
             }
         }
     </script>
+
+
+
+    <script type="text/javascript">
+        var cursor = 0;
+        var lineSpace = 0;
+        var leftPosition = 0;
+        var centerPosition = 0;
+        var rightPosition = 0;
+
+        function DrawLeftText(text) {
+            var canvas = document.getElementById('canvasPaper');
+
+            if (canvas.getContext) {
+                var context = canvas.getContext('2d');
+
+                context.textAlign = 'left';
+
+                context.fillText(text, leftPosition, cursor);
+
+                context.textAlign = 'start';
+            }
+        }
+
+        function DrawCenterText(text) {
+            var canvas = document.getElementById('canvasPaper');
+
+            if (canvas.getContext) {
+                var context = canvas.getContext('2d');
+
+                context.textAlign = 'center';
+
+                context.fillText(text, centerPosition, cursor);
+
+                context.textAlign = 'start';
+            }
+        }
+
+        function DrawRightText(text) {
+            var canvas = document.getElementById('canvasPaper');
+
+            if (canvas.getContext) {
+                var context = canvas.getContext('2d');
+
+                context.textAlign = 'right';
+
+                context.fillText(text, rightPosition, cursor);
+
+                context.textAlign = 'start';
+            }
+        }
+
+        function onDrawReceipt() {
+            switch (document.getElementById('paperWidth').value) {
+            case 'inch2':
+                drawReceipt(100, 24, 384, 1);
+                break;
+            case 'inch3DotImpact':
+                drawReceipt(100, 24, 576, 1);
+                break;
+            default:
+                drawReceipt(100, 24, 576, 1);
+                break;
+            case 'inch4':
+                drawReceipt(100, 24, 832, 1.5);
+                break;
+            }
+        }
+
+        function wrapText(context, text, x, y, maxWidth, lineHeight) {
+            var words = text.split(' ');
+            var line = '';
+
+            for (var n = 0; n < words.length; n++) {
+                var testLine = line + words[n] + ' ';
+                var metrics = context.measureText(testLine);
+                var testWidth = metrics.width;
+                if (testWidth > maxWidth && n > 0) {
+                    context.fillText(line, x, y);
+                    line = words[n] + ' ';
+                    y += lineHeight;
+                }
+                else {
+                    line = testLine;
+                }
+            }
+            context.fillText(line, x, y);
+        }
+
+
+
+
+
+        function drawReceipt(fontSize, lineSpace, receiptWidth, logoScale) {
+            var canvas = document.getElementById('canvasPaper');
+
+            if (canvas.getContext) {
+                var context = canvas.getContext('2d');
+
+                var maxWidth = 500;
+                var lineHeight = 25;
+                var x = (canvas.width - maxWidth) / 2;
+                var y = 60;
+
+                var font = '24px Georgia';
+
+                context.font = font;
+                context.fillStyle = '#333';
+
+
+                //MLR the next line was part of the print JS
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                //      context.textAlign    = 'start';
+                context.textBaseline = 'top';
+
+                leftPosition = 0;
+                centerPosition = (canvas.width - 16) / 2;
+                rightPosition = (canvas.width - 16);
+
+                //      cursor = 0;
+                cursor = 55 * logoScale;
+                cursor += lineSpace;
+                cursor += lineSpace;
+                cursor += lineSpace;
+
+
+                DrawCenterText('REPORT CARD'); cursor += lineSpace;
+
+                cursor += lineSpace;
+
+                wrapText(context, 'Thank you for taking the time to complete the Healthy Kids quiz for your child, @Model.SurveyResponse.StudentId. We hope this feedback will help you make healthy food and activity choices for your family.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
+                cursor += lineSpace;
+                cursor += lineSpace;
+                cursor += lineSpace;
+                cursor += lineSpace;
+                cursor += lineSpace;
+
+                context.fillRect(0, cursor - 2, receiptWidth, 2);     // Underline
+
+                cursor += lineSpace;
+
+                wrapText(context, '@Model.SurveyResponse.PositiveCategory.Affirmation', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
+                cursor += lineSpace;
+
+                context.fillRect(0, cursor - 2, receiptWidth, 2);     // Underline
+
+                cursor += lineSpace;
+
+                wrapText(context, 'You may want to work on buying fewer sugared drinks.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
+
+                cursor += lineSpace;
+
+                wrapText(context, 'Here are easy tips to keep your child healthy.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
+
+                wrapText(context, 'Serve your child water or milk instead of soda, fruit punch or sport drinks 3 times this week.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
+
+                wrapText(context, 'Choose water, unsweetened tea, or milk when eating out this week.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
+
+                wrapText(context, 'Add fresh fruit slices to your childs water 3 times this week.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
+
+                wrapText(context, 'Share these results with your doctor.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
+
+                wrapText(context, 'Together, select one tip to work on this week.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
+
+                wrapText(context, 'Be sure to ask your doctor about the free nutrition classes offered at this clinic.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
+
+
+
+
+                //      alert('Cursor:' + cursor + ', ' + 'Canvas:' + canvas.height);
+
+                var image = new Image();
+
+                image.src = 'img/HK_Logo_BW_Kiosk.jpg' + '?' + new Date().getTime();
+
+                image.onload = function () {
+                    context.drawImage(image, canvas.width - image.width * logoScale, 0, image.width * logoScale, image.height * logoScale);
+                }
+
+                image.onerror = function () {
+                    alert('Image file was not able to be loaded.');
+                }
+            }
+        }
+
+        function onResizeCanvas() {
+            var canvas = document.getElementById('canvasPaper');
+
+            if (canvas.getContext) {
+                var context = canvas.getContext('2d');
+
+                switch (document.getElementById('paperWidth').value) {
+                case 'inch2':
+                    canvas.width = 384;
+                    canvas.height = 555;
+                    break;
+                case 'inch3DotImpact':
+                    canvas.width = 576;
+                    canvas.height = 640;
+                    break;
+                default:
+                    canvas.width = 576;
+                    canvas.height = 640;
+                    break;
+                case 'inch4':
+                    canvas.width = 832;
+                    canvas.height = 952;
+                    break;
+                }
+                document.getElementById('canvasPaper').style.width = "700px";
+                onDrawReceipt();
+            }
+        }
+
+        function refocusWidthSelectbox() {
+            var paperWidthSelectbox = document.getElementById('paperWidth');
+            paperWidthSelectbox.blur();
+            paperWidthSelectbox.focus();
+        }
+
+        function onSendMessage() {
+            showNowPrinting();
+
+            var url = 'http://localhost:8001/StarWebPRNT/SendMessage';
+            var papertype = 'normal';
+
+            var trader = new StarWebPrintTrader({ url: url, papertype: papertype });
+
+            trader.onReceive = function (response) {
+                hideNowPrinting();
+
+                var msg = '- onReceive -\n\n';
+
+                msg += 'TraderSuccess : [ ' + response.traderSuccess + ' ]\n';
+
+                //      msg += 'TraderCode : [ ' + response.traderCode + ' ]\n';
+
+                msg += 'TraderStatus : [ ' + response.traderStatus + ',\n';
+
+                if (trader.isCoverOpen({ traderStatus: response.traderStatus })) { msg += '\tCoverOpen,\n'; }
+                if (trader.isOffLine({ traderStatus: response.traderStatus })) { msg += '\tOffLine,\n'; }
+                if (trader.isCompulsionSwitchClose({ traderStatus: response.traderStatus })) { msg += '\tCompulsionSwitchClose,\n'; }
+                if (trader.isEtbCommandExecute({ traderStatus: response.traderStatus })) { msg += '\tEtbCommandExecute,\n'; }
+                if (trader.isHighTemperatureStop({ traderStatus: response.traderStatus })) { msg += '\tHighTemperatureStop,\n'; }
+                if (trader.isNonRecoverableError({ traderStatus: response.traderStatus })) { msg += '\tNonRecoverableError,\n'; }
+                if (trader.isAutoCutterError({ traderStatus: response.traderStatus })) { msg += '\tAutoCutterError,\n'; }
+                if (trader.isBlackMarkError({ traderStatus: response.traderStatus })) { msg += '\tBlackMarkError,\n'; }
+                if (trader.isPaperEnd({ traderStatus: response.traderStatus })) { msg += '\tPaperEnd,\n'; }
+                if (trader.isPaperNearEnd({ traderStatus: response.traderStatus })) { msg += '\tPaperNearEnd,\n'; }
+
+                msg += '\tEtbCounter = ' + trader.extractionEtbCounter({ traderStatus: response.traderStatus }).toString() + ' ]\n';
+
+                //      msg += 'Status : [ ' + response.status + ' ]\n';
+                //
+                //      msg += 'ResponseText : [ ' + response.responseText + ' ]\n';
+
+                alert(msg);
+            }
+
+            trader.onError = function (response) {
+                hideNowPrinting();
+
+                var msg = '- onError -\n\n';
+
+                msg += '\tStatus:' + response.status + '\n';
+
+                msg += '\tResponseText:' + response.responseText;
+
+                alert(msg);
+            }
+
+            try {
+                var canvas = document.getElementById('canvasPaper');
+
+                if (canvas.getContext) {
+                    var context = canvas.getContext('2d');
+
+                    var builder = new StarWebPrintBuilder();
+
+                    var request = '';
+
+                    request += builder.createInitializationElement();
+
+                    request += builder.createBitImageElement({ context: context, x: 0, y: 0, width: canvas.width, height: canvas.height });
+
+                    request += builder.createCutPaperElement({ feed: false, type: 'full' });
+
+                    trader.sendMessage({ request: request });
+                }
+            }
+            catch (e) {
+                hideNowPrinting();
+
+                alert(e.message);
+            }
+        }
+        function nowLoading() {
+            document.getElementById('form').style.display = "block";
+            document.getElementById('overlay').style.display = "none";
+            document.getElementById('nowLoadingWrapper').style.display = "none";
+        }
+        function showNowPrinting() {
+            document.getElementById('overlay').style.display = "block";
+            document.getElementById('nowPrintingWrapper').style.display = "table";
+        }
+        function hideNowPrinting() {
+            document.getElementById('overlay').style.opacity = 0.0;
+            document.getElementById('overlay').style.transition = "all 0.3s";
+            intimer = setTimeout(function () {
+                document.getElementById('overlay').style.display = "none";
+                document.getElementById('overlay').style.opacity = 1;
+                clearTimeout(intimer);
+            }, 300);
+            document.getElementById('nowPrintingWrapper').style.display = "none";
+        }
+        window.onload = function () {
+            nowLoading();
+            onResizeCanvas();
+        }
+    </script>
     
-    <script src="@Url.Content("~/Scripts/StarWebPrintBuilder.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/StarWebPrintTrader.js")" type="text/javascript"></script>
+    <noscript>
+        Your browser does not support JavaScript!
+    </noscript>
 
     <style type="text/css">
         .col1.results
         {
-        	display:none;
+            display: none;
         }
     </style>
 }
