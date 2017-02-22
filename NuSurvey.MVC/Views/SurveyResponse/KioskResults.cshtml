@@ -1,4 +1,4 @@
-﻿using NuSurvey.MVC.Helpers
+﻿@using NuSurvey.MVC.Helpers
 @model NuSurvey.MVC.Controllers.ResultsViewModel
 
 
@@ -45,7 +45,7 @@
     }
 
     <fieldset class="result_fieldset_positive">
-        <div class="result_category positive">@Model.SurveyResponse.PositiveCategory.Affirmation</div>
+        <div class="result_category positive">@Model.SurveyResponse.PositiveCategory.Affirmation</div>        
     </fieldset>
 
 
@@ -163,6 +163,7 @@
     <script type="text/javascript">
         var idleTime = 0;
         $(document).ready(function () {
+            //alert("here");
             //Increment the idle time counter every minute.
             var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
 
@@ -326,7 +327,7 @@
 
                 cursor += lineSpace;
 
-                wrapText(context, '@Model.SurveyResponse.PositiveCategory.Affirmation', x, cursor, maxWidth, lineHeight);
+                wrapText(context, '@Html.Raw(Model.SurveyResponse.PositiveCategory.Affirmation)', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
                 cursor += lineSpace;
 
@@ -343,13 +344,13 @@
                 wrapText(context, 'Here are easy tips to keep your child healthy.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
 
-                        foreach (var goal in Model.SurveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
+                        @*foreach (var goal in Model.SurveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
                         {
                             wrapText(context, '@goal.Name', x, cursor, maxWidth, lineHeight);
                             cursor += lineSpace;
                             cursor += lineSpace;
                             cursor += lineSpace;
-                        }
+                        }*@
 
         context.fillRect(0, cursor - 2, receiptWidth, 2);     // Underline
 
