@@ -1,4 +1,4 @@
-﻿@using NuSurvey.MVC.Helpers
+﻿using NuSurvey.MVC.Helpers
 @model NuSurvey.MVC.Controllers.ResultsViewModel
 
 
@@ -22,12 +22,12 @@
     <div id="pdf_print">
         @if (Model.PublicGuid == null)
         {
-            <a class="col1" href='@Url.Action("Result", "Print", new {id = @Model.SurveyResponse.Id, withBackground = true})' target="_blank"><img alt="Print Results"/></a>
-            <a class="col1" href='@Url.Action("Result", "Print", new {id = @Model.SurveyResponse.Id, withBackground = false})' target="_blank"><img alt="Print Results without background"/></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = true})' target="_blank"><img alt="Print Results" /></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = false})' target="_blank"><img alt="Print Results without background" /></a>
         }
         else
         {
-            <a class="col1" href='@Url.Action("Result", "Print", new {id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid})' target="_blank"><img alt="Print my results" src="@Url.Image("big_print.png")"/></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid })' target="_blank"><img alt="Print my results" src="@Url.Image("big_print.png")" /></a>
         }
     </div>
 }
@@ -119,8 +119,10 @@
     </div>
 </div>
 
-<section class="btmMg20">
-    <h2 class="h2-tit-01 btmMg20">Results</h2>
+<section class="btmMg20"></section>
+
+<section>
+    <input id="sendBtn" type="button" value="Send" onclick="onSendMessage()" />
 </section>
 
 <form onsubmit='return false;' id="form">
@@ -128,7 +130,7 @@
         <div class="wrapper">
             <div id="canvasBlock">
                 <div id='canvasFrame'>
-                    <canvas id='canvasPaper' width='576' height='640'>
+                    <canvas id='canvasPaper' width='576' height='1000'>
                         Your browser does not support Canvas!
                     </canvas>
                 </div>
@@ -140,17 +142,12 @@
                 <dd>
                     :
                     <select id='paperWidth' onchange='onResizeCanvas(); refocusWidthSelectbox();'>
-                        <option value='inch2' selected='selected'>2 Inch</option>
-                        <option value='inch3'>3 Inch</option>
-                        <option value='inch4'>4 Inch</option>
+                        <option value='inch3' selected='selected'>3 Inch</option>
                     </select>
                 </dd>
             </dl>
         </div>
         <hr>
-        <footer>
-            <input id="sendBtn" type="button" value="Send" onclick="onSendMessage()" />
-        </footer>
     </div>
 </form>
 
@@ -180,7 +177,7 @@
         function timerIncrement() {
             idleTime++;
             //console.log("idle " + idleTime);
-            if (idleTime >= 3) { // 3 minutes 
+            if (idleTime >= 3) { // 3 minutes
                 var url = '@Url.Action("Kiosk", "Home")';
                 window.location.href = url;
             }
@@ -239,11 +236,11 @@
         }
 
         function onDrawReceipt() {
-            switch (document.getElementById('paperWidth').value) {
+            switch ('inch3') {
             case 'inch2':
                 drawReceipt(100, 24, 384, 1);
                 break;
-            case 'inch3DotImpact':
+            case 'inch3':
                 drawReceipt(100, 24, 576, 1);
                 break;
             default:
@@ -342,28 +339,47 @@
 
                 cursor += lineSpace;
 
+
                 wrapText(context, 'Here are easy tips to keep your child healthy.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
 
-                wrapText(context, 'Serve your child water or milk instead of soda, fruit punch or sport drinks 3 times this week.', x, cursor, maxWidth, lineHeight);
-                cursor += lineSpace;
+                        foreach (var goal in Model.SurveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
+                        {
+                            wrapText(context, '@goal.Name', x, cursor, maxWidth, lineHeight);
+                            cursor += lineSpace;
+                            cursor += lineSpace;
+                            cursor += lineSpace;
+                        }
 
-                wrapText(context, 'Choose water, unsweetened tea, or milk when eating out this week.', x, cursor, maxWidth, lineHeight);
-                cursor += lineSpace;
+        context.fillRect(0, cursor - 2, receiptWidth, 2);     // Underline
 
-                wrapText(context, 'Add fresh fruit slices to your childs water 3 times this week.', x, cursor, maxWidth, lineHeight);
-                cursor += lineSpace;
+        cursor += lineSpace;
+
+//*                wrapText(context, 'Serve your child water or milk instead of soda, fruit punch or sport drinks 3 times this week.', x, cursor, maxWidth, lineHeight);
+//*                cursor += lineSpace;
+
+//*                wrapText(context, 'Choose water, unsweetened tea, or milk when eating out this week.', x, cursor, maxWidth, lineHeight);
+//*                cursor += lineSpace;
+
+//*                wrapText(context, 'Add fresh fruit slices to your childs water 3 times this week.', x, cursor, maxWidth, lineHeight);
+//*                cursor += lineSpace;
 
                 wrapText(context, 'Share these results with your doctor.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
                 cursor += lineSpace;
 
                 wrapText(context, 'Together, select one tip to work on this week.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
+                cursor += lineSpace;
 
                 wrapText(context, 'Be sure to ask your doctor about the free nutrition classes offered at this clinic.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
+                cursor += lineSpace;
+                cursor += lineSpace;
 
+        context.fillRect(0, cursor - 2, receiptWidth, 2);     // Underline
 
+        cursor += lineSpace;
 
 
                 //      alert('Cursor:' + cursor + ', ' + 'Canvas:' + canvas.height);
@@ -388,18 +404,18 @@
             if (canvas.getContext) {
                 var context = canvas.getContext('2d');
 
-                switch (document.getElementById('paperWidth').value) {
+                switch ('inch3') {
                 case 'inch2':
                     canvas.width = 384;
                     canvas.height = 555;
                     break;
-                case 'inch3DotImpact':
+                case 'inch3':
                     canvas.width = 576;
-                    canvas.height = 640;
+                    canvas.height = 1000;
                     break;
                 default:
                     canvas.width = 576;
-                    canvas.height = 640;
+                    canvas.height = 1000;
                     break;
                 case 'inch4':
                     canvas.width = 832;
@@ -517,16 +533,14 @@
             onResizeCanvas();
         }
     </script>
-    
+
     <noscript>
         Your browser does not support JavaScript!
     </noscript>
 
     <style type="text/css">
-        .col1.results
-        {
+        .col1.results {
             display: none;
         }
     </style>
 }
-
