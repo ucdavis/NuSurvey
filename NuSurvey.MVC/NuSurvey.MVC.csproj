@@ -344,7 +344,9 @@
     <Content Include="Images\hk-goal-bkgd.jpg" />
     <Content Include="Images\hk-header.png" />
     <Content Include="Images\hk-thumb.png" />
+    <Content Include="Images\HK_Logo_BW_Kiosk.jpg" />
     <Content Include="Images\HK_pdf.jpg" />
+    <Content Include="Images\icon_loading.gif" />
     <Content Include="Images\InstGuideHealthyKids.png" />
     <Content Include="Images\InstGuideMyChild.png" />
     <Content Include="Images\kiosk-banner-01.png" />

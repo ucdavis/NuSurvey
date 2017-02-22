@@ -6,18 +6,19 @@
     ViewBag.Title = "Quiz Results";
     Layout = "~/Views/Shared/_LayoutNew.cshtml";
 
-        if (Model.SurveyResponse.Survey.ShortName.IsSpanish())
-        {
-            ViewBag.IsSpanish = true;
-        }
-        if (Model.SurveyResponse.Survey.QuizType.Equals("Kiosk", StringComparison.OrdinalIgnoreCase))
-        {
-            ViewBag.IsKiosk = true;
-        }
+    if (Model.SurveyResponse.Survey.ShortName.IsSpanish())
+    {
+        ViewBag.IsSpanish = true;
+    }
+    if (Model.SurveyResponse.Survey.QuizType.Equals("Kiosk", StringComparison.OrdinalIgnoreCase))
+    {
+        ViewBag.IsKiosk = true;
+    }
 
 }
 
-@if (Model.ShowPdfPrint) {            
+@if (Model.ShowPdfPrint)
+{
     <div id="pdf_print">
         @if (Model.PublicGuid == null)
         {
@@ -26,7 +27,7 @@
         }
         else
         {
-             <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid })' target="_blank"><img alt="Print my results" src="@Url.Image("big_print.png")" /></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid })' target="_blank"><img alt="Print my results" src="@Url.Image("big_print.png")" /></a>
         }
     </div>
 }
@@ -44,7 +45,7 @@
     }
 
     <fieldset class="result_fieldset_positive">
-        <div class="result_category positive">@Model.SurveyResponse.PositiveCategory.Affirmation</div>
+        <div class="result_category positive">@Model.SurveyResponse.PositiveCategory.Affirmation</div>        
     </fieldset>
 
 
@@ -107,19 +108,21 @@
     <div id="nowPrintingWrapper">
         <section id="nowPrinting">
             <h1>Now Printing</h1>
-            <p><img src="images/icon_loading.gif" /></p>
+            <p><img src="@Url.Content("~/Images/icon_loading.gif")"/></p>
         </section>
     </div>
     <div id="nowLoadingWrapper">
         <section id="nowLoading">
             <h1>Now Loading</h1>
-            <p><img src="images/icon_loading.gif" /></p>
+            <p><img src="@Url.Content("~/Images/icon_loading.gif")" /></p>
         </section>
     </div>
 </div>
 
-<section class="btmMg20">
-    <h2 class="h2-tit-01 btmMg20">Results</h2>
+<section class="btmMg20"></section>
+
+<section>
+    <input id="sendBtn" type="button" value="Send" onclick="onSendMessage()" />
 </section>
 
 <form onsubmit='return false;' id="form">
@@ -127,7 +130,7 @@
         <div class="wrapper">
             <div id="canvasBlock">
                 <div id='canvasFrame'>
-                    <canvas id='canvasPaper' width='576' height='640'>
+                    <canvas id='canvasPaper' width='576' height='1000'>
                         Your browser does not support Canvas!
                     </canvas>
                 </div>
@@ -139,17 +142,12 @@
                 <dd>
                     :
                     <select id='paperWidth' onchange='onResizeCanvas(); refocusWidthSelectbox();'>
-                        <option value='inch2' selected='selected'>2 Inch</option>
-                        <option value='inch3'>3 Inch</option>
-                        <option value='inch4'>4 Inch</option>
+                        <option value='inch3' selected='selected'>3 Inch</option>
                     </select>
                 </dd>
             </dl>
         </div>
         <hr>
-        <footer>
-            <input id="sendBtn" type="button" value="Send" onclick="onSendMessage()" />
-        </footer>
     </div>
 </form>
 
@@ -165,6 +163,7 @@
     <script type="text/javascript">
         var idleTime = 0;
         $(document).ready(function () {
+
             //Increment the idle time counter every minute.
             var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
 
@@ -179,7 +178,7 @@
         function timerIncrement() {
             idleTime++;
             //console.log("idle " + idleTime);
-            if (idleTime >= 3) { // 3 minutes 
+            if (idleTime >= 3) { // 3 minutes
                 var url = '@Url.Action("Kiosk", "Home")';
                 window.location.href = url;
             }
@@ -238,11 +237,11 @@
         }
 
         function onDrawReceipt() {
-            switch (document.getElementById('paperWidth').value) {
+            switch ('inch3') {
             case 'inch2':
                 drawReceipt(100, 24, 384, 1);
                 break;
-            case 'inch3DotImpact':
+            case 'inch3':
                 drawReceipt(100, 24, 576, 1);
                 break;
             default:
@@ -328,7 +327,7 @@
 
                 cursor += lineSpace;
 
-                wrapText(context, '@Model.SurveyResponse.PositiveCategory.Affirmation', x, cursor, maxWidth, lineHeight);
+                wrapText(context, '@Html.Raw(Model.SurveyResponse.PositiveCategory.Affirmation)', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
                 cursor += lineSpace;
 
@@ -341,35 +340,55 @@
 
                 cursor += lineSpace;
 
+
                 wrapText(context, 'Here are easy tips to keep your child healthy.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
 
-                wrapText(context, 'Serve your child water or milk instead of soda, fruit punch or sport drinks 3 times this week.', x, cursor, maxWidth, lineHeight);
-                cursor += lineSpace;
+                var negativeCategory1 = @Html.Raw(Json.Encode(Model.SurveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive).Select(a => a.Name).ToArray()));
+                negativeCategory1.forEach(function(e) {
+                    wrapText(context, e, x, cursor, maxWidth, lineHeight);
+                    cursor += lineSpace;
+                    cursor += lineSpace;
+                    cursor += lineSpace;
+                });
 
-                wrapText(context, 'Choose water, unsweetened tea, or milk when eating out this week.', x, cursor, maxWidth, lineHeight);
-                cursor += lineSpace;
 
-                wrapText(context, 'Add fresh fruit slices to your childs water 3 times this week.', x, cursor, maxWidth, lineHeight);
-                cursor += lineSpace;
+        context.fillRect(0, cursor - 2, receiptWidth, 2);     // Underline
+
+        cursor += lineSpace;
+
+//*                wrapText(context, 'Serve your child water or milk instead of soda, fruit punch or sport drinks 3 times this week.', x, cursor, maxWidth, lineHeight);
+//*                cursor += lineSpace;
+
+//*                wrapText(context, 'Choose water, unsweetened tea, or milk when eating out this week.', x, cursor, maxWidth, lineHeight);
+//*                cursor += lineSpace;
+
+//*                wrapText(context, 'Add fresh fruit slices to your childs water 3 times this week.', x, cursor, maxWidth, lineHeight);
+//*                cursor += lineSpace;
 
                 wrapText(context, 'Share these results with your doctor.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
                 cursor += lineSpace;
 
                 wrapText(context, 'Together, select one tip to work on this week.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
+                cursor += lineSpace;
 
                 wrapText(context, 'Be sure to ask your doctor about the free nutrition classes offered at this clinic.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
+                cursor += lineSpace;
+                cursor += lineSpace;
 
+        context.fillRect(0, cursor - 2, receiptWidth, 2);     // Underline
 
+        cursor += lineSpace;
 
 
                 //      alert('Cursor:' + cursor + ', ' + 'Canvas:' + canvas.height);
 
                 var image = new Image();
 
-                image.src = 'img/HK_Logo_BW_Kiosk.jpg' + '?' + new Date().getTime();
+                image.src = '@Url.Content("~/Images/HK_Logo_BW_Kiosk.jpg")' + '?' + new Date().getTime();
 
                 image.onload = function () {
                     context.drawImage(image, canvas.width - image.width * logoScale, 0, image.width * logoScale, image.height * logoScale);
@@ -387,18 +406,18 @@
             if (canvas.getContext) {
                 var context = canvas.getContext('2d');
 
-                switch (document.getElementById('paperWidth').value) {
+                switch ('inch3') {
                 case 'inch2':
                     canvas.width = 384;
                     canvas.height = 555;
                     break;
-                case 'inch3DotImpact':
+                case 'inch3':
                     canvas.width = 576;
-                    canvas.height = 640;
+                    canvas.height = 1000;
                     break;
                 default:
                     canvas.width = 576;
-                    canvas.height = 640;
+                    canvas.height = 1000;
                     break;
                 case 'inch4':
                     canvas.width = 832;
@@ -516,16 +535,14 @@
             onResizeCanvas();
         }
     </script>
-    
+
     <noscript>
         Your browser does not support JavaScript!
     </noscript>
 
     <style type="text/css">
-        .col1.results
-        {
+        .col1.results {
             display: none;
         }
     </style>
 }
-
