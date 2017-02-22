@@ -6,27 +6,28 @@
     ViewBag.Title = "Quiz Results";
     Layout = "~/Views/Shared/_LayoutNew.cshtml";
 
-        if (Model.SurveyResponse.Survey.ShortName.IsSpanish())
-        {
-            ViewBag.IsSpanish = true;
-        }
-        if (Model.SurveyResponse.Survey.QuizType.Equals("Kiosk", StringComparison.OrdinalIgnoreCase))
-        {
-            ViewBag.IsKiosk = true;
-        }
+    if (Model.SurveyResponse.Survey.ShortName.IsSpanish())
+    {
+        ViewBag.IsSpanish = true;
+    }
+    if (Model.SurveyResponse.Survey.QuizType.Equals("Kiosk", StringComparison.OrdinalIgnoreCase))
+    {
+        ViewBag.IsKiosk = true;
+    }
 
 }
 
-@if (Model.ShowPdfPrint) {            
+@if (Model.ShowPdfPrint)
+{
     <div id="pdf_print">
         @if (Model.PublicGuid == null)
         {
-            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = true})' target="_blank"><img alt="Print Results" /></a>
-            <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, withBackground = false})' target="_blank"><img alt="Print Results without background" /></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new {id = @Model.SurveyResponse.Id, withBackground = true})' target="_blank"><img alt="Print Results"/></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new {id = @Model.SurveyResponse.Id, withBackground = false})' target="_blank"><img alt="Print Results without background"/></a>
         }
         else
         {
-             <a class="col1" href='@Url.Action("Result", "Print", new { id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid })' target="_blank"><img alt="Print my results" src="@Url.Image("big_print.png")" /></a>
+            <a class="col1" href='@Url.Action("Result", "Print", new {id = @Model.SurveyResponse.Id, publicGuid = @Model.PublicGuid})' target="_blank"><img alt="Print my results" src="@Url.Image("big_print.png")"/></a>
         }
     </div>
 }
