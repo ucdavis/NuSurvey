@@ -45,7 +45,7 @@
     }
 
     <fieldset class="result_fieldset_positive">
-        <div class="result_category positive">@Model.SurveyResponse.PositiveCategory.Affirmation</div>        
+        <div class="result_category positive">@Model.SurveyResponse.PositiveCategory.Affirmation</div>
     </fieldset>
 
 
@@ -108,7 +108,7 @@
     <div id="nowPrintingWrapper">
         <section id="nowPrinting">
             <h1>Now Printing</h1>
-            <p><img src="@Url.Content("~/Images/icon_loading.gif")"/></p>
+            <p><img src="@Url.Content("~/Images/icon_loading.gif")" /></p>
         </section>
     </div>
     <div id="nowLoadingWrapper">
@@ -122,7 +122,7 @@
 <section class="btmMg20"></section>
 
 <section>
-    <input id="sendBtn" type="button" value="Send" onclick="onSendMessage()" />
+    <input id="sendBtn" class="button" type="button" value="Print Results" onclick="onSendMessage()" />
 </section>
 
 <form onsubmit='return false;' id="form">
@@ -335,7 +335,7 @@
 
                 cursor += lineSpace;
 
-                wrapText(context, 'You may want to work on buying fewer sugared drinks.', x, cursor, maxWidth, lineHeight);
+                wrapText(context, '@Html.Raw(Model.SurveyResponse.NegativeCategory1.Encouragement)', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
 
                 cursor += lineSpace;
@@ -343,10 +343,11 @@
 
                 wrapText(context, 'Here are easy tips to keep your child healthy.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
+                cursor += lineSpace;
 
                 var negativeCategory1 = @Html.Raw(Json.Encode(Model.SurveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive).Select(a => a.Name).ToArray()));
                 negativeCategory1.forEach(function(e) {
-                    wrapText(context, e, x, cursor, maxWidth, lineHeight);
+                    context.fillRect(5, 0, 12, 12); wrapText(context, e, x, cursor, maxWidth, lineHeight);
                     cursor += lineSpace;
                     cursor += lineSpace;
                     cursor += lineSpace;
@@ -356,15 +357,6 @@
         context.fillRect(0, cursor - 2, receiptWidth, 2);     // Underline
 
         cursor += lineSpace;
-
-//*                wrapText(context, 'Serve your child water or milk instead of soda, fruit punch or sport drinks 3 times this week.', x, cursor, maxWidth, lineHeight);
-//*                cursor += lineSpace;
-
-//*                wrapText(context, 'Choose water, unsweetened tea, or milk when eating out this week.', x, cursor, maxWidth, lineHeight);
-//*                cursor += lineSpace;
-
-//*                wrapText(context, 'Add fresh fruit slices to your childs water 3 times this week.', x, cursor, maxWidth, lineHeight);
-//*                cursor += lineSpace;
 
                 wrapText(context, 'Share these results with your doctor.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
