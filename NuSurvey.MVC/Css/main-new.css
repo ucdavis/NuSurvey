@@ -8,7 +8,7 @@
 	Ultra-bold: 900
 */
 
-html, body { font: 16px/20px 'Source Sans Pro',Arial,sans-serif; min-width: 1200px; color: #03205B; height: 100%;} /* */
+html, body { font: 16px/20px 'Source Sans Pro',Arial,sans-serif; /*min-width: 1200px; */ color: #03205B; height: 100%; background: url('../images/wavegrid_tan1.png') repeat;}
 
 .wrapper {min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -70px; background: url('../images/wavegrid_tan1.png') repeat;}
 
@@ -105,7 +105,7 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 .display-hk-question { background: #EDF5EF; /* Old browsers */  background: -webkit-linear-gradient(top, #F7FBF8, #EDF5EF); background: -moz-linear-gradient(top, #F7FBF8, #EDF5EF); background: -o-linear-gradient(top, #F7FBF8, #EDF5EF); background: -ms-linear-gradient(top, #F7FBF8, #EDF5EF); background: linear-gradient(top, #F7FBF8, #EDF5EF); border: solid 1px #95D1A0; color: #005311; }
 
-.display-mcmt-question .editor-field img, .display-hk-question .editor-field img, .display-kiosk-question .editor-field img { margin-right: 25px; }
+.display-mcmt-question .editor-field img, .display-hk-question .editor-field img, .display-kiosk-question .editor-field img { margin-right: 25px; float: left;}
 
 .display-mcmt-question .editor-field input, .display-hk-question .editor-field input, .display-kiosk-question .editor-field input {margin-left: 100px; }
 
