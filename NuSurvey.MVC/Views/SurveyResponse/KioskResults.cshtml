@@ -136,7 +136,7 @@
                 </div>
             </div>
         </div>
-        <div id="optionBlock">
+        <div id="optionBlock" style="display: none">
             <dl>
                 <dt>Paper Width</dt>
                 <dd>
@@ -315,7 +315,7 @@
 
                 cursor += lineSpace;
 
-                wrapText(context, 'Thank you for taking the time to complete the Healthy Kids quiz for your child, @Model.SurveyResponse.StudentId. We hope this feedback will help you make healthy food and activity choices for your family.', x, cursor, maxWidth, lineHeight);
+                wrapText(context, 'Thank you for taking the time to complete the Healthy Kids quiz for your child, @Html.HtmlEncode(Model.SurveyResponse.StudentId). We hope this feedback will help you make healthy food and activity choices for your family.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
                 cursor += lineSpace;
                 cursor += lineSpace;
