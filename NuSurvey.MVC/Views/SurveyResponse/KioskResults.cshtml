@@ -258,7 +258,7 @@
 
                 var negativeCategory1 = @Html.Raw(Json.Encode(Model.SurveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive).Select(a => a.Name).ToArray()));
                 negativeCategory1.forEach(function(e) {
-                    context.strokeRect(10, cursor, 12, 12); wrapText(context, e, x, cursor, maxWidth, lineHeight);
+                    context.strokeRect(10, cursor - 10, 12, 12); wrapText(context, e, x, cursor, maxWidth, lineHeight);
                     cursor += lineSpace;
                     cursor += lineSpace;
                     cursor += lineSpace;
@@ -293,7 +293,7 @@
                 image1.src = '@Url.Content("~/Images/HK_Logo_BW_Kiosk.jpg")' + '?' + new Date().getTime();
 
                 image1.onload = function() {
-                    context.drawImage(image1, canvas.width - image1.width / 2, 0, image1.width * logoScale, image1.height * logoScale);
+                    context.drawImage(image1, (canvas.width - image1.width) / 2, 0, image1.width * logoScale, image1.height * logoScale);
 
                 }
 
@@ -305,7 +305,7 @@
 
                 image2.src = '@Url.Content("~/Images/UCD_Logo_Black_Kiosk.jpg")' + '?' + new Date().getTime();
                 image2.onload = function() {
-                    context.drawImage(image2,canvas.width - image2.width / 2, 1100, image2.width * logoScale, image2.height * logoScale);
+                    context.drawImage(image2, (canvas.width - image2.width) / 2, 1075, image2.width * logoScale, image2.height * logoScale);
                 }
                 image2.onerror = function() {
                     alert('Image2 file was not able to be loaded.');
@@ -322,11 +322,11 @@
                 switch ('inch3') {
                 case 'inch3':
                     canvas.width = 576;
-                    canvas.height = 1300;
+                    canvas.height = 1200;
                     break;
                 default:
                     canvas.width = 576;
-                    canvas.height = 1300;
+                    canvas.height = 1200;
                     break;
                 }
                 document.getElementById('canvasPaper').style.width = "700px";
