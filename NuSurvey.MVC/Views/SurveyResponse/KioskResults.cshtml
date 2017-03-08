@@ -38,6 +38,7 @@
 
 <section>
     <input id="sendBtn" class="kiosk-button" type="button" value="Print My Results" onclick="onSendMessage()" />
+    @Html.ActionLink("Start Over", "Kiosk", "Home", null, new {@class = "kiosk-button" })
 </section>
 
 <form onsubmit='return false;' id="form">
@@ -258,7 +259,7 @@
 
                 var negativeCategory1 = @Html.Raw(Json.Encode(Model.SurveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive).Select(a => a.Name).ToArray()));
                 negativeCategory1.forEach(function(e) {
-                    context.strokeRect(10, cursor - 10, 12, 12); wrapText(context, e, x, cursor, maxWidth, lineHeight);
+                    context.strokeRect(10, cursor + 10, 12, 12); wrapText(context, e, x, cursor, maxWidth, lineHeight);
                     cursor += lineSpace;
                     cursor += lineSpace;
                     cursor += lineSpace;
