@@ -10,7 +10,7 @@
 
 html, body { font: 16px/20px 'Source Sans Pro',Arial,sans-serif; /*min-width: 1200px; */ color: #03205B; height: 100%; background: url('../images/wavegrid_tan1.png') repeat;}
 
-.wrapper {min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -70px; background: url('../images/wavegrid_tan1.png') repeat;}
+.wrapper {min-height: 100%; height: auto !important; height: 100%; margin: 0 auto; background: url('../images/wavegrid_tan1.png') repeat;}
 
 a, a img { text-decoration: none; border: 0; }
 
@@ -26,7 +26,7 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 #branding { background: #ede6de; background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4); background: -moz-linear-gradient(top, #EDE6DE, #E7DED4); background: -o-linear-gradient(top, #EDE6DE, #E7DED4); background: -ms-linear-gradient(top, #EDE6DE, #E7DED4); background: linear-gradient(top, #EDE6DE #E7DED4); margin: 0 auto; position: relative; z-index: 2; font-size: .8em; }
 
-.main { margin: 0; padding: 0 0 15px 0; /*background: url('../images/wavegrid_tan1.png') repeat;*/ }
+.main { margin: 0; padding: 0; /*background: url('../images/wavegrid_tan1.png') repeat;*/ }
 
 #branding h1 { font-size: 3em; line-height: 1em; padding-bottom: 0.2em; text-align: left; text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2); }
 
@@ -113,7 +113,7 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 .display-mcmt-question .editor-field, .display-hk-question .editor-field, .display-kiosk-question .editor-field { text-align: center; font-weight: bold;}
 
-.parent-response-options { text-align: left; font-weight: 600; margin-top: 1em; }
+.parent-response-options { text-align: left; font-weight: 600; margin-top: 1em; margin-left: 55%; }
 
 form { text-align: left; }
 
@@ -221,7 +221,7 @@ div .editor-label .bypass { padding: 5px 0; }
 
 
 /***---------- FOOTER ----------***/
-#footer { background: #ede6de; background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4); background: -moz-linear-gradient(top, #EDE6DE, #E7DED4); background: -o-linear-gradient(top, #EDE6DE, #E7DED4); background: -ms-linear-gradient(top, #EDE6DE, #E7DED4); background: linear-gradient(top, #EDE6DE #E7DED4); margin: 1em 0 0 0; padding: 1em 3em; font-size: .7em; text-align: left; }
+#footer { background: #ede6de; background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4); background: -moz-linear-gradient(top, #EDE6DE, #E7DED4); background: -o-linear-gradient(top, #EDE6DE, #E7DED4); background: -ms-linear-gradient(top, #EDE6DE, #E7DED4); background: linear-gradient(top, #EDE6DE #E7DED4); margin: 0; padding: 1em 3em; font-size: .7em; text-align: left; }
 
 #footertext { font-size: 1.0em; margin: 0 auto; }
 
@@ -364,7 +364,7 @@ div .editor-label .bypass { padding: 5px 0; }
 }
 
 .sq-50per-content {
-  padding: 30% 18%;
+  padding: 25% 18% 30% 8%;
 }
 
 .w-25per {
@@ -381,6 +381,18 @@ div .editor-label .bypass { padding: 5px 0; }
 	font-size: 1.3em;
 	line-height: 1.2em;
 	margin: 0 0 1.6em 0;
+}
+
+.kiosk-button { 
+	border: solid 2px #03205B; 
+	color: #fff; 
+	text-align: center; 
+	font-weight: 700; 
+	font-size: 1.2em;
+	background: #03205B; /* Important! fix for IE & older browsers */    
+	padding: 10px 15px; 
+	border-radius: 8px; 
+	margin: 15px 0 0 0;
 }
 
 .kiosk-button:link { 
