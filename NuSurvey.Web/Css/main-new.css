@@ -1,4 +1,4 @@
-﻿* { margin: 0; padding: 0; }
+* { margin: 0; padding: 0; }
 
 /* ------- FONT NOTES ------ */   
 /* 	Name: Source Sans Pro
@@ -333,6 +333,104 @@ div .editor-label .bypass { padding: 5px 0; }
 
 .survey-name .editor-field { width: 100%; }
 	
+
+/***---------- KIOSK ----------***/
+.square {
+    position: relative;
+    margin: 0px;
+   float: left;
+}
+.sq-setter-w {
+    width: 100%;
+    height: auto;
+    visibility: hidden;
+}
+.sq-content {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.w-100per {
+  width: 100%;
+}
+
+.w-50per {
+  width: 50%;
+}
+
+.sq-50per-content {
+  padding: 30% 18%;
+}
+
+.w-25per {
+  width: 25%;
+}
+
+.kiosk-h1 {
+	font-size: 2.5em;
+	line-height: 1.0em;
+	margin: 0 0 1.0em 0;
+}
+
+.kiosk-p {
+	font-size: 1.4em;
+	line-height: 1.2em;
+	margin: 0 0 1.0em 0;
+}
+
+.kiosk-button:link { 
+	border: solid 2px #03205B; 
+	color: #fff; 
+	text-align: center; 
+	font-weight: 700; 
+	font-size: 1.2em;
+	background: #03205B; /* Important! fix for IE & older browsers */    
+	padding: 10px 15px; 
+	border-radius: 8px; 
+	margin: 15px 0 0 0;
+}
+
+.kiosk-button:visited { 
+	border: solid 2px #03205B; 
+	color: #fff; 
+	text-align: center; 
+	font-weight: 700; 
+	font-size: 1.2em;
+	background: #03205B; /* Important! fix for IE & older browsers */    
+	padding: 10px 15px; 
+	border-radius: 8px; 
+	margin: 15px 0 0 0;
+}
+
+.kiosk-button:hover { 
+	border: solid 2px #03205B; 
+	color: #fff; 
+	text-align: center; 
+	font-weight: bold; 
+	font-size: 1.2em;
+	background: #4A94B4; /* Important! fix for IE & older browsers */    
+	padding: 10px 15px; 
+	border-radius: 8px; 
+	margin: 15px 0 0 0;
+}
+
+.kiosk-button:active { 
+	border: solid 2px #03205B; 
+	color: #fff; 
+	text-align: center; 
+	font-weight: 700; 
+	font-size: 1.2em;
+	background: #03205B; /* Important! fix for IE & older browsers */    
+	padding: 10px 15px; 
+	border-radius: 8px; 
+	margin: 15px 0 0 0;
+}
+
+
 	
 
 /***---------- ERROR MESSAGE HANDELING ----------***/

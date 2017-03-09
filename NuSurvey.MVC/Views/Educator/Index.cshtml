@@ -1,0 +1,60 @@
+﻿
+
+
+@{
+    ViewBag.Title = "Index";
+
+}
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'> </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.balloon').bt({ positions: 'bottom' });
+        });
+    </script>
+}
+
+    @*<h3>
+        Educators
+    </h3>
+    <a class="balloon" href='@Url.Action("Index", "SurveyResponse")' title="Answer Surveys"><img alt="Answer Surveys" src="@Url.Image("AnswerSurvey.png")"/></a>
+
+    <a class="balloon" href='@Url.Action("Review", "Survey")' title="Review Your Surveys"><img alt="Review Your Surveys" src="@Url.Image("review.png")"/></a>*@
+
+
+<div class="dashboard-header">
+    <h2>Educator Dashboard</h2>
+    <p>In this section you can quickly enter completed surveys for an entire class and create personalized goal sheets for each participant. You can print multiple goal sheets at once in the Review & Print section below.</p>
+</div>
+
+<div class="dashboard-detail">
+    <h3>Enter A New Survey</h3>
+
+    <ul>
+        <li><a class="educator-icon" href='@Url.Action("Create", "SurveyResponse", new{id=1})' title="Enter Heathy Kids Survey"><img alt="Enter Healthy Kids Survey" src="@Url.Image("AnswerHealthyKids.png")" /></a> </li>
+
+        <li><a class="educator-icon" href='@Url.Action("Create", "SurveyResponse", new {id = 2})' title="Enter My Child Survey"><img alt="Enter My Child at Meal Time Survey" src="@Url.Image("AnswerMyChild.png")"/></a></li>
+
+        <li><a class="educator-icon" href='@Url.Action("Create", "SurveyResponse", new{id=3})' title="Spanish Enter Heathy Kids Survey"><img alt="Enter Healthy Kids Survey" src="@Url.Image("AnswerHealthyKids.png")" /></a> </li>
+
+        <li><a class="educator-icon" href='@Url.Action("Create", "SurveyResponse", new{id=4})' title="Spanish Enter My Child Survey"><img alt="Enter My Child at Meal Time Survey" src="@Url.Image("AnswerMyChild.png")" /></a></li>
+    </ul>
+</div>
+
+<div class="dashboard-detail">
+    <h3>Review & Print Your Saved Surveys</h3>
+    <ul>
+        <li><a class="educator-icon" href='@Url.Action("YourDetails", "Survey", new{id=1})' title="View Heathy Kids Survey Data"><img alt="View Healthy Kids Survey Data" src="@Url.Image("ReviewHealthyKids.png")" /></a></li>
+
+        <li><a class="educator-icon" href='@Url.Action("YourDetails", "Survey", new {id = 2})' title="View My Child Survey Data"><img alt="View My Child at Meal Time Survey Data" src="@Url.Image("ReviewMyChild.png")"/></a></li>
+
+        <li><a class="educator-icon" href='@Url.Action("YourDetails", "Survey", new{id=3})' title="View Spanish Heathy Kids Survey Data"><img alt="View Healthy Kids Survey Data" src="@Url.Image("ReviewHealthyKids.png")" /></a></li>
+
+        <li><a class="educator-icon" href='@Url.Action("YourDetails", "Survey", new{id=4})' title="View Spanish My Child Survey Data"><img alt="View My Child at Meal Time Survey Data" src="@Url.Image("ReviewMyChild.png")" /></a></li>
+    </ul>
+
+</div>
+
+
+

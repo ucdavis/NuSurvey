@@ -1,0 +1,203 @@
+﻿@model NuSurvey.MVC.Controllers.SurveyResponseDetailViewModel
+
+@{
+	ViewBag.Title = "Your Survey Responses";
+}
+
+<link href="@Url.Css("TableTools.css")" rel="stylesheet" type="text/css" />
+
+@section AdditionalScripts{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/DataTables/jquery.dataTables.min.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.bt.min.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/Scripts/TableTools.min.js")'></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#printButton").bt();
+            $("#printButtonWithImage").bt();
+        });
+    </script>
+
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("#filter_container").accordion({ collapsible: true, autoHeight: false, active: false });
+        });
+    </script>
+ 
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#FilterBeginDate").datepicker();
+            $("#FilterEndDate").datepicker();
+
+            $('#yourDetails').dataTable({
+                "bJQueryUI": true,
+                "sDom": 'T<"clear">lfrtip',
+                "oTableTools": {
+                    "sRowSelect": "multi",
+                    "aButtons": ""
+                }
+            });
+
+            ////A hack to fix this being removed by the TableTools above
+            $(".dataTables_info").addClass("mmm-info");
+            $(".dataTables_length").addClass("mmm-length");
+            $(".dataTables_filter").addClass("mmm-filter");
+            $(".dataTables_paginate").addClass("mmm-paginate ");
+            //$(".dataTables_length").before('<span class="ui-widget-header" style="height: 62px; width: 36px; padding-left: 76px; padding-bottom: 19px;"></span>');
+            $(".DTTT_container").removeClass("ui-buttonset");
+
+
+
+        });
+    </script>
+
+    <script type="text/javascript">
+
+
+        function PopulateContainer() {
+            var oTT = TableTools.fnGetInstance('yourDetails');
+            var aSelectedTrs = oTT.fnGetSelected();
+            $(".tempPick").remove();
+            for (i = 0; i < aSelectedTrs.length; i++) {
+                var tempId = $(aSelectedTrs[i]).data("multi-id");
+                $("#pickedContainer").after('<input id="pickedId' + i + '" class="tempPick" type="hidden" value="' + tempId + '" name="picked[' + i + ']" >');
+            }
+        }
+
+    </script>
+}
+
+
+<p>Below is a list of surveys you have entered. You can select multiple surveys and print customized goal sheets by clicking the participants’ name. Click again to remove them from your selection. Once you have selected the desired participants, click the printer icon at the bottom. A PDF will be generated and open in a new window or tab. You can then print or save the file.</p>
+<div id="filter_container">
+    <h3><a href="#">Filters</a></h3>
+    @using (Html.BeginForm("YourDetails", "Survey", FormMethod.Post)) {
+        @Html.AntiForgeryToken();
+
+            <ul>        
+                <li>
+                    <div class="editor-label">
+                        @Html.Label("Response On or After Date")
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(a => a.FilterBeginDate)
+                    </div>
+                </li>
+                <li>
+                    <div class="editor-label">
+                        @Html.Label("Response On or Before Date")
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(a => a.FilterEndDate)
+                    </div>
+                </li>
+                <li>
+                    <label>&nbsp;</label>
+			        <input class="button" type="submit" value="Apply" />
+                </li>
+            </ul>
+
+    }
+</div>
+
+    
+    <table id="yourDetails" class="datatable">
+	    <thead>
+		    <tr>
+			    @*<th></th>*@
+			    <th>
+				    Name
+			    </th>
+			    <th>
+				    DateTaken
+			    </th>
+                <th>
+                    Positive Category
+                </th>
+                <th>
+                    Negative Category
+                </th>
+                <th>
+                    Negative Category
+                </th>
+		    </tr>
+	    </thead>
+	    <tbody>
+    @{ 
+        var odd = false;
+        var count = 0; 
+     }
+    @foreach (var item in Model.SurveyResponses) {
+		    <tr class="@(odd ? "odd": "even")" data-multi-id="@item.Id">
+			    @*<td>
+                    <a href='@Url.Action("Details", "SurveyResponse", new { id = @item.Id, fromYourDetails=true })'><img alt="Details of Survey Response" src="@Url.Image("details.png")"/></a>        
+			    </td>*@
+			    <td>
+				    @item.StudentId
+			    </td>
+			    <td>
+				    @String.Format("{0:g}", item.DateTaken)
+			    </td>
+                <td>
+                    @if (item.PositiveCategory != null) { 
+                        @item.PositiveCategory.Name
+                    }
+                </td>
+                <td>
+                    @if (item.NegativeCategory1 != null) { 
+                        @item.NegativeCategory1.Name
+                    }
+                </td>
+                <td>
+                    @if (item.NegativeCategory2 != null) {
+                        @item.NegativeCategory2.Name
+                    }
+                </td>
+		    </tr>
+		    odd = !odd;
+            count = count + 1;
+    }
+	    </tbody>        
+    </table>
+
+    <div class="dataTables_wrapper fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix">&nbsp;</div>
+
+
+
+
+
+@using (Html.BeginForm("PickResults", "Print", FormMethod.Post, new { target = "_blank" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.Hidden("id", Model.Survey.Id);
+    <div onclick="PopulateContainer()">
+     
+    <div id="pickedContainer">
+    </div>
+
+        <ul>
+            <li>
+                @Html.CheckBox("withBackground", true) With Background Image
+            </li>        
+            <li>
+                <label>&nbsp;</label>
+                <button id="printButton" name="button" title="Click on names above to print goal sheets" style="background-color:transparent; border:none;"><img src="@Url.Image("big_print.png")" /></button>                
+            </li>
+        </ul>
+    </div>
+
+}
+
+                  
+        
+
+
+
+
+
+
+
+
