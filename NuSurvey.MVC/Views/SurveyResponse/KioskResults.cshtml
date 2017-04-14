@@ -36,9 +36,11 @@
 
 <section class="btmMg20"></section>
 
-<section>
+<section id="kiosk-results">
+    <h1>Thank you!</h1>
+    <p>Thank you for completing the survey. Please select the print button to get your personalized Healthy Kids tips. Once your results have printed, click done.</p>
     <input id="sendBtn" class="kiosk-button" type="button" value="Print My Results" onclick="onSendMessage()" />
-    @Html.ActionLink("Start Over", "Kiosk", "Home", null, new {@class = "kiosk-button" })
+    <a class="kiosk-button" href="">Done</a>
 </section>
 
 <form onsubmit='return false;' id="form">
@@ -194,11 +196,11 @@
                 var context = canvas.getContext('2d');
 
                 var maxWidth = 500;
-                var lineHeight = 25;
+                var lineHeight = 27;
                 var x = (canvas.width - maxWidth) / 2;
                 var y = 60;
 
-                var font = '24px Georgia';
+                var font = '26px Georgia';
 
                 context.font = font;
                 context.fillStyle = '#333';
