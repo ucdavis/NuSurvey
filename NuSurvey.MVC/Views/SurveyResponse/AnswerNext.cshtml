@@ -225,21 +225,26 @@
                     }
                     @Html.HtmlEncode(Model.CurrentQuestion.Name) <br />
                     <div class="parent-response-options">
-                        @foreach (var response in Model.CurrentQuestion.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
-                        {
-                            var isChecked = string.Empty;
-                            if (Model.SurveyAnswer != null)
+                        <ul>
+                            @foreach (var response in Model.CurrentQuestion.Responses.Where(a => a.IsActive).OrderBy(x => x.Order))
                             {
-                                if (response.Id == Model.SurveyAnswer.ResponseId)
+                                var isChecked = string.Empty;
+                                if (Model.SurveyAnswer != null)
                                 {
-                                    isChecked = "checked=\"checked\"";
+                                    if (response.Id == Model.SurveyAnswer.ResponseId)
+                                    {
+                                        isChecked = "checked=\"checked\"";
+                                    }
                                 }
+                                <li>
+                                    <label for="Questions[@response.Order]">@response.Value</label>
+                                    <input id="Questions[@response.Order]" type="radio" value="@response.Id" @isChecked name="Questions.ResponseId"/>
+                                    <div class="check">
+                                        <div class="inside"></div>
+                                    </div>
+                                </li>
                             }
-
-                            <input id="Questions[@response.Order]" type="radio" value="@response.Id" @isChecked name="Questions.ResponseId" />
-                            <label for="Questions[@response.Order]">@response.Value</label>
-                            <br />
-                        }
+                        </ul>
                     </div>
                 }
                 @Html.ValidationMessage("Questions")
