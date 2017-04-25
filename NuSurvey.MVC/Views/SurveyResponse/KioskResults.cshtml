@@ -38,7 +38,9 @@
 
 <section id="kiosk-results">
     <h1>Thank you!</h1>
-    <p>Thank you for completing the survey. Please select the print button to get your personalized Healthy Kids tips. Once your results have printed, click done.</p>
+    <p>Thank you for completing the survey.</p>
+    <p>Please select the print button to get your personalized Healthy Kids tips.</p>
+    <p>Once your results have printed, click done.</p>
     <input id="sendBtn" class="kiosk-button" type="button" value="Print My Results" onclick="onSendMessage()" />
     @Html.ActionLink("Done", "Kiosk", "Home", null, new { @class = "kiosk-button" })
 </section>
