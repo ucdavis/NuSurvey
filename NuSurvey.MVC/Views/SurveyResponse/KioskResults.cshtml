@@ -38,7 +38,9 @@
 
 <section id="kiosk-results">
     <h1>Thank you!</h1>
-    <p>Thank you for completing the survey. Please select the print button to get your personalized Healthy Kids tips. Once your results have printed, click done.</p>
+    <p>Thank you for completing the survey.</p>
+    <p>Please select the print button to get your personalized Healthy Kids tips.</p>
+    <p>Once your results have printed, click done.</p>
     <input id="sendBtn" class="kiosk-button" type="button" value="Print My Results" onclick="onSendMessage()" />
     @Html.ActionLink("Done", "Kiosk", "Home", null, new { @class = "kiosk-button" })
 </section>
@@ -258,6 +260,7 @@
                 wrapText(context, 'Here are easy tips to keep your child healthy.', x, cursor, maxWidth, lineHeight);
                 cursor += lineSpace;
                 cursor += lineSpace;
+                cursor += lineSpace;
 
                 var negativeCategory1 = @Html.Raw(Json.Encode(Model.SurveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive).Select(a => a.Name).ToArray()));
                 negativeCategory1.forEach(function(e) {
@@ -276,6 +279,7 @@
                 cursor += lineSpace;
 
                 wrapText(context, 'Together, select one tip to work on this week.', x, cursor, maxWidth, lineHeight);
+                cursor += lineSpace;
                 cursor += lineSpace;
                 cursor += lineSpace;
 
