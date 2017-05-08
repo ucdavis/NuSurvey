@@ -125,7 +125,7 @@ form fieldset ul, .display-form { padding: 10px 200px; }
 
 form ul li { list-style-type: none; margin: 10px 0; }
 
-.display-mcmt-question input.button, .display-hk-question input.button, .display-kiosk-question input.button { float: right; }
+.display-mcmt-question input.button, .display-hk-question input.button, .display-kiosk-question input.button { float: right; margin-top: 50px; }
 
 input.button { font-size: 1.2em; padding: 3px 15px 3px; background: #ede6de; /* Old browsers */ background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4); background: -moz-linear-gradient(top, #EDE6DE, #E7DED4); background: -o-linear-gradient(top, #EDE6DE, #E7DED4); background: -ms-linear-gradient(top, #EDE6DE, #E7DED4); background: linear-gradient(top, #EDE6DE #E7DED4); -webkit-border-radius: 4px; -khtml-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #603813; }
 
