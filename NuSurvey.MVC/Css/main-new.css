@@ -394,8 +394,9 @@ div .editor-label .bypass { padding: 5px 0; }
 
 #kiosk-results p {
 	font: 20px/30px 'Source Sans Pro',Arial,sans-serif;
+	margin: 10px 0 10px 0;
 }
-.kiosk-button { 
+#kiosk-results input, .kiosk-button, .kiosk-button:link { 
 	border: solid 2px #03205B; 
 	color: #fff; 
 	text-align: center; 
@@ -404,19 +405,6 @@ div .editor-label .bypass { padding: 5px 0; }
 	background: #03205B; /* Important! fix for IE & older browsers */    
 	padding: 13px 20px; 
 	border-radius: 8px; 
-	margin: 45px 40px 0 0;
-}
-
-.kiosk-button:link { 
-	border: solid 2px #03205B; 
-	color: #fff; 
-	text-align: center; 
-	font-weight: 700; 
-	font-size: 1.3em;
-	background: #03205B; /* Important! fix for IE & older browsers */    
-	padding: 13px 20px; 
-	border-radius: 8px; 
-	margin: 45px 40px 0 0;
 }
 
 .kiosk-button:visited { 
@@ -456,7 +444,6 @@ div .editor-label .bypass { padding: 5px 0; }
 }
 
 
-#sendBtn { margin-left: 15%; }
 
 
 
