@@ -12,6 +12,7 @@ using NuSurvey.MVC.Resources;
 using NuSurvey.MVC.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
+using UCDArch.Web.ActionResults;
 using UCDArch.Web.Helpers;
 
 namespace NuSurvey.MVC.Controllers
@@ -831,6 +832,27 @@ namespace NuSurvey.MVC.Controllers
             //}
 
             return View(viewModel);
+        }
+
+        public JsonNetResult PrintResults(int id, Guid? publicGuid, string email)
+        {
+            var success = false;
+            var message = string.Empty;
+
+            var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+            if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+            {
+                surveyResponse = (SurveyResponse)Session[publicGuid.ToString()];
+            }
+
+            if (surveyResponse == null)
+            {
+                message = "Results not found. No email sent.";
+                return new JsonNetResult(new { success, message });
+            }
+
+
+            return new JsonNetResult(new { success, message });
         }
 
 

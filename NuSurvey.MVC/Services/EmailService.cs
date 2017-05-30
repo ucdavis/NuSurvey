@@ -13,6 +13,8 @@ namespace NuSurvey.MVC.Services
     {
         void SendPasswordReset(string userName, string tempPass);
         void SendNewUser(HttpRequestBase request, UrlHelper url, string userName, string tempPass);
+
+        void SendResults(string userEmail, string body, bool htmlBody = false);
     }
 
     public class EmailService : IEmailService
@@ -47,6 +49,19 @@ namespace NuSurvey.MVC.Services
             client.Send(mail);
 
         }
+
+        public void SendResults(string userEmail, string body, bool htmlBody = false)
+        {
+            var mail = new MailMessage("automatedemail@caes.ucdavis.edu", userEmail);
+            mail.Subject = "Your Healthy Kids Results";
+            mail.IsBodyHtml = htmlBody;
+            mail.Body = body;
+
+            var client = new SmtpClient();
+            client.Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("SmtpAccount"), CloudConfigurationManager.GetSetting("SmtpPassword"));
+            client.Send(mail);
+        }
+
 
         private string GetAbsoluteUrl(HttpRequestBase request, UrlHelper url, string relative)
         {
