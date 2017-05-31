@@ -26,13 +26,15 @@ namespace NuSurvey.MVC.Controllers
         private readonly IScoreService _scoreService;
         private readonly IRepository<Photo> _photoRepository;
         private readonly IBlobStoargeService _blobStoargeService;
+        private readonly IEmailService _emailService;
 
-        public SurveyResponseController(IRepository<SurveyResponse> surveyResponseRepository, IScoreService scoreService, IRepository<Photo> photoRepository, IBlobStoargeService blobStoargeService)
+        public SurveyResponseController(IRepository<SurveyResponse> surveyResponseRepository, IScoreService scoreService, IRepository<Photo> photoRepository, IBlobStoargeService blobStoargeService, IEmailService emailService)
         {
             _surveyResponseRepository = surveyResponseRepository;
             _scoreService = scoreService;
             _photoRepository = photoRepository;
             _blobStoargeService = blobStoargeService;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -834,7 +836,7 @@ namespace NuSurvey.MVC.Controllers
             return View(viewModel);
         }
 
-        public JsonNetResult PrintResults(int id, Guid? publicGuid, string email)
+        public JsonNetResult EmailResults(int id, Guid? publicGuid, string email)
         {
             var success = false;
             var message = string.Empty;
@@ -842,7 +844,7 @@ namespace NuSurvey.MVC.Controllers
             var surveyResponse = _surveyResponseRepository.GetNullableById(id);
             if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
             {
-                surveyResponse = (SurveyResponse)Session[publicGuid.ToString()];
+                surveyResponse = (SurveyResponse) Session[publicGuid.ToString()];
             }
 
             if (surveyResponse == null)
@@ -850,6 +852,31 @@ namespace NuSurvey.MVC.Controllers
                 message = "Results not found. No email sent.";
                 return new JsonNetResult(new { success, message });
             }
+
+            if (!CurrentUser.IsInRole(RoleNames.Admin))
+            {
+                if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+                {
+                    if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+                    {
+                        message = "Access Denied. No email sent.";
+                        return new JsonNetResult(new { success, message });
+                    }
+                }
+                else
+                {
+                    if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
+                    {
+                        message = "Access Denied. No email sent.";
+                        return new JsonNetResult(new { success, message });
+                    }
+                }
+            }
+
+
+
+
+            _emailService.SendResults("jsylvestre@ucdavis.edu", "test");
 
 
             return new JsonNetResult(new { success, message });
