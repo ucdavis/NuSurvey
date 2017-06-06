@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 using MvcContrib;
 using NuSurvey.Core.Domain;
@@ -873,10 +874,38 @@ namespace NuSurvey.MVC.Controllers
                 }
             }
 
+            //TODO: Language Choice
+            //TODO: Check if Kiosk Page has different results displays.
+            //TODO: Html Body?
 
+            var body = new StringBuilder();
+            body.AppendLine("Thank You!");
+            body.AppendLine("Thank you for completing the survey");
+            body.AppendLine("");
+            body.AppendLine("HEALTHY KIDS");
+            body.AppendLine("");
+            body.AppendLine("REPORT CARD");
+            body.AppendLine(string.Format("Thank you for taking the time to complete the Healthy Kids quiz for your child, {0}. We hope this feedback will help you make healthy food and activity choices for your family.", surveyResponse.StudentId));
+            body.AppendLine("================================");
+            body.AppendLine(surveyResponse.PositiveCategory.Affirmation);
+            body.AppendLine("================================");
+            body.AppendLine(surveyResponse.NegativeCategory1.Encouragement);
+            body.AppendLine("Here are easy tips to keep your child healthy.");
+            foreach (var categoryGoal in surveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
+            {
+                body.AppendLine(categoryGoal.Name);
+            }
+            body.AppendLine("================================");
+            body.AppendLine("Share these results with your doctor.");
+            body.AppendLine("Together, select one tip to work on this week.");
+            body.AppendLine("Be sure to ask your doctor about the free nutrition classes offered at this clinic.");
+            body.AppendLine("");
+            body.AppendLine("UC DAVIS");
+            body.AppendLine("");
+            body.AppendLine("");
+            body.AppendLine("Please do not reply to this email. It isn't monitored.");
 
-
-            _emailService.SendResults("jsylvestre@ucdavis.edu", "test");
+            _emailService.SendResults("jsylvestre@ucdavis.edu", body.ToString());
 
 
             return new JsonNetResult(new { success, message });
