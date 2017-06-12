@@ -467,7 +467,6 @@
                     if (!validateEmail(email)) {
                         alert("Invalid email");
                     } else {
-                        alert(email + pg);
                         $.ajax({
                             type: 'POST',
                             url: '@Url.Action("EmailResults", "SurveyResponse")',
