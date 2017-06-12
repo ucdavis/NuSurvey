@@ -207,7 +207,7 @@
                         }
                         @if (Model.CurrentQuestion.OpenEndedQuestionType == (int) NuSurvey.Core.Domain.QuestionType.WholeNumber || Model.CurrentQuestion.OpenEndedQuestionType == (int) NuSurvey.Core.Domain.QuestionType.Decimal)
                         {
-                            <input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer"/>
+                            <input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer" autocomplete="off" />
                         }
                     </div>
 
