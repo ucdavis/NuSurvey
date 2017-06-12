@@ -905,7 +905,7 @@ namespace NuSurvey.MVC.Controllers
             body.AppendLine("");
             body.AppendLine("Please do not reply to this email. It isn't monitored.");
 
-            _emailService.SendResults("jsylvestre@ucdavis.edu", body.ToString());
+            _emailService.SendResults(email, body.ToString());
 
 
             return new JsonNetResult(new { success, message });
