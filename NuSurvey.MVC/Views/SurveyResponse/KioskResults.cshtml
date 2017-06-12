@@ -470,9 +470,11 @@
                         $.ajax({
                             type: 'POST',
                             url: '@Url.Action("EmailResults", "SurveyResponse")',
-                            data: { id: 0, publicGuid: pg, __RequestVerificationToken: antiforgery }
+                            data: { id: 0, publicGuid: pg, email: email, __RequestVerificationToken: antiforgery }
                         }).success(function(response) {
                             if (response.success === false) {
+                                alert(response.message);
+                            } else {
                                 alert(response.message);
                             }
                         }).fail(function() {
