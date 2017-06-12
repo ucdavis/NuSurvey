@@ -461,6 +461,7 @@
         $(function() {
             $("#send").on("click",
                 function() {
+                    $("#primaryDonorEdits").modal('hide');
                     var email = $("#email").val();
                     var antiforgery = $("input[name='__RequestVerificationToken']").val();
                     var pg = '@Model.PublicGuid';
