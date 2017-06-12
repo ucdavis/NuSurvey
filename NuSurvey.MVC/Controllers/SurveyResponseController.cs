@@ -929,7 +929,7 @@ namespace NuSurvey.MVC.Controllers
                 body.AppendLine("<p>Here are easy tips to keep your child healthy.</p>");
                 foreach (var categoryGoal in surveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
                 {
-                    body.AppendLine(categoryGoal.Name);
+                    body.AppendLine(string.Format("<p>&#9745; {0}</p>", categoryGoal.Name)); //Checked checkbox
                 }
                 body.AppendLine("<hr/>");
                 body.AppendLine("<p>Share these results with your doctor.</p>");
