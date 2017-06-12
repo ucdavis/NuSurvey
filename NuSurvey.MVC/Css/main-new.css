@@ -113,7 +113,7 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 .display-mcmt-question .editor-field, .display-hk-question .editor-field, .display-kiosk-question .editor-field { text-align: center; font-weight: bold;}
 
-.parent-response-options { text-align: left; font-weight: 600; /* margin-top: 1em; */ margin-left: 60%; }
+.parent-response-options { text-align: left; font-weight: 600; /* margin-top: 1em; */ margin-left: 57%; }
 
 form { text-align: left; }
 
@@ -125,7 +125,7 @@ form fieldset ul, .display-form { padding: 10px 200px; }
 
 form ul li { list-style-type: none; margin: 10px 0; }
 
-.display-mcmt-question input.button, .display-hk-question input.button, .display-kiosk-question input.button { float: right; }
+.display-mcmt-question input.button, .display-hk-question input.button, .display-kiosk-question input.button { float: right; margin-top: 50px; }
 
 input.button { font-size: 1.2em; padding: 3px 15px 3px; background: #ede6de; /* Old browsers */ background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4); background: -moz-linear-gradient(top, #EDE6DE, #E7DED4); background: -o-linear-gradient(top, #EDE6DE, #E7DED4); background: -ms-linear-gradient(top, #EDE6DE, #E7DED4); background: linear-gradient(top, #EDE6DE #E7DED4); -webkit-border-radius: 4px; -khtml-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #603813; }
 
@@ -394,8 +394,9 @@ div .editor-label .bypass { padding: 5px 0; }
 
 #kiosk-results p {
 	font: 20px/30px 'Source Sans Pro',Arial,sans-serif;
+	margin: 10px 0 10px 0;
 }
-.kiosk-button { 
+#kiosk-results input, .kiosk-button, .kiosk-button:link { 
 	border: solid 2px #03205B; 
 	color: #fff; 
 	text-align: center; 
@@ -404,19 +405,6 @@ div .editor-label .bypass { padding: 5px 0; }
 	background: #03205B; /* Important! fix for IE & older browsers */    
 	padding: 13px 20px; 
 	border-radius: 8px; 
-	margin: 45px 40px 0 0;
-}
-
-.kiosk-button:link { 
-	border: solid 2px #03205B; 
-	color: #fff; 
-	text-align: center; 
-	font-weight: 700; 
-	font-size: 1.3em;
-	background: #03205B; /* Important! fix for IE & older browsers */    
-	padding: 13px 20px; 
-	border-radius: 8px; 
-	margin: 45px 40px 0 0;
 }
 
 .kiosk-button:visited { 
@@ -428,7 +416,7 @@ div .editor-label .bypass { padding: 5px 0; }
 	background: #03205B; /* Important! fix for IE & older browsers */    
 	padding: 13px 20px; 
 	border-radius: 8px; 
-	margin: 45px 40px 0 0;
+	/* margin: 45px 40px 0 0; */
 }
 
 .kiosk-button:hover { 
@@ -440,7 +428,7 @@ div .editor-label .bypass { padding: 5px 0; }
 	background: #4A94B4; /* Important! fix for IE & older browsers */    
 	padding: 13px 20px; 
 	border-radius: 8px; 
-	margin: 45px 40px 0 0;
+	/* margin: 45px 40px 0 0; */
 }
 
 .kiosk-button:active { 
@@ -452,11 +440,10 @@ div .editor-label .bypass { padding: 5px 0; }
 	background: #03205B; /* Important! fix for IE & older browsers */    
 	padding: 13px 20px; 
 	border-radius: 8px; 
-	margin: 45px 40px 0 0;
+	/* margin: 45px 40px 0 0; */
 }
 
 
-#sendBtn { margin-left: 15%; }
 
 
 
