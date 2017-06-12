@@ -842,6 +842,9 @@ namespace NuSurvey.MVC.Controllers
             var success = false;
             var message = string.Empty;
 
+            _emailService.SendResults("jsylvestre@ucdavis.edu", "test");
+            return new JsonNetResult(new {success= 1});
+
             try
             {
 
