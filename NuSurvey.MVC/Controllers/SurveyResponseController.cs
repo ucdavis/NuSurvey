@@ -918,25 +918,25 @@ namespace NuSurvey.MVC.Controllers
                 body.Append("<br/>");
                 body.Append("<p style='font-weight: bold'>HEALTHY KIDS</p>");
                 body.Append("<br/>");
-                body.Append("<p>REPORT CARD</p>");
+                body.Append("<h1>REPORT CARD</h1>");
                 body.Append(string.Format(
                     "<p>Thank you for taking the time to complete the Healthy Kids quiz for your child, {0}. We hope this feedback will help you make healthy food and activity choices for your family.</p>",
                     surveyResponse.StudentId));
                 body.Append("<hr/>");
-                body.Append(surveyResponse.PositiveCategory.Affirmation);
+                body.Append(string.Format("<h2>{0}</h2>", surveyResponse.PositiveCategory.Affirmation));
                 body.Append("<hr/>");
-                body.Append(surveyResponse.NegativeCategory1.Encouragement);
-                body.Append("<p>Here are easy tips to keep your child healthy.</p>");
+                body.Append(string.Format("<h2>{0}</h2>", surveyResponse.NegativeCategory1.Encouragement));
+                body.Append("<h3>Here are easy tips to keep your child healthy.</h3>");
                 foreach (var categoryGoal in surveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
                 {
-                    body.Append(string.Format("<p>&#9745; {0}</p>", categoryGoal.Name)); //Checked checkbox
+                    body.Append(string.Format("<p>&#9744; {0}</p>", categoryGoal.Name)); //Checked checkbox unchecked  Checked &#9745;
                 }
                 body.Append("<hr/>");
                 body.Append("<p>Share these results with your doctor.</p>");
                 body.Append("<p>Together, select one tip to work on this week.</p>");
                 body.Append("<p>Be sure to ask your doctor about the free nutrition classes offered at this clinic.</p>");
                 body.Append("<br/>");
-                body.Append("<p>UC DAVIS</p>");
+                body.Append("<p style='font-weight: bold'>UC DAVIS</p>");
                 body.Append("<br/>");
                 body.Append("<br/>");
                 body.Append("<p>Please do not reply to this email. It isn't monitored.</p>");
