@@ -916,7 +916,7 @@ namespace NuSurvey.MVC.Controllers
                 body.Append("<h1>Thank You!</h1>");
                 body.Append("<h2>Thank you for completing the survey</h2>");
                 body.Append("<br/>");
-                body.Append("<p style='font-weight: bold'>HEALTHY KIDS</p>");
+                body.Append("<h1'>HEALTHY KIDS</h1>");
                 body.Append("<br/>");
                 body.Append("<h1>REPORT CARD</h1>");
                 body.Append(string.Format(
