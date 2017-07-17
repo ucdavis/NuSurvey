@@ -913,14 +913,15 @@ namespace NuSurvey.MVC.Controllers
                 //_emailService.SendResults(email, body.ToString());
 
                 var image1 = _emailService.GetAbsoluteUrl(Request, Url, "~/Images/HK_Logo_BW_Kiosk.jpg");
+                var image2 = _emailService.GetAbsoluteUrl(Request, Url, "~/Images/UCD_Logo_Black_Kiosk.jpg");
 
                 var body = new StringBuilder();
                 body.Append("<h1>Thank You!</h1>");
                 body.Append("<h2>Thank you for completing the survey</h2>");
+                //body.Append("<br/>");
+                //body.Append("<h1>HEALTHY KIDS</h1>");
                 body.Append("<br/>");
-                body.Append("<h1>HEALTHY KIDS</h1>");
-                body.Append("<br/>");
-                body.Append(string.Format("<img src='{0}'/>", image1));
+                body.Append(string.Format("<div style='width: 100%; text-align: center'><img src='{0}'/></div>", image1));
                 body.Append("<br/>");
                 body.Append("<h1 style='width: 100%; text-align: center'>REPORT CARD</h1>");
                 body.Append(string.Format(
@@ -939,8 +940,10 @@ namespace NuSurvey.MVC.Controllers
                 body.Append("<p>Share these results with your doctor.</p>");
                 body.Append("<p>Together, select one tip to work on this week.</p>");
                 body.Append("<p>Be sure to ask your doctor about the free nutrition classes offered at this clinic.</p>");
+                //body.Append("<br/>");
+                //body.Append("<p style='font-weight: bold'>UC DAVIS</p>");
                 body.Append("<br/>");
-                body.Append("<p style='font-weight: bold'>UC DAVIS</p>");
+                body.Append(string.Format("<div style='width: 100%; text-align: center'><img src='{0}'/></div>", image2));
                 body.Append("<br/>");
                 body.Append("<br/>");
                 body.Append("<p>Please do not reply to this email. It isn't monitored.</p>");
