@@ -15,6 +15,8 @@ namespace NuSurvey.MVC.Services
         void SendNewUser(HttpRequestBase request, UrlHelper url, string userName, string tempPass);
 
         void SendResults(string userEmail, string body, bool htmlBody = false);
+
+        string GetAbsoluteUrl(HttpRequestBase request, UrlHelper url, string relative);
     }
 
     public class EmailService : IEmailService
@@ -63,7 +65,7 @@ namespace NuSurvey.MVC.Services
         }
 
 
-        private string GetAbsoluteUrl(HttpRequestBase request, UrlHelper url, string relative)
+        public string GetAbsoluteUrl(HttpRequestBase request, UrlHelper url, string relative)
         {
             return string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Host, url.Content(relative));
         }
