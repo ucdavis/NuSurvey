@@ -921,7 +921,7 @@ namespace NuSurvey.MVC.Controllers
                 //body.Append("<br/>");
                 //body.Append("<h1>HEALTHY KIDS</h1>");
                 body.Append("<br/>");
-                body.Append(string.Format("<div style='width: 100%; text-align: center'><img src='{0}'/></div>", image1));
+                body.Append(string.Format("<div style='width: 100%; text-align: center'><img src='{0}' alt='HEALTHY KIDS'/></div>", image1));
                 body.Append("<br/>");
                 body.Append("<h1 style='width: 100%; text-align: center'>REPORT CARD</h1>");
                 body.Append(string.Format(
@@ -943,7 +943,7 @@ namespace NuSurvey.MVC.Controllers
                 //body.Append("<br/>");
                 //body.Append("<p style='font-weight: bold'>UC DAVIS</p>");
                 body.Append("<br/>");
-                body.Append(string.Format("<div style='width: 100%; text-align: center'><img src='{0}'/></div>", image2));
+                body.Append(string.Format("<div style='width: 100%; text-align: center'><img src='{0}' alt='UC DAVIS'/></div>", image2));
                 body.Append("<br/>");
                 body.Append("<br/>");
                 body.Append("<p>Please do not reply to this email. It isn't monitored.</p>");
