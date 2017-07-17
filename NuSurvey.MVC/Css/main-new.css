@@ -384,7 +384,7 @@ div .editor-label .bypass { padding: 5px 0; }
 }
 
 #kiosk-results {
-	margin-bottom: 400px;
+	margin-bottom: 600px;
 }
 
 #kiosk-results h1 {
@@ -397,50 +397,55 @@ div .editor-label .bypass { padding: 5px 0; }
 	margin: 10px 0 10px 0;
 }
 #kiosk-results input, .kiosk-button, .kiosk-button:link { 
+	font: 25px 'Source Sans Pro',Arial,sans-serif;	
 	border: solid 2px #03205B; 
 	color: #fff; 
 	text-align: center; 
 	font-weight: 700; 
-	font-size: 1.3em;
 	background: #03205B; /* Important! fix for IE & older browsers */    
 	padding: 13px 20px; 
-	border-radius: 8px; 
+	border-radius: 8px;
+	display: inline-block; 
+	margin: 0px 0 25px 0;
 }
 
 .kiosk-button:visited { 
+	font: 25px 'Source Sans Pro',Arial,sans-serif;
 	border: solid 2px #03205B; 
 	color: #fff; 
 	text-align: center; 
 	font-weight: 700; 
-	font-size: 1.3em;
 	background: #03205B; /* Important! fix for IE & older browsers */    
 	padding: 13px 20px; 
-	border-radius: 8px; 
-	/* margin: 45px 40px 0 0; */
+	border-radius: 8px;
+	display: inline-block; 
+	margin: 0px 0 25px 0;
 }
 
 .kiosk-button:hover { 
+	font: 25px 'Source Sans Pro',Arial,sans-serif;
 	border: solid 2px #03205B; 
 	color: #fff; 
 	text-align: center; 
 	font-weight: bold; 
-	font-size: 1.3em;
 	background: #4A94B4; /* Important! fix for IE & older browsers */    
 	padding: 13px 20px; 
-	border-radius: 8px; 
-	/* margin: 45px 40px 0 0; */
+	border-radius: 8px;
+	display: inline-block; 
+	margin: 0px 0 25px 0;
 }
 
 .kiosk-button:active { 
+	font: 25px 'Source Sans Pro',Arial,sans-serif;
 	border: solid 2px #03205B; 
 	color: #fff; 
 	text-align: center; 
 	font-weight: 700; 
-	font-size: 1.3em;
 	background: #03205B; /* Important! fix for IE & older browsers */    
 	padding: 13px 20px; 
 	border-radius: 8px; 
-	/* margin: 45px 40px 0 0; */
+	display: inline-block; 
+	margin: 0px 0 25px 0;
 }
 
 
