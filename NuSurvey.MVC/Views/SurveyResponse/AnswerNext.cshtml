@@ -115,9 +115,9 @@
 
     @if (!Model.Survey.ShortName.IsSpanish() && Model.Survey.ShortName.ToLower().Trim() == "hk") //Don't really need the IsSpanish, just thinking of future.
     {
-        <div class="quiz-inst">
+        @*<div class="quiz-inst">
             <img src='@Url.Image("hk-header.png")'/>
-        </div>
+        </div>*@
     }
     @if ((bool)ViewBag.IsKiosk)
     {
