@@ -115,9 +115,9 @@
 
     @if (!Model.Survey.ShortName.IsSpanish() && Model.Survey.ShortName.ToLower().Trim() == "hk") //Don't really need the IsSpanish, just thinking of future.
     {
-        <div class="quiz-inst">
+        @*<div class="quiz-inst">
             <img src='@Url.Image("hk-header.png")'/>
-        </div>
+        </div>*@
     }
     @if ((bool)ViewBag.IsKiosk)
     {
@@ -140,7 +140,7 @@
     
     <input id="byPassAnswer" name="byPassAnswer" type="hidden" />
 
-    <fieldset class="@ViewBag.KioskClass">
+    <fieldset class="@ViewBag.KioskClass @ViewBag.questionDisplay">
     @* Legend is required if you have more than one widget/unit to help the user understand what is being asked of them.
     Example: Dinosaur 1  *@
 	    @*<legend>Survey Response</legend>*@
@@ -207,7 +207,7 @@
                         }
                         @if (Model.CurrentQuestion.OpenEndedQuestionType == (int) NuSurvey.Core.Domain.QuestionType.WholeNumber || Model.CurrentQuestion.OpenEndedQuestionType == (int) NuSurvey.Core.Domain.QuestionType.Decimal)
                         {
-                            <input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer"/>
+                            <input id="Questions" class="text-box single-line" type="text" value="@ans" name="Questions.Answer" autocomplete="off" />
                         }
                     </div>
 

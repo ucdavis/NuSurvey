@@ -8,6 +8,8 @@
     <meta name="author" content="Jason Sylvestre"/>
 
     <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" />
+    
+    @RenderSection("AdditionalStylesBeforeMain", false)
 
     <link href="@Url.Css("jquery-ui-1.8.11.custom.css")" rel="Stylesheet" type="text/css" />
     <link href="@Url.Css("jquery-ui-timepicker.css")" rel="stylesheet" type="text/css" />
@@ -63,7 +65,7 @@
         <div class="main @ViewBag.surveyimage">
             @RenderSection("QuizImage", false)
             <div class="container-center">
-                <div class="@ViewBag.questionDisplay">
+                <div>
                     <div id="messagecontainer">
                         @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
                         {

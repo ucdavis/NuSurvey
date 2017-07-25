@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 using MvcContrib;
 using NuSurvey.Core.Domain;
@@ -12,6 +13,7 @@ using NuSurvey.MVC.Resources;
 using NuSurvey.MVC.Services;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
+using UCDArch.Web.ActionResults;
 using UCDArch.Web.Helpers;
 
 namespace NuSurvey.MVC.Controllers
@@ -25,13 +27,15 @@ namespace NuSurvey.MVC.Controllers
         private readonly IScoreService _scoreService;
         private readonly IRepository<Photo> _photoRepository;
         private readonly IBlobStoargeService _blobStoargeService;
+        private readonly IEmailService _emailService;
 
-        public SurveyResponseController(IRepository<SurveyResponse> surveyResponseRepository, IScoreService scoreService, IRepository<Photo> photoRepository, IBlobStoargeService blobStoargeService)
+        public SurveyResponseController(IRepository<SurveyResponse> surveyResponseRepository, IScoreService scoreService, IRepository<Photo> photoRepository, IBlobStoargeService blobStoargeService, IEmailService emailService)
         {
             _surveyResponseRepository = surveyResponseRepository;
             _scoreService = scoreService;
             _photoRepository = photoRepository;
             _blobStoargeService = blobStoargeService;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -831,6 +835,130 @@ namespace NuSurvey.MVC.Controllers
             //}
 
             return View(viewModel);
+        }
+
+        public JsonNetResult EmailResults(int id, Guid? publicGuid, string email)
+        {
+            var success = false;
+            var message = string.Empty;
+
+            try
+            {
+
+                var surveyResponse = _surveyResponseRepository.GetNullableById(id);
+                if (string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+                {
+                    surveyResponse = (SurveyResponse) Session[publicGuid.ToString()];
+                }
+
+                if (surveyResponse == null)
+                {
+                    message = "Results not found. No email sent.";
+                    return new JsonNetResult(new {success, message});
+                }
+
+                if (!CurrentUser.IsInRole(RoleNames.Admin))
+                {
+                    if (!string.IsNullOrWhiteSpace(CurrentUser.Identity.Name))
+                    {
+                        if (surveyResponse.UserId.ToLower() != CurrentUser.Identity.Name.ToLower())
+                        {
+                            message = "Access Denied. No email sent.";
+                            return new JsonNetResult(new {success, message});
+                        }
+                    }
+                    else
+                    {
+                        if (surveyResponse.UserId.ToLower() != publicGuid.ToString().ToLower())
+                        {
+                            message = "Access Denied. No email sent.";
+                            return new JsonNetResult(new {success, message});
+                        }
+                    }
+                }
+
+                //TODO: Language Choice
+                //TODO: Check if Kiosk Page has different results displays.
+                //TODO: Html Body?
+
+                //var body = new StringBuilder();
+                //body.AppendLine("Thank You!");
+                //body.AppendLine("Thank you for completing the survey");
+                //body.AppendLine("");
+                //body.AppendLine("HEALTHY KIDS");
+                //body.AppendLine("");
+                //body.AppendLine("REPORT CARD");
+                //body.AppendLine(string.Format(
+                //    "Thank you for taking the time to complete the Healthy Kids quiz for your child, {0}. We hope this feedback will help you make healthy food and activity choices for your family.",
+                //    surveyResponse.StudentId));
+                //body.AppendLine("================================");
+                //body.AppendLine(surveyResponse.PositiveCategory.Affirmation);
+                //body.AppendLine("================================");
+                //body.AppendLine(surveyResponse.NegativeCategory1.Encouragement);
+                //body.AppendLine("Here are easy tips to keep your child healthy.");
+                //foreach (var categoryGoal in surveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
+                //{
+                //    body.AppendLine(categoryGoal.Name);
+                //}
+                //body.AppendLine("================================");
+                //body.AppendLine("Share these results with your doctor.");
+                //body.AppendLine("Together, select one tip to work on this week.");
+                //body.AppendLine("Be sure to ask your doctor about the free nutrition classes offered at this clinic.");
+                //body.AppendLine("");
+                //body.AppendLine("UC DAVIS");
+                //body.AppendLine("");
+                //body.AppendLine("");
+                //body.AppendLine("Please do not reply to this email. It isn't monitored.");
+
+                //_emailService.SendResults(email, body.ToString());
+
+                var image1 = _emailService.GetAbsoluteUrl(Request, Url, "~/Images/HK_Logo_BW_Kiosk.jpg");
+                var image2 = _emailService.GetAbsoluteUrl(Request, Url, "~/Images/UCD_Logo_Black_Kiosk.jpg");
+
+                var body = new StringBuilder();
+                body.Append("<h1>Thank You!</h1>");
+                body.Append("<h2>Thank you for completing the survey</h2>");
+                //body.Append("<br/>");
+                //body.Append("<h1>HEALTHY KIDS</h1>");
+                body.Append("<br/>");
+                body.Append(string.Format("<div style='width: 100%; text-align: center'><img src='{0}' alt='HEALTHY KIDS'/></div>", image1));
+                body.Append("<br/>");
+                body.Append("<h1 style='width: 100%; text-align: center'>REPORT CARD</h1>");
+                body.Append(string.Format(
+                    "<p>Thank you for taking the time to complete the Healthy Kids quiz for your child, {0}. We hope this feedback will help you make healthy food and activity choices for your family.</p>",
+                    surveyResponse.StudentId));
+                body.Append("<hr/>");
+                body.Append(string.Format("<h2>{0}</h2>", surveyResponse.PositiveCategory.Affirmation));
+                body.Append("<hr/>");
+                body.Append(string.Format("<h2>{0}</h2>", surveyResponse.NegativeCategory1.Encouragement));
+                body.Append("<h3>Here are easy tips to keep your child healthy.</h3>");
+                foreach (var categoryGoal in surveyResponse.NegativeCategory1.CategoryGoals.Where(x => x.IsActive))
+                {
+                    body.Append(string.Format("<p>&#9744; {0}</p>", categoryGoal.Name)); //Checked checkbox unchecked  Checked &#9745;
+                }
+                body.Append("<hr/>");
+                body.Append("<p>Share these results with your doctor.</p>");
+                body.Append("<p>Together, select one tip to work on this week.</p>");
+                body.Append("<p>Be sure to ask your doctor about the free nutrition classes offered at this clinic.</p>");
+                //body.Append("<br/>");
+                //body.Append("<p style='font-weight: bold'>UC DAVIS</p>");
+                body.Append("<br/>");
+                body.Append(string.Format("<div style='width: 100%; text-align: center'><img src='{0}' alt='UC DAVIS'/></div>", image2));
+                body.Append("<br/>");
+                body.Append("<br/>");
+                body.Append("<p>Please do not reply to this email. It isn't monitored.</p>");
+
+                _emailService.SendResults(email, body.ToString(), true);
+
+                success = true;
+                message = "Email Sent";
+            }
+            catch (Exception e)
+            {
+                return new JsonNetResult(new {success, message = "An internal error occurred."}); 
+            }
+
+            return new JsonNetResult(new { success, message });
         }
 
 
