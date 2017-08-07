@@ -38,15 +38,37 @@
 
 <section class="btmMg20"></section>
 
-<section id="kiosk-results">
-    <h1>Thank you!</h1>
-    <p>Thank you for completing the survey.</p>
-    <p>Please select the print button to get your personalized Healthy Kids tips.</p>
-    <p><input id="sendBtn" class="kiosk-button" type="button" value="Print My Results" onclick="onSendMessage()" /> <button class="kiosk-button" data-toggle="modal" data-target="#primaryDonorEdits">Email Results</button></p>
-    
-    <p>Once your results have printed, click done.</p>
 
-    <p>@Html.ActionLink("Done", "Kiosk", "Home", null, new { @class = "kiosk-button" })</p>
+<section id="kiosk-results">
+    <h1>Thank you for completing the quiz!</h1>
+    <div id="step-main">
+
+        <div id="step1">
+            <img src="@Url.Content("~/Images/step1.png")">
+            <div class="step-container">
+                <p>Please select the print button to get your personalized Healthy Kids tips.</p>
+                <p><input id="sendBtn" class="kiosk-button" type="button" value="Print My Results" onclick="onSendMessage()" /></p>
+            </div>
+        </div>
+
+        <div id="step2">
+            <img src="@Url.Content("~/Images/step2.png")">
+            <div class="step-container">
+                <p>Send your results to yourself for reference later. (Optional)</p>
+                <p><button class="kiosk-button" data-toggle="modal" data-target="#primaryDonorEdits">Email Results</button></p>
+            </div>
+        </div>
+    
+        <div id="step3">
+            <img src="@Url.Content("~/Images/step3.png")">
+            <div class="step-container">
+                <p>Once your results have printed, click done.</p>
+                <p>@Html.ActionLink("Done", "Kiosk", "Home", null, new { @class = "kiosk-button" })</p>
+            </div>
+        </div>
+
+    </div> <!-- End step-container -->
+
 </section>
 
 <form onsubmit='return false;' id="form">
