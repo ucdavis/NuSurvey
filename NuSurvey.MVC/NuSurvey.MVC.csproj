@@ -370,6 +370,9 @@
     <Content Include="Images\ReviewHealthyKids.png" />
     <Content Include="Images\ReviewMyChild.png" />
     <Content Include="Images\small_print.png" />
+    <Content Include="Images\step1.png" />
+    <Content Include="Images\step2.png" />
+    <Content Include="Images\step3.png" />
     <Content Include="Images\test.png" />
     <Content Include="Images\top_blue_bar.jpg" />
     <Content Include="Images\UCD_Logo_Black_Kiosk.jpg" />

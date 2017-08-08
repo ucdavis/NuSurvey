@@ -402,7 +402,7 @@ div .editor-label .bypass { padding: 5px 0; }
 	margin: 10px 0 10px 0;
 }
 #kiosk-results input, .kiosk-button, .kiosk-button:link { 
-	font: 25px 'Source Sans Pro',Arial,sans-serif;	
+	font: 18px 'Source Sans Pro',Arial,sans-serif;	
 	border: solid 2px #03205B; 
 	color: #fff; 
 	text-align: center; 
@@ -411,7 +411,7 @@ div .editor-label .bypass { padding: 5px 0; }
 	padding: 13px 20px; 
 	border-radius: 8px;
 	display: inline-block; 
-	margin: 0px 0 25px 0;
+	margin: 0px auto 25px auto;
 }
 
 .kiosk-button:visited { 
@@ -424,7 +424,7 @@ div .editor-label .bypass { padding: 5px 0; }
 	padding: 13px 20px; 
 	border-radius: 8px;
 	display: inline-block; 
-	margin: 0px 0 25px 0;
+	margin: 0px auto 25px auto;
 }
 
 .kiosk-button:hover { 
@@ -437,7 +437,7 @@ div .editor-label .bypass { padding: 5px 0; }
 	padding: 13px 20px; 
 	border-radius: 8px;
 	display: inline-block; 
-	margin: 0px 0 25px 0;
+	margin: 0px auto 25px auto;
 }
 
 .kiosk-button:active { 
@@ -450,9 +450,23 @@ div .editor-label .bypass { padding: 5px 0; }
 	padding: 13px 20px; 
 	border-radius: 8px; 
 	display: inline-block; 
-	margin: 0px 0 25px 0;
+	margin: 0px auto 25px auto;
 }
 
+#step-main {
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+#step-main img {
+	height: 180px;
+}
+
+#step-container {
+	float:left;
+	margin-top: 45px;
+	margin-left: 165px;
+}
 
 
 
