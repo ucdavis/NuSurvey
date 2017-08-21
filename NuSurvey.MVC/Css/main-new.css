@@ -395,6 +395,7 @@ div .editor-label .bypass { padding: 5px 0; }
 #kiosk-results h1 {
 	margin-bottom: 40px;
 	font-size: 40px;
+	text-align: center;
 }
 
 #kiosk-results p {
@@ -459,13 +460,15 @@ div .editor-label .bypass { padding: 5px 0; }
 }
 
 #step-main img {
-	height: 180px;
+	float: left;
+	height: 190px;
 }
 
-#step-container {
-	float:left;
-	margin-top: 45px;
-	margin-left: 165px;
+.step-container {
+	float: left;
+	margin-top: 60px;
+	font-size: 1.3em;
+	line-height: 1.2em;
 }
 
 
