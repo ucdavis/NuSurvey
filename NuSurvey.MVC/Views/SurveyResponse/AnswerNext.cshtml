@@ -34,6 +34,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            var idleTime = 0;
             var isKiosk = @(ViewBag.IsKiosk.ToString().ToLower());
             if (isKiosk === true) {
                 //Increment the idle time counter every minute.
