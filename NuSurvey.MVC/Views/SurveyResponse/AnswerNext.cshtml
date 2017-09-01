@@ -37,7 +37,8 @@
             var isKiosk = @(ViewBag.IsKiosk.ToString().ToLower());
             if (isKiosk === true) {
                 //Increment the idle time counter every minute.
-                var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+                //var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+                var idleInterval = setInterval(timerIncrement, 10000); // 10 seconds
 
                 //Zero the idle timer on mouse movement.
                 $(this).on('mousemove mousedown keypress', function ()
@@ -51,7 +52,8 @@
             function timerIncrement() {
                 idleTime++;
                 console.log("idle " + idleTime);
-                if (idleTime >= 3) { // 3 minutes
+                //if (idleTime >= 3) { // 3 minutes
+                if (idleTime >= 6) { // 1 minutes
                     var url = '@Url.Action("Kiosk", "Home")';
                     window.location.href = url;
                 }
