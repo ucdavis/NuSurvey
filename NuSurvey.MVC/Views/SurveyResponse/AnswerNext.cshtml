@@ -43,14 +43,14 @@
                 $(this).on('mousemove mousedown keypress', function ()
                 {
                     idleTime = 0;
-                    //console.log("Cleared");
+                    console.log("Cleared");
                 });
             }
 
 
             function timerIncrement() {
                 idleTime++;
-                //console.log("idle " + idleTime);
+                console.log("idle " + idleTime);
                 if (idleTime >= 3) { // 3 minutes
                     var url = '@Url.Action("Kiosk", "Home")';
                     window.location.href = url;
