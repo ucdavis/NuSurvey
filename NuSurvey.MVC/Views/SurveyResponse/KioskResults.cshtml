@@ -36,17 +36,37 @@
     </div>
 </div>
 
-<section class="btmMg20"></section>
 
 <section id="kiosk-results">
-    <h1>Thank you!</h1>
-    <p>Thank you for completing the survey.</p>
-    <p>Please select the print button to get your personalized Healthy Kids tips.</p>
-    <p><input id="sendBtn" class="kiosk-button" type="button" value="Print My Results" onclick="onSendMessage()" /> <button class="kiosk-button" data-toggle="modal" data-target="#primaryDonorEdits">Email Results</button></p>
-    
-    <p>Once your results have printed, click done.</p>
+    <h1>Thank you for completing the quiz!</h1>
+    <div id="step-main">
 
-    <p>@Html.ActionLink("Done", "Kiosk", "Home", null, new { @class = "kiosk-button" })</p>
+        <div id="step1">
+            <img src="@Url.Content("~/Images/step1.png")">
+            <div class="step-container">
+                <p>Please select the print button to get your personalized Healthy Kids tips.</p>
+                <p><input id="sendBtn" class="kiosk-button" type="button" value="Print My Results" onclick="onSendMessage()" /></p>
+            </div>
+        </div>
+
+        <div id="step2">
+            <img src="@Url.Content("~/Images/step2.png")">
+            <div class="step-container">
+                <p>Send results to your email</p>
+                <p><button class="kiosk-button" data-toggle="modal" data-target="#primaryDonorEdits">Email Results</button></p>
+            </div>
+        </div>
+    
+        <div id="step3">
+            <img src="@Url.Content("~/Images/step3.png")">
+            <div class="step-container">
+                <p>Once your results have printed, click done.</p>
+                <p>@Html.ActionLink("Done", "Kiosk", "Home", null, new { @class = "kiosk-button" })</p>
+            </div>
+        </div>
+
+    </div> <!-- End step-container -->
+
 </section>
 
 <form onsubmit='return false;' id="form">
@@ -92,7 +112,8 @@
         $(document).ready(function () {
 
             //Increment the idle time counter every minute.
-            var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+            //var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+            var idleInterval = setInterval(timerIncrement, 10000); // 10 seconds Use this one if you want it checked every 10 seconds. Better if the idle time is only 1 minute
 
             //Zero the idle timer on mouse movement.
             $(this).on('mousemove mousedown keypress',
@@ -105,7 +126,7 @@
         function timerIncrement() {
             idleTime++;
             //console.log("idle " + idleTime);
-            if (idleTime >= 3) { // 3 minutes
+            if (idleTime >= 6) { // 1 minutes
                 var url = '@Url.Action("Kiosk", "Home")';
                 window.location.href = url;
             }

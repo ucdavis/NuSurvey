@@ -389,12 +389,13 @@ div .editor-label .bypass { padding: 5px 0; }
 
 
 #kiosk-results {
-	margin-bottom: 600px;
+	margin-bottom: 750px;
 }
 
 #kiosk-results h1 {
-	margin-bottom: 40px;
+	margin-bottom: 10px;
 	font-size: 40px;
+	text-align: center;
 }
 
 #kiosk-results p {
@@ -402,7 +403,7 @@ div .editor-label .bypass { padding: 5px 0; }
 	margin: 10px 0 10px 0;
 }
 #kiosk-results input, .kiosk-button, .kiosk-button:link { 
-	font: 25px 'Source Sans Pro',Arial,sans-serif;	
+	font: 18px 'Source Sans Pro',Arial,sans-serif;	
 	border: solid 2px #03205B; 
 	color: #fff; 
 	text-align: center; 
@@ -411,7 +412,7 @@ div .editor-label .bypass { padding: 5px 0; }
 	padding: 13px 20px; 
 	border-radius: 8px;
 	display: inline-block; 
-	margin: 0px 0 25px 0;
+	margin: 0px auto 25px auto;
 }
 
 .kiosk-button:visited { 
@@ -424,20 +425,20 @@ div .editor-label .bypass { padding: 5px 0; }
 	padding: 13px 20px; 
 	border-radius: 8px;
 	display: inline-block; 
-	margin: 0px 0 25px 0;
+	margin: 0px auto 25px auto;
 }
 
 .kiosk-button:hover { 
-	font: 25px 'Source Sans Pro',Arial,sans-serif;
+	font: 18px 'Source Sans Pro',Arial,sans-serif;	
 	border: solid 2px #03205B; 
 	color: #fff; 
 	text-align: center; 
-	font-weight: bold; 
+	font-weight: 700; 
 	background: #4A94B4; /* Important! fix for IE & older browsers */    
 	padding: 13px 20px; 
 	border-radius: 8px;
 	display: inline-block; 
-	margin: 0px 0 25px 0;
+	margin: 0px auto 25px auto;
 }
 
 .kiosk-button:active { 
@@ -450,9 +451,26 @@ div .editor-label .bypass { padding: 5px 0; }
 	padding: 13px 20px; 
 	border-radius: 8px; 
 	display: inline-block; 
-	margin: 0px 0 25px 0;
+	margin: 0px auto 25px auto;
 }
 
+#step-main {
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+#step-main img {
+	float: left;
+	height: 190px;
+}
+
+.step-container {
+	float: right;
+	margin-top: 60px;
+	font-size: 1.3em;
+	line-height: 1.2em;
+	width: 74%;
+}
 
 
 
