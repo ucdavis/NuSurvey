@@ -1,7 +1,7 @@
 ﻿@model NuSurvey.MVC.Controllers.HomeController.HomeViewModel
 
 @{
-    ViewBag.Title = "Healthy Kids - Home Page";
+    ViewBag.Title = "Página Principal";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
     ViewBag.IsSpanish = true;
 }
@@ -23,15 +23,15 @@
     <div id="parents">
         <div class="container-center">
             <div id="parents-left">
-                <h2>PARENTS</h2>
-                <p>Want to keep your child healthy?</p>
-                <p>Take the survey and have goals created just for you and your child!</p>
-                <img src="@Url.Image("arrow.png")" alt="Select a Survey" />
+                <h2>Padres</h2>
+                <p>¿Quieren mantener a su niño(a) sano(a)?</p>
+                <p>¡Llene la encuesta y metas serán hechas para usted y su niño(a)!</p>
+                <img src="@Url.Image("arrow-sp.png")" alt="De click en una encuesta para comenzar" />
             </div>
 
             <div id="parents-right">
-                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "HKS"})'><img src="@Url.Image("hk-thumb.png")" alt="Healthy Kids Survey" /></a>
-                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "MCMTS" })'><img src="@Url.Image("mcmt-thumb.png")" alt="My Child At Mealtime Survey" /></a>
+                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "HKS"})'><img src="@Url.Image("hk-sp-thumb.png")" alt="La Alimentación y Actividad de mi Familia" /></a>
+                <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "MCMTS" })'><img src="@Url.Image("mcmt-sp-thumb.png")" alt="Mi Familia a la Hora de Comer" /></a>
 
             </div>
             <br style="clear:both">
