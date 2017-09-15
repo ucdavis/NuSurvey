@@ -313,7 +313,9 @@
     <Content Include="Images\404.jpg" />
     <Content Include="Images\Admin.png" />
     <Content Include="Images\AnswerHealthyKids.png" />
+    <Content Include="Images\AnswerHealthyKids_Spanish.png" />
     <Content Include="Images\AnswerMyChild.png" />
+    <Content Include="Images\AnswerMyChild_Spanish.png" />
     <Content Include="Images\AnswerSurvey.png" />
     <Content Include="Images\arrow-sp.png" />
     <Content Include="Images\arrow.png" />
@@ -371,7 +373,9 @@
     <Content Include="Images\print_hover.png" />
     <Content Include="Images\review.png" />
     <Content Include="Images\ReviewHealthyKids.png" />
+    <Content Include="Images\ReviewHealthyKids_Spanish.png" />
     <Content Include="Images\ReviewMyChild.png" />
+    <Content Include="Images\ReviewMyChild_Spanish.png" />
     <Content Include="Images\small_print.png" />
     <Content Include="Images\step1.png" />
     <Content Include="Images\step2.png" />
