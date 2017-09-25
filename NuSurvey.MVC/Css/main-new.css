@@ -93,9 +93,13 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 
 /***---------- PARENT QUESTION DISPLAY ----------***/ 
+.mcmt-survey, .mcmts-survey { padding: 156px 0 0 0; }
 .mcmt-survey { background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
+.mcmt-survey { background:  url("../Images/mcmt-header-sp.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
 
-.hk-survey { background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
+.hk-survey, .hks-survey { background:  padding: 156px 0 0 0; }
+.hk-survey { background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; }
+.hks-survey { background:  url("../Images/hk-header-sp.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; }
 
 .mcmt-survey .container-center, .hk-survey .container-center { padding: 0 26px; }
 
@@ -119,7 +123,7 @@ form { text-align: left; }
 
 form fieldset { padding: 10px; }
 
-form fieldset ul, .display-form { padding: 10px 200px; }
+/* form fieldset ul, .display-form { padding: 10px 200px; } */
 
 .display-mcmt-question ul, .display-mcmts-question ul, .display-hk-question ul, .display-hks-question ul, .display-kiosk-question ul { padding: 0 10px; }
 
@@ -127,7 +131,7 @@ form ul li { list-style-type: none; margin: 10px 0; }
 
 .display-mcmt-question input.button, .display-mcmts-question input.button, .display-hk-question input.button, .display-hks-question input.button, .display-kiosk-question input.button { float: right; margin-top: 50px; }
 
-input.button { font-size: 1.15em; padding: 3px 15px 3px; background: #ede6de; /* Old browsers */ background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4); background: -moz-linear-gradient(top, #EDE6DE, #E7DED4); background: -o-linear-gradient(top, #EDE6DE, #E7DED4); background: -ms-linear-gradient(top, #EDE6DE, #E7DED4); background: linear-gradient(top, #EDE6DE #E7DED4); -webkit-border-radius: 4px; -khtml-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #603813; }
+input.button { font-size: 1.05em; padding: 8px 30px; background: #ede6de; /* Old browsers */ background: -webkit-linear-gradient(top, #EDE6DE, #E7DED4); background: -moz-linear-gradient(top, #EDE6DE, #E7DED4); background: -o-linear-gradient(top, #EDE6DE, #E7DED4); background: -ms-linear-gradient(top, #EDE6DE, #E7DED4); background: linear-gradient(top, #EDE6DE #E7DED4); -webkit-border-radius: 4px; -khtml-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #603813; }
 
 
 
@@ -256,7 +260,7 @@ div .editor-label .bypass { padding: 5px 0; }
 
 #parents-left h2 { font-size: 3.3em; }
 
-#parents-left p { line-height: 1.5em; font-size: 1.3em; margin: 20px 100px 20px 0; }
+#parents-left p { line-height: 1.5em; font-size: 1.3em; margin: 20px 50px 20px 0; }
 
 #parents-left img { float: right; }
 
@@ -281,7 +285,7 @@ div .editor-label .bypass { padding: 5px 0; }
 
 #login-form .editor-label label, #openRegister .editor-label label { font-size: 1.1em; line-height: 1.5em; }
 
-#login-form .editor-field input, #openRegister .editor-field input, #SurveyResponse_StudentId { font-size: 1.2em; padding: 7px; width: 400px; color: #4a94b4; } 
+#login-form .editor-field input, #openRegister .editor-field input, #SurveyResponse_StudentId { font-size: 1.0em; padding: 7px; width: 400px; color: #4a94b4; } 
 
 #login-form fieldset ul, #openRegister fieldset ul { padding: 10px 50px; }
 
@@ -484,7 +488,7 @@ div .editor-label .bypass { padding: 5px 0; }
   position: relative;
   float: left;
   width: 100%;
-  height: 25px;
+ /* height: 25px; */
 	/*border-bottom: 1px solid #333;*/
 }
 /* center circle alignment */
@@ -497,10 +501,10 @@ div .editor-label .bypass { padding: 5px 0; }
   display: block;
   position: relative;
   font-weight: 300;
-  font-size: 1.05em;
+  font-size: 0.95em;
   padding: 10px 25px 0px 80px;
-  /*margin: 10px auto;*/
-  height: 30px;
+  margin: 2px auto;
+  /* height: 30px; */
   z-index: 9;
   cursor: pointer;
   -webkit-transition: all 0.25s linear;
@@ -565,3 +569,11 @@ input[type=radio]:checked ~ label{
 .field-validation-error { background: #BC272D; padding: 0px 4px 2px 4px; margin: 3px; color: #fff; font-weight: bold; font-size: 1.1em; }
 
 style="background: #BC272D; padding: 2px 4px; color: #fff; font-weight: bold; font-size: 1.1em;"
+
+
+
+
+
+/***---------- BACKEND UI ----------***/
+
+.ui-buttonset .ui-button {margin-right: 0;}
