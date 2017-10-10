@@ -95,7 +95,7 @@ h2 { margin: 30px 0 0px 0; } /* */
 /***---------- PARENT QUESTION DISPLAY ----------***/ 
 .mcmt-survey, .mcmts-survey { padding: 156px 0 0 0; }
 .mcmt-survey { background:  url("../Images/mcmt-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
-.mcmt-survey { background:  url("../Images/mcmt-header-sp.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
+.mcmts-survey { background:  url("../Images/mcmt-header-sp.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; padding: 156px 0 0 0; }
 
 .hk-survey, .hks-survey { background:  padding: 156px 0 0 0; }
 .hk-survey { background:  url("../Images/hk-header.png") center top no-repeat scroll, url('../images/wavegrid_tan1.png') left top repeat; }
@@ -105,9 +105,11 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 .display-mcmt-question, .display-mcmts-question, .display-hk-question, .display-hks-question { -webkit-box-shadow: 3px 3px 5px #626262; -moz-box-shadow: 3px 3px 5px #626262; box-shadow: 3px 3px 5px #626262; -webkit-border-radius: 14px; -khtml-border-radius: 14px; -moz-border-radius: 14px; border-radius: 14px; margin: 0px 50px 0 50px; padding: 10px 10px 40px 10px; font: 25px/30px 'Source Sans Pro', Arial, sans-serif; font-weight: 600; }
 
-.display-mcmt-question, .display-mcmts-question, .display-kiosk-question { background: #D6EFFF; /* Old browsers */ background: -webkit-linear-gradient(top, #ECF7FD, #CFEDFF); background: -moz-linear-gradient(top, #ECF7FD, #CFEDFF); background: -o-linear-gradient(top, #ECF7FD, #CFEDFF); background: -ms-linear-gradient(top, #ECF7FD, #CFEDFF); background: linear-gradient(top, #ECF7FD #CFEDFF); border: solid 1px #7DBEDE; color: #03205B; }
+.display-kiosk-question { background: #D6EFFF; /* Old browsers */ background: -webkit-linear-gradient(top, #ECF7FD, #CFEDFF); background: -moz-linear-gradient(top, #ECF7FD, #CFEDFF); background: -o-linear-gradient(top, #ECF7FD, #CFEDFF); background: -ms-linear-gradient(top, #ECF7FD, #CFEDFF); background: linear-gradient(top, #ECF7FD #CFEDFF); border: solid 1px #7DBEDE; color: #03205B; }
 
-.display-hk-question, .display-hks-question { background: #EDF5EF; /* Old browsers */  background: -webkit-linear-gradient(top, #F7FBF8, #EDF5EF); background: -moz-linear-gradient(top, #F7FBF8, #EDF5EF); background: -o-linear-gradient(top, #F7FBF8, #EDF5EF); background: -ms-linear-gradient(top, #F7FBF8, #EDF5EF); background: linear-gradient(top, #F7FBF8, #EDF5EF); border: solid 1px #95D1A0; color: #005311; }
+.display-mcmt-question, .display-mcmts-question { background: #D6EFFF; /* Old browsers */ background: -webkit-linear-gradient(top, #ECF7FD, #CFEDFF); background: -moz-linear-gradient(top, #ECF7FD, #CFEDFF); background: -o-linear-gradient(top, #ECF7FD, #CFEDFF); background: -ms-linear-gradient(top, #ECF7FD, #CFEDFF); background: linear-gradient(top, #ECF7FD #CFEDFF); border: solid 1px #7DBEDE; color: #03205B; margin-top: 150px;}
+
+.display-hk-question, .display-hks-question { background: #EDF5EF; /* Old browsers */  background: -webkit-linear-gradient(top, #F7FBF8, #EDF5EF); background: -moz-linear-gradient(top, #F7FBF8, #EDF5EF); background: -o-linear-gradient(top, #F7FBF8, #EDF5EF); background: -ms-linear-gradient(top, #F7FBF8, #EDF5EF); background: linear-gradient(top, #F7FBF8, #EDF5EF); border: solid 1px #95D1A0; color: #005311; margin-top: 150px;}
 
 .display-mcmt-question .editor-field img, .display-mcmts-question .editor-field img, .display-hk-question .editor-field img, .display-hks-question .editor-field img, .display-kiosk-question .editor-field img { margin-right: 25px; float: left;}
 
@@ -127,7 +129,7 @@ form fieldset { padding: 10px; }
 
 .display-mcmt-question ul, .display-mcmts-question ul, .display-hk-question ul, .display-hks-question ul, .display-kiosk-question ul { padding: 0 10px; }
 
-form ul li { list-style-type: none; margin: 10px 0; }
+/* form ul li { list-style-type: none; margin: 10px 0; } */
 
 .display-mcmt-question input.button, .display-mcmts-question input.button, .display-hk-question input.button, .display-hks-question input.button, .display-kiosk-question input.button { float: right; margin-top: 50px; }
 
@@ -137,7 +139,7 @@ input.button { font-size: 1.05em; padding: 8px 30px; background: #ede6de; /* Old
 
 /***---------- PROGRESS BAR  ----------***/
 
-.display-form { margin: 15px 0 0 0; }
+.display-form { width: 50%; margin: 15px auto 0 auto; }
 
 .display-form ul { text-align: left; margin: 0; }
 
@@ -145,7 +147,7 @@ input.button { font-size: 1.05em; padding: 8px 30px; background: #ede6de; /* Old
 
 .display-label, .display-details { display: inline; padding-right: 20px; }
 
-.ui-progressbar { height: 2em; width: 47%; text-align: left; }
+.ui-progressbar { height: 2em; width: 100%; text-align: left; }
 
 .ui-widget-content { background: #EDE6DE; border: 1px solid #C7B299; webkit-border-radius: 8px; -khtml-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px; }
 
