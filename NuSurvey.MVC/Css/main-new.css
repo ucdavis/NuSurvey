@@ -129,7 +129,9 @@ form fieldset { padding: 10px; }
 
 .display-mcmt-question ul, .display-mcmts-question ul, .display-hk-question ul, .display-hks-question ul, .display-kiosk-question ul { padding: 0 10px; }
 
-/* form ul li { list-style-type: none; margin: 10px 0; } */
+.display-mcmt-question ul li, .display-mcmts-question ul li, .display-hk-question ul li, .display-hks-question ul li, .display-kiosk-question ul li { list-style-type: none;}
+
+form ul li { list-style-type: none;}
 
 .display-mcmt-question input.button, .display-mcmts-question input.button, .display-hk-question input.button, .display-hks-question input.button, .display-kiosk-question input.button { float: right; margin-top: 50px; }
 
@@ -578,4 +580,4 @@ style="background: #BC272D; padding: 2px 4px; color: #fff; font-weight: bold; fo
 
 /***---------- BACKEND UI ----------***/
 
-.ui-buttonset .ui-button {margin-right: 0;}
+.ui-buttonset .ui-button {margin-right: 0.5em;}
