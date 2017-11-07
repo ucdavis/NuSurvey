@@ -304,9 +304,9 @@ div .editor-label .bypass { padding: 5px 0; }
 /***---------- GOAL RESULTS PAGE PARENTS ----------***/
 .result_fieldset_page { background:  url('../images/hk-goal-bkgd.jpg') top left no-repeat; } 
 
-.result_fieldset_page .MCMTS-background-image { background:  url('../images/mcmts-goal-bkgd.jpg') top left no-repeat; } 
+.result_fieldset_page.MCMTS-background-image { background:  url('../images/mcmts-goal-bkgd.jpg') top left no-repeat; } 
 
-.result_fieldset_page .HKS-background-image { background:  url('../images/hks-goal-bkgd.jpg') top left no-repeat; } 
+.result_fieldset_page.HKS-background-image { background:  url('../images/hks-goal-bkgd.jpg') top left no-repeat; } 
 
 .result_thanks { margin: 125px 55px 0 55px; height: 60px; } 
 
