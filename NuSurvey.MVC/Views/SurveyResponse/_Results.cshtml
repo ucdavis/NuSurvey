@@ -3,14 +3,14 @@
      
 @if (Model.Survey.ShortName.IsSpanish())
 {
-    var quizText = "Sus resultados de la prueba de " + @Model.Survey.QuizType;
-    if (Model.Survey.QuizType == "Nutrition")
+    var quizText = "Sus resultados de la prueba de " + Model.Survey.QuizType;
+    if (Model.Survey.QuizType.Equals("Nutrition", StringComparison.OrdinalIgnoreCase))
     {
         quizText = "Sus resultados de la prueba de nutrición";
     }
     else
     {
-        if (Model.Survey.QuizType == "Parenting")
+        if (Model.Survey.QuizType.Equals("Parenting", StringComparison.OrdinalIgnoreCase))
         {
             quizText = "Sus resultados de la prueba de la crianza de los niños";
         }
