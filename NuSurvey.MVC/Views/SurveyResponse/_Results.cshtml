@@ -1,8 +1,26 @@
 ﻿@using NuSurvey.MVC.Helpers
 @model NuSurvey.Core.Domain.SurveyResponse
-           
-<div class="result_quiz">Your @Model.Survey.QuizType Quiz Results</div>
-
+     
+@if (Model.Survey.ShortName.IsSpanish())
+{
+    var quizText = "Sus resultados de la prueba de " + @Model.Survey.QuizType;
+    if (Model.Survey.QuizType.Equals("Nutrition", StringComparison.OrdinalIgnoreCase))
+    {
+        quizText = "Sus resultados de la prueba de nutrición";
+    }
+    else
+    {
+        if (Model.Survey.QuizType.Equals("Parenting", StringComparison.OrdinalIgnoreCase))
+        {
+            quizText = "Sus resultados de la prueba de la crianza de los niños";
+        }
+    }
+    <div class="result_quiz">@quizText</div>
+}
+else
+{
+    <div class="result_quiz">Your @Model.Survey.QuizType Quiz Results</div>
+}
 <fieldset class="result_fieldset_page @string.Format("{0}-background-image", Model.Survey.ShortName.ToUpper().Trim())">
     @if (Model.Survey.ShortName.IsSpanish())
     {

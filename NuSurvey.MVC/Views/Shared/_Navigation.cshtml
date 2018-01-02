@@ -11,18 +11,21 @@
                 @if (ViewBag.IsSpanish != null && (bool) ViewBag.IsSpanish)
                 {
                     <li>@Html.ActionLink("Página Principal", "Spanish", "Home")</li>
-                    <li>@Html.ActionLink("PADRES", "Spanish", "Home", new {parent = true}, new {})</li>                    
+                    <li>@Html.ActionLink("Padres", "Spanish", "Home", new {parent = true}, new {})</li> 
+                    <li>@Html.ActionLink("Educadores", "Index", "Educator")</li>
+                    <li>@Html.ActionLink("Directores", "Index", "ProgramDirector")</li>
                 }
                 else
                 {
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Parents", "Index", "Home", new {parent = true}, new {})</li>             
+                    <li>@Html.ActionLink("Parents", "Index", "Home", new {parent = true}, new {})</li>     
+                    <li>@Html.ActionLink("Educators", "Index", "Educator")</li>
+                    <li>@Html.ActionLink("Directors", "Index", "ProgramDirector")</li>
                 }
-                <li>@Html.ActionLink("Educators", "Index", "Educator")</li>
-                <li>@Html.ActionLink("Directors", "Index", "ProgramDirector")</li>
+
                 @if (ViewBag.IsSpanish != null && (bool)ViewBag.IsSpanish)
                 {
-                    <li>@Html.ActionLink("in English", "Index", "Home")</li>
+                    <li>@Html.ActionLink("en Ingles", "Index", "Home")</li>
                 }
                 else
                 {
