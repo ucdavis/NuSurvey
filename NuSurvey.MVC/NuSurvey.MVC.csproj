@@ -338,7 +338,11 @@
     <Content Include="Images\delete.png" />
     <Content Include="Images\details.png" />
     <Content Include="Images\diagonal_waves_blue1.png" />
+    <Content Include="Images\DownloadGoals_Spanish.png" />
     <Content Include="Images\DownloadHealthyKids.png" />
+    <Content Include="Images\DownloadHK_19ques.png" />
+    <Content Include="Images\DownloadHK_Spanish.png" />
+    <Content Include="Images\DownloadMCMT_Spanish.png" />
     <Content Include="Images\DownloadMyChild.png" />
     <Content Include="Images\edit.png" />
     <Content Include="Images\email.png" />
