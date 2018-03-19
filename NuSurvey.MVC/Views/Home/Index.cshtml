@@ -28,10 +28,39 @@
                 <img src="@Url.Image("arrow.png")" alt="Select a Survey" />
             </div>
 	
-            <div id="parents-right">
+            @*<div id="parents-right">
                 <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "HK"})'><img src="@Url.Image("hk-thumb.png")" alt="Healthy Kids Survey"  /></a> 
                 <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new { shortname = "MCMT" })'><img src="@Url.Image("mcmt-thumb.png")" alt="My Child At Mealtime Survey" /></a> 
             
+            </div>*@
+            <div id="parents-right">
+                <div id="hk-home">
+                    <img src="@Url.Image("hk-thumb.png")" alt="Healthy Kids Survey" />
+                    
+                    <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new {shortname = "HK"})'>
+                        <div class="survey-button svy-btn-left">
+                            <p>English</p>
+                        </div>
+                    </a> 
+                    <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new {shortname = "HKS"})'>
+                        <div class="survey-button svy-btn-right">
+                            <p>en Español</p>
+                        </div>
+                    </a>
+                </div>
+                <div id="mcmt-home">
+                    <img src="@Url.Image("mcmt-thumb.png")" alt="My Child At Mealtime Survey" />
+                    <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new {shortname = "MCMT"})'>
+                        <div class="survey-button svy-btn-left">
+                            <p>English</p>
+                        </div>
+                    </a> 
+                    <a href='@Url.Action("FindAndStartSurvey", "SurveyResponse", new {shortname = "MCMTS"})'>
+                        <div class="survey-button svy-btn-right">
+                            <p>en Español</p>
+                        </div>
+                    </a>
+                </div>
             </div>
             <br style="clear:both">
         </div> <!--- END main MLR 121313 --->
