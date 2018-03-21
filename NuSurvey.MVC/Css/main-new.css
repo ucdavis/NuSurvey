@@ -274,6 +274,8 @@ div .editor-label .bypass { padding: 5px 0; }
 
 #hk-home, #mcmt-home {width: 50%; float: left;}
 
+#hk-home img, #mcmt-home img {width: 90%;}
+
 .survey-button {padding: 6px 0; width: 35%; margin: 0 5%; float: left; color: #fff; text-align: center; font-weight: 700; font-size: 0.8em; background: #4A94B4; border-radius: 4px;}
 
 .svy-btn-left {margin: 3% 2% 0 10%;}
@@ -332,7 +334,9 @@ div .editor-label .bypass { padding: 5px 0; }
 
 .result_quiz { font-size: 2.5em; padding: 5px 0; font-weight:bold; color:#30205B; line-height: 40px; text-align: center;}
 
-#pdf_print { font-size: 1.4em; background: none repeat scroll 0 0 #fff; border: 1px solid #4a94b4; border-radius: 8px; line-height: 20px; padding: 20px; width: 25%; }
+#pdf_print { font-size: 1.4em; background: none repeat scroll 0 0 #fff; border: 1px solid #4a94b4; border-radius: 8px; line-height: 20px; padding: 10px; width: 25%; margin: 0 auto 30px auto; }
+
+#pdf_print img {max-width: 60px;}
 
 
 
