@@ -28,6 +28,7 @@ namespace NuSurvey.MVC.Controllers
         private readonly IRepository<Photo> _photoRepository;
         private readonly IBlobStoargeService _blobStoargeService;
         private readonly IEmailService _emailService;
+        private const string EmailKiosk = "kioskemail";
 
         public SurveyResponseController(IRepository<SurveyResponse> surveyResponseRepository, IScoreService scoreService, IRepository<Photo> photoRepository, IBlobStoargeService blobStoargeService, IEmailService emailService)
         {
@@ -101,7 +102,7 @@ namespace NuSurvey.MVC.Controllers
         {
             if (kioskEmail == true)
             {
-                Session["kioskemail"] = true;
+                Session[EmailKiosk] = true;
             }
             var survey = Repository.OfType<Survey>().Queryable.Single(a => a.ShortName == shortName);
             return this.RedirectToAction("StartSurvey", new {id = survey.Id});
