@@ -22,6 +22,11 @@
     {
         ViewBag.IsKiosk = false;
     }
+    ViewBag.kioskemail = false;
+    if (Session["kioskemail"] != null && (bool)Session["kioskemail"] == true)
+    {
+        ViewBag.kioskemail = true;
+    }
 }
 
 
@@ -55,6 +60,9 @@
                 //console.log("idle " + idleTime);
                 if (idleTime >= 6) { // 1 minutes
                     var url = '@Url.Action("Kiosk", "Home")';
+                    if (@(ViewBag.kioskemail.ToString().ToLower()) === true) {
+                        url = '@Url.Action("KioskEmail", "Home")';
+                    }
                     window.location.href = url;
                 }
             }
