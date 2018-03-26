@@ -40,6 +40,7 @@
             @if (ViewBag.RestartKiosk != null && (bool) ViewBag.RestartKiosk == true)
             {
                 <li>@Html.ActionLink("Restart Kiosk Mode", "Kiosk", "Home")</li>
+                <li>@Html.ActionLink("Restart Email Only Kiosk Mode", "KioskEmail", "Home")</li>
             }
 
         </ul>
