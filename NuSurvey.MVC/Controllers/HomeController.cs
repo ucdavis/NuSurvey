@@ -42,6 +42,15 @@ namespace NuSurvey.MVC.Controllers
 
             return View(viewModel);
         }
+        public ActionResult KioskEmail(bool parent = true)
+        {
+            Session.Abandon();
+            var viewModel = HomeViewModel.Create(CurrentUser.IsInRole(RoleNames.Admin), CurrentUser.IsInRole(RoleNames.User), CurrentUser.IsInRole(RoleNames.ProgramDirector));
+
+            ViewBag.OnlyParent = true;
+
+            return View(viewModel);
+        }
 
         /// <summary>
         /// #2

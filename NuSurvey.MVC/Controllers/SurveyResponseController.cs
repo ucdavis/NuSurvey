@@ -97,8 +97,12 @@ namespace NuSurvey.MVC.Controllers
             return View(viewModel);
         }
 
-        public ActionResult FindAndStartSurvey(string shortName)
+        public ActionResult FindAndStartSurvey(string shortName, bool kioskEmail = false)
         {
+            if (kioskEmail == true)
+            {
+                Session["kioskemail"] = true;
+            }
             var survey = Repository.OfType<Survey>().Queryable.Single(a => a.ShortName == shortName);
             return this.RedirectToAction("StartSurvey", new {id = survey.Id});
             //return this.RedirectToAction(a => a.StartSurvey(survey.Id));
@@ -833,6 +837,10 @@ namespace NuSurvey.MVC.Controllers
             //{
             viewModel.ShowPdfPrint = true;
             //}
+
+            //Check Session to see if print should be hidden.
+            //Redirect when done or timed out may need to go to a different page and/or pass the session.
+            //Then Session.Abandon();
 
             return View(viewModel);
         }
