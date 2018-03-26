@@ -1,8 +1,53 @@
 ﻿@{
     ViewBag.Title = "Error";
     ViewBag.RestartKiosk = true;
+
+    ViewBag.kioskemail = false;
+    ViewBag.kiosk = false;
+    if (Session["kioskemail"] != null && (bool)Session["kioskemail"] == true)
+    {
+        ViewBag.kioskemail = true;
+    }
+    if (Session["kioskemail"] != null && (bool)Session["kioskemail"] == false)
+    {
+        ViewBag.kiosk = true;
+    }
 }
 
 <h2>An Error occurred processing your request.</h2>
 
+@section AdditionalScripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var idleTime = 0; //Need to init otherwise get an error if the mouse is never moved
+            var isKiosk = @(ViewBag.kiosk.ToString().ToLower());
+            var isKioskEmail = @(ViewBag.kioskemail.ToString().ToLower());
+            if (isKiosk === true || isKioskEmail === true) {
+                //Increment the idle time counter every minute.
+                //var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+                var idleInterval = setInterval(timerIncrement, 1000); // 1 seconds Use this one if you want it checked every 10 seconds. Better if the idle time is only 1 minute
+
+                //Zero the idle timer on mouse movement.
+                $(this).on('mousemove mousedown keypress', function ()
+                {
+                    idleTime = 0;
+                    //console.log("Cleared");
+                });
+            }
+
+
+            function timerIncrement() {
+                idleTime++;
+                //console.log("idle " + idleTime);
+                if (idleTime >= 2) { // 2 SECONDS
+                    var url = '@Url.Action("Kiosk", "Home")';
+                    if (@(ViewBag.kioskemail.ToString().ToLower()) === true) {
+                        url = '@Url.Action("KioskEmail", "Home")';
+                    }
+                    window.location.href = url;
+                }
+            }
+        });
+    </script>
+}
 
