@@ -543,6 +543,7 @@
     <Content Include="Views\Home\Kiosk.cshtml" />
     <Content Include="Views\SurveyResponse\KioskResults.cshtml" />
     <Content Include="Views\SurveyResponse\_EmailResultsDialog.cshtml" />
+    <Content Include="Views\Home\KioskEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

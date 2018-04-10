@@ -17,6 +17,7 @@ namespace NuSurvey.MVC.Controllers
         /// <returns></returns>
         public ActionResult Index(bool parent = false)
         {
+            Session.Abandon();
             var viewModel = HomeViewModel.Create(CurrentUser.IsInRole(RoleNames.Admin), CurrentUser.IsInRole(RoleNames.User), CurrentUser.IsInRole(RoleNames.ProgramDirector));
 
             ViewBag.OnlyParent = parent;
@@ -26,6 +27,7 @@ namespace NuSurvey.MVC.Controllers
 
         public ActionResult Spanish(bool parent = true)
         {
+            Session.Abandon();
             var viewModel = HomeViewModel.Create(CurrentUser.IsInRole(RoleNames.Admin), CurrentUser.IsInRole(RoleNames.User), CurrentUser.IsInRole(RoleNames.ProgramDirector));
 
             ViewBag.OnlyParent = true;
@@ -35,10 +37,25 @@ namespace NuSurvey.MVC.Controllers
 
         public ActionResult Kiosk(bool parent = true)
         {
-            Session.Abandon();
+            Session.Clear();
+
             var viewModel = HomeViewModel.Create(CurrentUser.IsInRole(RoleNames.Admin), CurrentUser.IsInRole(RoleNames.User), CurrentUser.IsInRole(RoleNames.ProgramDirector));
 
             ViewBag.OnlyParent = true;
+
+            Session["kioskemail"] = false;
+
+            return View(viewModel);
+        }
+        public ActionResult KioskEmail(bool parent = true)
+        {
+            Session.Clear();      
+
+            var viewModel = HomeViewModel.Create(CurrentUser.IsInRole(RoleNames.Admin), CurrentUser.IsInRole(RoleNames.User), CurrentUser.IsInRole(RoleNames.ProgramDirector));
+
+            ViewBag.OnlyParent = true;
+
+            Session["kioskemail"] = true;
 
             return View(viewModel);
         }

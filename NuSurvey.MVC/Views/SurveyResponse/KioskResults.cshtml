@@ -14,6 +14,11 @@
     {
         ViewBag.IsKiosk = true;
     }
+    ViewBag.kioskemail = false;
+    if (Session["kioskemail"] != null && (bool)Session["kioskemail"] == true)
+    {
+        ViewBag.kioskemail = true;
+    }
 
 
 }
@@ -40,31 +45,50 @@
 <section id="kiosk-results">
     <h1>Thank you for completing the quiz!</h1>
     <div id="step-main">
-
-        <div id="step1">
-            <img src="@Url.Content("~/Images/step1.png")">
-            <div class="step-container">
-                <p>Please select the print button to get your personalized Healthy Kids tips.</p>
-                <p><input id="sendBtn" class="kiosk-button" type="button" value="Print My Results" onclick="onSendMessage()" /></p>
+        @if (ViewBag.kioskemail != true)
+        {
+            <div id="step1">
+                <img src="@Url.Content("~/Images/step1.png")">
+                <div class="step-container">
+                    <p>Please select the print button to get your personalized Healthy Kids tips.</p>
+                    <p><input id="sendBtn" class="kiosk-button" type="button" value="Print My Results" onclick="onSendMessage()"/></p>
+                </div>
             </div>
-        </div>
 
-        <div id="step2">
-            <img src="@Url.Content("~/Images/step2.png")">
-            <div class="step-container">
-                <p>Send results to your email</p>
-                <p><button class="kiosk-button" data-toggle="modal" data-target="#primaryDonorEdits">Email Results</button></p>
+            <div id="step2">
+                <img src="@Url.Content("~/Images/step2.png")">
+                <div class="step-container">
+                    <p>Send results to your email</p>
+                    <p><button class="kiosk-button" data-toggle="modal" data-target="#primaryDonorEdits">Email Results</button></p>
+                </div>
             </div>
-        </div>
-    
-        <div id="step3">
-            <img src="@Url.Content("~/Images/step3.png")">
-            <div class="step-container">
-                <p>Once your results have printed, click done.</p>
-                <p>@Html.ActionLink("Done", "Kiosk", "Home", null, new { @class = "kiosk-button" })</p>
-            </div>
-        </div>
 
+            <div id="step3">
+                <img src="@Url.Content("~/Images/step3.png")">
+                <div class="step-container">
+                    <p>Once your results have printed, click done.</p>
+                    <p>@Html.ActionLink("Done", "Kiosk", "Home", null, new {@class = "kiosk-button"})</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="step1">
+                <img src="@Url.Content("~/Images/step1.png")">
+                <div class="step-container">
+                    <p>Send results to your email</p>
+                    <p><button class="kiosk-button" data-toggle="modal" data-target="#primaryDonorEdits">Email Results</button></p>
+                </div>
+            </div>
+
+            <div id="step2">
+                <img src="@Url.Content("~/Images/step2.png")">
+                <div class="step-container">
+                    <p>Once you have emailed your results, click done.</p>
+                    <p>@Html.ActionLink("Done", "KioskEmail", "Home", null, new {@class = "kiosk-button"})</p>
+                </div>
+            </div>
+        }
     </div> <!-- End step-container -->
 
 </section>
@@ -128,6 +152,9 @@
             //console.log("idle " + idleTime);
             if (idleTime >= 6) { // 1 minutes
                 var url = '@Url.Action("Kiosk", "Home")';
+                if (@(ViewBag.kioskemail.ToString().ToLower()) === true) {
+                    url = '@Url.Action("KioskEmail", "Home")';
+                }
                 window.location.href = url;
             }
         }
