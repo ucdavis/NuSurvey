@@ -113,7 +113,7 @@ h2 { margin: 30px 0 0px 0; } /* */
 
 .display-hk-question, .display-hks-question { background: #EDF5EF; /* Old browsers */  background: -webkit-linear-gradient(top, #F7FBF8, #EDF5EF); background: -moz-linear-gradient(top, #F7FBF8, #EDF5EF); background: -o-linear-gradient(top, #F7FBF8, #EDF5EF); background: -ms-linear-gradient(top, #F7FBF8, #EDF5EF); background: linear-gradient(top, #F7FBF8, #EDF5EF); border: solid 1px #95D1A0; color: #005311; margin-top: 150px;}
 
-.display-mcmt-question .editor-field img, .display-mcmts-question .editor-field img, .display-hk-question .editor-field img, .display-hks-question .editor-field img, .display-kiosk-question .editor-field img { margin-right: 25px; float: left;}
+.display-mcmt-question .editor-field img, .display-mcmts-question .editor-field img, .display-hk-question .editor-field img, .display-hks-question .editor-field img, .display-kiosk-question .editor-field img { margin-right: 25px; float: left; width: 53%;}
 
 .display-mcmt-question .editor-field input, .display-mcmts-question .editor-field input, .display-hk-question .editor-field input, .display-hks-question .editor-field input, .display-kiosk-question .editor-field input {margin-left: 100px; }
 
@@ -316,7 +316,7 @@ div .editor-label .bypass { padding: 5px 0; }
 
 
 /***---------- GOAL RESULTS PAGE PARENTS ----------***/
-.result_fieldset_page { background:  url('../images/hk-goal-bkgd.jpg') top center no-repeat; max-width: 612px; margin: 0 auto; font: 14px/18px; padding-bottom: 30px;} 
+.result_fieldset_page { background:  url('../images/hk-goal-bkgd.jpg') top center no-repeat; max-width: 612px; margin: 0 auto; font-size: 12px; line-height: 14px; padding-bottom: 30px;} 
 
 .result_fieldset_page.MCMTS-background-image { background:  url('../images/mcmts-goal-bkgd.jpg') top left no-repeat; min-height: 800px; max-width: 600px; } 
 
@@ -326,9 +326,9 @@ div .editor-label .bypass { padding: 5px 0; }
 
 .result_fieldset_positive { margin: 40px 90px; height:  20px; }
 
-.result_fieldset_majorgoal { margin: 60px 90px 0 90px; height: 30px; }
+.result_fieldset_majorgoal { margin: 55px 90px 0 90px; height: 30px; }
 
-.result_minorgoals { margin: 52px 108px 0 108px; height: 82px; max-width: 420px; } 
+.result_minorgoals { margin: 60px 108px 0 108px; height: 90px; max-width: 420px; } 
 
 .result_checkbox { float: left; margin: 0 10px 0 0; } 
 
