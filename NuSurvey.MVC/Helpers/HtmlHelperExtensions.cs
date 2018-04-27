@@ -11,25 +11,7 @@ using System.Web.UI;
 namespace NuSurvey.MVC.Helpers
 {
     public static class HtmlHelperExtensions
-    {
-        public static MvcHtmlString GenerateCaptcha(this HtmlHelper helper)
-        {
-            var captchaControl = new Recaptcha.RecaptchaControl
-            {
-                ID = "recaptcha",
-                Theme = "clean",
-                PublicKey = ConfigurationManager.AppSettings["RecaptchaPublicKey"],
-                PrivateKey = ConfigurationManager.AppSettings["RecaptchaPrivateKey"]
-            };
-
-            var htmlWriter = new HtmlTextWriter(new StringWriter());
-
-            captchaControl.RenderControl(htmlWriter);
-
-            return new MvcHtmlString(htmlWriter.InnerWriter.ToString());
-        }
-
-                
+    {              
         private const string HtmlTag = @"&lt;{0}&gt;";
         private const string Span = "span";
         private const string SpanEncodedStyled = @"&lt;span style=&quot;{0}&quot;&gt;";

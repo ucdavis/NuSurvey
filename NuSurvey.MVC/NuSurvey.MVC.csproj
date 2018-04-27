@@ -194,7 +194,6 @@
     <Compile Include="Controllers\EducatorController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Filters\LocVersionAttribute.cs" />
-    <Compile Include="Controllers\Filters\Recaptcha.cs" />
     <Compile Include="Controllers\Filters\RoleFilter.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
