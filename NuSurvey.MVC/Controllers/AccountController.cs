@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
@@ -11,6 +12,7 @@ using NuSurvey.MVC.Models;
 using NuSurvey.MVC.Services;
 using System.Linq.Expressions;
 using System.Linq;
+using System.Net;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 
@@ -114,10 +116,20 @@ namespace NuSurvey.MVC.Controllers
             return View(viewModel);
         }
 
-        [CaptchaValidator]
+        //[CaptchaValidator]
         [HttpPost]
-        public ActionResult OpenRegister(OpenRegisterModel model, bool captchaValid)
+        public ActionResult OpenRegister(OpenRegisterModel model)
         {
+            var captchaValid = false;
+            var response = Request.Form["g-Recaptcha-Response"];
+            using (var client = new WebClient())
+            {
+                var text = client.DownloadString(string.Format(
+                    "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}",
+                    ConfigurationManager.AppSettings["NewRecaptchaPrivateKey"], response));
+                captchaValid = text.Contains("\"success\": true");
+            }
+
             ViewBag.UserRole = RoleNames.User;
             ViewBag.ProgramDirectorRole = RoleNames.ProgramDirector;
 
@@ -495,10 +507,20 @@ namespace NuSurvey.MVC.Controllers
         /// <param name="userName"></param>
         /// <param name="captchaValid"></param>
         /// <returns></returns>
-        [CaptchaValidator]
+        //[CaptchaValidator]
         [HttpPost]
-        public ActionResult ForgotPassword(string userName, bool captchaValid)
+        public ActionResult ForgotPassword(string userName)
         {
+            var captchaValid = false;
+            var response = Request.Form["g-Recaptcha-Response"];
+            using (var client = new WebClient())
+            {
+                var text = client.DownloadString(string.Format(
+                    "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}",
+                    ConfigurationManager.AppSettings["NewRecaptchaPrivateKey"], response));
+                captchaValid = text.Contains("\"success\": true");
+            }
+
             if (!captchaValid)
             {
                 ModelState.AddModelError("Captcha", "Recaptcha value not valid");

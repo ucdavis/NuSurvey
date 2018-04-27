@@ -1,4 +1,5 @@
 ﻿@model NuSurvey.MVC.Models.OpenRegisterModel
+@using System.Configuration
 @using NuSurvey.Core.Resources
 @using NuSurvey.MVC.Controllers.Filters
 @using NuSurvey.MVC.Helpers
@@ -30,7 +31,8 @@
                  
             });
         });
-    </script>    
+    </script>   
+    <script src="https://www.google.com/recaptcha/api.js"></script>
 }
 
 
@@ -222,8 +224,7 @@
 
             <li>
                 <div class="editor-field">
-                    @Html.GenerateCaptcha()
-                    @Html.ValidationMessage("Captcha")
+                    <div class="g-recaptcha" data-sitekey='@ConfigurationManager.AppSettings["NewRecaptchaPublicKey"]'></div>
                 </div>
             </li>
             <li>
