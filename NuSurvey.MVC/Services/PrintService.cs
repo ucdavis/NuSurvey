@@ -399,28 +399,38 @@ namespace NuSurvey.MVC.Services
             doc.Open();
 
             var questions = printedSurvey.PrintedSurveyQuestions.OrderBy(a => a.Order).ToArray();
-            if (printedSurvey.Survey.ShortName.Trim().ToUpper() == "HK")
+
+            switch (printedSurvey.Survey.ShortName.Trim().ToUpper())
             {
-                ProcessHkPage1(doc, questions, request, url);
-                ProcessHkPage2(doc, questions, request, url);
-                ProcessHkMiddlePages(doc, questions, 9, request, url);
-                ProcessHkMiddlePages(doc, questions, 14, request, url);
-                ProcessHkMiddlePages(doc, questions, 19, request, url);
-                ProcessHkMiddlePages(doc, questions, 24, request, url);
-                ProcessHkMiddlePages(doc, questions, 29, request, url);
-                ProcessHkMiddlePages(doc, questions, 34, request, url);
-                ProcessHkMiddlePages(doc, questions, 39, request, url);
-                ProcessHkLastPage(doc, questions, request, url);
+                case "HK":
+                    ProcessHkPage1(doc, questions, request, url);
+                    ProcessHkPage2(doc, questions, request, url);
+                    ProcessHkMiddlePages(doc, questions, 9, request, url);
+                    ProcessHkMiddlePages(doc, questions, 14, request, url);
+                    ProcessHkMiddlePages(doc, questions, 19, request, url);
+                    ProcessHkMiddlePages(doc, questions, 24, request, url);
+                    ProcessHkMiddlePages(doc, questions, 29, request, url);
+                    ProcessHkMiddlePages(doc, questions, 34, request, url);
+                    ProcessHkMiddlePages(doc, questions, 39, request, url);
+                    ProcessHkLastPage(doc, questions, request, url);
+                    break;
+                case "HK19":
+                    ProcessHkPage1(doc, questions, request, url);
+                    ProcessHkMiddlePages(doc, questions, 4, request, url);
+                    ProcessHkMiddlePages(doc, questions, 9, request, url);
+                    ProcessHkMiddlePages(doc, questions, 14, request, url);
+                    ProcessHk19LastPage(doc, questions, request, url);
+                    break;
+                default:
+                    ProcessMCMTPage1(doc, questions, request, url);
+                    ProcessMCMTMiddlePages(doc, questions, 4, request, url);
+                    ProcessMCMTMiddlePages(doc, questions, 9, request, url);
+                    ProcessMCMTMiddlePages(doc, questions, 14, request, url);
+                    ProcessMCMTMiddlePages(doc, questions, 19, request, url);
+                    ProcessMCMTLastPage(doc, questions, request, url);
+                    break;
             }
-            else
-            {
-                ProcessMCMTPage1(doc, questions, request, url);
-                ProcessMCMTMiddlePages(doc, questions, 4, request, url);
-                ProcessMCMTMiddlePages(doc, questions, 9, request, url);
-                ProcessMCMTMiddlePages(doc, questions, 14, request, url);
-                ProcessMCMTMiddlePages(doc, questions, 19, request, url);
-                ProcessMCMTLastPage(doc, questions, request, url);
-            }
+          
             doc.Close();
 
             var someBytes = ms.ToArray();
@@ -861,6 +871,47 @@ namespace NuSurvey.MVC.Services
                 selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
             }
             table.AddCell(selectedImage);
+
+
+            doc.Add(table);
+            doc.NewPage();
+        }
+
+        private void ProcessHk19LastPage(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
+        {
+            var table = new PdfPTable(1);
+            table.TotalWidth = 219f;
+            table.LockedWidth = true;
+            table.HorizontalAlignment = Element.ALIGN_LEFT;
+            table.DefaultCell.Border = 0;
+            table.DefaultCell.Padding = 0;
+            table.DefaultCell.PaddingBottom = 13.5f;
+
+            //var psq = questions[44];
+            //Image selectedImage = null;
+            //if (psq.Photo != null)
+            //{
+            //    try
+            //    {
+            //        selectedImage = new Jpeg(_blobStoargeService.GetPhoto(psq.Photo.Id, Resource.Original));
+            //    }
+            //    catch (Exception)
+            //    {
+            //        selectedImage = null;
+            //    }
+
+            //}
+
+            ////Image FakeImage = null;
+            ////selectedImage = new Jpeg(_blobStoargeService.GetPhoto(10, Resource.Original));
+
+            //table.DefaultCell.PaddingTop = 63;
+
+            //if (selectedImage == null)
+            //{
+            //    selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
+            //}
+            //table.AddCell(selectedImage);
 
 
             doc.Add(table);
