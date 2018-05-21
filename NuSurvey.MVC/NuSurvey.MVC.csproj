@@ -332,6 +332,7 @@
     <Content Include="Images\copy.png" />
     <Content Include="Images\copy_hover.png" />
     <Content Include="Images\CreateHealthyKids.png" />
+    <Content Include="Images\CreateHealthyKids19.png" />
     <Content Include="Images\CreateMyChild.png" />
     <Content Include="Images\csv.png" />
     <Content Include="Images\csv_hover.png" />
@@ -340,6 +341,7 @@
     <Content Include="Images\diagonal_waves_blue1.png" />
     <Content Include="Images\DownloadGoals_Spanish.png" />
     <Content Include="Images\DownloadHealthyKids.png" />
+    <Content Include="Images\DownloadHealthyKids19.png" />
     <Content Include="Images\DownloadHK_19ques.png" />
     <Content Include="Images\DownloadHK_Spanish.png" />
     <Content Include="Images\DownloadMCMT_Spanish.png" />
