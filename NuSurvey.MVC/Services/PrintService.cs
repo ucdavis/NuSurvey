@@ -399,28 +399,35 @@ namespace NuSurvey.MVC.Services
             doc.Open();
 
             var questions = printedSurvey.PrintedSurveyQuestions.OrderBy(a => a.Order).ToArray();
-            if (printedSurvey.Survey.ShortName.Trim().ToUpper() == "HK")
+
+            switch (printedSurvey.Survey.ShortName.Trim().ToUpper())
             {
-                ProcessHkPage1(doc, questions, request, url);
-                ProcessHkPage2(doc, questions, request, url);
-                ProcessHkMiddlePages(doc, questions, 9, request, url);
-                ProcessHkMiddlePages(doc, questions, 14, request, url);
-                ProcessHkMiddlePages(doc, questions, 19, request, url);
-                ProcessHkMiddlePages(doc, questions, 24, request, url);
-                ProcessHkMiddlePages(doc, questions, 29, request, url);
-                ProcessHkMiddlePages(doc, questions, 34, request, url);
-                ProcessHkMiddlePages(doc, questions, 39, request, url);
-                ProcessHkLastPage(doc, questions, request, url);
+                case "HK":
+                    ProcessHkPage1(doc, questions, request, url);
+                    ProcessHkPage2(doc, questions, request, url);
+                    ProcessHkMiddlePages(doc, questions, 9, request, url);
+                    ProcessHkMiddlePages(doc, questions, 14, request, url);
+                    ProcessHkMiddlePages(doc, questions, 19, request, url);
+                    ProcessHkMiddlePages(doc, questions, 24, request, url);
+                    ProcessHkMiddlePages(doc, questions, 29, request, url);
+                    ProcessHkMiddlePages(doc, questions, 34, request, url);
+                    ProcessHkMiddlePages(doc, questions, 39, request, url);
+                    ProcessHkLastPage(doc, questions, request, url);
+                    break;
+                case "HK19":
+                    break;
+                case "MCMT":
+                    ProcessMCMTPage1(doc, questions, request, url);
+                    ProcessMCMTMiddlePages(doc, questions, 4, request, url);
+                    ProcessMCMTMiddlePages(doc, questions, 9, request, url);
+                    ProcessMCMTMiddlePages(doc, questions, 14, request, url);
+                    ProcessMCMTMiddlePages(doc, questions, 19, request, url);
+                    ProcessMCMTLastPage(doc, questions, request, url);
+                    break;
+                default:
+                    throw new Exception("Unknown Shortname");
             }
-            else
-            {
-                ProcessMCMTPage1(doc, questions, request, url);
-                ProcessMCMTMiddlePages(doc, questions, 4, request, url);
-                ProcessMCMTMiddlePages(doc, questions, 9, request, url);
-                ProcessMCMTMiddlePages(doc, questions, 14, request, url);
-                ProcessMCMTMiddlePages(doc, questions, 19, request, url);
-                ProcessMCMTLastPage(doc, questions, request, url);
-            }
+
             doc.Close();
 
             var someBytes = ms.ToArray();
@@ -636,6 +643,30 @@ namespace NuSurvey.MVC.Services
             doc.NewPage();
         }
 
+        private void ProcessHk19Page1(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
+        {
+            var table = new PdfPTable(1);
+            table.TotalWidth = 255;
+
+
+            table.LockedWidth = true;
+
+            table.HorizontalAlignment = Element.ALIGN_LEFT;
+            table.DefaultCell.Border = 0;
+            table.DefaultCell.Padding = 0;
+            table.DefaultCell.PaddingBottom = 13.5f;
+
+
+            Image selectedImage = null;
+            selectedImage = new Jpeg(_blobStoargeService.GetPhoto(2029, Resource.Original));
+            table.DefaultCell.PaddingTop = 168f;
+            table.DefaultCell.PaddingBottom = 32.5f;
+
+            table.AddCell(selectedImage);
+            doc.Add(table);
+            doc.NewPage();
+
+        }
 
         private void ProcessHkPage1(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
         {
