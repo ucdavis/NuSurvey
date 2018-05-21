@@ -312,6 +312,7 @@
     <Content Include="Images\404.jpg" />
     <Content Include="Images\Admin.png" />
     <Content Include="Images\AnswerHealthyKids.png" />
+    <Content Include="Images\AnswerHealthyKids19.png" />
     <Content Include="Images\AnswerHealthyKids_Spanish.png" />
     <Content Include="Images\AnswerMyChild.png" />
     <Content Include="Images\AnswerMyChild_Spanish.png" />
@@ -331,6 +332,7 @@
     <Content Include="Images\copy.png" />
     <Content Include="Images\copy_hover.png" />
     <Content Include="Images\CreateHealthyKids.png" />
+    <Content Include="Images\CreateHealthyKids19.png" />
     <Content Include="Images\CreateMyChild.png" />
     <Content Include="Images\csv.png" />
     <Content Include="Images\csv_hover.png" />
@@ -339,6 +341,7 @@
     <Content Include="Images\diagonal_waves_blue1.png" />
     <Content Include="Images\DownloadGoals_Spanish.png" />
     <Content Include="Images\DownloadHealthyKids.png" />
+    <Content Include="Images\DownloadHealthyKids19.png" />
     <Content Include="Images\DownloadHK_19ques.png" />
     <Content Include="Images\DownloadHK_Spanish.png" />
     <Content Include="Images\DownloadMCMT_Spanish.png" />
@@ -383,6 +386,7 @@
     <Content Include="Images\print_hover.png" />
     <Content Include="Images\review.png" />
     <Content Include="Images\ReviewHealthyKids.png" />
+    <Content Include="Images\ReviewHealthyKids19.png" />
     <Content Include="Images\ReviewHealthyKids_Spanish.png" />
     <Content Include="Images\ReviewMyChild.png" />
     <Content Include="Images\ReviewMyChild_Spanish.png" />
