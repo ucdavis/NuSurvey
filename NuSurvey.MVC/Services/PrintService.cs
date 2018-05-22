@@ -652,6 +652,37 @@ namespace NuSurvey.MVC.Services
 
         private void ProcessHk19Page1(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
         {
+            const float theWidth = 259.8f;
+
+            Image selectedImage = null;
+            selectedImage = new Jpeg(_blobStoargeService.GetPhoto(2029, Resource.Original));
+            var theHeight = (selectedImage.Height * theWidth) / selectedImage.Width;
+
+
+            selectedImage.ScaleAbsoluteWidth(theWidth);
+            selectedImage.ScaleAbsoluteHeight(theHeight);
+            selectedImage.SetAbsolutePosition(36.47f, 486.5f);
+            
+            doc.Add(selectedImage);
+
+            selectedImage = null;
+            selectedImage = new Jpeg(_blobStoargeService.GetPhoto(2030, Resource.Original));
+            theHeight = (selectedImage.Height * theWidth) / selectedImage.Width;
+
+
+            selectedImage.ScaleAbsoluteWidth(theWidth);
+            selectedImage.ScaleAbsoluteHeight(theHeight);
+
+            selectedImage.SetAbsolutePosition(314.5f, 486.5f);
+
+            doc.Add(selectedImage);
+
+            doc.NewPage();
+
+        }
+
+        private void ProcessHk19Page1Working(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
+        {
             //OK, so this is quite close for 2 columns. Didn't try the second row
             // to move them around, add to the total width and half that amount add to the padding right.
             var table = new PdfPTable(2);
@@ -672,6 +703,8 @@ namespace NuSurvey.MVC.Services
 
             Image selectedImage = null;
             selectedImage = new Jpeg(_blobStoargeService.GetPhoto(2029, Resource.Original));
+
+
             table.DefaultCell.PaddingTop = 168.3f;
             table.DefaultCell.PaddingBottom = 32.5f;
 
@@ -679,10 +712,11 @@ namespace NuSurvey.MVC.Services
 
             table.AddCell(selectedImage);
             doc.Add(table);
+
             doc.NewPage();
 
         }
-        
+
 
         private void ProcessHkPage1(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
         {
