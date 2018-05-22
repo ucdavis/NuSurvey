@@ -391,7 +391,13 @@ namespace NuSurvey.MVC.Services
 
             var doc = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
             doc.SetPageSize(readerUnder.GetPageSize(1));
-            doc.SetMargins(58, 0, 0, 0);
+            var leftMargin = 58;
+            if (printedSurvey.Survey.ShortName.Trim().ToUpper() == "HK19")
+            {
+                leftMargin = 36;
+            }
+
+            doc.SetMargins(leftMargin, 0, 0, 0);
 
             var ms = new MemoryStream();
             var writer = PdfWriter.GetInstance(doc, ms);
@@ -415,6 +421,7 @@ namespace NuSurvey.MVC.Services
                     ProcessHkLastPage(doc, questions, request, url);
                     break;
                 case "HK19":
+                    ProcessHk19Page1(doc, questions, request, url);
                     break;
                 case "MCMT":
                     ProcessMCMTPage1(doc, questions, request, url);
@@ -645,8 +652,10 @@ namespace NuSurvey.MVC.Services
 
         private void ProcessHk19Page1(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
         {
-            var table = new PdfPTable(1);
-            table.TotalWidth = 255;
+            //OK, so this is quite close for 2 columns. Didn't try the second row
+            // to move them around, add to the total width and half that amount add to the padding right.
+            var table = new PdfPTable(2);
+            table.TotalWidth = 556f;
 
 
             table.LockedWidth = true;
@@ -654,19 +663,26 @@ namespace NuSurvey.MVC.Services
             table.HorizontalAlignment = Element.ALIGN_LEFT;
             table.DefaultCell.Border = 0;
             table.DefaultCell.Padding = 0;
+            table.DefaultCell.PaddingLeft = 0.5f;
+
+            table.DefaultCell.PaddingRight = 17.3f;
             table.DefaultCell.PaddingBottom = 13.5f;
+
 
 
             Image selectedImage = null;
             selectedImage = new Jpeg(_blobStoargeService.GetPhoto(2029, Resource.Original));
-            table.DefaultCell.PaddingTop = 168f;
+            table.DefaultCell.PaddingTop = 168.3f;
             table.DefaultCell.PaddingBottom = 32.5f;
+
+            table.AddCell(selectedImage);
 
             table.AddCell(selectedImage);
             doc.Add(table);
             doc.NewPage();
 
         }
+        
 
         private void ProcessHkPage1(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
         {
