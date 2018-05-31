@@ -414,6 +414,7 @@
     <Content Include="Content\MCMT-director-print.pdf" />
     <Content Include="Content\DataTables\css\dataTables.responsive.scss" />
     <Content Include="Content\DataTables\css\dataTables.jqueryui.scss" />
+    <Content Include="Content\HK19-director-print.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery.bt.min.js" />
     <Content Include="Scripts\DataTables\dataTables.autoFill.js" />
