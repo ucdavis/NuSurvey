@@ -312,6 +312,7 @@
     <Content Include="Images\404.jpg" />
     <Content Include="Images\Admin.png" />
     <Content Include="Images\AnswerHealthyKids.png" />
+    <Content Include="Images\AnswerHealthyKids19.png" />
     <Content Include="Images\AnswerHealthyKids_Spanish.png" />
     <Content Include="Images\AnswerMyChild.png" />
     <Content Include="Images\AnswerMyChild_Spanish.png" />
@@ -331,6 +332,7 @@
     <Content Include="Images\copy.png" />
     <Content Include="Images\copy_hover.png" />
     <Content Include="Images\CreateHealthyKids.png" />
+    <Content Include="Images\CreateHealthyKids19.png" />
     <Content Include="Images\CreateMyChild.png" />
     <Content Include="Images\csv.png" />
     <Content Include="Images\csv_hover.png" />
@@ -339,6 +341,7 @@
     <Content Include="Images\diagonal_waves_blue1.png" />
     <Content Include="Images\DownloadGoals_Spanish.png" />
     <Content Include="Images\DownloadHealthyKids.png" />
+    <Content Include="Images\DownloadHealthyKids19.png" />
     <Content Include="Images\DownloadHK_19ques.png" />
     <Content Include="Images\DownloadHK_Spanish.png" />
     <Content Include="Images\DownloadMCMT_Spanish.png" />
@@ -355,6 +358,7 @@
     <Content Include="Images\hks-goal-bkgd.jpg" />
     <Content Include="Images\HKS_pdf.jpg" />
     <Content Include="Images\HK_Logo_BW_Kiosk.jpg" />
+    <Content Include="Images\HK19_pdf.jpg" />
     <Content Include="Images\HK_pdf.jpg" />
     <Content Include="Images\icon_loading.gif" />
     <Content Include="Images\InstGuideHealthyKids.png" />
@@ -382,6 +386,7 @@
     <Content Include="Images\print_hover.png" />
     <Content Include="Images\review.png" />
     <Content Include="Images\ReviewHealthyKids.png" />
+    <Content Include="Images\ReviewHealthyKids19.png" />
     <Content Include="Images\ReviewHealthyKids_Spanish.png" />
     <Content Include="Images\ReviewMyChild.png" />
     <Content Include="Images\ReviewMyChild_Spanish.png" />
@@ -412,6 +417,7 @@
     <Content Include="Content\MCMT-director-print.pdf" />
     <Content Include="Content\DataTables\css\dataTables.responsive.scss" />
     <Content Include="Content\DataTables\css\dataTables.jqueryui.scss" />
+    <Content Include="Content\HK19-director-print.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery.bt.min.js" />
     <Content Include="Scripts\DataTables\dataTables.autoFill.js" />
@@ -458,7 +464,9 @@
     <Content Include="Scripts\TableTools.js" />
     <Content Include="Scripts\TableTools.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
