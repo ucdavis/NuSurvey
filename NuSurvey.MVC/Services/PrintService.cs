@@ -391,7 +391,15 @@ namespace NuSurvey.MVC.Services
 
             var doc = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
             doc.SetPageSize(readerUnder.GetPageSize(1));
-            doc.SetMargins(58, 0, 0, 0);
+            var leftMargin = 58;
+            var topMargin = 0;
+            if (printedSurvey.Survey.ShortName.Trim().ToUpper() == "HK19")
+            {
+                leftMargin = 49;
+                topMargin = -9;
+            }
+            doc.SetMargins(leftMargin, 0, topMargin, 0);
+
 
             var ms = new MemoryStream();
             var writer = PdfWriter.GetInstance(doc, ms);
