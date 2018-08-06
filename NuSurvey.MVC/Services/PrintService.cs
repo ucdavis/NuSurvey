@@ -422,7 +422,7 @@ namespace NuSurvey.MVC.Services
                     break;
                 case "HK19":
                     ProcessHk19Page1(doc, questions, request, url);
-
+                    ProcessHk19Page2(doc, questions, request, url);
                     break;
                 case "MCMT":
                     ProcessMCMTPage1(doc, questions, request, url);
@@ -680,6 +680,40 @@ namespace NuSurvey.MVC.Services
 
         }
 
+        private void ProcessHk19Page2(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
+        {
+            var psq = questions[4];
+            Image selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(35.9f, 617.8f);
+            doc.Add(selectedImage);
+
+            psq = questions[5];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(314.85f, 617.8f);
+            doc.Add(selectedImage);
+
+            psq = questions[6];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(35.9f, 340.4f);
+            doc.Add(selectedImage);
+
+            psq = questions[7];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(314.85f, 340.4f);
+            doc.Add(selectedImage);
+
+            psq = questions[8];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteWidth(295.0f); //Override size that other images are using to 295
+            selectedImage.ScaleAbsoluteHeight(155.6f); // and 155.6
+            selectedImage.SetAbsolutePosition(35.8f, 46.3f);
+            doc.Add(selectedImage);
+
+            doc.NewPage();
+
+        }
+
+        //Just for the HK19 code as I have to do this for every question
         private Image SelectedImage(HttpRequestBase request, UrlHelper url, PrintedSurveyQuestion psq)
         {
             Image selectedImage = null;
