@@ -658,12 +658,12 @@ namespace NuSurvey.MVC.Services
         {
             var psq = questions[0];
             Image selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(35.9f, 435.0f); 
+            selectedImage.SetAbsolutePosition(45.0f, 444.2f); //(35.9f, 435.0f); 
             doc.Add(selectedImage);
 
             psq = questions[1];
             selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(314.85f, 435.3f); 
+            selectedImage.SetAbsolutePosition(324.0f, 444.2f); //(314.85f, 435.3f); 
             doc.Add(selectedImage);
 
             psq = questions[2];
@@ -734,7 +734,7 @@ namespace NuSurvey.MVC.Services
                 selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
             }
 
-            const float theWidth = 261.2f;
+            const float theWidth = 261.0f; //261.2f;
             const float theHeight = 137.8f;
             //var theHeight = (selectedImage.Height * theWidth) / selectedImage.Width;
 
