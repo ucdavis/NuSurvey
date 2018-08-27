@@ -684,29 +684,29 @@ namespace NuSurvey.MVC.Services
         {
             var psq = questions[4];
             Image selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(35.9f, 617.8f);
+            selectedImage.SetAbsolutePosition(45.0f, 626.6f); 
             doc.Add(selectedImage);
 
             psq = questions[5];
             selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(314.85f, 617.8f);
+            selectedImage.SetAbsolutePosition(324.0f, 626.6f); 
             doc.Add(selectedImage);
 
             psq = questions[6];
             selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(35.9f, 340.4f);
+            selectedImage.SetAbsolutePosition(45.0f, 349.2f);
             doc.Add(selectedImage);
 
             psq = questions[7];
             selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(314.85f, 340.4f);
+            selectedImage.SetAbsolutePosition(324.0f, 349.2f);
             doc.Add(selectedImage);
 
             psq = questions[8];
             selectedImage = SelectedImage(request, url, psq);
-            selectedImage.ScaleAbsoluteWidth(295.0f); //Override size that other images are using to 295
+            selectedImage.ScaleAbsoluteWidth(294.8f); //Override size that other images are using to 295
             selectedImage.ScaleAbsoluteHeight(155.6f); // and 155.6
-            selectedImage.SetAbsolutePosition(35.8f, 46.3f);
+            selectedImage.SetAbsolutePosition(45.0f, 55.3f);
             doc.Add(selectedImage);
 
             doc.NewPage();
