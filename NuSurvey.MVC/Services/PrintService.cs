@@ -423,6 +423,7 @@ namespace NuSurvey.MVC.Services
                 case "HK19":
                     ProcessHk19Page1(doc, questions, request, url);
                     ProcessHk19Page2(doc, questions, request, url);
+                    ProcessHk19Page3(doc, questions, request, url);
                     break;
                 case "MCMT":
                     ProcessMCMTPage1(doc, questions, request, url);
@@ -684,22 +685,26 @@ namespace NuSurvey.MVC.Services
         {
             var psq = questions[4];
             Image selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.8f); //137.8f;
             selectedImage.SetAbsolutePosition(45.0f, 626.6f); 
             doc.Add(selectedImage);
 
             psq = questions[5];
             selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.8f); //137.8f;
             selectedImage.SetAbsolutePosition(324.0f, 626.6f); 
             doc.Add(selectedImage);
 
             psq = questions[6];
             selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.4f); //137.8f;
             selectedImage.SetAbsolutePosition(45.0f, 349.2f);
             doc.Add(selectedImage);
 
             psq = questions[7];
             selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(324.0f, 349.2f);
+            selectedImage.ScaleAbsoluteHeight(138.4f); //137.8f;
+            selectedImage.SetAbsolutePosition(324.2f, 349.2f);
             doc.Add(selectedImage);
 
             psq = questions[8];
@@ -707,6 +712,32 @@ namespace NuSurvey.MVC.Services
             selectedImage.ScaleAbsoluteWidth(294.8f); //Override size that other images are using to 295
             selectedImage.ScaleAbsoluteHeight(155.6f); // and 155.6
             selectedImage.SetAbsolutePosition(45.0f, 55.3f);
+            doc.Add(selectedImage);
+
+            doc.NewPage();
+
+        }
+
+        private void ProcessHk19Page3(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
+        {
+            var psq = questions[9];
+            Image selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(45.0f, 626.6f);
+            doc.Add(selectedImage);
+
+            psq = questions[10];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(324.0f, 626.6f);
+            doc.Add(selectedImage);
+
+            psq = questions[11];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(45.0f, 349.2f);
+            doc.Add(selectedImage);
+
+            psq = questions[12];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(324.0f, 349.2f);
             doc.Add(selectedImage);
 
             doc.NewPage();
