@@ -658,22 +658,22 @@ namespace NuSurvey.MVC.Services
         {
             var psq = questions[0];
             Image selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(45.0f, 444.2f); //(35.9f, 435.0f); 
+            selectedImage.SetAbsolutePosition(45.0f, 444.2f); //(45.0f, 444.2f); 
             doc.Add(selectedImage);
 
             psq = questions[1];
             selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(324.0f, 444.2f); //(314.85f, 435.3f); 
+            selectedImage.SetAbsolutePosition(324.0f, 444.2f); //(324.0f, 444.2f); 
             doc.Add(selectedImage);
 
             psq = questions[2];
             selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(35.9f, 157.4f); 
+            selectedImage.SetAbsolutePosition(45.0f, 166.4f); 
             doc.Add(selectedImage);
 
             psq = questions[3];
             selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(314.85f, 157.4f); 
+            selectedImage.SetAbsolutePosition(324.0f, 166.4f); 
             doc.Add(selectedImage);
 
             doc.NewPage();
