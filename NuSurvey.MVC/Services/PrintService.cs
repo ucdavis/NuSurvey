@@ -424,6 +424,7 @@ namespace NuSurvey.MVC.Services
                     ProcessHk19Page1(doc, questions, request, url);
                     ProcessHk19Page2(doc, questions, request, url);
                     ProcessHk19Page3(doc, questions, request, url);
+                    ProcessHk19Page4(doc, questions, request, url);
                     break;
                 case "MCMT":
                     ProcessMCMTPage1(doc, questions, request, url);
@@ -732,14 +733,17 @@ namespace NuSurvey.MVC.Services
             selectedImage.SetAbsolutePosition(324.0f, 627.0f);
             doc.Add(selectedImage);
 
-            psq = questions[11]; //TODO : shift to make sure of alignment
+            psq = questions[11]; 
             selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.2f); //137.8f;
             selectedImage.SetAbsolutePosition(45.0f, 349.2f);
             doc.Add(selectedImage);
 
-            psq = questions[12]; //TODO : shift to make sure of alignment
+            psq = questions[12]; 
             selectedImage = SelectedImage(request, url, psq);
-            selectedImage.SetAbsolutePosition(324.0f, 349.2f);
+            selectedImage.ScaleAbsoluteHeight(138.2f); //137.8f;
+            selectedImage.ScaleAbsoluteWidth(261.4f); //261.0f;
+            selectedImage.SetAbsolutePosition(323.8f, 349.2f);
             doc.Add(selectedImage);
 
             psq = questions[13];
@@ -748,6 +752,44 @@ namespace NuSurvey.MVC.Services
             selectedImage.ScaleAbsoluteHeight(155.6f); // and 155.6
             selectedImage.SetAbsolutePosition(45.0f, 55.3f);
             doc.Add(selectedImage);
+
+            doc.NewPage();
+
+        }
+
+        private void ProcessHk19Page4(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
+        {
+            //TODO: Scale images, position them
+
+            var psq = questions[14];
+            Image selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(124.0f); //137.8f;
+            selectedImage.ScaleAbsoluteWidth(234.0f); //261.0f;
+            selectedImage.SetAbsolutePosition(45.0f, 657.2f);
+            doc.Add(selectedImage);
+
+            psq = questions[15];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(124.0f); //137.8f;
+            selectedImage.ScaleAbsoluteWidth(234.0f); //261.0f;
+            selectedImage.SetAbsolutePosition(297.15f, 657.2f);
+            doc.Add(selectedImage);
+
+            psq = questions[16];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(124.0f); //137.8f;
+            selectedImage.ScaleAbsoluteWidth(234.0f); //261.0f;
+            selectedImage.SetAbsolutePosition(45.0f, 390.2f);
+            doc.Add(selectedImage);
+
+            psq = questions[17];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(124.0f); //137.8f;
+            selectedImage.ScaleAbsoluteWidth(234.0f); //261.0f;
+            selectedImage.SetAbsolutePosition(297.15f, 390.2f);
+            doc.Add(selectedImage);
+  
+            //Last image is hard coded milk
 
             doc.NewPage();
 
