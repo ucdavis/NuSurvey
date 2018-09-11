@@ -392,13 +392,11 @@ namespace NuSurvey.MVC.Services
             var doc = new Document(PageSize.LETTER, 80 /* left */, 36 /* right */, 62 /* top */, 0 /* bottom */);
             doc.SetPageSize(readerUnder.GetPageSize(1));
             var leftMargin = 58;
-            var topMargin = 0;
             if (printedSurvey.Survey.ShortName.Trim().ToUpper() == "HK19")
             {
-                leftMargin = 49;
-                topMargin = -9;
+                leftMargin = 36;
             }
-            doc.SetMargins(leftMargin, 0, topMargin, 0);
+            doc.SetMargins(leftMargin, 0, 0, 0);
 
 
             var ms = new MemoryStream();
@@ -425,9 +423,8 @@ namespace NuSurvey.MVC.Services
                 case "HK19":
                     ProcessHk19Page1(doc, questions, request, url);
                     ProcessHk19Page2(doc, questions, request, url);
-                    ProcessHk19MiddlePages(doc, questions, 9, request, url);
-                    ProcessHk19MiddlePages(doc, questions, 14, request, url);
-                    ProcessHk19LastPage(doc);
+                    ProcessHk19Page3(doc, questions, request, url);
+                    ProcessHk19Page4(doc, questions, request, url);
                     break;
                 case "MCMT":
                     ProcessMCMTPage1(doc, questions, request, url);
@@ -661,207 +658,172 @@ namespace NuSurvey.MVC.Services
         
         private void ProcessHk19Page1(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
         {
-            var table = new PdfPTable(1);
-            table.TotalWidth = 219f;
+            var psq = questions[0];
+            Image selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(45.0f, 444.2f); //(45.0f, 444.2f); 
+            doc.Add(selectedImage);
 
-            table.LockedWidth = true;
+            psq = questions[1];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(324.0f, 444.2f); //(324.0f, 444.2f); 
+            doc.Add(selectedImage);
 
-            table.HorizontalAlignment = Element.ALIGN_LEFT;
-            table.DefaultCell.Border = 0;
-            table.DefaultCell.Padding = 0;
-            table.DefaultCell.PaddingBottom = 13.5f;
+            psq = questions[2];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(45.0f, 166.4f); 
+            doc.Add(selectedImage);
 
+            psq = questions[3];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.SetAbsolutePosition(324.0f, 166.4f); 
+            doc.Add(selectedImage);
 
-            for (int i = 0; i < 4; i++)
-            {
-                var psq = questions[i];
-                Image selectedImage = null;
-                if (psq.Photo != null)
-                {
-                    try
-                    {
-                        selectedImage = new Jpeg(_blobStoargeService.GetPhoto(psq.Photo.Id, Resource.Original));
-                    }
-                    catch (Exception)
-                    {
-                        selectedImage = null;
-                    }
-
-                }
-                //Image FakeImage = null;
-                //selectedImage = new Jpeg(_blobStoargeService.GetPhoto(10, Resource.Original));
-
-                if (i == 0)
-                {
-                    table.DefaultCell.PaddingTop = 215.5f;
-                    table.DefaultCell.PaddingBottom = 32.5f;
-                }
-                else
-                {
-                    table.DefaultCell.PaddingTop = 0;
-                    table.DefaultCell.PaddingBottom = 35f;
-                }
-
-                if (i == 2)
-                {
-                    table.DefaultCell.PaddingTop = 1.5f;
-                }
-
-                if (i == 3)
-                {
-                    table.DefaultCell.PaddingTop = 0.5f;
-                    table.DefaultCell.PaddingBottom = 0;
-                }
-
-                if (selectedImage == null)
-                {
-                    selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
-                }
-                table.AddCell(selectedImage);
-
-            }
-
-            doc.Add(table);
             doc.NewPage();
 
         }
+
         private void ProcessHk19Page2(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
         {
-            var table = new PdfPTable(1);
-            table.TotalWidth = 219f;
-            table.LockedWidth = true;
-            table.HorizontalAlignment = Element.ALIGN_LEFT;
-            table.DefaultCell.Border = 0;
-            table.DefaultCell.Padding = 0;
-            table.DefaultCell.PaddingBottom = 13.5f;
+            var psq = questions[4];
+            Image selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.8f); //137.8f;
+            selectedImage.SetAbsolutePosition(45.0f, 626.6f); 
+            doc.Add(selectedImage);
 
+            psq = questions[5];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.8f); //137.8f;
+            selectedImage.SetAbsolutePosition(324.0f, 626.6f); 
+            doc.Add(selectedImage);
 
-            for (int i = 0; i < 4; i++)
-            {
-                var psq = questions[i + 4];
-                Image selectedImage = null;
-                if (psq.Photo != null)
-                {
-                    try
-                    {
-                        selectedImage = new Jpeg(_blobStoargeService.GetPhoto(psq.Photo.Id, Resource.Original));
-                    }
-                    catch (Exception)
-                    {
-                        selectedImage = null;
-                    }
+            psq = questions[6];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.4f); //137.8f;
+            selectedImage.SetAbsolutePosition(45.0f, 349.2f);
+            doc.Add(selectedImage);
 
-                }
-                //Image FakeImage = null;
-                //selectedImage = new Jpeg(_blobStoargeService.GetPhoto(10, Resource.Original));
+            psq = questions[7];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.4f); //137.8f;
+            selectedImage.SetAbsolutePosition(324.2f, 349.2f);
+            doc.Add(selectedImage);
 
-                if (i == 0)
-                {
-                    table.DefaultCell.PaddingTop = 63;
-                    table.DefaultCell.PaddingBottom = 35f;
-                }
-                else
-                {
-                    table.DefaultCell.PaddingTop = 0;
-                    table.DefaultCell.PaddingBottom = 34.5f;
-                }
+            psq = questions[8];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteWidth(294.8f); //Override size that other images are using to 295
+            selectedImage.ScaleAbsoluteHeight(155.6f); // and 155.6
+            selectedImage.SetAbsolutePosition(45.0f, 55.3f);
+            doc.Add(selectedImage);
 
-                if (i == 3)
-                {
-                    table.DefaultCell.PaddingTop = 2;
-                    table.DefaultCell.PaddingBottom = 0;
-                }
-                if (selectedImage == null)
-                {
-                    selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
-                }
-                table.AddCell(selectedImage);
-
-            }
-
-            doc.Add(table);
             doc.NewPage();
-        }
-        private void ProcessHk19MiddlePages(Document doc, PrintedSurveyQuestion[] questions, int firstQuestionOnPage, HttpRequestBase request, UrlHelper url)
-        {
-            var table = new PdfPTable(1);
-            table.TotalWidth = 219f;
-            table.LockedWidth = true;
-            table.HorizontalAlignment = Element.ALIGN_LEFT;
-            table.DefaultCell.Border = 0;
-            table.DefaultCell.Padding = 0;
-            table.DefaultCell.PaddingBottom = 13.5f;
 
-
-            for (int i = 0; i < 5; i++)
-            {
-                var psq = questions[i + firstQuestionOnPage];
-                Image selectedImage = null;
-                if (psq.Photo != null)
-                {
-                    try
-                    {
-                        selectedImage = new Jpeg(_blobStoargeService.GetPhoto(psq.Photo.Id, Resource.Original));
-                    }
-                    catch (Exception)
-                    {
-                        selectedImage = null;
-                    }
-
-                }
-                //Image FakeImage = null;
-                //selectedImage = new Jpeg(_blobStoargeService.GetPhoto(10, Resource.Original));
-
-                if (i == 0)
-                {
-                    table.DefaultCell.PaddingTop = 63;
-                    table.DefaultCell.PaddingBottom = 35f;
-                }
-                else
-                {
-                    table.DefaultCell.PaddingTop = 0;
-                    table.DefaultCell.PaddingBottom = 34.5f;
-                }
-
-                if (i == 3)
-                {
-                    table.DefaultCell.PaddingTop = 2;
-                    table.DefaultCell.PaddingBottom = 34.5f;
-                }
-
-                if (i == 4)
-                {
-                    table.DefaultCell.PaddingTop = 1.5f;
-                    table.DefaultCell.PaddingBottom = 0;
-                }
-                if (selectedImage == null)
-                {
-                    selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
-                }
-                table.AddCell(selectedImage);
-
-            }
-
-            doc.Add(table);
-            doc.NewPage();
         }
 
-        private void ProcessHk19LastPage(Document doc)
+        private void ProcessHk19Page3(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
         {
-            var table = new PdfPTable(1);
-            table.TotalWidth = 219f;
-            table.LockedWidth = true;
-            table.HorizontalAlignment = Element.ALIGN_LEFT;
-            table.DefaultCell.Border = 0;
-            table.DefaultCell.Padding = 0;
-            table.DefaultCell.PaddingBottom = 13.5f;
+            var psq = questions[9];
+            Image selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.2f); //137.8f;
+            selectedImage.SetAbsolutePosition(45.0f, 627.0f);
+            doc.Add(selectedImage);
 
+            psq = questions[10];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.2f); //137.8f;
+            selectedImage.SetAbsolutePosition(324.0f, 627.0f);
+            doc.Add(selectedImage);
 
-            table.AddCell(""); // Just to get a blank page to print
+            psq = questions[11]; 
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.2f); //137.8f;
+            selectedImage.SetAbsolutePosition(45.0f, 349.2f);
+            doc.Add(selectedImage);
 
+            psq = questions[12]; 
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(138.2f); //137.8f;
+            selectedImage.ScaleAbsoluteWidth(261.4f); //261.0f;
+            selectedImage.SetAbsolutePosition(323.8f, 349.2f);
+            doc.Add(selectedImage);
 
-            doc.Add(table);
+            psq = questions[13];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteWidth(294.8f); //Override size that other images are using to 295
+            selectedImage.ScaleAbsoluteHeight(155.6f); // and 155.6
+            selectedImage.SetAbsolutePosition(45.0f, 55.3f);
+            doc.Add(selectedImage);
+
             doc.NewPage();
+
+        }
+
+        private void ProcessHk19Page4(Document doc, PrintedSurveyQuestion[] questions, HttpRequestBase request, UrlHelper url)
+        {
+            //TODO: Scale images, position them
+
+            var psq = questions[14];
+            Image selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(124.0f); //137.8f;
+            selectedImage.ScaleAbsoluteWidth(234.0f); //261.0f;
+            selectedImage.SetAbsolutePosition(45.0f, 657.2f);
+            doc.Add(selectedImage);
+
+            psq = questions[15];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(124.0f); //137.8f;
+            selectedImage.ScaleAbsoluteWidth(234.0f); //261.0f;
+            selectedImage.SetAbsolutePosition(297.15f, 657.2f);
+            doc.Add(selectedImage);
+
+            psq = questions[16];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(124.0f); //137.8f;
+            selectedImage.ScaleAbsoluteWidth(234.0f); //261.0f;
+            selectedImage.SetAbsolutePosition(45.0f, 390.2f);
+            doc.Add(selectedImage);
+
+            psq = questions[17];
+            selectedImage = SelectedImage(request, url, psq);
+            selectedImage.ScaleAbsoluteHeight(124.0f); //137.8f;
+            selectedImage.ScaleAbsoluteWidth(234.0f); //261.0f;
+            selectedImage.SetAbsolutePosition(297.15f, 390.2f);
+            doc.Add(selectedImage);
+  
+            //Last image is hard coded milk
+
+            doc.NewPage();
+
+        }
+
+        //Just for the HK19 code as I have to do this for every question
+        private Image SelectedImage(HttpRequestBase request, UrlHelper url, PrintedSurveyQuestion psq)
+        {
+            Image selectedImage = null;
+            if (psq.Photo != null)
+            {
+                try
+                {
+                    selectedImage = new Jpeg(_blobStoargeService.GetPhoto(psq.Photo.Id, Resource.Original));
+                }
+                catch (Exception)
+                {
+                    selectedImage = null;
+                }
+            }
+
+            if (selectedImage == null)
+            {
+                selectedImage = Image.GetInstance(GetAbsoluteUrl(request, url, "~/Images/NoImage.jpg"));
+            }
+
+            const float theWidth = 261.0f; //261.2f;
+            const float theHeight = 137.8f;
+            //var theHeight = (selectedImage.Height * theWidth) / selectedImage.Width;
+
+            selectedImage.ScaleAbsoluteWidth(theWidth);
+            selectedImage.ScaleAbsoluteHeight(theHeight);
+
+            return selectedImage;
         }
 
         #endregion HK19 Pages
