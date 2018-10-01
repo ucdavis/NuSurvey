@@ -42,3 +42,5 @@ NuSurvey.Core/bin/Test/*dll
 NuSurvey.MVC/bin/*
 NuSurvey.MVC/bin/NuSurvey.MVC.dll.config
 .vs/*
+/NuSurvey.Db/*.jfm
+/NuSurvey.SQL/*.jfm
